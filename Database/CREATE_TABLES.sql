@@ -1,24 +1,24 @@
 -- usuario
 DROP TABLE IF EXISTS usuario CASCADE;
 CREATE TABLE usuario (
-	id_usuario SERIAL,
-	email TEXT NOT NULL UNIQUE,
-	senha VARCHAR(100) NOT NULL,
+	id_usuario uuid,
 	dt_nascimento DATE NOT NULL,
 	dtt_conta_criacao TIMESTAMP NOT NULL,
 	pais TEXT NOT NULL,
 	sexo TEXT NOT NULL,
 	sistema_metrico VARCHAR(10) NOT NULL,
 	perfil_alimentar VARCHAR(20) NOT NULL,
+	CONSTRAINT check_perfil_sexo CHECK (sexo IN ('H', 'M')),
 	CONSTRAINT check_sistema_metrico CHECK (sistema_metrico IN ('METRICO', 'IMPERIAL')), 
-	CONSTRAINT check_perfil_alimentar CHECK (perfil_alimentar IN ('ONIVORO', 'VEGETARIANO', 'VEGANO')), 
+	CONSTRAINT check_perfil_alimentar CHECK (perfil_alimentar IN ('ONIVORO', 'VEGETARIANO', 'VEGANO')),
+   CONSTRAINT usuario_fk_auth_user FOREIGN KEY (id_usuario) REFERENCES auth.users(id) ON DELETE CASCADE,
 	PRIMARY KEY (id_usuario)
 );
 
 -- cartao
 DROP TABLE IF EXISTS cartao CASCADE;
 CREATE TABLE cartao (
-	id_usuario INTEGER NOT NULL,
+	id_usuario uuid NOT NULL,
 	tipo_cartao TEXT,
 	dtt_interacao_cartao TIMESTAMP NOT NULL,
 	CONSTRAINT check_tipo_cartao CHECK (tipo_cartao IN ('DIETA FLEXIVEL', 'MACROS', 'CALORIAS')), 
@@ -30,7 +30,7 @@ CREATE TABLE cartao (
 DROP TABLE IF EXISTS perfil CASCADE;
 CREATE TABLE perfil (
 	id_perfil SERIAL,
-	id_usuario INTEGER NOT NULL,
+	id_usuario uuid NOT NULL,
 	peso_inicial NUMERIC(4,1) NOT NULL,
 	peso_final NUMERIC(4,1) NOT NULL,
 	altura NUMERIC(4,1) NOT NULL,
@@ -65,28 +65,25 @@ CREATE TABLE perfil (
 -- refeicao
 DROP TABLE IF EXISTS refeicao CASCADE;
 CREATE TABLE refeicao (
-	id_refeicao SERIAL,
-	id_usuario INTEGER NOT NULL,
-	numero_refeicao SMALLSERIAL NOT NULL,
+	id_usuario uuid,
+	numero_refeicao SMALLINT,
 	nome_refeicao TEXT NOT NULL,
 	ativa BOOLEAN NOT NULL,
-	CONSTRAINT refeicao_unique_id_usuario_numero_refeicao UNIQUE (id_usuario, numero_refeicao),
+	dt_criacao DATE NOT NULL,
 	CONSTRAINT refeicao_fk_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario) ON DELETE CASCADE,
-	PRIMARY KEY (id_refeicao)
+	PRIMARY KEY (id_usuario, numero_refeicao)
 );
 
 -- dia
 DROP TABLE IF EXISTS dia CASCADE;
 CREATE TABLE dia (
-	id_dia BIGSERIAL,
-	id_usuario INTEGER NOT NULL,
-	dt_dia DATE NOT NULL,
+	id_usuario UUID,
+	dt_dia DATE,
 	peso_dia NUMERIC(4,1),
 	foto_dia BYTEA,
 	medida_abdomen_dia NUMERIC(4,1),
-	CONSTRAINT dia_unique_id_usuario_data_dia UNIQUE (id_usuario, dt_dia),
 	CONSTRAINT dia_fk_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario) ON DELETE CASCADE,
-	PRIMARY KEY (id_dia)
+	PRIMARY KEY (id_usuario, dt_dia)
 );
 
 -- alimento
@@ -149,7 +146,7 @@ CREATE TABLE codigo_de_barras (
 -- alimento_favoritado
 DROP TABLE IF EXISTS alimento_favoritado CASCADE;
 CREATE TABLE alimento_favoritado (
-	id_usuario INTEGER,
+	id_usuario UUID,
 	id_alimento INTEGER,
 	dtt_alimento_favoritado TIMESTAMP NOT NULL,
 	CONSTRAINT alimento_favorito_fk_id_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario) ON DELETE CASCADE,
@@ -161,7 +158,7 @@ CREATE TABLE alimento_favoritado (
 DROP TABLE IF EXISTS prato CASCADE;
 CREATE TABLE prato (
 	id_prato SERIAL,
-	id_usuario INTEGER,
+	id_usuario UUID,
 	nome_prato TEXT NOT NULL,
 	dtt_criacao_prato TIMESTAMP NOT NULL,
 	dtt_prato_favoritado TIMESTAMP,
@@ -201,11 +198,13 @@ CREATE TABLE alimento_prato (
 
 DROP TABLE IF EXISTS alimento_consumido CASCADE;
 CREATE TABLE alimento_consumido (
-	id_dia BIGINT NOT NULL,
+   id_alimento_consumido BIGSERIAL,
+   id_usuario UUID NOT NULL,
+	numero_refeicao INTEGER NOT NULL, 
 	id_alimento INTEGER NOT NULL,
-	id_refeicao INTEGER NOT NULL,
 	id_prato INTEGER,
-	hora_insercao TIME NOT NULL,
+	dt_insercao DATE NOT NULL,
+	hr_insercao TIME NOT NULL,
 	unidade_medida TEXT NOT NULL,
 	porcao_padrao INTEGER,
 	qtde_utilizada NUMERIC(5,1) NOT NULL,
@@ -213,11 +212,13 @@ CREATE TABLE alimento_consumido (
 	qtde_carboidrato NUMERIC(6,1) NOT NULL,
 	qtde_gordura NUMERIC(6,1) NOT NULL,
 	qtde_alcool NUMERIC(6,1) NOT NULL,
-	CONSTRAINT alimento_consumido_check_valores_maiores_que_zero CHECK (porcao_padrao > 0 AND qtde_proteina >= 0 AND 
-	qtde_carboidrato >= 0 AND qtde_gordura >= 0 AND qtde_alcool >= 0 AND qtde_utilizada > 0
+	CONSTRAINT alimento_consumido_check_valores_maiores_que_zero CHECK (
+      porcao_padrao > 0 AND qtde_proteina >= 0 AND 
+	   qtde_carboidrato >= 0 AND qtde_gordura >= 0 AND qtde_alcool >= 0 AND qtde_utilizada > 0
 	),
-	CONSTRAINT alimento_consumido_fk_id_dia FOREIGN KEY (id_dia) REFERENCES dia(id_dia) ON DELETE CASCADE,
+	CONSTRAINT alimento_consumido_fk_id_usuario_numero_refeicao FOREIGN KEY (id_usuario, numero_refeicao) REFERENCES refeicao(id_usuario, numero_refeicao),
 	CONSTRAINT alimento_consumido_fk_id_alimento FOREIGN KEY (id_alimento) REFERENCES alimento(id_alimento),
-	CONSTRAINT alimento_consumido_fk_id_refeicao FOREIGN KEY (id_refeicao) REFERENCES refeicao(id_refeicao),
-	CONSTRAINT alimento_consumido_fk_id_prato FOREIGN KEY (id_prato) REFERENCES prato(id_prato)
+	CONSTRAINT alimento_consumido_fk_id_prato FOREIGN KEY (id_prato) REFERENCES prato(id_prato),
+   PRIMARY KEY (id_alimento_consumido)
 );
+
