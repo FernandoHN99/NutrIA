@@ -1,5 +1,4 @@
 import Usuario from '../entities/usuario';
-import IUsuario from '../interfaces/IUsuario';
 import { AppDataSource } from '../../database/data-source';
 
 export default class UsuarioRepositorio {
@@ -10,14 +9,13 @@ export default class UsuarioRepositorio {
       this.repositorio = AppDataSource.getRepository(Usuario);
    }
 
-   public async obterUsuarioPorID(usuarioID: string): Promise<IUsuario | null> {
-      return this.repositorio.findOne({ where: { id_usuario : usuarioID } });
+   public async obterUsuarioPorID(usuarioID: string): Promise<Usuario | null> {
+      return await this.repositorio.findOne({ where: { id_usuario : usuarioID } });
    }
 
-   public async obterUsuarios(): Promise<IUsuario[]> {
-      return this.repositorio.find();
+   public async criarUsuario(novoUsuario:Usuario): Promise<Usuario> {
+      return await this.repositorio.insert(novoUsuario);
    }
-
 
    public getRepositorio(): any {
       return this.repositorio;

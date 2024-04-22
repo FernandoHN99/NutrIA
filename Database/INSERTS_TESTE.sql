@@ -7,6 +7,10 @@ INSERT INTO usuario (id_usuario, dt_nascimento, dtt_conta_criacao, pais, sexo, s
 VALUES
 ('793ff4ca-9da9-429e-8cb7-9d46e22af739', '1990-01-01', CURRENT_TIMESTAMP, 'Brasil', 'H', 'METRICO', 'VEGETARIANO');
 
+INSERT INTO usuario (id_usuario, dt_nascimento, dtt_conta_criacao, pais, sexo, sistema_metrico, perfil_alimentar)
+VALUES
+('793ff4ca-9da9-429e-8cb7-9d46e22af733', '1990-01-01', CURRENT_TIMESTAMP, 'Brasil', 'H', 'METRICO', 'VEGETARIANO');
+
 
 -- cartao
 INSERT INTO cartao (id_usuario, tipo_cartao, dtt_interacao_cartao) 

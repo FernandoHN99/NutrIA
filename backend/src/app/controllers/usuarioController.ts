@@ -1,38 +1,49 @@
 import { Request, Response } from 'express';
-import UsuarioRepositorio from '../repositories/usuarioRepositorio';
 import UsuarioService from '../services/usuarioService';
-import Controller from './controller';
+import JsonResponse from '../../utils/jsonReponse';
+import validate  from 'uuid-validate'
+import { usuarioSchema, criarUsuarioInputDTO, criarUsuarioOutputDTO } from '../schemas/criarUsuarioSchema';
 
-export default class UsuarioController implements Controller{
 
-   private usuarioRepo: UsuarioRepositorio;
+export default class UsuarioController {
+
    private usuarioService: UsuarioService;
 
    constructor() {
       this.usuarioService = new UsuarioService();
-      this.usuarioRepo = new UsuarioRepositorio();
    }
 
-   public async obterUsuario(req: Request, res: Response, next: any) {
-      try {
-         // const usuarioID: string = req.params.id;
-         const usuarioID: string = 'a60fdf7b-c7f4-4778-b022-7c71040290c'
-         let retornoUsuario: any = await this.usuarioRepo.obterUsuarioPorID(usuarioID);
-         // let retornoUsuario: any = await this.usuarioRepo.obterUsuarios();
-         res.status(200).json({ message: retornoUsuario });
-      }catch(erro) {
-         res.status(501).json({ Error: erro });
+   public async obterUsuarioPorID(req: Request, res: Response): Promise<JsonResponse>{
+      const usuarioID: string = req.params.id;
+      if(!validate(usuarioID)){
+         return JsonResponse.erro(400, 'ID do usuário inválido');
       }
-  }
-
-  public async obterUsuarios(req: Request, res: Response) {
-   try {
-      let retornoUsuarios: any = await this.usuarioRepo.obterUsuarios();
-      res.status(200).json({ message: retornoUsuarios });
-
-   }catch(erro) {
-      res.status(500).json({ Error: erro });
+      let retornoUsuario: any = await this.usuarioService.obterUsuarioPorID(usuarioID);
+      if(!retornoUsuario){
+         return JsonResponse.erro(404, 'Usuário não encontrado');
+      }
+      return JsonResponse.sucesso(200, retornoUsuario);
    }
-}
-   
+
+   public async criarUsuario(req: Request, res: Response): Promise<JsonResponse> {
+      let reqCriarUsuario: criarUsuarioInputDTO = req.body;
+      const resultParse = usuarioSchema.safeParse(reqCriarUsuario)
+      if (!resultParse.success){
+         return JsonResponse.sucesso(400, resultParse.error);
+      };
+      let outputParser:criarUsuarioOutputDTO = resultParse.data;
+      let retornoUsuarioCriado = await this.usuarioService.criarUsuario(outputParser);
+      return JsonResponse.sucesso(201, {retornoUsuarioCriado});
+   }
+
+   // public async obterUsuarios(req: Request, res: Response): Promise<void> {
+   //    try {
+   //       let retornoUsuarios: any = await this.usuarioService.obterUsuarios();
+   //       res.status(200).json({ message: retornoUsuarios });
+
+   //    } catch (erro) {
+   //       res.status(500).json({ Error: erro });
+   //    }
+   // }
+
 }

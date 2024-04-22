@@ -1,5 +1,7 @@
 SELECT * FROM usuario;
 
+SELECT * FROM auth.users;
+
 SELECT * FROM cartao;
 
 SELECT * FROM perfil;

@@ -1,4 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import { criarUsuarioOutputDTO } from '../schemas/criarUsuarioSchema';
 
 // CREATE TABLE usuario (
 // 	id_usuario uuid,
@@ -37,5 +38,18 @@ export default class Usuario {
 
    @Column('varchar', { length: 20 })
    perfil_alimentar: string;
+
+   constructor(dto?: criarUsuarioOutputDTO) {
+      if (dto) {
+         this.id_usuario = 'a60fdf7b-c7f4-4778-b022-7c71040290cd';
+         this.dt_nascimento = new Date(dto.dt_nascimento);
+         this.pais = dto.pais;
+         this.sexo = dto.sexo;
+         this.sistema_metrico = dto.sistema_metrico;
+         this.perfil_alimentar = dto.perfil_alimentar;
+      }
+      this.dtt_conta_criacao = new Date();
+   }
+
 }
 

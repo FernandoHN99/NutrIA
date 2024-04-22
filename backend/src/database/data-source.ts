@@ -11,7 +11,7 @@ export const AppDataSource = new DataSource({
    username: USUARIO,
    password: SENHA,
    database: DATABASE,
-   synchronize: true,
+   synchronize: false,
    logging: false,
    entities: [Usuario],
    migrations: [], //migrations: [create1298290]

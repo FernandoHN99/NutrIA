@@ -2,7 +2,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import Rota from './rota';
 import UsuarioController from '../controllers/usuarioController';
-import asyncHandler from 'express-async-handler';
+import Util from '../../utils/util';
 
 export default class UsuarioRotas implements Rota {
    public caminho: string = '/usuario';
@@ -13,10 +13,11 @@ export default class UsuarioRotas implements Rota {
       this.roteador = Router()
       this.controller = new UsuarioController();
 
-      this.roteador.get('/', this.controller.obterUsuario.bind(this.controller));      
-      this.roteador.get('/usuarios', this.controller.obterUsuarios.bind(this.controller));
+      this.roteador.get('/criar-usuario', Util.envolveFuncTryCatch(this.controller, this.controller.criarUsuario));    
+      this.roteador.get('/:id', Util.envolveFuncTryCatch(this.controller, this.controller.obterUsuarioPorID));    
+
       console.log('Rotas Usuário: Ativo');
    }
-   
+
 }
 
