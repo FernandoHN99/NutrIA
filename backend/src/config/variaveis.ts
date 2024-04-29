@@ -8,5 +8,10 @@ export const HOST: string = process.env.DB_HOST ?? '';
 export const DATABASE: string = process.env.DB_DATABASE ?? '';
 export const SENHA: string = process.env.DB_SENHA ?? '';
 export const PORTA_DB: number | undefined = process.env.DB_PORTA ? 
-                                       parseInt(process.env.DB_PORTA) : 
-                                       undefined;
+   parseInt(process.env.DB_PORTA) : undefined;
+
+export const ANON_KEY: string = process.env.ANON_KEY ?? '';
+export const SERVICE_KEY: string = process.env.SERVICE_KEY ?? '';
+export const API_EXTERNAL_URL: string = process.env.API_EXTERNAL_URL ?? '';
+
+export const listaParamsAtualizarUsuario = [ "email", "senha", "dados" ];

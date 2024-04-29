@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 import { DataSource } from 'typeorm'
-import { USUARIO, HOST, DATABASE, SENHA, PORTA_DB } from '../config/config'
+import { USUARIO, HOST, DATABASE, SENHA, PORTA_DB } from '../config/variaveis'
 import Usuario  from '../app/entities/usuario'
 // import { create1298290 } './migrations/<migrations>'
 

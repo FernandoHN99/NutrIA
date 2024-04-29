@@ -1,8 +1,12 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import UsuarioService from '../services/usuarioService';
-import JsonResponse from '../../utils/jsonReponse';
 import validate  from 'uuid-validate'
-import { usuarioSchema, criarUsuarioInputDTO, criarUsuarioOutputDTO } from '../schemas/criarUsuarioSchema';
+import { efetuarLoginSchema } from '../schemas/usuario/efetuarLoginSchema';
+import { criarUsuarioSchema, criarUsuarioObject } from '../schemas/usuario/criarUsuarioSchema';
+import { atualizarUsuarioSchema } from '../schemas/usuario/atualizarUsuarioSchema';
+import { atualizarUsuarioContaSchema } from '../schemas/usuario/atualizarUsuarioContaSchema ';
+import { atualizarUsuarioDadosSchema } from '../schemas/usuario/atualizarUsuarioDadosSchema';
+import { JsonReponseSucesso, JsonReponseErro } from '../../utils/jsonReponses';
 
 
 export default class UsuarioController {
@@ -13,37 +17,60 @@ export default class UsuarioController {
       this.usuarioService = new UsuarioService();
    }
 
-   public async obterUsuarioPorID(req: Request, res: Response): Promise<JsonResponse>{
+   public async obterUsuarioPorID(req: Request, res: Response): Promise<JsonReponseSucesso>{
       const usuarioID: string = req.params.id;
       if(!validate(usuarioID)){
-         return JsonResponse.erro(400, 'ID do usuário inválido');
+         JsonReponseErro.lancar(400, 'ID do usuário inválido');
       }
-      let retornoUsuario: any = await this.usuarioService.obterUsuarioPorID(usuarioID);
-      if(!retornoUsuario){
-         return JsonResponse.erro(404, 'Usuário não encontrado');
-      }
-      return JsonResponse.sucesso(200, retornoUsuario);
+      let retornoConta = await this.usuarioService.obterContaPorID(usuarioID);
+      let retornoUsuario = await this.usuarioService.obterUsuarioPorID(usuarioID);
+      return new JsonReponseSucesso(200, 'Usuário retornado com sucesso', {...retornoUsuario, email: retornoConta.email});
    }
 
-   public async criarUsuario(req: Request, res: Response): Promise<JsonResponse> {
-      let reqCriarUsuario: criarUsuarioInputDTO = req.body;
-      const resultParse = usuarioSchema.safeParse(reqCriarUsuario)
-      if (!resultParse.success){
-         return JsonResponse.sucesso(400, resultParse.error);
+   public async criarUsuario(req: Request, res: Response): Promise<JsonReponseSucesso> {
+      const resultadoParse: any = criarUsuarioSchema.safeParse(req.body); 
+      if (!resultadoParse.success){
+         JsonReponseErro.lancar(400, 'JSON inválido', resultadoParse.error);
       };
-      let outputParser:criarUsuarioOutputDTO = resultParse.data;
-      let retornoUsuarioCriado = await this.usuarioService.criarUsuario(outputParser);
-      return JsonResponse.sucesso(201, {retornoUsuarioCriado});
+      const retornoContaCriada = await this.usuarioService.criarConta(resultadoParse.data);
+      const retornoCriacao =  await this.usuarioService.criarUsuario(retornoContaCriada.id, resultadoParse.data);
+      return new JsonReponseSucesso(201, 'Usuário criado com sucesso', {id_usuario: retornoContaCriada.id});
    }
 
-   // public async obterUsuarios(req: Request, res: Response): Promise<void> {
-   //    try {
-   //       let retornoUsuarios: any = await this.usuarioService.obterUsuarios();
-   //       res.status(200).json({ message: retornoUsuarios });
+   public async atualizarUsuario(req: Request, res: Response): Promise<JsonReponseSucesso> {
+      const resultadoParse: any = atualizarUsuarioSchema.safeParse(req.body);
+      if (!resultadoParse.success){
+         JsonReponseErro.lancar(400, 'JSON inválido', resultadoParse.error);
+      }
+      let retoronoUsuarioDadosAtualizado, retoronoUsuarioContaAtualizada;
+      const novosDadosUsuario = resultadoParse.data;
+      if(atualizarUsuarioDadosSchema.safeParse(req.body).success){
+         retoronoUsuarioDadosAtualizado = await this.usuarioService.atualizarUsuarioDados(novosDadosUsuario);
+      }
+      if(atualizarUsuarioContaSchema.safeParse(req.body).success){
+         retoronoUsuarioContaAtualizada = await this.usuarioService.atualizarUsuarioConta(novosDadosUsuario)
+      }
+      return new JsonReponseSucesso(200, 'Usuário Atualizado com sucesso', {...retoronoUsuarioDadosAtualizado, email: retoronoUsuarioContaAtualizada?.email});
+   }
 
-   //    } catch (erro) {
-   //       res.status(500).json({ Error: erro });
-   //    }
-   // }
+   public async fazerLogin(req: Request, res: Response): Promise<JsonReponseSucesso> {
+      const resultadoParse: any = efetuarLoginSchema.safeParse(req.body);
+      if (!resultadoParse.success){
+         JsonReponseErro.lancar(400, 'JSON inválido', resultadoParse.error);
+      };
 
+      let retornoLogin = await this.usuarioService.fazerLogin(resultadoParse.data);
+      return new JsonReponseSucesso(200, 'Login efetuado com sucesso', retornoLogin);
+   }
+
+   public async obterTodosUsuarios(req: Request, res: Response): Promise<JsonReponseSucesso> {
+      let retornoUsuarios = await this.usuarioService.obterTodosUsuarios();
+      return new JsonReponseSucesso(200, 'Usuários retornados com sucesso', retornoUsuarios);
+   }
+
+   public async teste(req: Request, res: Response){
+      let retornoTeste = await this.usuarioService.teste();
+      return new JsonReponseSucesso(200, 'TESTE', retornoTeste);
+   }
+   
 }

@@ -1,9 +1,14 @@
+-- Active: 1714012903894@@aws-0-sa-east-1.pooler.supabase.com@5432@postgres@public
 -- usuario
+
+DELETE FROM auth.users;
+
 DROP TABLE IF EXISTS usuario CASCADE;
 CREATE TABLE usuario (
 	id_usuario uuid,
+   nome TEXT NOT NULL,
+   sobrenome TEXT NOT NULL,
 	dt_nascimento DATE NOT NULL,
-	dtt_conta_criacao TIMESTAMP NOT NULL,
 	pais TEXT NOT NULL,
 	sexo TEXT NOT NULL,
 	sistema_metrico VARCHAR(10) NOT NULL,

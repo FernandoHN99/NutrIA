@@ -1,4 +1,5 @@
 import Usuario from '../entities/usuario';
+
 import { AppDataSource } from '../../database/data-source';
 
 export default class UsuarioRepositorio {
@@ -13,8 +14,8 @@ export default class UsuarioRepositorio {
       return await this.repositorio.findOne({ where: { id_usuario : usuarioID } });
    }
 
-   public async criarUsuario(novoUsuario:Usuario): Promise<Usuario> {
-      return await this.repositorio.insert(novoUsuario);
+   public async inserirUsuario(usuario: Usuario): Promise<Usuario> {
+      return await this.repositorio.insert(usuario);
    }
 
    public getRepositorio(): any {

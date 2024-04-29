@@ -2,9 +2,10 @@ import 'reflect-metadata';
 import express, { Request, Response, NextFunction } from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import Rota from './rotas/rota';
+import Rota from '../utils/rota';
 import 'dotenv/config';
 import { AppDataSource } from '../database/data-source';
+
 
 export default class Servidor {
    private app: express.Application;

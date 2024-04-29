@@ -1,13 +1,11 @@
-import UsuarioRotas from './app/rotas/usuarioRotas';
-import { PORTA_BACKEND } from './config/config';
-import Rota from './app/rotas/rota';
+import { PORTA_BACKEND } from './config/variaveis';
+import Rota from './utils/rota';
 import Servidor from './app/servidor';
+import { directoryImport } from 'directory-import';
+import Util from './utils/util';
 
 const porta: number = PORTA_BACKEND;
+const listaRotas: Rota[] = Util.returnarInstaciasRotas(directoryImport('./app/rotas/'));
 
-const listaSubRotas: Rota[] = [
-   new UsuarioRotas()
-];
-
-const servidor: Servidor = new Servidor(porta, listaSubRotas);
+const servidor: Servidor = new Servidor(porta, listaRotas);
 servidor.iniciar();
