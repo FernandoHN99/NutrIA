@@ -13,7 +13,8 @@ export default class UsuarioRotas implements Rota {
       this.roteador = Router()
       this.controller = new UsuarioController();
 
-      this.roteador.get('/atualizar', Util.envolveFuncTryCatch(this.controller, this.controller.atualizarUsuario));    
+      this.roteador.get('/atualizar/conta', Util.envolveFuncTryCatch(this.controller, this.controller.atualizarUsuarioConta));    
+      this.roteador.get('/atualizar/dados', Util.envolveFuncTryCatch(this.controller, this.controller.atualizarUsuarioDados));    
       this.roteador.get('/teste', Util.envolveFuncTryCatch(this.controller, this.controller.teste));    
       this.roteador.get('/criar', Util.envolveFuncTryCatch(this.controller, this.controller.criarUsuario));    
       this.roteador.get('/login', Util.envolveFuncTryCatch(this.controller, this.controller.fazerLogin));

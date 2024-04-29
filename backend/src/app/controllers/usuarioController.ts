@@ -3,11 +3,9 @@ import UsuarioService from '../services/usuarioService';
 import validate  from 'uuid-validate'
 import { efetuarLoginSchema } from '../schemas/usuario/efetuarLoginSchema';
 import { criarUsuarioSchema, criarUsuarioObject } from '../schemas/usuario/criarUsuarioSchema';
-import { atualizarUsuarioSchema } from '../schemas/usuario/atualizarUsuarioSchema';
 import { atualizarUsuarioContaSchema } from '../schemas/usuario/atualizarUsuarioContaSchema ';
 import { atualizarUsuarioDadosSchema } from '../schemas/usuario/atualizarUsuarioDadosSchema';
 import { JsonReponseSucesso, JsonReponseErro } from '../../utils/jsonReponses';
-
 
 export default class UsuarioController {
 
@@ -37,22 +35,24 @@ export default class UsuarioController {
       return new JsonReponseSucesso(201, 'Usuário criado com sucesso', {id_usuario: retornoContaCriada.id});
    }
 
-   public async atualizarUsuario(req: Request, res: Response): Promise<JsonReponseSucesso> {
-      const resultadoParse: any = atualizarUsuarioSchema.safeParse(req.body);
+   public async atualizarUsuarioConta(req: Request, res: Response): Promise<JsonReponseSucesso> {
+      const resultadoParse: any = atualizarUsuarioContaSchema.safeParse(req.body);
       if (!resultadoParse.success){
          JsonReponseErro.lancar(400, 'JSON inválido', resultadoParse.error);
       }
-      let retoronoUsuarioDadosAtualizado, retoronoUsuarioContaAtualizada;
-      const novosDadosUsuario = resultadoParse.data;
-      if(atualizarUsuarioDadosSchema.safeParse(req.body).success){
-         retoronoUsuarioDadosAtualizado = await this.usuarioService.atualizarUsuarioDados(novosDadosUsuario);
-      }
-      if(atualizarUsuarioContaSchema.safeParse(req.body).success){
-         retoronoUsuarioContaAtualizada = await this.usuarioService.atualizarUsuarioConta(novosDadosUsuario)
-      }
-      return new JsonReponseSucesso(200, 'Usuário Atualizado com sucesso', {...retoronoUsuarioDadosAtualizado, email: retoronoUsuarioContaAtualizada?.email});
+      const retoronoUsuarioContaAtualizada = await this.usuarioService.atualizarUsuarioConta(resultadoParse.data)
+      return new JsonReponseSucesso(200, 'Usuário Atualizado com sucesso', retoronoUsuarioContaAtualizada);
    }
 
+
+   public async atualizarUsuarioDados(req: Request, res: Response): Promise<JsonReponseSucesso> {
+      const resultadoParse: any = atualizarUsuarioDadosSchema.safeParse(req.body)
+      if (!resultadoParse.success){
+         JsonReponseErro.lancar(400, 'JSON inválido', resultadoParse.error);
+      }
+      const retoronoUsuarioDadosAtualizado = await this.usuarioService.atualizarUsuarioDados(resultadoParse.data);
+      return new JsonReponseSucesso(200, 'Usuário Atualizado com sucesso', retoronoUsuarioDadosAtualizado);
+   }
    public async fazerLogin(req: Request, res: Response): Promise<JsonReponseSucesso> {
       const resultadoParse: any = efetuarLoginSchema.safeParse(req.body);
       if (!resultadoParse.success){
