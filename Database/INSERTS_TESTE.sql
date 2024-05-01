@@ -1,7 +1,8 @@
+-- Active: 1714012903894@@aws-0-sa-east-1.pooler.supabase.com@5432
 -- usuario
-INSERT INTO usuario (id_usuario, dt_nascimento, dtt_conta_criacao, pais, sexo, sistema_metrico, perfil_alimentar)
+INSERT INTO usuario (id_usuario, nome, sobrenome, dt_nascimento, pais, sexo, sistema_metrico, perfil_alimentar)
 VALUES
-('a60fdf7b-c7f4-4778-b022-7c71040290cd', '1990-01-01', CURRENT_TIMESTAMP, 'Brasil', 'M', 'METRICO', 'VEGETARIANO');
+('a60fdf7b-c7f4-4778-b022-7c71040290cd', 'fe' , 'nando',  '1990-01-01', 'Brasil', 'M', 'METRICO', 'VEGETARIANO');
 
 INSERT INTO usuario (id_usuario, dt_nascimento, dtt_conta_criacao, pais, sexo, sistema_metrico, perfil_alimentar)
 VALUES
@@ -15,7 +16,7 @@ VALUES
 -- cartao
 INSERT INTO cartao (id_usuario, tipo_cartao, dtt_interacao_cartao) 
 VALUES 
-('a60fdf7b-c7f4-4778-b022-7c71040290cd', 'MACROS', CURRENT_TIMESTAMP);
+('c62d6f87-c028-4bd5-963b-73cc3d6b332a', 'CALORIAS', CURRENT_TIMESTAMP);
 
 -- perfil
 INSERT INTO perfil (id_usuario, peso_inicial, peso_final, altura, nivel_atividade, objetivo, tmb, tmt, tmf, meta_proteina, meta_carboidrato, meta_gordura, dt_criacao_perfil, proteina_peso, carboidrato_peso, gordura_peso)

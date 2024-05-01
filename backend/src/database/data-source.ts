@@ -2,6 +2,7 @@ import 'reflect-metadata'
 import { DataSource } from 'typeorm'
 import { USUARIO, HOST, DATABASE, SENHA, PORTA_DB } from '../config/variaveis'
 import Usuario  from '../app/entities/usuario'
+import Cartao from '../app/entities/cartao'
 // import { create1298290 } './migrations/<migrations>'
 
 export const AppDataSource = new DataSource({
@@ -13,7 +14,7 @@ export const AppDataSource = new DataSource({
    database: DATABASE,
    synchronize: false,
    logging: false,
-   entities: [Usuario],
+   entities: [Usuario, Cartao],
    migrations: [], //migrations: [create1298290]
    subscribers: [],
 })

@@ -1,0 +1,53 @@
+Uma empresa de tecnologia quer fazer um aplicativo chamado, NutriAI, onde o aplicativo será um contabilizador de calorias além de ter um chatbot embutido que auxiliará o usuário a atingir suas metas e contabilizar os nutrientes consumidos. Os usuários criarão uma conta e realizarão um login com email e senha para utilizá-lo.
+
+A conta do usuário terá um perfil atribúido com suas informações pessoais e metabólicas como peso, altura, nível de atividade, taxa metabólica basal, taxa metabólica total e quantidades específicas de macronutrientes (proteínas, gorduras e carboidratos) que deverão ser ingeridos por dia.
+
+As informações metabólicas armazenadas no perfil serão calculados a partir dos dados mais "básicos" (peso, altura, nível de atividade) inseridas no momento de criação da conta ou manualmente preenchidos caso já tiver um acompanhamento profiisional.
+
+Lembrando que faz sentido a conta ter somente um perfil vigente e caso altere qualquer informação em seus dados será disponibilizado um novo perfil com novos valores metabólicos e assim poderá optar por atualizá-lo ou não. De qualquer forma é importante mencionar que os diferentes perfis sempre deverão ser armazenados e relacionados aquela conta. 
+
+A rastreabilidade e contabilização dos nutrientes será feita por dia, como uma espécie de diário, onde a cada dia se terá a contabilização total de kcal e de macronutrientes ingeridos e restantes conforme já atribuidos a seu perfil.
+
+O usuário incluirá uma quantidade em gramas ou pedaços ou colheres de sopa, entre outros, para um alimento específico a uma refeição específica (café, alomoço, janta...) a um dia específico de seu diário. Pratos também poderão ser criadas pelos usuários que nada mais são do que uma combinação de alimentos já com quantidades pré-defininas. 
+
+Tanto os alimentos quanto as pratos terão uma rastreabilidade, de modo que se tenha um histórico deles para saber os mais utlizados por aquele usuário, além dele poder favoritar alimentos e pratos caso julgue necessário conforme usa o aplicativo.
+
+O sistema já disponibilizará uma série de alimentos ao usuário com nome, marca, estado do alimento (cru, cozido, frito...), código de barras entre outros. Assim ele poderá buscar por tais alimentos a partir do nome ou escaneando o código de barras e inserir o alimento resgatado dessa busca na refeição do dia. 
+
+Não somente alimentos e pratos serão adicionados a uma refeição diretamente, se por uma necessidade o usuário quiser adicionar calorias rápidas sem qualquer alimento atrelado também será possível.
+
+É importante mencionar que após ter sido montado o perfil será questionado a preferência de alimentos a serem adicionados a sua rotina, além de permití-lo montar pratos se quiser.
+
+O usuário além de ter acesso aos alimentos pré-cadastrados ele poderá também adicionar um novo alimento na base de alimentos, visto que qualquer alimento adicionado pelos usuários será considerado como não verificado e somente após a validação pela empresa o alimento poderá ser considerado como verificado. Entretanto usuários poderão ter acesso a alimentos cadastrados por outros usuários independente de já terem sido validados ou não.
+
+Além disso o usuário poderá informar o seu peso atual diário e medidas do corpo como circunferencia abdominal conforme eles vão mudando. Assim essas informações ficarão atribúidas diretamente a um dia específico de seu diário, além de fotos caso queira para ter uma ideia visual de seu progresso.
+
+Importante mencionar que o peso informado por dia no diário nunca modificará o cálculo das informações metabólicas dp perfil vigente . Para fazer tal alteração é necessário alterar o peso no perfil da conta.
+
+Uma funcionalidade que será implementada é a possibilidade do usuário fixar um ou mais alimentos e fazer um "de-para" com outros, de modo que facilite comparar alimentos, assim o quanto de um ou mais alimentos específicados serão equivalentes a outros em questão de calorias e macronutrientes.
+
+Também será implementado um esquema de cards com títulos simples e atrativos que instruírão o usuário a clicar e explicarão pontos-chave de nutrição que o aplicativo se baseia. Dessa forma se compreendidos corretamente o usuário utilizará o aplicativo da melhor forma possível e conseguirá tirar o maximo proveito dele.
+
+Por fim uma espécie de conversa com um bot de inteligência artificial será adicionada onde o bot saberá todo o perfil do usuário como também seus alimentos mais consumidos e objetivos vigentes. O usuário poderá se comunicar com o chatbot tanto via voz quanto via texto, de modo que ele consiga realizar todas as ações que seria possível fazer no diário manualmente além também de esclarecer dúvidas explicando conceitos que o aplicativo é fundamentado.
+
+A funcionalidade de envio de notificação também será implementada, como se o bot estivesse perguntando como foi o andamento da dieta naquele dia e caso algo fique muito fora do planejado alerte-o com alguma dica ou informação. A ideia é de educar o usuário a sempre estar consciente de seu consumo calórico diário, pois a ideia de habituá-lo a contabilizar calorias e utilizar o app para isso é o mais importante.
+
+
+Parte Gráfica:
+
+   O usuário terá principalmente 2 abas principais. Uma relacionada ao diário e outra relacionada ao chatbot que será explicado mais a frente.
+
+   A aba primeira principal será relacionada ao diário do usuário onde será subdividida em outra 3 abas menores:
+   
+      A primeira delas será focada no diário, em que o usuário poderá alterar o consumo dos alimentos como quiser no dia q julgar necessário, sendo ele qualquer dia maior ou menor que hoje.
+
+      A segunda aba mostrará de forma resumida e gráfica o consumo calórico medio e total, por dia, mês, quais dias nao foram preenchidos, possibilitar preencher dias específicos baseadas em outros de forma rápida. Assim ele terá elementos em tela que o possibiltarão manipular dos dados e ver resultados específicos conforme a necessidade.
+      A ideia é que seja uma visão geral do progresso do usuário e consiga visualizar de modo comparativo suas fotos também.
+
+      A teceira aba será relacionada ao perfil/configuração do usuário com as informações preenchidas no cadastrado, onde será detalhado as informações cruciais do aplicativo que ele poderá alterar e assim manipular as configurações em seu de como é calculado seu perfil metabólico. 
+
+   Agora a segunda aba principal citada anteriormente será relacionada ao chatbot que nada mais será que um chatbot normal com um input de perguntas e respostas.
+
+
+*** Backlog *** 
+   Uma ideia é que pudessemos utilizar uma AI com essas informações do perfil metabólico com alimentos já pré-selecionados para cada refeição e utilizá-la para montar pratos para o usuário, porém não sei quão acertiva seria essa AI para fazer as decisão e se os pratos seriam bem fundamentados no quisito de nutrição e Sáude, portanto optamos deixar essa montagem de cardápio totalmente para o usuário neste primeiro momento.

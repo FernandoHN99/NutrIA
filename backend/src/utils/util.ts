@@ -13,7 +13,7 @@ export default class Util {
             if(erro instanceof JsonReponseErro){
                res.status(erro.codigo).json(erro);
             }else{
-               res.status(500).json({sucesso: false, codigo: 500, mensagem: 'Erro interno no servidor' , erro: {} } );
+               res.status(500).json({sucesso: false, codigo: 500, mensagem: 'Erro interno no servidor' , erro } );
             }
          }
       };

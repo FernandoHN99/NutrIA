@@ -6,6 +6,7 @@ import { criarUsuarioSchema, criarUsuarioObject } from '../schemas/usuario/criar
 import { atualizarUsuarioContaSchema } from '../schemas/usuario/atualizarUsuarioContaSchema ';
 import { atualizarUsuarioDadosSchema } from '../schemas/usuario/atualizarUsuarioDadosSchema';
 import { JsonReponseSucesso, JsonReponseErro } from '../../utils/jsonReponses';
+import { atualizarUsuarioDadosObject } from '../schemas/usuario/atualizarUsuarioDadosSchema';
 
 export default class UsuarioController {
 
@@ -31,8 +32,8 @@ export default class UsuarioController {
          JsonReponseErro.lancar(400, 'JSON inválido', resultadoParse.error);
       };
       const retornoContaCriada = await this.usuarioService.criarConta(resultadoParse.data);
-      const retornoCriacao =  await this.usuarioService.criarUsuario(retornoContaCriada.id, resultadoParse.data);
-      return new JsonReponseSucesso(201, 'Usuário criado com sucesso', {id_usuario: retornoContaCriada.id});
+      const retornoUsuarioCriacao =  await this.usuarioService.criarUsuario(retornoContaCriada.id, resultadoParse.data);
+      return new JsonReponseSucesso(201, 'Usuário criado com sucesso', retornoUsuarioCriacao);
    }
 
    public async atualizarUsuarioConta(req: Request, res: Response): Promise<JsonReponseSucesso> {
@@ -44,15 +45,17 @@ export default class UsuarioController {
       return new JsonReponseSucesso(200, 'Usuário Atualizado com sucesso', retoronoUsuarioContaAtualizada);
    }
 
-
    public async atualizarUsuarioDados(req: Request, res: Response): Promise<JsonReponseSucesso> {
       const resultadoParse: any = atualizarUsuarioDadosSchema.safeParse(req.body)
       if (!resultadoParse.success){
          JsonReponseErro.lancar(400, 'JSON inválido', resultadoParse.error);
       }
-      const retoronoUsuarioDadosAtualizado = await this.usuarioService.atualizarUsuarioDados(resultadoParse.data);
+      const novosDadosUsuario: atualizarUsuarioDadosObject = resultadoParse.data;
+      const usuarioAtual = await this.usuarioService.obterUsuarioPorID(novosDadosUsuario.id_usuario);
+      const retoronoUsuarioDadosAtualizado = await this.usuarioService.atualizarUsuarioDados(usuarioAtual, novosDadosUsuario);
       return new JsonReponseSucesso(200, 'Usuário Atualizado com sucesso', retoronoUsuarioDadosAtualizado);
    }
+
    public async fazerLogin(req: Request, res: Response): Promise<JsonReponseSucesso> {
       const resultadoParse: any = efetuarLoginSchema.safeParse(req.body);
       if (!resultadoParse.success){

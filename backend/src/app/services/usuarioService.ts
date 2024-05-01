@@ -35,8 +35,9 @@ export default class UsuarioService{
    }
 
    public async criarUsuario(id_conta: string, dadosUsuario: criarUsuarioObject): Promise<any> {
-      const novoUsuario: Usuario = new Usuario({ ...dadosUsuario, id_usuario: id_conta });
-      return await novoUsuario.save()
+      const novoUsuario: Usuario = new Usuario();
+      novoUsuario.atribuirDados({ ...dadosUsuario, id_usuario: id_conta });
+      return novoUsuario.save();
    }
 
    public async criarConta(criarContaJSON: criarUsuarioObject): Promise<any> {
@@ -51,10 +52,9 @@ export default class UsuarioService{
       return data.user;
    }
 
-   public async atualizarUsuarioDados(novosDadosUsuario: atualizarUsuarioDadosObject): Promise<any>{
-      let usuarioAtual = await this.obterUsuarioPorID(novosDadosUsuario.id_usuario);
-      const novoUsuario = new Usuario({ ...usuarioAtual, ...novosDadosUsuario });
-      return await novoUsuario.save();
+   public async atualizarUsuarioDados(usuarioAtual: Usuario, novosDadosUsuario: atualizarUsuarioDadosObject): Promise<any>{
+      usuarioAtual.atualizar(novosDadosUsuario);
+      return await usuarioAtual.save();
    }
 
    public async atualizarUsuarioConta(novosDadosContaUsuario: atualizarUsuarioContaObject): Promise<{email: any}>{

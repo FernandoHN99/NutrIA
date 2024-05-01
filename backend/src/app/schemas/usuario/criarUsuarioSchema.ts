@@ -39,7 +39,7 @@ const criarUsuarioSchema = z.object({
    perfil_alimentar: z.string()
       .transform(perfil => perfil.toLocaleUpperCase())
       .refine(perfil => ['ONIVORO', 'VEGETARIANO', 'VEGANO'].includes(perfil), 
-         { message: 'Sistema Perfil Alimentar' }),
+         { message: 'Perfil Alimentar Inválido' }),
 })
 
 type criarUsuarioObject = z.infer<typeof criarUsuarioSchema>
