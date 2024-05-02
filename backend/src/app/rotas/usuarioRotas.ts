@@ -13,11 +13,10 @@ export default class UsuarioRotas implements Rota {
       this.roteador = Router()
       this.controller = new UsuarioController();
 
-      this.roteador.get('/atualizar/conta', Util.envolveFuncTryCatch(this.controller, this.controller.atualizarUsuarioConta));    
-      this.roteador.get('/atualizar/dados', Util.envolveFuncTryCatch(this.controller, this.controller.atualizarUsuarioDados));    
-      this.roteador.get('/teste', Util.envolveFuncTryCatch(this.controller, this.controller.teste));    
-      this.roteador.get('/criar', Util.envolveFuncTryCatch(this.controller, this.controller.criarUsuario));    
-      this.roteador.get('/login', Util.envolveFuncTryCatch(this.controller, this.controller.fazerLogin));
+      this.roteador.patch('/atualizar/conta', Util.envolveFuncTryCatch(this.controller, this.controller.atualizarUsuarioConta));    
+      this.roteador.patch('/atualizar/dados', Util.envolveFuncTryCatch(this.controller, this.controller.atualizarUsuarioDados));    
+      this.roteador.post('/criar', Util.envolveFuncTryCatch(this.controller, this.controller.criarUsuario));    
+      this.roteador.post('/login', Util.envolveFuncTryCatch(this.controller, this.controller.fazerLogin));
       this.roteador.get('/:id', Util.envolveFuncTryCatch(this.controller, this.controller.obterUsuarioPorID));    
       this.roteador.get('/', Util.envolveFuncTryCatch(this.controller, this.controller.obterTodosUsuarios));
       
