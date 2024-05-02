@@ -14,4 +14,8 @@ export default class CartaoRepositorio{
       return await this.repositorio.find({ where: { id_usuario : usuarioID } });
    }
 
+   public async criarCartaoUsuario(listaCartoes: Cartao[]): Promise<Cartao> {
+      return await this.repositorio.insert(listaCartoes);
+   }
+
 }

@@ -11,10 +11,18 @@ export default class Cartao extends BaseEntity {
    tipo_cartao: string
 
    @Column('timestamp')
-   dtt_interacao_cartao: string
+   dtt_interacao_cartao: string | null
 
    @ManyToOne(() => Usuario, (usuario) => usuario.cartoes)
    @JoinColumn({ name: "id_usuario" })
    usuario: Usuario;
+
+
+   constructor(id_usuario: string, tipo_cartao: string) {
+      super();
+      this.id_usuario = id_usuario;
+      this.tipo_cartao = tipo_cartao;
+      this.dtt_interacao_cartao = null;
+   }
 
 }
