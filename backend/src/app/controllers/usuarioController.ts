@@ -42,7 +42,7 @@ export default class UsuarioController {
          JsonReponseErro.lancar(400, 'JSON inválido', resultadoParse.error);
       }
       const retoronoUsuarioContaAtualizada = await this.usuarioService.atualizarUsuarioConta(resultadoParse.data)
-      return new JsonReponseSucesso(200, 'Usuário Atualizado com sucesso', retoronoUsuarioContaAtualizada);
+      return new JsonReponseSucesso(200, 'Conta do usuário atualizado com sucesso', retoronoUsuarioContaAtualizada);
    }
 
    public async atualizarUsuarioDados(req: Request, res: Response): Promise<JsonReponseSucesso> {
@@ -53,7 +53,7 @@ export default class UsuarioController {
       const novosDadosUsuario: atualizarUsuarioDadosObject = resultadoParse.data;
       const usuarioAtual = await this.usuarioService.obterUsuarioPorID(novosDadosUsuario.id_usuario);
       const retoronoUsuarioDadosAtualizado = await this.usuarioService.atualizarUsuarioDados(usuarioAtual, novosDadosUsuario);
-      return new JsonReponseSucesso(200, 'Usuário Atualizado com sucesso', retoronoUsuarioDadosAtualizado);
+      return new JsonReponseSucesso(200, 'Dados do usuário atualizados com sucesso', retoronoUsuarioDadosAtualizado);
    }
 
    public async fazerLogin(req: Request, res: Response): Promise<JsonReponseSucesso> {

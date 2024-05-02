@@ -19,9 +19,12 @@ export default class CartaoService{
    }
 
    private criarCartoesPadrao(usuarioID: string): Cartao[] {
-      const cartao = new Cartao(usuarioID, 'MACROS');
-      const cartao02 = new Cartao(usuarioID, 'CALORIAS');
-      return [cartao, cartao02];
+      const tiposCartoes = ['MACROS', 'CALORIAS', 'DIETA FLEXIVEL'];
+      const listaCartoes: Cartao[] = [];
+      tiposCartoes.forEach(tipo => {
+         listaCartoes.push(new Cartao(usuarioID, tipo));
+      });
+      return listaCartoes;
    }
 
 }
