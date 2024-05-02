@@ -38,8 +38,10 @@ export default class UsuarioService{
 
    public async criarUsuario(id_conta: string, dadosUsuario: criarUsuarioObject): Promise<Usuario> {
       this.cartaoService = new CartaoService();
-      const novoUsuario: Usuario = new Usuario();
-      novoUsuario.atribuirDados({ ...dadosUsuario, id_usuario: id_conta });
+      const novoUsuario: Usuario = new Usuario(id_conta, dadosUsuario.dt_nascimento, 
+         dadosUsuario.nome, dadosUsuario.sobrenome, dadosUsuario.pais, dadosUsuario.sexo, 
+         dadosUsuario.sistema_metrico, dadosUsuario.perfil_alimentar);
+
       await this.usuarioRepo.inserirUsuario(novoUsuario);
       await this.cartaoService.criarCartoesUsuario(novoUsuario.id_usuario);
       return novoUsuario;
@@ -47,7 +49,9 @@ export default class UsuarioService{
 
    public async criarConta(criarContaJSON: criarUsuarioObject): Promise<any> {
       this.setClienteSupabase()
-      const { data, error } = await this.clienteSupabase.auth.admin.createUser({...criarContaJSON,  email_confirm: true});
+      const { data, error } = await this.clienteSupabase.auth.admin.createUser(
+         {...criarContaJSON,  email_confirm: true});
+
       if(error || !data?.user?.id){
          if(error?.code.includes('email_exists')){
             JsonReponseErro.lancar(409, 'Email já cadastrado');
@@ -57,7 +61,9 @@ export default class UsuarioService{
       return data.user;
    }
 
-   public async atualizarUsuarioDados(usuarioAtual: Usuario, novosDadosUsuario: atualizarUsuarioDadosObject): Promise<any>{
+   public async atualizarUsuarioDados(usuarioAtual: Usuario, 
+      novosDadosUsuario: atualizarUsuarioDadosObject): Promise<any>{
+
       usuarioAtual.atualizar(novosDadosUsuario);
       return await usuarioAtual.save();
    }

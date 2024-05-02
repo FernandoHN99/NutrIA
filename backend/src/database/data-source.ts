@@ -3,7 +3,6 @@ import { DataSource } from 'typeorm'
 import { USUARIO, HOST, DATABASE, SENHA, PORTA_DB } from '../config/variaveis'
 import Usuario  from '../app/entities/usuario'
 import Cartao from '../app/entities/cartao'
-// import { create1298290 } './migrations/<migrations>'
 
 export const AppDataSource = new DataSource({
    type: 'postgres',
@@ -15,6 +14,6 @@ export const AppDataSource = new DataSource({
    synchronize: false,
    logging: false,
    entities: [Usuario, Cartao],
-   migrations: [], //migrations: [create1298290]
+   migrations: [],
    subscribers: [],
 })

@@ -33,17 +33,22 @@ export default class Usuario extends BaseEntity {
    @JoinColumn({ name: 'id_usuario' })
    cartoes: Cartao[]
 
-   public atribuirDados(dadosUsuario: any) {
-      this.id_usuario = dadosUsuario.id_usuario;
-      this.dt_nascimento = dadosUsuario.dt_nascimento;
-      this.nome = dadosUsuario.nome;
-      this.sobrenome = dadosUsuario.sobrenome;
-      this.pais = dadosUsuario.pais;
-      this.sexo = dadosUsuario.sexo;
-      this.sistema_metrico = dadosUsuario.sistema_metrico;
-      this.perfil_alimentar = dadosUsuario.perfil_alimentar;
+
+   constructor(id_usuario: string, dt_nascimento: string, nome: string, sobrenome: string, 
+         pais: string, sexo: string, sistema_metrico: string, perfil_alimentar: string) {
+            
+      super();
+      this.id_usuario = id_usuario;
+      this.dt_nascimento = dt_nascimento;
+      this.nome = nome;
+      this.sobrenome = sobrenome;
+      this.pais = pais;
+      this.sexo = sexo;
+      this.sistema_metrico = sistema_metrico;
+      this.perfil_alimentar = perfil_alimentar;
    }
 
+   
    public atualizar(novosDados: atualizarUsuarioDadosObject) {
       this.dt_nascimento = novosDados.dt_nascimento || this.dt_nascimento;
       this.nome = novosDados.nome || this.nome;
