@@ -1,5 +1,8 @@
 import CartaoRepositorio from "../repositories/cartaoRepositorio";
 import Cartao from "../entities/cartao";
+import { tiposDeCartao } from "../../config/variaveis";
+import { atualizarCartaoObject } from "../schemas/cartao/atualizarCartao";
+import { JsonReponseErro } from "../../utils/jsonReponses";
 
 export default class CartaoService{
    
@@ -9,20 +12,40 @@ export default class CartaoService{
       this.cartaoRepo = new CartaoRepositorio()
    }
 
-   public async pegarCartoesUsuario(usuarioID: string): Promise<Cartao | null> {
-      return await this.cartaoRepo.pegarCartoesUsuario(usuarioID);
+   public async pegarCartoesUsuario(usuarioID: string): Promise<Cartao[] | null> {
+      const cartoesRetornados = await this.cartaoRepo.pegarCartoesUsuario(usuarioID);
+      if(!cartoesRetornados || cartoesRetornados.length === 0){
+         JsonReponseErro.lancar(500, 'Usuário inválido / Usuário não possui cartões');
+      }
+      return cartoesRetornados;
    }
 
    public async criarCartoesUsuario(usuarioID: string): Promise<Cartao[]> {
-      const listaCartoes = this.criarCartoesPadrao(usuarioID);
+      const listaCartoes = this.criarListaCartoes(usuarioID);
       await this.cartaoRepo.criarCartaoUsuario(listaCartoes);
       return listaCartoes;
    }
 
-   private criarCartoesPadrao(usuarioID: string): Cartao[] {
-      const tiposCartoes = ['MACROS', 'CALORIAS', 'DIETA FLEXIVEL'];
+   public async marcarCartaoLido(dadosCartaoAtualizacao: atualizarCartaoObject){
+      let cartaoAtual: Cartao = await this.pegarCartao(dadosCartaoAtualizacao.id_usuario, dadosCartaoAtualizacao.tipo_cartao);
+      if(cartaoAtual.dtt_interacao_cartao){
+         JsonReponseErro.lancar(404, 'Cartão já foi lido');
+      }
+      cartaoAtual.marcarCartaoLido();
+      return await cartaoAtual.save();
+   }
+
+   private async pegarCartao(usuarioID: string, tipoCartao: string): Promise<Cartao> {
+      const cartaoRetornado = await this.cartaoRepo.pegarCartao(usuarioID, tipoCartao);
+      if(!cartaoRetornado){
+         JsonReponseErro.lancar(404, 'Cartão não encontrado');
+      }
+      return cartaoRetornado!;
+   }
+
+   private criarListaCartoes(usuarioID: string): Cartao[] {
       const listaCartoes: Cartao[] = [];
-      tiposCartoes.forEach(tipo => {
+      tiposDeCartao.forEach(tipo => {
          listaCartoes.push(new Cartao(usuarioID, tipo));
       });
       return listaCartoes;

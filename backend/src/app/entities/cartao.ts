@@ -25,4 +25,8 @@ export default class Cartao extends BaseEntity {
       this.dtt_interacao_cartao = null;
    }
 
+   public marcarCartaoLido() {
+      this.dtt_interacao_cartao = new Date().toISOString();
+   }
+
 }

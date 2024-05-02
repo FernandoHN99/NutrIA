@@ -20,11 +20,11 @@ export default class UsuarioService{
    }
 
    public async obterUsuarioPorID(usuarioID: string): Promise<Usuario> {
-      let usuarioRetornado: any = await this.usuarioRepo.obterUsuarioPorID(usuarioID);
+      let usuarioRetornado = await this.usuarioRepo.obterUsuarioPorID(usuarioID);
       if(!usuarioRetornado){
          JsonReponseErro.lancar(404, 'Usuário não encontrado');
       }
-      return usuarioRetornado;
+      return usuarioRetornado!;
    }
 
    public async obterContaPorID(contaId: string): Promise<any> {
