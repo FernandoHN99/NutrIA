@@ -34,10 +34,11 @@ export default class UsuarioService{
       return { id: data.user.id, email: data.user.identities[0].email }
    }
 
-   public async criarUsuario(id_conta: string, dadosUsuario: criarUsuarioObject): Promise<any> {
+   public async criarUsuario(id_conta: string, dadosUsuario: criarUsuarioObject): Promise<Usuario> {
       const novoUsuario: Usuario = new Usuario();
       novoUsuario.atribuirDados({ ...dadosUsuario, id_usuario: id_conta });
-      return novoUsuario.save();
+      await this.usuarioRepo.inserirUsuario(novoUsuario);
+      return novoUsuario;
    }
 
    public async criarConta(criarContaJSON: criarUsuarioObject): Promise<any> {

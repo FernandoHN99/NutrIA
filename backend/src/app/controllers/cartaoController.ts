@@ -29,7 +29,3 @@ export default class CartaoController{
    }
 
 }
-
-   //    const retornoCartoes = await cartaoRepository.find({
-   //       relations: ['usuario']
-   // });

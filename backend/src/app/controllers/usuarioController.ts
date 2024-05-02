@@ -33,7 +33,7 @@ export default class UsuarioController {
       };
       const retornoContaCriada = await this.usuarioService.criarConta(resultadoParse.data);
       const retornoUsuarioCriacao =  await this.usuarioService.criarUsuario(retornoContaCriada.id, resultadoParse.data);
-      return new JsonReponseSucesso(201, 'Usuário criado com sucesso', retornoUsuarioCriacao);
+      return new JsonReponseSucesso(201, 'Usuário criado com sucesso', { email: retornoContaCriada.email, ...retornoUsuarioCriacao });
    }
 
    public async atualizarUsuarioConta(req: Request, res: Response): Promise<JsonReponseSucesso> {
@@ -69,11 +69,6 @@ export default class UsuarioController {
    public async obterTodosUsuarios(req: Request, res: Response): Promise<JsonReponseSucesso> {
       let retornoUsuarios = await this.usuarioService.obterTodosUsuarios();
       return new JsonReponseSucesso(200, 'Usuários retornados com sucesso', retornoUsuarios);
-   }
-
-   public async teste(req: Request, res: Response){
-      let retornoTeste = await this.usuarioService.teste();
-      return new JsonReponseSucesso(200, 'TESTE', retornoTeste);
    }
    
 }
