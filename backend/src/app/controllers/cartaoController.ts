@@ -19,13 +19,4 @@ export default class CartaoController{
       return new JsonReponseSucesso(200, 'Cartoes retornados com sucesso', retornoCartoes);
    }
 
-   public async criarCartoesUsuario(req: Request, res: Response): Promise<JsonReponseSucesso>{
-      const usuarioID: string = req.params.id_usuario;
-      if(!validate(usuarioID)){
-         JsonReponseErro.lancar(400, 'ID do usuário inválido');
-      }
-      const retornoCartao = await this.cartaoService.criarCartoesUsuario(usuarioID);
-      return new JsonReponseSucesso(200, 'Cartao criado com sucesso', retornoCartao);
-   }
-
 }

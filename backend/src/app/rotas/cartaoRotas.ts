@@ -12,9 +12,10 @@ export default class UsuarioRotas implements Rota {
       this.roteador = Router()
       this.controller = new CartaoController();
 
-      this.roteador.post('/criar/:id_usuario', Util.envolveFuncTryCatch(this.controller, this.controller.criarCartoesUsuario));
       this.roteador.get('/:id_usuario', Util.envolveFuncTryCatch(this.controller, this.controller.obterCartoesUsuario));
+
       console.log('Rotas Cartao: Ativo');
    }
+   
 }
 
