@@ -1,7 +1,6 @@
 import { z } from 'zod';
 import { criarUsuarioSchema } from './criarUsuarioSchema';
 
-
 const atualizarUsuarioContaSchema = criarUsuarioSchema.partial()
    .pick({email: true, password: true})
    .extend({ id_usuario: z.string().uuid('Formato Inválido: ID do Usuário') })

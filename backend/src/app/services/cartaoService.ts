@@ -1,5 +1,6 @@
 import CartaoRepositorio from "../repositories/cartaoRepositorio";
 import Cartao from "../entities/cartao";
+
 export default class CartaoService{
    
    private cartaoRepo: CartaoRepositorio;

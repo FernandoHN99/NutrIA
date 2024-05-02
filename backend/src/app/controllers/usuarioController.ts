@@ -65,10 +65,5 @@ export default class UsuarioController {
       let retornoLogin = await this.usuarioService.fazerLogin(resultadoParse.data);
       return new JsonReponseSucesso(200, 'Login efetuado com sucesso', retornoLogin);
    }
-
-   public async obterTodosUsuarios(req: Request, res: Response): Promise<JsonReponseSucesso> {
-      let retornoUsuarios = await this.usuarioService.obterTodosUsuarios();
-      return new JsonReponseSucesso(200, 'Usuários retornados com sucesso', retornoUsuarios);
-   }
    
 }

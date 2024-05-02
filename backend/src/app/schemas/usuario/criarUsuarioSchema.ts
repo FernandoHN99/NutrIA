@@ -1,4 +1,4 @@
-import { number, z } from 'zod';
+import { z } from 'zod';
 import Util from '../../../utils/util';
 
 const criarUsuarioSchema = z.object({

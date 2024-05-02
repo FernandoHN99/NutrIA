@@ -81,14 +81,10 @@ export default class UsuarioService{
       return data.session;
    }
 
-   public async obterTodosUsuarios(): Promise<Usuario[] | null> {
-      return await Usuario.find()
-   }
-
-
    private setClienteSupabase(){
       this.clienteSupabase = createClient(API_EXTERNAL_URL, SERVICE_KEY);
    }
+   
 }
 
 
