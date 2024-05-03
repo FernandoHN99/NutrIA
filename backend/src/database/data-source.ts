@@ -3,6 +3,7 @@ import { DataSource } from 'typeorm'
 import { USUARIO, HOST, DATABASE, SENHA, PORTA_DB } from '../config/variaveis'
 import Usuario  from '../app/entities/usuario'
 import Cartao from '../app/entities/cartao'
+import Dia from '../app/entities/dia'
 
 export const AppDataSource = new DataSource({
    type: 'postgres',
@@ -13,7 +14,7 @@ export const AppDataSource = new DataSource({
    database: DATABASE,
    synchronize: false,
    logging: false,
-   entities: [Usuario, Cartao],
+   entities: [Usuario, Cartao, Dia],
    migrations: [],
    subscribers: [],
 })

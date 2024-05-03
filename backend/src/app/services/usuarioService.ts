@@ -43,7 +43,7 @@ export default class UsuarioService{
          dadosUsuario.sistema_metrico, dadosUsuario.perfil_alimentar);
 
       await this.usuarioRepo.inserirUsuario(novoUsuario);
-      await this.cartaoService.criarCartoesUsuario(novoUsuario.id_usuario);
+      // await this.cartaoService.criarCartoesUsuario(novoUsuario.id_usuario);
       return novoUsuario;
    }
 

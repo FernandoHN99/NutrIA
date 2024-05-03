@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryColumn, BaseEntity, OneToMany, JoinColumn, AfterInsert} from "typeorm";
 import Cartao from "./cartao";
+import Dia from "./dia";
 import { atualizarUsuarioDadosObject } from "../schemas/usuario/atualizarUsuarioDadosSchema";
 
 @Entity('usuario')
@@ -32,6 +33,10 @@ export default class Usuario extends BaseEntity {
    @OneToMany(() => Cartao, (cartao) => cartao.usuario)
    @JoinColumn({ name: 'id_usuario' })
    cartoes: Cartao[]
+
+   @OneToMany(() => Dia, (dia) => dia.usuario)
+   @JoinColumn({ name: 'id_usuario' })
+   dias: Dia[]
 
 
    constructor(id_usuario: string, dt_nascimento: string, nome: string, sobrenome: string, 

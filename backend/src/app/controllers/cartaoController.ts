@@ -1,5 +1,5 @@
 import CartaoService from "../services/cartaoService";
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import { JsonReponseSucesso, JsonReponseErro } from "../../utils/jsonReponses";
 import validate  from 'uuid-validate'
 import { atualizarCartaoSchema } from "../schemas/cartao/atualizarCartao";

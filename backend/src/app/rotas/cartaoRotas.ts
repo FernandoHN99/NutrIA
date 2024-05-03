@@ -3,7 +3,7 @@ import Rota from '../../utils/rota';
 import CartaoController from '../controllers/cartaoController';
 import Util from '../../utils/util';
 
-export default class UsuarioRotas implements Rota {
+export default class CartaoRotas implements Rota {
    public caminho: string = '/cartao';
    public roteador: Router;
    public controller: CartaoController;
