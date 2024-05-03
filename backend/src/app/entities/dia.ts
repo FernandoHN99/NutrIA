@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryColumn, BaseEntity, ManyToOne, JoinColumn} from "typeorm";
 import Usuario from "./usuario";
+import { salvarDiaObject } from "../schemas/dia/salvarDiaSchema";
 
 @Entity('dia')
 export default class Dia extends BaseEntity {
@@ -11,25 +12,33 @@ export default class Dia extends BaseEntity {
    dt_dia: string;
 
    @Column('numeric', { precision: 4, scale: 1 })
-   peso_dia: number;
+   peso_dia: number | null;
 
    @Column('bytea')
-   foto_dia: Buffer;
+   foto_dia: string | null;
 
    @Column('numeric', { precision: 4, scale: 1 })
-   medida_abdomen_dia: number;
+   medida_abdomen_dia: number | null;
 
    @ManyToOne(() => Usuario, (usuario) => usuario.dias)
    @JoinColumn({ name: "id_usuario" })
    usuario: Usuario;
 
-   constructor(id_usuario: string, peso_dia: number, foto_dia: Buffer, medida_abdomen_dia: number) {
+   constructor(dados: salvarDiaObject) {
       super();
-      this.id_usuario = id_usuario;
-      this.dt_dia = new Date().toISOString().split('T')[0];
-      this.peso_dia = peso_dia;
-      this.foto_dia = foto_dia;
-      this.medida_abdomen_dia = medida_abdomen_dia;
+      if(dados){
+         this.id_usuario = dados.id_usuario;
+         this.dt_dia = dados.dt_dia
+         this.peso_dia = dados.peso_dia || null;
+         this.foto_dia = dados.foto_dia || null;
+         this.medida_abdomen_dia = dados.medida_abdomen_dia || null;
+      }
+   }
+
+   public atualizar(dados: salvarDiaObject): void {
+      this.peso_dia = dados.peso_dia || this.peso_dia;
+      this.foto_dia = dados.foto_dia || this.foto_dia;
+      this.medida_abdomen_dia = dados.medida_abdomen_dia || this.medida_abdomen_dia;
    }
 
 }

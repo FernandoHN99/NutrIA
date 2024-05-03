@@ -3,7 +3,7 @@ import Usuario from '../entities/usuario';
 import { API_EXTERNAL_URL, SERVICE_KEY }  from '../../config/variaveis'
 import { criarUsuarioObject } from '../schemas/usuario/criarUsuarioSchema';
 import { atualizarUsuarioDadosObject } from '../schemas/usuario/atualizarUsuarioDadosSchema';
-import { atualizarUsuarioContaObject } from '../schemas/usuario/atualizarUsuarioContaSchema ';
+import { atualizarUsuarioContaObject } from '../schemas/usuario/atualizarUsuarioContaSchema';
 import { efetuarLoginObject } from '../schemas/usuario/efetuarLoginSchema';
 import { createClient } from '@supabase/supabase-js'
 import { JsonReponseErro } from '../../utils/jsonReponses';

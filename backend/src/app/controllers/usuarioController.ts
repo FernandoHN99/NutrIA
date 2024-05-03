@@ -3,7 +3,7 @@ import UsuarioService from '../services/usuarioService';
 import validate  from 'uuid-validate'
 import { efetuarLoginSchema } from '../schemas/usuario/efetuarLoginSchema';
 import { criarUsuarioSchema, criarUsuarioObject } from '../schemas/usuario/criarUsuarioSchema';
-import { atualizarUsuarioContaSchema } from '../schemas/usuario/atualizarUsuarioContaSchema ';
+import { atualizarUsuarioContaSchema } from '../schemas/usuario/atualizarUsuarioContaSchema';
 import { atualizarUsuarioDadosSchema } from '../schemas/usuario/atualizarUsuarioDadosSchema';
 import { JsonReponseSucesso, JsonReponseErro } from '../../utils/jsonReponses';
 import { atualizarUsuarioDadosObject } from '../schemas/usuario/atualizarUsuarioDadosSchema';

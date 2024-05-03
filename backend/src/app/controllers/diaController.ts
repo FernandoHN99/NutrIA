@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { JsonReponseSucesso, JsonReponseErro } from "../../utils/jsonReponses";
 import validate  from 'uuid-validate'
 import DiaService from '../services/diaService';
+import { salvarDiaSchema } from '../schemas/dia/salvarDiaSchema';
 
 export default class DiaController{
    private diaService: DiaService;
@@ -17,6 +18,15 @@ export default class DiaController{
       }
       const retornoDias = await this.diaService.pegarDiasUsuario(usuarioID);
       return new JsonReponseSucesso(200, 'Dias retornados com sucesso', retornoDias);
+   }
+
+   public async salvarDia(req: Request, res: Response): Promise<JsonReponseSucesso>{
+      const resultadoParse: any = salvarDiaSchema.safeParse(req.body); 
+      if (!resultadoParse.success){
+         JsonReponseErro.lancar(400, 'JSON inválido', resultadoParse.error);
+      };
+      const novoDia = await this.diaService.salvarDia(resultadoParse.data);
+      return new JsonReponseSucesso(200, 'Dia salvo com sucesso', novoDia);
    }
 
 }
