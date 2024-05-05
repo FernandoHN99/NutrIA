@@ -12,7 +12,8 @@ export default class DiaService{
    }
 
    public async pegarDiasUsuario(usuarioID: string): Promise<Dia[]>{
-      return await this.diaRepo.obterDiasUsuario(usuarioID);
+      const dias = await this.diaRepo.obterDiasUsuario(usuarioID);
+      return dias.map(dia => this.converterTiposDadosDia(dia));
    }
 
    public async salvarDia(dadosSalvarDia: salvarDiaObject): Promise<Dia> {
