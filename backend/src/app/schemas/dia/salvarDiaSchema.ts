@@ -11,19 +11,21 @@ const salvarDiaSchema = z.object({
          message: 'Data do dia não pode ser maior que a data atual'
       }),
 
-
    peso_dia: z.number()
       .int().min(0).max(999.9, 
          {message: 'Formato Inválido: Peso'})
-         .optional(),
+      .nullable()
+      .optional(),
 
    foto_dia: z.string()
+      .nullable()
       .optional(),
 
    medida_abdomen_dia: z.number()
       .int().min(0).max(999.9, 
          {message: 'Formato Inválido: Medida de abdomen'})
-         .optional(),
+      .nullable()  
+      .optional(),
          
 })
 .refine(data => Object.keys(data).length > 2, {

@@ -15,7 +15,6 @@ export default class DiaRepositorio {
 
    public async pegarDiaUsuario(usuarioID: string, dtDia: string): Promise<Dia | null> {
       return await this.repositorio.findOne({ where: { id_usuario: usuarioID , dt_dia: dtDia}});
-
    }
 
 }

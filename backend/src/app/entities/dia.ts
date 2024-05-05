@@ -35,10 +35,18 @@ export default class Dia extends BaseEntity {
       }
    }
 
-   public atualizar(dados: salvarDiaObject): void {
-      this.peso_dia = dados.peso_dia || this.peso_dia;
-      this.foto_dia = dados.foto_dia || this.foto_dia;
-      this.medida_abdomen_dia = dados.medida_abdomen_dia || this.medida_abdomen_dia;
-   }
+   public atualizar(dadosAtualizacao: salvarDiaObject): void {
+      this.peso_dia = dadosAtualizacao.peso_dia !== undefined 
+         ? dadosAtualizacao.peso_dia 
+            : this.peso_dia;
+            
+      this.foto_dia = dadosAtualizacao.foto_dia !== undefined 
+         ? dadosAtualizacao.foto_dia 
+            : this.foto_dia;
 
+      this.medida_abdomen_dia = dadosAtualizacao.medida_abdomen_dia !== undefined 
+         ? dadosAtualizacao.medida_abdomen_dia 
+            : this.medida_abdomen_dia;
+  }
+  
 }
