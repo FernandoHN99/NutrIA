@@ -29,9 +29,10 @@ export default class Dia extends BaseEntity {
       if(dados){
          this.id_usuario = dados.id_usuario;
          this.dt_dia = dados.dt_dia
-         this.peso_dia = dados.peso_dia || null;
-         this.foto_dia = dados.foto_dia || null;
-         this.medida_abdomen_dia = dados.medida_abdomen_dia || null;
+         this.peso_dia = dados.peso_dia !== undefined ? dados.peso_dia : null;
+         this.foto_dia = dados.foto_dia !== undefined ? dados.foto_dia : null;
+         this.medida_abdomen_dia = dados.medida_abdomen_dia !== undefined 
+            ? dados.medida_abdomen_dia : null;
       }
    }
 

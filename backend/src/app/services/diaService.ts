@@ -22,7 +22,15 @@ export default class DiaService{
       }else{
          dia = new Dia(dadosSalvarDia);
       }
+      dia = this.converterTiposDadosDia(dia);
       return await dia.save();
+   }
+
+   private converterTiposDadosDia(dia: Dia): Dia{
+      dia.foto_dia = dia.foto_dia ? dia.foto_dia.toString() : null;
+      dia.medida_abdomen_dia = dia.medida_abdomen_dia ? parseFloat(dia.medida_abdomen_dia.toString()) : null;
+      dia.peso_dia = dia.peso_dia ? parseFloat(dia.peso_dia.toString()) : null;
+      return dia;
    }
 
 }
