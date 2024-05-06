@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { JsonReponseSucesso, JsonReponseErro } from './jsonReponses';
+import { directoryImport } from 'directory-import';
 
 export default class Util {
 
@@ -27,12 +28,22 @@ export default class Util {
       return string.length > 0;
   }
 
-  static returnarInstaciasRotas(importedModules: any): [] {
-      let rotas: any = [];
-      for (let key in importedModules) {
-         rotas.push(new importedModules[key].default());
+  static exportarColecaoInstacias(caminhoModulos: string): [] {
+      const modulosImportados: any = directoryImport(caminhoModulos);
+      let instanciasExportadas: any = [];
+      for (let key in modulosImportados) {
+         instanciasExportadas.push(new modulosImportados[key].default());
       }
-      return rotas;
+      return instanciasExportadas;
+  }
+
+  static exportarColecao(caminhoModulos: string): [] {
+      const modulosImportados: any = directoryImport(caminhoModulos);
+      let modulosExportados: any = [];
+      for (let key in modulosImportados) {
+         modulosExportados.push(modulosImportados[key].default);
+      }
+      return modulosImportados;
   }
 
   static capitalize(frase: string){
