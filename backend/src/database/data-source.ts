@@ -5,6 +5,7 @@ import Usuario  from '../app/entities/usuario'
 import Cartao from '../app/entities/cartao'
 import Dia from '../app/entities/dia'
 import Refeicao from '../app/entities/refeicao'
+import Alimento from '../app/entities/alimento'
 
 export const AppDataSource = new DataSource({
    type: 'postgres',
@@ -15,7 +16,7 @@ export const AppDataSource = new DataSource({
    database: DATABASE,
    synchronize: false,
    logging: false,
-   entities: [Usuario, Cartao, Dia, Refeicao],
+   entities: [Usuario, Cartao, Dia, Refeicao, Alimento],
    migrations: [],
    subscribers: [],
 })
