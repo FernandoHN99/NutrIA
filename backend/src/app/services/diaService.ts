@@ -11,13 +11,13 @@ export default class DiaService{
       this.diaRepo = new DiaRepositorio()
    }
 
-   public async pegarDiasUsuario(usuarioID: string): Promise<Dia[]>{
+   public async obterDiasUsuario(usuarioID: string): Promise<Dia[]>{
       const dias = await this.diaRepo.obterDiasUsuario(usuarioID);
       return dias.map(dia => this.converterTiposDadosDia(dia));
    }
 
    public async salvarDia(dadosSalvarDia: salvarDiaObject): Promise<Dia> {
-      let dia = await this.diaRepo.pegarDiaUsuario(dadosSalvarDia.id_usuario, dadosSalvarDia.dt_dia);
+      let dia = await this.diaRepo.obterDiaUsuario(dadosSalvarDia.id_usuario, dadosSalvarDia.dt_dia);
       if(dia){
          dia.atualizar(dadosSalvarDia);
       }else{

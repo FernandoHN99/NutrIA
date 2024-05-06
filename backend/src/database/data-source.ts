@@ -4,6 +4,7 @@ import { USUARIO, HOST, DATABASE, SENHA, PORTA_DB } from '../config/variaveis'
 import Usuario  from '../app/entities/usuario'
 import Cartao from '../app/entities/cartao'
 import Dia from '../app/entities/dia'
+import Refeicao from '../app/entities/refeicao'
 
 export const AppDataSource = new DataSource({
    type: 'postgres',
@@ -14,7 +15,7 @@ export const AppDataSource = new DataSource({
    database: DATABASE,
    synchronize: false,
    logging: false,
-   entities: [Usuario, Cartao, Dia],
+   entities: [Usuario, Cartao, Dia, Refeicao],
    migrations: [],
    subscribers: [],
 })

@@ -1,6 +1,7 @@
 import { Entity, Column, PrimaryColumn, BaseEntity, OneToMany, JoinColumn, AfterInsert} from "typeorm";
 import Cartao from "./cartao";
 import Dia from "./dia";
+import Refeicao from "./refeicao";
 import { atualizarUsuarioDadosObject } from "../schemas/usuario/atualizarUsuarioDadosSchema";
 
 @Entity('usuario')
@@ -38,6 +39,9 @@ export default class Usuario extends BaseEntity {
    @JoinColumn({ name: 'id_usuario' })
    dias: Dia[]
 
+   @OneToMany(() => Refeicao, (refeicao) => refeicao.usuario)
+   @JoinColumn({ name: 'id_usuario' })
+   refeicoes: Refeicao[]
 
    constructor(id_usuario: string, dt_nascimento: string, nome: string, sobrenome: string, 
          pais: string, sexo: string, sistema_metrico: string, perfil_alimentar: string) {

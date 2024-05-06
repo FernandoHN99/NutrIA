@@ -39,4 +39,8 @@ export default class Util {
       return frase.replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase());
   }
 
+  static criarStrDataAtual(): string {
+      return new Date().toISOString().split('T')[0];
+  }
+
 }

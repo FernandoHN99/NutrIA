@@ -13,7 +13,7 @@ export default class DiaRepositorio {
       return await this.repositorio.find({ where: { id_usuario: usuarioID }, order: { dt_dia: "ASC" }});
    }
 
-   public async pegarDiaUsuario(usuarioID: string, dtDia: string): Promise<Dia | null> {
+   public async obterDiaUsuario(usuarioID: string, dtDia: string): Promise<Dia | null> {
       return await this.repositorio.findOne({ where: { id_usuario: usuarioID, dt_dia: dtDia }});
    }
 
