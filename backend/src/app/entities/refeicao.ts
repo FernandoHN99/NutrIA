@@ -1,6 +1,7 @@
 import { Entity, Column, PrimaryColumn, BaseEntity, ManyToOne, JoinColumn} from "typeorm";
 import Usuario from "./usuario";
 import Util from "../../utils/util";
+import { atualizarRefeicaoObject } from "../schemas/refeicao/atualizarRefeicaoSchema";
 
 // CREATE TABLE refeicao (
 // 	id_usuario uuid,
@@ -43,8 +44,13 @@ export default class Refeicao extends BaseEntity {
          this.dt_criacao = Util.criarStrDataAtual();
    }
 
-   public atualizar(dadosAtualizacao: any): void {
-      
+   public atualizar(dadosAtualizacao: atualizarRefeicaoObject): void {
+      this.nome_refeicao =  dadosAtualizacao.nome_refeicao !== undefined 
+         ? dadosAtualizacao.nome_refeicao 
+            : this.nome_refeicao;
+      this.ativa = dadosAtualizacao.ativa !== undefined 
+         ? dadosAtualizacao.ativa 
+            : this.ativa;
   }
   
 }

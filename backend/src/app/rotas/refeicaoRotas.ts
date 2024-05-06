@@ -13,6 +13,7 @@ export default class DiaRotas implements Rota {
       this.controller = new RefeicaoController();
 
       this.roteador.post('/criar', Util.envolveFuncTryCatch(this.controller, this.controller.criarRefeicao));
+      this.roteador.patch('/atualizar', Util.envolveFuncTryCatch(this.controller, this.controller.atualizarRefeicao));
       this.roteador.get('/:id_usuario', Util.envolveFuncTryCatch(this.controller, this.controller.obterRefeicoesUsuario));
 
       console.log('Rotas Refeicao: Ativo');

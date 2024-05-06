@@ -48,7 +48,7 @@ export default class Servidor {
       AppDataSource.initialize().then(async () => {
          console.log('Banco de dados: Ativo');
          this.app.listen(this.porta, () => {
-            console.log(`Servidor: Ativo em Porta: ${this.porta}`);
+            console.log(`Servidor (${this.porta}): Ativo`);
          });
       }).catch((erro) => {
          console.error('Erro ao conectar ao banco de dados', erro);

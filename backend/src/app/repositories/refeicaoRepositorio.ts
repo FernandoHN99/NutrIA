@@ -10,7 +10,7 @@ export default class RefeicaoRepositorio {
    }
 
    public async obterRefeicoesUsuario(usuarioID: string): Promise<Refeicao[]> {
-      return await this.repositorio.find({ where: { id_usuario: usuarioID }});
+      return await this.repositorio.find({ where: { id_usuario: usuarioID }, order: { numero_refeicao: 'ASC' }});
    }
 
    public async contarRefeicoesUsuario(usuarioID: string): Promise<number> {
@@ -19,6 +19,10 @@ export default class RefeicaoRepositorio {
 
    public criarRefeicao(refeicao: Refeicao): Promise<Refeicao> {
       return this.repositorio.insert(refeicao);
+   }
+
+   public async obterRefeicao(id_usuario: string, numero_refeicao: number): Promise<Refeicao> {
+      return await this.repositorio.findOne({ where: { id_usuario, numero_refeicao }});
    }
 
 }
