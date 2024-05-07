@@ -43,7 +43,7 @@ export default class Util {
       for (let key in modulosImportados) {
          modulosExportados.push(modulosImportados[key].default);
       }
-      return modulosImportados;
+      return modulosExportados;
   }
 
   static capitalize(frase: string){
