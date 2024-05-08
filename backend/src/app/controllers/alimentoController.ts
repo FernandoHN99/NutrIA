@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { JsonReponseSucesso, JsonReponseErro } from "../../utils/jsonReponses";
-import validate  from 'uuid-validate'
+import { buscarAlimentosSchema } from '../schemas/alimento/buscarAlimentoSchema';
 import AlimentoService from '../services/alimentoService';
 
 export default class DiaController{
@@ -11,12 +11,12 @@ export default class DiaController{
    }
 
    public async obterAlimentos(req: Request, res: Response): Promise<JsonReponseSucesso>{
-      const usuarioID: string = req.params.id_usuario;
-      if(!validate(usuarioID)){
-         JsonReponseErro.lancar(400, 'ID do usuário inválido');
-      }
-      const retornoRefeicoes = await this.alimentoService.obterAlimentos();
-      return new JsonReponseSucesso(200, 'Refeicoes retornados com sucesso', retornoRefeicoes);
+      const resultadoParse: any = buscarAlimentosSchema.safeParse(req.query); 
+      if (!resultadoParse.success){
+         JsonReponseErro.lancar(400, 'Parametros inválidos', resultadoParse.error);
+      };
+      const retornoAlimentos = await this.alimentoService.obterAlimentos(resultadoParse.data);
+      return new JsonReponseSucesso(200, 'Alimentos retornados com sucesso', retornoAlimentos);
    }
    
 }
