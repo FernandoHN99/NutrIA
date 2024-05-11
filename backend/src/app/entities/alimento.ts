@@ -1,11 +1,12 @@
 import { Entity, Column, PrimaryColumn, BaseEntity, ManyToOne, JoinColumn} from "typeorm";
 import Usuario from "./usuario";
 import { criarAlimentoObject } from "../schemas/alimento/criarAlimentoSchema";
+import { atualizarAlimentoObject } from "../schemas/alimento/atualizarAlimentoSchema";
 
 @Entity('alimento')
 export default class Alimento extends BaseEntity {
 
-   @PrimaryColumn('int4')
+   @PrimaryColumn('int4', { generated: true })
    id_alimento: number;
 
    @Column('uuid')
@@ -46,8 +47,29 @@ export default class Alimento extends BaseEntity {
       }
    }
 
-   public atualizar(dadosAtualizacao: any): void {
 
-  }
+   public atualizar(dadosAtualizacao: atualizarAlimentoObject): void {
+
+      this.nome_alimento = dadosAtualizacao.nome_alimento !== undefined
+         ? dadosAtualizacao.nome_alimento
+            : this.nome_alimento;
+
+      this.estado_alimento = dadosAtualizacao.estado_alimento !== undefined
+         ? dadosAtualizacao.estado_alimento
+            : this.estado_alimento;
+
+      this.grupo_excludente = dadosAtualizacao.grupo_excludente !== undefined
+         ? dadosAtualizacao.grupo_excludente
+            : this.grupo_excludente;
+
+      this.alimento_verificado = dadosAtualizacao.alimento_verificado !== undefined
+         ? dadosAtualizacao.alimento_verificado
+            : this.alimento_verificado;
+
+      this.marca_alimento = dadosAtualizacao.marca_alimento !== undefined
+         ? dadosAtualizacao.marca_alimento
+            : this.marca_alimento;
+         
+      }
   
 }

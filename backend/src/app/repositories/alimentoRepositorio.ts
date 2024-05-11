@@ -13,7 +13,8 @@ export default class AlimentoRepositorio {
    public async obterAlimentos(pegar: number, pular: number): Promise<Alimento[]> {
       return await this.repositorio.find(
          { order: { 
-            nome_alimento: 'ASC' 
+            alimento_verificado: 'DESC',
+            nome_alimento: 'ASC',
          }, 
          take: pegar, 
          skip: pular});
@@ -25,11 +26,16 @@ export default class AlimentoRepositorio {
              nome_alimento: ILike(`%${nome}%`)
          },
          order: {
-             nome_alimento: 'ASC'
+            alimento_verificado: 'DESC',
+            nome_alimento: 'ASC'
          },
          take: pegar,
          skip: pular
      });
+   }
+
+   public async obterAlimentoPorId(idAlimento: number): Promise<Alimento> {
+      return await this.repositorio.findOne({ where: { id_alimento: idAlimento }});
    }
 
 }
