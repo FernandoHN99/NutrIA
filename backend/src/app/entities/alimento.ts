@@ -1,7 +1,6 @@
 import { Entity, Column, PrimaryColumn, BaseEntity, ManyToOne, JoinColumn} from "typeorm";
 import Usuario from "./usuario";
-import Util from "../../utils/util";
-
+import { criarAlimentoObject } from "../schemas/alimento/criarAlimentoSchema";
 
 @Entity('alimento')
 export default class Alimento extends BaseEntity {
@@ -10,7 +9,7 @@ export default class Alimento extends BaseEntity {
    id_alimento: number;
 
    @Column('uuid')
-   id_usuario: string;
+   id_criador: string;
 
    @Column('text')
    nome_alimento: string;
@@ -25,20 +24,30 @@ export default class Alimento extends BaseEntity {
    grupo_excludente: string;
 
    @Column('text')
-   marca_alimento: string;
+   marca_alimento: string | null;
    
    @Column('timestamp')
    dtt_criacao_alimento: string;
    
    @ManyToOne(() => Usuario, (usuario) => usuario.alimentos)
-   @JoinColumn({ name: "id_usuario" })
+   @JoinColumn({ name: "id_criador" })
    usuario: Usuario;
 
-   constructor() {
+   constructor(criarAlimentoObject: criarAlimentoObject) {
       super();
+      if(criarAlimentoObject){
+         this.id_criador = criarAlimentoObject.id_criador;
+         this.nome_alimento = criarAlimentoObject.nome_alimento;
+         this.estado_alimento = criarAlimentoObject.estado_alimento;
+         this.grupo_excludente = criarAlimentoObject.grupo_excludente;
+         this.alimento_verificado = false;
+         this.marca_alimento = criarAlimentoObject.marca_alimento || null;
+         this.dtt_criacao_alimento = new Date().toISOString();
+      }
    }
 
    public atualizar(dadosAtualizacao: any): void {
+
   }
   
 }

@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { JsonReponseSucesso, JsonReponseErro } from './jsonReponses';
 import { directoryImport } from 'directory-import';
-import { util } from 'zod';
 
 export default class Util {
 
