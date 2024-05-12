@@ -3,6 +3,7 @@ import Cartao from "./cartao";
 import Dia from "./dia";
 import Refeicao from "./refeicao";
 import Alimento from "./alimento";
+import AlimentoConsumido from "./alimentoConsumido";
 import { atualizarUsuarioDadosObject } from "../schemas/usuario/atualizarUsuarioDadosSchema";
 
 @Entity('usuario')
@@ -47,6 +48,10 @@ export default class Usuario extends BaseEntity {
    @OneToMany(() => Alimento, (alimento) => alimento.usuario)
    @JoinColumn({ name: 'id_usuario' })
    alimentos: Alimento[]
+
+   @OneToMany(() => AlimentoConsumido, (alimentoConsumido) => alimentoConsumido.usuario)
+   @JoinColumn({ name: 'id_usuario' })
+   alimentosConsumidos: AlimentoConsumido[]
 
    constructor(id_usuario: string, dt_nascimento: string, nome: string, sobrenome: string, 
          pais: string, sexo: string, sistema_metrico: string, perfil_alimentar: string) {
