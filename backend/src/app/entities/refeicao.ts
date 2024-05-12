@@ -3,15 +3,6 @@ import Usuario from "./usuario";
 import Util from "../../utils/util";
 import { atualizarRefeicaoObject } from "../schemas/refeicao/atualizarRefeicaoSchema";
 
-// CREATE TABLE refeicao (
-// 	id_usuario uuid,
-// 	numero_refeicao SMALLINT,
-// 	nome_refeicao TEXT NOT NULL,
-// 	ativa BOOLEAN NOT NULL,
-// 	dt_criacao DATE NOT NULL,
-// 	CONSTRAINT refeicao_fk_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario) ON DELETE CASCADE,
-// 	PRIMARY KEY (id_usuario, numero_refeicao)
-// );
 
 @Entity('refeicao')
 export default class Refeicao extends BaseEntity {

@@ -10,19 +10,6 @@ export default class AlimentoRepositorio {
       this.repositorio = AppDataSource.getRepository(Alimento);
    }
 
-   public async obterAlimentos(pegar: number, pular: number): Promise<Alimento[]> {
-      return await this.repositorio.find({
-         where: { 
-            alimento_ativo: true 
-         },
-         order: { 
-            alimento_verificado: 'DESC',
-            nome_alimento: 'ASC',
-         }, 
-         take: pegar, 
-         skip: pular});
-   }
-
    public async obterAlimentosDoUsuario(usuarioID: string): Promise<Alimento[]> {
       return await this.repositorio.find({
          where: {

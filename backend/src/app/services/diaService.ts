@@ -1,6 +1,5 @@
 import DiaRepositorio from "../repositories/diaRepositorio";
 import Dia from "../entities/dia";
-import { JsonReponseErro } from "../../utils/jsonReponses";
 import { salvarDiaObject } from "../schemas/dia/salvarDiaSchema";
 
 export default class DiaService{

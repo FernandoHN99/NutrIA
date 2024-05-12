@@ -33,6 +33,17 @@ export default class Util {
       return !isNaN(numero);
    }
 
+   static validarNumeroPositivo(valor: any): boolean {
+      const numero = parseFloat(valor);
+      return !isNaN(numero) && numero >= 0;
+   }
+
+   static validarNumeroMaiorZero(valor: any): boolean {
+      const numero = parseFloat(valor);
+      return !isNaN(numero) && numero > 0;
+   }
+
+
    static exportarColecaoInstacias(caminhoModulos: string): [] {
       const modulosImportados: any = directoryImport(caminhoModulos);
       let instanciasExportadas: any = [];

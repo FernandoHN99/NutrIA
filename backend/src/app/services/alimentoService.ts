@@ -14,14 +14,10 @@ export default class AlimentoService{
    }
 
    public async obterAlimentos(buscarAlimentos: buscarAlimentosOject): Promise<Alimento[]>{
-      if(buscarAlimentos.nome){
          return await this.alimentoRepo.obterAlimentosPorNome(
             buscarAlimentos.nome, 
-            buscarAlimentos.pegar, 
-            buscarAlimentos.pular
-         );
-      }
-      return await this.alimentoRepo.obterAlimentos(buscarAlimentos.pegar, buscarAlimentos.pular);
+            parseFloat(buscarAlimentos.pegar),
+            parseFloat(buscarAlimentos.pular));
    }
 
    public async obterAlimentosUsuario(usuarioID: string): Promise<Alimento[]>{
