@@ -28,6 +28,9 @@ const atualizarAlimentoSchema = z.object({
 
    marca_alimento: z.string()
       .optional(),
+   
+   alimento_ativo: z.boolean()
+      .optional(),
 
 }).refine(data => Object.keys(data).length > 2, {
    message: 'Nenhum dado fornecido para atualização do alimento',

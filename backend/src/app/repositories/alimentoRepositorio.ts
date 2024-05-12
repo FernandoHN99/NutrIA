@@ -11,8 +11,11 @@ export default class AlimentoRepositorio {
    }
 
    public async obterAlimentos(pegar: number, pular: number): Promise<Alimento[]> {
-      return await this.repositorio.find(
-         { order: { 
+      return await this.repositorio.find({
+         where: { 
+            alimento_ativo: true 
+         },
+         order: { 
             alimento_verificado: 'DESC',
             nome_alimento: 'ASC',
          }, 
@@ -20,10 +23,24 @@ export default class AlimentoRepositorio {
          skip: pular});
    }
 
+   public async obterAlimentosDoUsuario(usuarioID: string): Promise<Alimento[]> {
+      return await this.repositorio.find({
+         where: {
+            id_criador: usuarioID,
+            alimento_ativo: true
+         },
+         order: {
+            alimento_verificado: 'DESC',
+            nome_alimento: 'ASC'
+         },
+      });
+   }
+
    public async obterAlimentosPorNome(nome: string, pegar: number, pular: number): Promise<Alimento[]> {
       return await this.repositorio.find({
          where: {
-             nome_alimento: ILike(`%${nome}%`)
+             nome_alimento: ILike(`%${nome}%`),
+             alimento_ativo: true
          },
          order: {
             alimento_verificado: 'DESC',

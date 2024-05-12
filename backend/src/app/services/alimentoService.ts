@@ -1,5 +1,5 @@
 import AlimentoRepositorio from "../repositories/alimentoRepositorio";
-import { buscarAlimentosOject } from "../schemas/alimento/buscarAlimentoSchema";
+import { buscarAlimentosOject } from "../schemas/alimento/buscarAlimentosSchema";
 import { criarAlimentoObject } from "../schemas/alimento/criarAlimentoSchema";
 import { atualizarAlimentoObject } from '../schemas/alimento/atualizarAlimentoSchema';
 import { JsonReponseErro } from "../../utils/jsonReponses";
@@ -24,6 +24,10 @@ export default class AlimentoService{
       return await this.alimentoRepo.obterAlimentos(buscarAlimentos.pegar, buscarAlimentos.pular);
    }
 
+   public async obterAlimentosUsuario(usuarioID: string): Promise<Alimento[]>{
+      return await this.alimentoRepo.obterAlimentosDoUsuario(usuarioID)
+   }
+   
    public async criarAlimento(criarAlimento: criarAlimentoObject): Promise<any>{
       const alimento = new Alimento(criarAlimento);
       return await alimento.save();
@@ -42,11 +46,14 @@ export default class AlimentoService{
       if(!alimento){
          JsonReponseErro.lancar(404, 'Alimento não encontrado');
       }
-      else if(alimento.alimento_verificado){
-         JsonReponseErro.lancar(400, 'Alimento já verificado, não é possível atualizar');
-      }
       else if(alimento.id_criador !== atualizarAlimento.id_usuario){
          JsonReponseErro.lancar(403, 'Usuário não tem permissão para atualizar esse alimento');
+      }
+      else if(!alimento.alimento_ativo){
+         JsonReponseErro.lancar(400, 'Alimento inativo, não é possível atualizar');
+      }
+      else if(alimento.alimento_verificado){
+         JsonReponseErro.lancar(400, 'Alimento já verificado, não é possível atualizar');
       }
       alimento.atualizar(atualizarAlimento);
       return await alimento.save();

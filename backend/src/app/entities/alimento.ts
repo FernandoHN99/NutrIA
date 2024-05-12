@@ -29,6 +29,9 @@ export default class Alimento extends BaseEntity {
    
    @Column('timestamp')
    dtt_criacao_alimento: string;
+
+   @Column('boolean')
+   alimento_ativo: boolean;
    
    @ManyToOne(() => Usuario, (usuario) => usuario.alimentos)
    @JoinColumn({ name: "id_criador" })
@@ -42,6 +45,7 @@ export default class Alimento extends BaseEntity {
          this.estado_alimento = criarAlimentoObject.estado_alimento;
          this.grupo_excludente = criarAlimentoObject.grupo_excludente;
          this.alimento_verificado = false;
+         this.alimento_ativo = true;
          this.marca_alimento = criarAlimentoObject.marca_alimento || null;
          this.dtt_criacao_alimento = new Date().toISOString();
       }
@@ -69,7 +73,10 @@ export default class Alimento extends BaseEntity {
       this.marca_alimento = dadosAtualizacao.marca_alimento !== undefined
          ? dadosAtualizacao.marca_alimento
             : this.marca_alimento;
-         
+
+      this.alimento_ativo = dadosAtualizacao.alimento_ativo !== undefined
+         ? dadosAtualizacao.alimento_ativo
+            : this.alimento_ativo;         
       }
   
 }

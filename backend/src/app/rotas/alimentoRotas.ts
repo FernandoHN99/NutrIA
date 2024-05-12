@@ -11,6 +11,7 @@ export default class DiaRotas implements Rota {
    constructor() {
       this.roteador = Router()
       this.controller = new AlimentoController();
+      this.roteador.get('/buscar/:id_usuario', Util.envolveFuncTryCatch(this.controller, this.controller.obterAlimentosUsuario));
       this.roteador.get('/buscar', Util.envolveFuncTryCatch(this.controller, this.controller.obterAlimentos));
       this.roteador.post('/criar', Util.envolveFuncTryCatch(this.controller, this.controller.criarAlimento));
       this.roteador.patch('/atualizar', Util.envolveFuncTryCatch(this.controller, this.controller.atualizarAlimento));
