@@ -36,6 +36,9 @@ export default class Servidor {
    private ativarRotas(): void {
       this.ativarSubRotas();
       this.app.use('/nutria', this.roteadorServidor);
+      this.app.use((req, res) => {
+         res.status(404).json({ sucesso: false, codigo: 404, mensagem: 'Rota não encontrada', rota: req.url });
+       });
    }
    
    private ativarSubRotas() {
