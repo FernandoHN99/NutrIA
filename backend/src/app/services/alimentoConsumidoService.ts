@@ -1,8 +1,8 @@
 import ControleCaloriasRepositorio from "../repositories/alimentoConsumidoRepositorio";
 import AlimentoConsumido from "../entities/alimentoConsumido";
 import { buscarAlimentosConsumidosObject } from "../schemas/alimentoConsumido/buscarAlimentosConsumidosSchema";
+import { criarAlimentoConsumidoObject } from "../schemas/alimentoConsumido/criarAlimentoConsumidoSchema";
 import { JsonReponseErro } from "../../utils/jsonReponses";
-import Util from "../../utils/util";
 
 export default class ControleCaloriasService{
    
@@ -16,6 +16,11 @@ export default class ControleCaloriasService{
       if(dadosbusca.dataInicio! > dadosbusca.dataFim!){
          JsonReponseErro.lancar(400, 'Data de início maior que data de fim');
       }
-      return await this.controleCaloriasRepo.obterConsumoUsuario(usuarioID, dadosbusca?.dataInicio!, dadosbusca.dataFim!);
+      return await this.controleCaloriasRepo.obterConsumoUsuario(usuarioID, dadosbusca.dataInicio!, dadosbusca.dataFim!);
+   }
+
+   public async cadastrarConsumoAlimento(cadastrarConsumoAlimentoJSON: criarAlimentoConsumidoObject): Promise<AlimentoConsumido>{
+      let novoAlimentoConsumido = new AlimentoConsumido(cadastrarConsumoAlimentoJSON);
+      return await novoAlimentoConsumido.save();
    }
 }

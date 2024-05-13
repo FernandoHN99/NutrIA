@@ -2,7 +2,9 @@ import { Request, Response } from 'express';
 import { JsonReponseSucesso, JsonReponseErro } from "../../utils/jsonReponses";
 import AlimentoConsumidoService from '../services/alimentoConsumidoService';
 import { buscarAlimentosConsumidosSchema } from '../schemas/alimentoConsumido/buscarAlimentosConsumidosSchema';
+import { criarAlimentoConsumidoSchema } from '../schemas/alimentoConsumido/criarAlimentoConsumidoSchema';
 import validate  from 'uuid-validate'
+import { atualizarAlimentoSchema } from '../schemas/alimento/atualizarAlimentoSchema';
 
 
 export default class AlimentoConsumidoController{
@@ -23,5 +25,22 @@ export default class AlimentoConsumidoController{
       }
       const retornoConsumoUsuario = await this.alimentoConsumidoService.obterConsumoUsuario(usuarioID, resultadoParse.data);
       return new JsonReponseSucesso(200, 'Consumo do usuário retornado com sucesso', retornoConsumoUsuario);
+   }
+
+   public async salvarAlimentoConsumido(req: Request, res: Response): Promise<JsonReponseSucesso>{
+      let resultadoParseCriar: any = criarAlimentoConsumidoSchema.safeParse(req.body)
+      // let resultadoParseAtualizar: any = atualizarAlimentoConsumidoSchema.safeParse(req.body)
+      let retornoSalvarAlimentoConsumido;
+      if (resultadoParseCriar.success){
+         retornoSalvarAlimentoConsumido = await this.alimentoConsumidoService.cadastrarConsumoAlimento(resultadoParseCriar.data);
+      }
+      // else if (resultadoParseAtualizar.success){
+      //    retornoSalvarAlimentoConsumido = await this.alimentoConsumidoService.atualizarAlimentoConsumido(usuarioID, resultadoParse.data);
+      // }
+      else{
+         JsonReponseErro.lancar(400, 'JSON inválido', resultadoParseCriar.error);
+      }
+      return new JsonReponseSucesso(200, 'Consumo do usuário retornado com sucesso', retornoSalvarAlimentoConsumido);
+
    }
 }

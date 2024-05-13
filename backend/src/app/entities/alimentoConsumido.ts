@@ -1,11 +1,15 @@
 import { Entity, Column, PrimaryColumn, BaseEntity, ManyToOne, JoinColumn } from "typeorm";
+import { criarAlimentoConsumidoObject } from "../schemas/alimentoConsumido/criarAlimentoConsumidoSchema";
 import Usuario from "./usuario";
 
 
 @Entity('alimento_consumido')
 export default class AlimentoConsumido extends BaseEntity {
-   @PrimaryColumn('int8')
+   @PrimaryColumn('int8', { generated: true })
    id_alimento_consumido: number;
+
+   @PrimaryColumn('uuid')
+   id_usuario: string;
 
    @Column('int')
    numero_refeicao: number;
@@ -14,10 +18,10 @@ export default class AlimentoConsumido extends BaseEntity {
    id_alimento: number;
 
    @Column('int4')
-   id_prato: number;
+   id_prato: number | null;
 
    @Column('date')
-   dt_dia: Date;
+   dt_dia: string;
 
    @Column('text')
    unidade_medida: string;
@@ -43,5 +47,23 @@ export default class AlimentoConsumido extends BaseEntity {
    @ManyToOne(() => Usuario, usuario => usuario.alimentosConsumidos)
    @JoinColumn({name: 'id_usuario'})
    usuario: Usuario;
+
+   constructor (criarAlimentoConsumido: criarAlimentoConsumidoObject){
+      super();
+      if(criarAlimentoConsumido){
+         this.id_usuario = criarAlimentoConsumido.id_usuario;
+         this.numero_refeicao = criarAlimentoConsumido.numero_refeicao;
+         this.id_alimento = criarAlimentoConsumido.id_alimento;
+         this.id_prato = criarAlimentoConsumido.id_prato;
+         this.dt_dia = criarAlimentoConsumido.dt_dia;
+         this.unidade_medida = criarAlimentoConsumido.unidade_medida;
+         this.porcao_padrao = criarAlimentoConsumido.porcao_padrao;
+         this.qtde_utilizada = criarAlimentoConsumido.qtde_utilizada;
+         this.qtde_proteina = criarAlimentoConsumido.qtde_proteina;
+         this.qtde_carboidrato = criarAlimentoConsumido.qtde_carboidrato;
+         this.qtde_gordura = criarAlimentoConsumido.qtde_gordura;
+         this.qtde_alcool = criarAlimentoConsumido.qtde_alcool;
+      }    
+   }
 
 }

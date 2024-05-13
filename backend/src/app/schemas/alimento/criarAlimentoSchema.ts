@@ -1,26 +1,4 @@
 import { z } from 'zod';
-import Util from '../../../utils/util';
-
-// CREATE TABLE alimento (
-// 	id_alimento SERIAL,
-//    id_usuario UUID,
-// 	nome_alimento TEXT NOT NULL,
-// 	estado_alimento VARCHAR(20) NOT NULL,
-// 	alimento_verificado BOOLEAN NOT NULL,
-// 	grupo_excludente VARCHAR(25) NOT NULL,
-// 	marca_alimento TEXT,
-//    dtt_criacao_alimento TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-// 	CONSTRAINT check_grupo_excludente CHECK (
-// 		grupo_excludente IN (
-// 			'ONIVORO', 'VEGETARIANO', 'VEGANO')
-// 	), 
-// 	CONSTRAINT check_estado_alimento CHECK (
-// 		estado_alimento IN (
-// 			'CRU', 'COZIDO', 'ASSADO', 'FRITO', 'GRELHADO', 'PADRAO')
-// 	), 
-//    CONSTRAINT alimento_fk_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario),
-// 	PRIMARY KEY (id_alimento)
-// );
 
 const criarAlimentoSchema = z.object({
 

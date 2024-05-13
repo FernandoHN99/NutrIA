@@ -10,12 +10,12 @@ export default class AlimentoConsumidoRepositorio{
       this.repositorio = AppDataSource.getRepository(AlimentoConsumido);
    }
 
-   
    public async obterConsumoUsuario(usuarioID: string, dataInicio: string, dataFim: string): Promise<any[]> {
       const query = `
       SELECT ac.dt_dia,  
          r.nome_refeicao, 
          a.nome_alimento, 
+         a.id_alimento, 
          ac.unidade_medida, 
          ac.porcao_padrao, 
          ac.qtde_utilizada, 

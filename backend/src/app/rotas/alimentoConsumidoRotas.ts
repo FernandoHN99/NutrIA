@@ -12,6 +12,7 @@ export default class AlimentoConsumidoRotas implements Rota {
       this.roteador = Router()
       this.controller = new AlimentoConsumidoController();
       this.roteador.get('/:usuarioID', Util.envolveFuncTryCatch(this.controller, this.controller.obterConsumoUsuario));
+      this.roteador.put('/salvar', Util.envolveFuncTryCatch(this.controller, this.controller.salvarAlimentoConsumido));
 
       console.log('Rotas Alimentos Consumidos: Ativo');
    }
