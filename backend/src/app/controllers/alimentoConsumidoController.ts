@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { JsonReponseSucesso, JsonReponseErro } from "../../utils/jsonReponses";
 import AlimentoConsumidoService from '../services/alimentoConsumidoService';
+import { buscarAlimentosConsumidosSchema } from '../schemas/alimentoConsumido/buscarAlimentosConsumidosSchema';
 import validate  from 'uuid-validate'
 
 
@@ -16,7 +17,11 @@ export default class AlimentoConsumidoController{
       if(!validate(usuarioID)){
          JsonReponseErro.lancar(400, 'ID do usuário inválido');
       }
-      const retornoConsumoUsuario = await this.alimentoConsumidoService.obterConsumoUsuario(usuarioID);
+      const resultadoParse: any = buscarAlimentosConsumidosSchema.safeParse(req.query)
+      if (!resultadoParse.success){
+         JsonReponseErro.lancar(400, 'JSON inválido', resultadoParse.error);
+      }
+      const retornoConsumoUsuario = await this.alimentoConsumidoService.obterConsumoUsuario(usuarioID, resultadoParse.data);
       return new JsonReponseSucesso(200, 'Consumo do usuário retornado com sucesso', retornoConsumoUsuario);
    }
 }

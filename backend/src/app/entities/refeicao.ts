@@ -32,7 +32,7 @@ export default class Refeicao extends BaseEntity {
          this.numero_refeicao = numero_refeicao;
          this.nome_refeicao = nome_refeicao;
          this.ativa = true;
-         this.dt_criacao = Util.criarStrDataAtual();
+         this.dt_criacao = Util.criarStrData();
    }
 
    public atualizar(dadosAtualizacao: atualizarRefeicaoObject): void {

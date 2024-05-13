@@ -11,7 +11,7 @@ export default class AlimentoConsumidoRepositorio{
    }
 
    
-   public async obterConsumoUsuario(usuarioID: string): Promise<any[]> {
+   public async obterConsumoUsuario(usuarioID: string, dataInicio: string, dataFim: string): Promise<any[]> {
       const query = `
       SELECT ac.dt_dia,  
          r.nome_refeicao, 
@@ -32,7 +32,11 @@ export default class AlimentoConsumidoRepositorio{
          AND r.id_usuario = ac.id_usuario
       WHERE
          ac.id_usuario = '${usuarioID}'
-      ORDER BY ac.dt_dia ASC, r.numero_refeicao ASC;
+         AND ac.dt_dia >= '${dataInicio}'
+         AND ac.dt_dia <= '${dataFim}'   
+      ORDER BY 
+         ac.dt_dia ASC, 
+         r.numero_refeicao ASC;
       `;
       return await this.repositorio.query(query);
    }

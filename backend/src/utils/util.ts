@@ -43,7 +43,6 @@ export default class Util {
       return !isNaN(numero) && numero > 0;
    }
 
-
    static exportarColecaoInstacias(caminhoModulos: string): [] {
       const modulosImportados: any = directoryImport(caminhoModulos);
       let instanciasExportadas: any = [];
@@ -66,8 +65,9 @@ export default class Util {
       return frase.replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase());
    }
 
-   static criarStrDataAtual(): string {
-      return new Date().toISOString().split('T')[0];
+
+   static criarStrData(dias: number = 0, meses: number = 0, anos: number = 0, data: Date = new Date()): string {
+      return new Date(data.getFullYear() + anos, data.getMonth() + meses, data.getDate() + dias).toISOString().split('T')[0];
    }
 
 }
