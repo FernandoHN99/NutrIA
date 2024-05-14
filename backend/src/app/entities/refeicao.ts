@@ -1,6 +1,7 @@
-import { Entity, Column, PrimaryColumn, BaseEntity, ManyToOne, JoinColumn} from "typeorm";
+import { Entity, Column, PrimaryColumn, BaseEntity, ManyToOne, JoinColumn, OneToMany} from "typeorm";
 import Usuario from "./usuario";
 import Util from "../../utils/util";
+import AlimentoConsumido from "./alimentoConsumido";
 import { atualizarRefeicaoObject } from "../schemas/refeicao/atualizarRefeicaoSchema";
 
 
@@ -25,6 +26,11 @@ export default class Refeicao extends BaseEntity {
    @ManyToOne(() => Usuario, (usuario) => usuario.refeicoes)
    @JoinColumn({ name: "id_usuario" })
    usuario: Usuario;
+
+   @OneToMany(() => AlimentoConsumido, alimentoConsumido => alimentoConsumido.refeicao)
+   @JoinColumn({ name: 'id_usuario', referencedColumnName: 'id_usuario' })
+   @JoinColumn({ name: 'numero_refeicao', referencedColumnName: 'numero_refeicao' })
+   alimentosConsumidos: AlimentoConsumido[];
 
    constructor(id_usuario: string, nome_refeicao: string, numero_refeicao: number) {
       super();

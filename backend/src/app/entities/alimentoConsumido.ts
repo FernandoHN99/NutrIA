@@ -1,13 +1,16 @@
-import { Entity, Column, PrimaryColumn, BaseEntity, ManyToOne, JoinColumn } from "typeorm";
+import { Entity, Column, PrimaryColumn, BaseEntity, ManyToOne, JoinColumn, OneToMany, OneToOne } from "typeorm";
 import { criarAlimentoConsumidoObject } from "../schemas/alimentoConsumido/criarAlimentoConsumidoSchema";
 import Usuario from "./usuario";
+import Alimento from "./alimento";
+import Refeicao from "./refeicao";
+import Util from '../../utils/util';
 
 
 @Entity('alimento_consumido')
 export default class AlimentoConsumido extends BaseEntity {
    @PrimaryColumn('int8', { generated: true })
    id_alimento_consumido: number;
-
+   
    @PrimaryColumn('uuid')
    id_usuario: string;
 
@@ -32,21 +35,33 @@ export default class AlimentoConsumido extends BaseEntity {
    @Column('numeric', { precision: 5, scale: 1 })
    qtde_utilizada: number;
 
-   @Column('numeric', { precision: 6, scale: 1 })
+   @Column('numeric', { precision: 5, scale: 1})
    qtde_proteina: number;
 
-   @Column('numeric', { precision: 6, scale: 1 })
+   @Column('numeric', { precision: 5, scale: 1 })
    qtde_carboidrato: number;
 
-   @Column('numeric', { precision: 6, scale: 1 })
+   @Column('numeric', { precision: 5, scale: 1})
    qtde_gordura: number;
 
-   @Column('numeric', { precision: 6, scale: 1 })
+   @Column('numeric', { precision: 5, scale: 1 })
    qtde_alcool: number;
+
+   @Column('numeric', { precision: 5, scale: 1, transformer: Util.transformerStringNumber })
+   kcal: number;
 
    @ManyToOne(() => Usuario, usuario => usuario.alimentosConsumidos)
    @JoinColumn({name: 'id_usuario'})
    usuario: Usuario;
+
+   @ManyToOne(() => Alimento, alimento => alimento.alimentosConsumidos)
+   @JoinColumn({ name: 'id_alimento' })
+   alimento: Alimento;
+
+   @ManyToOne(() => Refeicao, refeicao => refeicao.alimentosConsumidos)
+   @JoinColumn({ name: 'numero_refeicao', referencedColumnName: 'numero_refeicao' })
+   @JoinColumn({ name: 'id_usuario', referencedColumnName: 'id_usuario' })
+   refeicao: Refeicao;
 
    constructor (criarAlimentoConsumido: criarAlimentoConsumidoObject){
       super();
@@ -63,6 +78,7 @@ export default class AlimentoConsumido extends BaseEntity {
          this.qtde_carboidrato = criarAlimentoConsumido.qtde_carboidrato;
          this.qtde_gordura = criarAlimentoConsumido.qtde_gordura;
          this.qtde_alcool = criarAlimentoConsumido.qtde_alcool;
+         this.kcal = criarAlimentoConsumido.kcal;
       }    
    }
 

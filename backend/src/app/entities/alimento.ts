@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryColumn, BaseEntity, ManyToOne, JoinColumn} from "typeorm";
+import { Entity, Column, PrimaryColumn, BaseEntity, ManyToOne, JoinColumn, OneToMany} from "typeorm";
 import Usuario from "./usuario";
+import AlimentoConsumido from "./alimentoConsumido";
 import { criarAlimentoObject } from "../schemas/alimento/criarAlimentoSchema";
 import { atualizarAlimentoObject } from "../schemas/alimento/atualizarAlimentoSchema";
 
@@ -34,8 +35,12 @@ export default class Alimento extends BaseEntity {
    alimento_ativo: boolean;
    
    @ManyToOne(() => Usuario, (usuario) => usuario.alimentos)
-   @JoinColumn({ name: "id_criador" })
+   @JoinColumn({ name: 'id_criador' })
    usuario: Usuario;
+
+   @OneToMany(() => AlimentoConsumido, (alimentoConsumido) => alimentoConsumido.alimento)
+   @JoinColumn({ name: 'id_alimento' })
+   alimentosConsumidos: AlimentoConsumido[];
 
    constructor(criarAlimentoObject: criarAlimentoObject) {
       super();
