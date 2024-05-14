@@ -18,11 +18,7 @@ export default class RefeicaoService{
 
    public async criarRefeicao(ciarRefeicaoDados: criarRefeicaoObject): Promise<any>{
       let numeroRefeicoes = await this.refeicaoRepo.contarRefeicoesUsuario(ciarRefeicaoDados.id_usuario);
-      const novaRefeicao = new Refeicao(
-         ciarRefeicaoDados.id_usuario, 
-         ciarRefeicaoDados.nome_refeicao, 
-         (numeroRefeicoes + 1)
-      );
+      const novaRefeicao = new Refeicao(ciarRefeicaoDados, (numeroRefeicoes + 1));
       await this.refeicaoRepo.criarRefeicao(novaRefeicao);
       return novaRefeicao;
    }

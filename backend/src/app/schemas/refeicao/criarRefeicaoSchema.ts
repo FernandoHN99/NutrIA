@@ -6,8 +6,8 @@ const criarRefeicaoSchema = z.object({
    
    nome_refeicao: z.string().min(1).max(25,
       {message: 'Formato Inválido: Nome da Refeição'}),
-   
-})
+
+});
 
 type criarRefeicaoObject = z.infer<typeof criarRefeicaoSchema>;
 
