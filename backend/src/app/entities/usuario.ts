@@ -55,7 +55,6 @@ export default class Usuario extends BaseEntity {
 
    constructor(id_usuario: string, dt_nascimento: string, nome: string, sobrenome: string, 
          pais: string, sexo: string, sistema_metrico: string, perfil_alimentar: string) {
-            
       super();
       this.id_usuario = id_usuario;
       this.dt_nascimento = dt_nascimento;

@@ -8,7 +8,7 @@ import Util from '../../utils/util';
 
 @Entity('alimento_consumido')
 export default class AlimentoConsumido extends BaseEntity {
-   @PrimaryColumn('int8', { generated: true })
+   @PrimaryColumn('int8', { generated: true, transformer: Util.transformerStringNumber })
    id_alimento_consumido: number;
    
    @PrimaryColumn('uuid')
@@ -32,19 +32,19 @@ export default class AlimentoConsumido extends BaseEntity {
    @Column('integer')
    porcao_padrao: number;
 
-   @Column('numeric', { precision: 5, scale: 1 })
+   @Column('numeric', { precision: 5, scale: 1, transformer: Util.transformerStringNumber })
    qtde_utilizada: number;
 
-   @Column('numeric', { precision: 5, scale: 1})
+   @Column('numeric', { precision: 5, scale: 1, transformer: Util.transformerStringNumber })
    qtde_proteina: number;
 
-   @Column('numeric', { precision: 5, scale: 1 })
+   @Column('numeric', { precision: 5, scale: 1, transformer: Util.transformerStringNumber  })
    qtde_carboidrato: number;
 
-   @Column('numeric', { precision: 5, scale: 1})
+   @Column('numeric', { precision: 5, scale: 1, transformer: Util.transformerStringNumber })
    qtde_gordura: number;
 
-   @Column('numeric', { precision: 5, scale: 1 })
+   @Column('numeric', { precision: 5, scale: 1, transformer: Util.transformerStringNumber  })
    qtde_alcool: number;
 
    @Column('numeric', { precision: 5, scale: 1, transformer: Util.transformerStringNumber })

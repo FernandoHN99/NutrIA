@@ -6,13 +6,13 @@ const criarAlimentoConsumidoSchema = z.object({
       .uuid('Formato Inválido: ID do Usuário'),
 
    id_alimento: z.number()
-      .int().min(1, { message: 'Campo Inválido: ID do Alimento Consumido'}),
+      .int().min(1),
    
    numero_refeicao: z.number()
-      .int().min(1, { message: 'Campo Inválido: Número da Refeição'}),
+      .int().min(1),
    
    id_prato: z.number()
-      .int().min(1, { message: 'Campo Inválido: ID do Prato'})
+      .int().min(1)
       .nullable()
       .optional()
       .default(null),
@@ -21,27 +21,29 @@ const criarAlimentoConsumidoSchema = z.object({
       .refine(Util.validarData, { message: 'Formato Inválido: Data do Dia' }),
    
    unidade_medida: z.string()
-      .min(1).max(10, { message: 'Campo Inválido: Unidade de Medida' })
+      .min(1).max(10)
       .transform(sistema => sistema.toLocaleUpperCase()),
    
-   porcao_padrao: z.number()
-      .min(0, { message: 'Campo Inválido: Porção Padrão' }),
+   porcao_padrao: z.number().int()
+      .min(0).positive(),
    
    qtde_utilizada: z.number()
-      .min(1).max(9999.9, { message: 'Campo Inválido: Quantidade Utilizada' }),
+      .min(0).max(9999.9).positive(),
 
    qtde_proteina: z.number()
-      .min(0).max(99999.9, { message: 'Campo Inválido: Quantidade de Proteína' }),
+      .min(0).max(9999.9),
 
    qtde_carboidrato: z.number()
-      .min(0).max(99999.9, { message: 'Campo Inválido: Quantidade de Carboidrato' }),
+      .min(0).max(9999.9),
 
    qtde_gordura: z.number()
-      .min(0).max(99999.9, { message: 'Campo Inválido: Quantidade de Gordura' }),
+      .min(0).max(9999.9),
 
    qtde_alcool: z.number()
-      .min(0).max(99999.9, { message: 'Campo Inválido: Quantidade de Álcool' }),
-      
+      .min(0).max(9999.9),
+
+   kcal: z.number()
+      .min(0).max(9999.9).positive(),
 })
 
 type criarAlimentoConsumidoObject = z.infer<typeof criarAlimentoConsumidoSchema>;

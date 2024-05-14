@@ -4,8 +4,7 @@ import AlimentoConsumidoService from '../services/alimentoConsumidoService';
 import { buscarAlimentosConsumidosSchema } from '../schemas/alimentoConsumido/buscarAlimentosConsumidosSchema';
 import { criarAlimentoConsumidoSchema } from '../schemas/alimentoConsumido/criarAlimentoConsumidoSchema';
 import validate  from 'uuid-validate'
-import { atualizarAlimentoSchema } from '../schemas/alimento/atualizarAlimentoSchema';
-
+import { atualizarAlimentoConsumidoSchema } from '../schemas/alimentoConsumido/atualizarAlimentoConsumidoSchema';
 
 export default class AlimentoConsumidoController{
    private alimentoConsumidoService: AlimentoConsumidoService;

@@ -23,4 +23,5 @@ export default class ControleCaloriasService{
       let novoAlimentoConsumido = new AlimentoConsumido(cadastrarConsumoAlimentoJSON);
       return await novoAlimentoConsumido.save();
    }
+   
 }
