@@ -42,7 +42,7 @@ export default class AlimentoService{
       if(!alimento){
          JsonReponseErro.lancar(404, 'Alimento não encontrado');
       }
-      else if(alimento.id_criador !== atualizarAlimento.id_usuario){
+      else if(alimento.id_usuario !== atualizarAlimento.id_usuario){
          JsonReponseErro.lancar(403, 'Usuário não tem permissão para atualizar esse alimento');
       }
       else if(!alimento.alimento_ativo){
@@ -51,7 +51,7 @@ export default class AlimentoService{
       else if(alimento.alimento_verificado){
          JsonReponseErro.lancar(400, 'Alimento já verificado, não é possível atualizar');
       }
-      alimento.atualizar(atualizarAlimento);
+      alimento.atualizarDados(atualizarAlimento);
       return await alimento.save();
    }
 
