@@ -44,9 +44,10 @@ export default class UsuarioService{
 
    public async criarConta(criarContaJSON: criarUsuarioObject): Promise<any> {
       this.setClienteSupabase()
-      const { data, error } = await this.clienteSupabase.auth.admin.createUser(
-         {...criarContaJSON,  email_confirm: true});
-
+      const { data, error } = await this.clienteSupabase.auth.admin.createUser({  
+            ...criarContaJSON,  
+            email_confirm: true
+         });
       if(error || !data?.user?.id){
          if(error?.code.includes('email_exists')){
             JsonReponseErro.lancar(409, 'Email já cadastrado');
