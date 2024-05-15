@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryColumn, BaseEntity, ManyToOne, JoinColumn, OneToMany, OneToOne } from "typeorm";
 import { criarAlimentoConsumidoObject } from "../schemas/alimentoConsumido/criarAlimentoConsumidoSchema";
+import { atualizarAlimentoConsumidoObject } from "../schemas/alimentoConsumido/atualizarAlimentoConsumidoSchema";
 import Usuario from "./usuario";
 import Alimento from "./alimento";
 import Refeicao from "./refeicao";
@@ -65,21 +66,13 @@ export default class AlimentoConsumido extends BaseEntity {
 
    constructor (criarAlimentoConsumido: criarAlimentoConsumidoObject){
       super();
-      if(criarAlimentoConsumido){
-         this.id_usuario = criarAlimentoConsumido.id_usuario;
-         this.numero_refeicao = criarAlimentoConsumido.numero_refeicao;
-         this.id_alimento = criarAlimentoConsumido.id_alimento;
-         this.id_prato = criarAlimentoConsumido.id_prato;
-         this.dt_dia = criarAlimentoConsumido.dt_dia;
-         this.unidade_medida = criarAlimentoConsumido.unidade_medida;
-         this.porcao_padrao = criarAlimentoConsumido.porcao_padrao;
-         this.qtde_utilizada = criarAlimentoConsumido.qtde_utilizada;
-         this.qtde_proteina = criarAlimentoConsumido.qtde_proteina;
-         this.qtde_carboidrato = criarAlimentoConsumido.qtde_carboidrato;
-         this.qtde_gordura = criarAlimentoConsumido.qtde_gordura;
-         this.qtde_alcool = criarAlimentoConsumido.qtde_alcool;
-         this.kcal = criarAlimentoConsumido.kcal;
-      }    
+      if (criarAlimentoConsumido) {
+         Object.assign(this, criarAlimentoConsumido);
+      }
    }
+
+   public atualizarDados(novosAtualizacao: atualizarAlimentoConsumidoObject) {
+      Object.assign(this, novosAtualizacao);
+  }
 
 }
