@@ -70,12 +70,23 @@ export default class Util {
    }
 
    static transformerStringNumber = {
-      to(value: string): number {
-         return parseFloat(value);
+      from(valor: string): number {
+         return parseFloat(valor);
       },
-      from(value: string): number {
-         return parseFloat(value);
+      to(valor: string): number {
+         return parseFloat(valor);
       }
    };
+
+   static transformerByteaString = {
+      from(valor: any): string {
+         return valor?.toString();
+      },
+      to(valor: any): any {
+         return valor;
+      }
+   };
+
+
 
 }

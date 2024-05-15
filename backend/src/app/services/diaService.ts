@@ -12,34 +12,23 @@ export default class DiaService{
    }
 
    public async obterDiasUsuario(usuarioID: string): Promise<Dia[]>{
-      const dias = await this.diaRepo.obterDiasUsuario(usuarioID);
-      return dias.map(dia => this.converterTiposDadosDia(dia));
+      return await this.diaRepo.obterDiasUsuario(usuarioID);
    }
 
    public async salvarDia(dadosSalvarDia: salvarDiaObject): Promise<Dia> {
       let diaNovo = new Dia(dadosSalvarDia);
       let dia = await this.diaRepo.obterDiaUsuario(dadosSalvarDia.id_usuario, dadosSalvarDia.dt_dia);
-      // Se o dia não existir, cria um novo dia
-      if(!dia){
-         if(diaNovo.ehValido()){
-            return await diaNovo.save();
+      if(!dia){                  // verifica se esse dia ja existe
+         if(diaNovo.ehValido()){ // dia antigo não existe e verifica se o novo eh valido
+            return await diaNovo.save(); 
          }
-         JsonReponseErro.lancar(400, 'Todos atributos do dia são nulos');
+         JsonReponseErro.lancar(400, 'Todos atributos do dia são nulos'); // dia antigo não existe e o novo eh invalido
       }
-      // Se o dia existir e for valido, atualiza
       dia!.atualizar(dadosSalvarDia);
-      if(dia!.ehValido()){
+      if(dia!.ehValido()){ // dia antigo existe e o dia atualizado eh valido
          return await dia!.save();
       }
-      // Se o dia não for válido, remove
-      return await dia!.remove();
-   }
-
-   private converterTiposDadosDia(dia: Dia): Dia{
-      dia.foto_dia = dia.foto_dia ? dia.foto_dia.toString() : null;
-      dia.medida_abdomen_dia = dia.medida_abdomen_dia ? parseFloat(dia.medida_abdomen_dia.toString()) : null;
-      dia.peso_dia = dia.peso_dia ? parseFloat(dia.peso_dia.toString()) : null;
-      return dia;
+      return await dia!.remove(); // dia antigo existe e o dia atualizado eh invalido
    }
 
 }
