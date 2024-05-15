@@ -17,7 +17,6 @@ export default class Cartao extends BaseEntity {
    @JoinColumn({ name: "id_usuario" })
    usuario: Usuario;
 
-
    constructor(id_usuario: string, tipo_cartao: string) {
       super();
       this.id_usuario = id_usuario;

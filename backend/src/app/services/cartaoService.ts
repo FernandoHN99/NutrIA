@@ -29,7 +29,7 @@ export default class CartaoService{
    public async marcarCartaoLido(dadosCartaoAtualizacao: atualizarCartaoObject){
       let cartaoAtual: Cartao = await this.pegarCartao(dadosCartaoAtualizacao.id_usuario, dadosCartaoAtualizacao.tipo_cartao);
       if(cartaoAtual.dtt_interacao_cartao){
-         JsonReponseErro.lancar(404, 'Cartão já foi lido');
+         JsonReponseErro.lancar(400, 'Cartão já foi lido');
       }
       cartaoAtual.marcarCartaoLido();
       return await cartaoAtual.save();
