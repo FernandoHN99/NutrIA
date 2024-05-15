@@ -17,7 +17,6 @@ export default class DiaService{
 
    public async salvarDia(dadosSalvarDia: salvarDiaObject): Promise<Dia> {
       let dia = await this.diaRepo.obterDiaUsuario(dadosSalvarDia.id_usuario, dadosSalvarDia.dt_dia);
-      console.log(dia);
       if(dia){
          dia.atualizar(dadosSalvarDia);
       }else{
