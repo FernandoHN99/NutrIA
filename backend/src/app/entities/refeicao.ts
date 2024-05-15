@@ -33,24 +33,15 @@ export default class Refeicao extends BaseEntity {
    @JoinColumn({ name: 'numero_refeicao', referencedColumnName: 'numero_refeicao' })
    alimentosConsumidos: AlimentoConsumido[];
 
-   constructor(criarRefeicaoDados: criarRefeicaoObject, numeroRefeicao: number) {
+   constructor(dadosCriacao: criarRefeicaoObject) {
       super();
-      if(criarRefeicaoDados && numeroRefeicao){
-         this.id_usuario = criarRefeicaoDados.id_usuario;
-         this.nome_refeicao = criarRefeicaoDados.nome_refeicao;
-         this.numero_refeicao = numeroRefeicao;
-         this.ativa = true;
-         this.dt_criacao = Util.criarStrData();
+      if(dadosCriacao){
+         Object.assign(this, dadosCriacao);
       }
    }
 
-   public atualizar(dadosAtualizacao: atualizarRefeicaoObject): void {
-      this.nome_refeicao =  dadosAtualizacao.nome_refeicao !== undefined 
-         ? dadosAtualizacao.nome_refeicao 
-            : this.nome_refeicao;
-      this.ativa = dadosAtualizacao.ativa !== undefined 
-         ? dadosAtualizacao.ativa 
-            : this.ativa;
+   public atualizar(dadosAtualizacao: atualizarRefeicaoObject) {
+      Object.assign(this, dadosAtualizacao);
   }
   
 }

@@ -17,10 +17,6 @@ export default class RefeicaoRepositorio {
       return await this.repositorio.count({ where: { id_usuario: usuarioID }});
    }
 
-   public criarRefeicao(refeicao: Refeicao): Promise<Refeicao> {
-      return this.repositorio.insert(refeicao);
-   }
-
    public async obterRefeicao(id_usuario: string, numero_refeicao: number): Promise<Refeicao> {
       return await this.repositorio.findOne({ where: { id_usuario, numero_refeicao }});
    }
