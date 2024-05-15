@@ -50,9 +50,7 @@ export default class UsuarioController {
       if (!resultadoParse.success){
          JsonReponseErro.lancar(400, 'JSON inválido', resultadoParse.error);
       }
-      const novosDadosUsuario: atualizarUsuarioDadosObject = resultadoParse.data;
-      const usuarioAtual = await this.usuarioService.obterUsuarioPorID(novosDadosUsuario.id_usuario);
-      const retoronoUsuarioDadosAtualizado = await this.usuarioService.atualizarUsuarioDados(usuarioAtual, novosDadosUsuario);
+      const retoronoUsuarioDadosAtualizado = await this.usuarioService.atualizarUsuarioDados(resultadoParse.data);
       return new JsonReponseSucesso(200, 'Dados do usuário atualizados com sucesso', retoronoUsuarioDadosAtualizado);
    }
 

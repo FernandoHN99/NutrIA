@@ -37,14 +37,9 @@ export default class UsuarioService{
    }
 
    public async criarUsuario(id_conta: string, dadosUsuario: criarUsuarioObject): Promise<Usuario> {
-      this.cartaoService = new CartaoService();
-      const novoUsuario: Usuario = new Usuario(id_conta, dadosUsuario.dt_nascimento, 
-         dadosUsuario.nome, dadosUsuario.sobrenome, dadosUsuario.pais, dadosUsuario.sexo, 
-         dadosUsuario.sistema_metrico, dadosUsuario.perfil_alimentar);
-
-      await this.usuarioRepo.inserirUsuario(novoUsuario);
-      // await this.cartaoService.criarCartoesUsuario(novoUsuario.id_usuario);
-      return novoUsuario;
+      dadosUsuario.id_usuario = id_conta;
+      const novoUsuario: Usuario = new Usuario(dadosUsuario);
+      return await novoUsuario.save();
    }
 
    public async criarConta(criarContaJSON: criarUsuarioObject): Promise<any> {
@@ -61,11 +56,10 @@ export default class UsuarioService{
       return data.user;
    }
 
-   public async atualizarUsuarioDados(usuarioAtual: Usuario, 
-      novosDadosUsuario: atualizarUsuarioDadosObject): Promise<any>{
-
-      usuarioAtual.atualizar(novosDadosUsuario);
-      return await usuarioAtual.save();
+   public async atualizarUsuarioDados(novosDadosUsuario: atualizarUsuarioDadosObject): Promise<any>{
+      let usuario = await this.obterUsuarioPorID(novosDadosUsuario.id_usuario);
+      usuario.atualizarDados(novosDadosUsuario);
+      return await usuario.save();
    }
 
    public async atualizarUsuarioConta(novosDadosContaUsuario: atualizarUsuarioContaObject): Promise<{email: any}>{

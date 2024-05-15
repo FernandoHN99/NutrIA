@@ -5,6 +5,7 @@ import Refeicao from "./refeicao";
 import Alimento from "./alimento";
 import AlimentoConsumido from "./alimentoConsumido";
 import { atualizarUsuarioDadosObject } from "../schemas/usuario/atualizarUsuarioDadosSchema";
+import { criarUsuarioObject } from "../schemas/usuario/criarUsuarioSchema";
 
 @Entity('usuario')
 export default class Usuario extends BaseEntity {
@@ -53,28 +54,15 @@ export default class Usuario extends BaseEntity {
    @JoinColumn({ name: 'id_usuario' })
    alimentosConsumidos: AlimentoConsumido[]
 
-   constructor(id_usuario: string, dt_nascimento: string, nome: string, sobrenome: string, 
-         pais: string, sexo: string, sistema_metrico: string, perfil_alimentar: string) {
+   constructor(dadosCriarUsuario: criarUsuarioObject) {
       super();
-      this.id_usuario = id_usuario;
-      this.dt_nascimento = dt_nascimento;
-      this.nome = nome;
-      this.sobrenome = sobrenome;
-      this.pais = pais;
-      this.sexo = sexo;
-      this.sistema_metrico = sistema_metrico;
-      this.perfil_alimentar = perfil_alimentar;
+      if(dadosCriarUsuario){
+         Object.assign(this, dadosCriarUsuario);
+      }
    }
-
    
-   public atualizar(novosDados: atualizarUsuarioDadosObject) {
-      this.dt_nascimento = novosDados.dt_nascimento || this.dt_nascimento;
-      this.nome = novosDados.nome || this.nome;
-      this.sobrenome = novosDados.sobrenome || this.sobrenome;
-      this.pais = novosDados.pais || this.pais;
-      this.sexo = novosDados.sexo || this.sexo;
-      this.sistema_metrico = novosDados.sistema_metrico || this.sistema_metrico;
-      this.perfil_alimentar = novosDados.perfil_alimentar || this.perfil_alimentar;
+   public atualizarDados(dadosAtualizacao: atualizarUsuarioDadosObject) {
+      Object.assign(this, dadosAtualizacao);
    }
 
 }

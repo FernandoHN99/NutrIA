@@ -3,6 +3,9 @@ import Util from '../../../utils/util';
 
 const criarUsuarioSchema = z.object({
 
+   id_usuario: z.any()
+      .transform(() => ''),
+
    email: z.string()
       .email('Formato Inválido: Email'),
 
