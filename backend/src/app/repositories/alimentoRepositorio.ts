@@ -38,8 +38,13 @@ export default class AlimentoRepositorio {
      });
    }
 
-   public async obterAlimentoPorId(idAlimento: number): Promise<Alimento> {
-      return await this.repositorio.findOne({ where: { id_alimento: idAlimento }});
+   public async obterAlimentoUsuario(idAlimento: number, usuarioID: string): Promise<Alimento> {
+      return await this.repositorio.findOne({ 
+         where: { 
+            id_alimento: idAlimento,
+            id_usuario: usuarioID,
+         }
+      });
    }
 
 }

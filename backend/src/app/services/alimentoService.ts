@@ -29,8 +29,8 @@ export default class AlimentoService{
       return await alimento.save();
    }
 
-   public async obterAlimentoPorId(id_alimento: number): Promise<Alimento>{
-      const alimento = await this.alimentoRepo.obterAlimentoPorId(id_alimento);
+   private async obterAlimentoUsuario(idAlimento: number, usuarioID: string): Promise<Alimento>{
+      const alimento = await this.alimentoRepo.obterAlimentoUsuario(idAlimento, usuarioID);
       if(!alimento){
          JsonReponseErro.lancar(404, 'Alimento não encontrado');
       }
@@ -38,17 +38,8 @@ export default class AlimentoService{
    }
 
    public async atualizarAlimento(atualizarAlimento: atualizarAlimentoObject): Promise<Alimento>{
-      const alimento = await this.obterAlimentoPorId(atualizarAlimento.id_alimento);
-      if(!alimento){
-         JsonReponseErro.lancar(404, 'Alimento não encontrado');
-      }
-      else if(alimento.id_usuario !== atualizarAlimento.id_usuario){
-         JsonReponseErro.lancar(403, 'Usuário não tem permissão para atualizar esse alimento');
-      }
-      else if(!alimento.alimento_ativo){
-         JsonReponseErro.lancar(400, 'Alimento inativo, não é possível atualizar');
-      }
-      else if(alimento.alimento_verificado){
+      const alimento = await this.obterAlimentoUsuario(atualizarAlimento.id_alimento, atualizarAlimento.id_usuario);
+      if(alimento.alimento_verificado){
          JsonReponseErro.lancar(400, 'Alimento já verificado, não é possível atualizar');
       }
       alimento.atualizarDados(atualizarAlimento);
