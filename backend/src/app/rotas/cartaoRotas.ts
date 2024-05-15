@@ -13,7 +13,7 @@ export default class CartaoRotas implements Rota {
       this.controller = new CartaoController();
 
       this.roteador.get('/:id_usuario', Util.envolveFuncTryCatch(this.controller, this.controller.obterCartoesUsuario));
-      this.roteador.patch('/cartao-lido', Util.envolveFuncTryCatch(this.controller, this.controller.marcarCartaoLido));
+      this.roteador.patch('/atualizar', Util.envolveFuncTryCatch(this.controller, this.controller.marcarCartaoLido));
 
       console.log('Rotas Cartao: Ativo');
    }

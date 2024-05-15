@@ -11,7 +11,7 @@ export default class CartaoRepositorio{
    }
 
    public async pegarCartoesUsuario(usuarioID: string): Promise<Cartao[] | null> {
-      return await this.repositorio.find({ where: { id_usuario : usuarioID } });
+      return await this.repositorio.find({ where: { id_usuario: usuarioID }, order: { dtt_interacao_cartao: 'DESC' }});
    }
 
    public async criarCartaoUsuario(listaCartoes: Cartao[]): Promise<Cartao> {
