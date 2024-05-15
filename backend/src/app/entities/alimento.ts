@@ -49,7 +49,7 @@ export default class Alimento extends BaseEntity {
       }
    }
 
-   public atualizarDados(dadosAtualizacao: atualizarAlimentoObject): void {
+   public atualizarDados(dadosAtualizacao: atualizarAlimentoObject) {
       Object.assign(this, dadosAtualizacao);
    }
   

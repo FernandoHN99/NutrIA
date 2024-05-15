@@ -12,21 +12,17 @@ const salvarDiaSchema = z.object({
       }),
 
    peso_dia: z.number()
-      .int().min(0).max(999.9, 
+      .positive().max(999.9, 
          {message: 'Formato Inválido: Peso'})
-      .nullable()
-      .optional(),
+      .nullish(),
 
    foto_dia: z.string()
-      .nullable()
-      .optional(),
+      .nullish(),
 
    medida_abdomen_dia: z.number()
-      .int().min(0).max(999.9, 
+      .positive().max(999.9, 
          {message: 'Formato Inválido: Medida de abdomen'})
-      .nullable()  
-      .optional(),
-         
+      .nullish()
 })
 .refine(data => Object.keys(data).length > 2, {
    message: 'Nenhum dado fornecido para salvar o dia',

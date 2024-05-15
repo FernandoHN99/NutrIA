@@ -14,7 +14,6 @@ export default class DiaRepositorio {
       return await this.repositorio.find({ where: { id_usuario: usuarioID }, order: { dt_dia: "ASC" }});
    }
    public async obterDiaUsuario(usuarioID: string, dtDia: string): Promise<Dia | null> {
-      // fazer um join do usuario junto com o dia
       return await this.repositorio.findOne({
          where: { 
             id_usuario: usuarioID, 

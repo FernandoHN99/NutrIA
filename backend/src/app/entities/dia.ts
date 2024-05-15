@@ -24,27 +24,24 @@ export default class Dia extends BaseEntity {
    @JoinColumn({ name: "id_usuario" })
    usuario: Usuario;
 
-   constructor(dados: salvarDiaObject) {
+   constructor(dadosCriacaoDia: salvarDiaObject) {
       super();
-      if(dados){
-         this.id_usuario = dados.id_usuario;
-         this.dt_dia = dados.dt_dia
-         this.atualizar(dados);
+      if(dadosCriacaoDia){
+         // this.id_usuario = dadosCriacaoDia.id_usuario;
+         // this.dt_dia = dadosCriacaoDia.dt_dia;
+         // this.peso_dia = dadosCriacaoDia.peso_dia || null;
+         // this.foto_dia = dadosCriacaoDia.foto_dia || null;
+         // this.medida_abdomen_dia = dadosCriacaoDia.medida_abdomen_dia || null;
+         Object.assign(this, dadosCriacaoDia);
       }
    }
 
-   public atualizar(dadosAtualizacao: salvarDiaObject): void {
-      this.peso_dia = dadosAtualizacao.peso_dia !== undefined 
-         ? dadosAtualizacao.peso_dia 
-            : this.peso_dia;
-            
-      this.foto_dia = dadosAtualizacao.foto_dia !== undefined 
-         ? dadosAtualizacao.foto_dia 
-            : this.foto_dia;
+   public atualizar(dadosAtualizacao: salvarDiaObject) {
+      Object.assign(this, dadosAtualizacao);
+  }
 
-      this.medida_abdomen_dia = dadosAtualizacao.medida_abdomen_dia !== undefined 
-         ? dadosAtualizacao.medida_abdomen_dia 
-            : this.medida_abdomen_dia;
+  public ehValido(): boolean {
+      return (this.peso_dia != null || this.foto_dia != null || this.medida_abdomen_dia != null); 
   }
   
 }

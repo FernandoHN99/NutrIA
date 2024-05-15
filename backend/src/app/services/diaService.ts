@@ -1,6 +1,7 @@
 import DiaRepositorio from "../repositories/diaRepositorio";
 import Dia from "../entities/dia";
 import { salvarDiaObject } from "../schemas/dia/salvarDiaSchema";
+import { JsonReponseErro } from "../../utils/jsonReponses";
 
 export default class DiaService{
    
@@ -16,14 +17,22 @@ export default class DiaService{
    }
 
    public async salvarDia(dadosSalvarDia: salvarDiaObject): Promise<Dia> {
+      let diaNovo = new Dia(dadosSalvarDia);
       let dia = await this.diaRepo.obterDiaUsuario(dadosSalvarDia.id_usuario, dadosSalvarDia.dt_dia);
-      if(dia){
-         dia.atualizar(dadosSalvarDia);
-      }else{
-         dia = new Dia(dadosSalvarDia);
+      // Se o dia não existir, cria um novo dia
+      if(!dia){
+         if(diaNovo.ehValido()){
+            return await diaNovo.save();
+         }
+         JsonReponseErro.lancar(400, 'Todos atributos do dia são nulos');
       }
-      dia = this.converterTiposDadosDia(dia);
-      return await dia.save();
+      // Se o dia existir e for valido, atualiza
+      dia!.atualizar(dadosSalvarDia);
+      if(dia!.ehValido()){
+         return await dia!.save();
+      }
+      // Se o dia não for válido, remove
+      return await dia!.remove();
    }
 
    private converterTiposDadosDia(dia: Dia): Dia{
