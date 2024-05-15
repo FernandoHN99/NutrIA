@@ -17,24 +17,17 @@ const criarAlimentoSchema = z.object({
       .refine(grupo => ['NENHUM', 'VEGETARIANO', 'VEGANO'].includes(grupo), {message: 'Inválido: Grupo Excludente'}),
 
    marca_alimento: z.string().min(1)
-      .nullable()
-      .optional()
+      .nullish()
       .default(null),
    
-   alimento_verificado: z.boolean()
-      .transform(() => false)
-      .optional()
-      .default(false),
+   alimento_verificado: z.any()
+      .transform(() => false),
 
-   dtt_criacao_alimento: z.string()
-      .transform(() => new Date().toISOString())
-      .optional()
-      .default(new Date().toISOString()),
+   dtt_criacao_alimento: z.any()
+      .transform(() => new Date().toISOString()),
 
-   alimento_ativo: z.boolean()
+   alimento_ativo: z.any()
       .transform(() => true)
-      .optional()
-      .default(true)
 
 });
 
