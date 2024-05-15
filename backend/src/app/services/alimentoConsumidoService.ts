@@ -20,8 +20,8 @@ export default class ControleCaloriasService{
       return await this.controleCaloriasRepo.obterConsumoUsuario(usuarioID, dadosbusca.dataInicio!, dadosbusca.dataFim!);
    }
 
-   private async obterAlimentoConsumido(id_alimento_consumido: number): Promise<AlimentoConsumido>{
-      const alimentoConsumido = await this.controleCaloriasRepo.obterAlimentoConsumido(id_alimento_consumido);
+   private async obterAlimentoConsumido(idAlimentoConsumido: number, usuarioID: string): Promise<AlimentoConsumido>{
+      const alimentoConsumido = await this.controleCaloriasRepo.obterAlimentoConsumido(idAlimentoConsumido, usuarioID);
       if(!alimentoConsumido){
          JsonReponseErro.lancar(400, 'Alimento consumido não encontrado');
       }
@@ -34,11 +34,10 @@ export default class ControleCaloriasService{
    }
 
    public async atualizarAlimentoConsumido(atualizarAlimentoConsumidoJSON: atualizarAlimentoConsumidoObject): Promise<AlimentoConsumido>{
-      let alimentoConsumido = await this.obterAlimentoConsumido(atualizarAlimentoConsumidoJSON.id_alimento_consumido);
-      if(alimentoConsumido.id_usuario !== atualizarAlimentoConsumidoJSON.id_usuario){
-         JsonReponseErro.lancar(401, 'Alimento consumido não pertence ao usuário informado');
-      
-      }
+      let alimentoConsumido = await this.obterAlimentoConsumido(
+         atualizarAlimentoConsumidoJSON.id_alimento_consumido, 
+         atualizarAlimentoConsumidoJSON.id_usuario
+      );
       alimentoConsumido.atualizarDados(atualizarAlimentoConsumidoJSON);
       return await alimentoConsumido.save();
    }

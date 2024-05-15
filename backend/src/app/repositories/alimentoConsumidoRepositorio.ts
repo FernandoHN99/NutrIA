@@ -10,8 +10,13 @@ export default class AlimentoConsumidoRepositorio {
       this.repositorio = AppDataSource.getRepository(AlimentoConsumido);
    }
 
-   public async obterAlimentoConsumido(idAlimentoConsumido: number): Promise<AlimentoConsumido> {
-      return await this.repositorio.findOne({ where: { id_alimento_consumido : idAlimentoConsumido }});
+   public async obterAlimentoConsumido(idAlimentoConsumido: number, usuarioID: string): Promise<AlimentoConsumido> {
+      return await this.repositorio.findOne({ 
+         where: { 
+            id_alimento_consumido : idAlimentoConsumido, 
+            id_usuario: usuarioID
+         }
+      });
    }
 
    public async obterConsumoUsuario(usuarioID: string, dataInicio: string, dataFim: string): Promise<any[]> {
