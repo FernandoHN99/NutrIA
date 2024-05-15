@@ -13,7 +13,7 @@ export default class AlimentoRepositorio {
    public async obterAlimentosDoUsuario(usuarioID: string): Promise<Alimento[]> {
       return await this.repositorio.find({
          where: {
-            id_criador: usuarioID,
+            id_usuario: usuarioID,
             alimento_ativo: true
          },
          order: {
