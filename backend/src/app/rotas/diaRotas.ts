@@ -13,6 +13,7 @@ export default class DiaRotas implements Rota {
       this.controller = new DiaController();
 
       this.roteador.post('/salvar', Util.envolveFuncTryCatch(this.controller, this.controller.salvarDia));
+      this.roteador.delete('/deletar', Util.envolveFuncTryCatch(this.controller, this.controller.removerDia));
       this.roteador.get('/:id_usuario', Util.envolveFuncTryCatch(this.controller, this.controller.obterDiasUsuario));
 
       console.log('Rotas Dia: Ativo');

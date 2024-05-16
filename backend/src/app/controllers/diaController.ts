@@ -3,6 +3,7 @@ import { JsonReponseSucesso, JsonReponseErro } from "../../utils/jsonReponses";
 import validate  from 'uuid-validate'
 import DiaService from '../services/diaService';
 import { salvarDiaSchema } from '../schemas/dia/salvarDiaSchema';
+import { deletarDiaObject, deletarDiaSchema } from '../schemas/dia/deletarDiaSchema';
 
 export default class DiaController{
    private diaService: DiaService;
@@ -27,6 +28,15 @@ export default class DiaController{
       };
       const novoDia = await this.diaService.salvarDia(resultadoParse.data);
       return new JsonReponseSucesso(200, 'Dia salvo com sucesso', novoDia);
+   }
+
+   public async removerDia(req: Request, res: Response): Promise<JsonReponseSucesso>{
+      const resultadoParse: any = deletarDiaSchema.safeParse(req.body); 
+      if (!resultadoParse.success){
+         JsonReponseErro.lancar(400, 'JSON inválido', resultadoParse.error);
+      };
+      await this.diaService.removerDia(resultadoParse.data);
+      return new JsonReponseSucesso(200, 'Dia removido com sucesso');
    }
 
 }

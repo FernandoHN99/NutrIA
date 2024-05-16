@@ -26,7 +26,10 @@ const salvarDiaSchema = z.object({
 })
 .refine(data => Object.keys(data).length > 2, {
    message: 'Nenhum dado fornecido para salvar o dia',
-});
+})
+.refine(data => (data.peso_dia == null && data.foto_dia == null || data.medida_abdomen_dia == null),
+   { message: 'Todos atributos do dia são nulos'}
+);
 
 type salvarDiaObject = z.infer<typeof salvarDiaSchema>;
 

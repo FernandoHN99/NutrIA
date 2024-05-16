@@ -37,10 +37,6 @@ export default class Dia extends BaseEntity {
       }
    }
 
-   public atualizar(dadosAtualizacao: salvarDiaObject) {
-      Object.assign(this, dadosAtualizacao);
-  }
-
   public ehValido(): boolean {
       return (this.peso_dia != null || this.foto_dia != null || this.medida_abdomen_dia != null); 
   }

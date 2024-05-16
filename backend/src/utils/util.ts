@@ -73,16 +73,16 @@ export default class Util {
       from(valor: string): number {
          return parseFloat(valor);
       },
-      to(valor: string): number {
-         return parseFloat(valor);
+      to(valor: any) {
+         return valor;
       }
    };
 
    static transformerByteaString = {
       from(valor: any): string {
-         return valor?.toString();
+         return valor ? valor.toString() : valor;
       },
-      to(valor: any): any {
+      to(valor: any) {
          return valor;
       }
    };

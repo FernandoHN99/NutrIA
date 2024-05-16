@@ -2,6 +2,7 @@ import DiaRepositorio from "../repositories/diaRepositorio";
 import Dia from "../entities/dia";
 import { salvarDiaObject } from "../schemas/dia/salvarDiaSchema";
 import { JsonReponseErro } from "../../utils/jsonReponses";
+import { deletarDiaObject } from "../schemas/dia/deletarDiaSchema";
 
 export default class DiaService{
    
@@ -17,18 +18,27 @@ export default class DiaService{
 
    public async salvarDia(dadosSalvarDia: salvarDiaObject): Promise<Dia> {
       let diaNovo = new Dia(dadosSalvarDia);
-      let dia = await this.diaRepo.obterDiaUsuario(dadosSalvarDia.id_usuario, dadosSalvarDia.dt_dia);
-      if(!dia){                  // verifica se esse dia ja existe
-         if(diaNovo.ehValido()){ // dia antigo não existe e verifica se o novo eh valido
-            return await diaNovo.save(); 
-         }
-         JsonReponseErro.lancar(400, 'Todos atributos do dia são nulos'); // dia antigo não existe e o novo eh invalido
+      let diaAntigo = await this.diaRepo.obterDiaUsuario(dadosSalvarDia.id_usuario, dadosSalvarDia.dt_dia);
+      if(!diaAntigo && !diaNovo.ehValido()){
+         JsonReponseErro.lancar(400, 'Dia não pode ser criado com todos seus valores nulos');
       }
-      dia!.atualizar(dadosSalvarDia);
-      if(dia!.ehValido()){ // dia antigo existe e o dia atualizado eh valido
-         return await dia!.save();
+      if(diaAntigo && !diaNovo.ehValido()){
+         JsonReponseErro.lancar(400, 'Dia não pode ser atualizado com todos seus valores nulos');
       }
-      return await dia!.remove(); // dia antigo existe e o dia atualizado eh invalido
+      return await (diaAntigo ? new Dia({...diaAntigo, ...dadosSalvarDia}) : diaNovo).save();
+   }
+
+   public async removerDia(diaRemoverDados: deletarDiaObject): Promise<void>{
+      let diaRemover = await this.obterDiaUsuario(diaRemoverDados.id_usuario, diaRemoverDados.dt_dia);
+      await diaRemover.remove();
+   }
+
+   private async obterDiaUsuario(usuarioID: string, dtDia: string): Promise<Dia>{
+      let diaRemover = await this.diaRepo.obterDiaUsuario(usuarioID, dtDia);
+      if(!diaRemover){
+         JsonReponseErro.lancar(404, 'Dia não encontrado');
+      }
+      return diaRemover!;
    }
 
 }
