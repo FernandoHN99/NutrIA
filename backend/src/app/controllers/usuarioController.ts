@@ -17,7 +17,7 @@ export default class UsuarioController {
    }
 
    public async obterUsuarioPorID(req: Request, res: Response): Promise<JsonReponseSucesso>{
-      const usuarioID: string = req.params.id;
+      const usuarioID: string = req.params.id_usuario;
       if(!validate(usuarioID)){
          JsonReponseErro.lancar(400, 'ID do usuário inválido');
       }

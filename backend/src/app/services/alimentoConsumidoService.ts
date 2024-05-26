@@ -2,8 +2,9 @@ import ControleCaloriasRepositorio from "../repositories/alimentoConsumidoReposi
 import AlimentoConsumido from "../entities/alimentoConsumido";
 import { buscarAlimentosConsumidosObject } from "../schemas/alimentoConsumido/buscarAlimentosConsumidosSchema";
 import { criarAlimentoConsumidoObject } from "../schemas/alimentoConsumido/criarAlimentoConsumidoSchema";
-import { JsonReponseErro } from "../../utils/jsonReponses";
 import { atualizarAlimentoConsumidoObject } from "../schemas/alimentoConsumido/atualizarAlimentoConsumidoSchema";
+import { deletarAlimentoConsumidoObject } from "../schemas/alimentoConsumido/deletarAlimentoConsumido";
+import { JsonReponseErro } from "../../utils/jsonReponses";
 
 export default class ControleCaloriasService{
    
@@ -42,5 +43,8 @@ export default class ControleCaloriasService{
       return await alimentoConsumido.save();
    }
 
-   
+   public async deletarAlimentoConsumido(deletarAlimentoConsumidoJSON: deletarAlimentoConsumidoObject): Promise<AlimentoConsumido>{
+      let alimentoConsumido = await this.obterAlimentoConsumido(deletarAlimentoConsumidoJSON.id_consumo, deletarAlimentoConsumidoJSON.id_usuario);
+      return await alimentoConsumido.remove();
+   }
 }
