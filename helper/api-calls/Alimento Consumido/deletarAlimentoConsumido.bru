@@ -1,0 +1,23 @@
+meta {
+  name: deletarAlimentoConsumido
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{backend_url}}:{{backend_port}}/nutria/alimento-consumido/deletar
+  body: json
+  auth: none
+}
+
+query {
+  ~dataInicio: 2023-12-28
+  ~dataFim: 2026-01-01
+}
+
+body:json {
+  {
+    "id_usuario": "{{id_usuario}}",
+    "id_consumo": 50
+  }
+}

@@ -1,0 +1,22 @@
+meta {
+  name: criarAlimento
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{backend_url}}:{{backend_port}}/nutria/alimento/criar
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id_usuario": "{{id_usuario}}",
+    "nome_alimento": "Feijao",
+    "estado_alimento": "CRU",
+    "grupo_excludente": "NENHUM",
+    "marca_alimento": "TESTE",
+    "dtt_criacao_alimento": 12
+  }
+}

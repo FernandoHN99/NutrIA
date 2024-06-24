@@ -1,0 +1,21 @@
+meta {
+  name: atualizarAlimentoConsumido
+  type: http
+  seq: 3
+}
+
+patch {
+  url: {{backend_url}}:{{backend_port}}/nutria/alimento-consumido/atualizar
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "numero_refeicao": 1,
+    "id_alimento_consumido": 1,
+    "kcal": 0.2,
+    "id_usuario": "{{id_usuario}}"
+  }
+  
+}

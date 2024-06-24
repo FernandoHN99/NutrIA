@@ -1,0 +1,18 @@
+meta {
+  name: criarRefeicao
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{backend_url}}:{{backend_port}}/nutria/refeicao/criar
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id_usuario": "{{id_usuario}}",
+    "nome_refeicao": "teste"
+  }
+}

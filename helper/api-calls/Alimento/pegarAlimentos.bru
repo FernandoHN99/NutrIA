@@ -1,0 +1,21 @@
+meta {
+  name: pegarAlimentos
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{backend_url}}:{{backend_port}}/nutria/alimento/buscar
+  body: json
+  auth: none
+}
+
+query {
+  ~pegar: 10
+  ~pular: 20
+  ~nome: Fei
+}
+
+body:json {
+  {}
+}

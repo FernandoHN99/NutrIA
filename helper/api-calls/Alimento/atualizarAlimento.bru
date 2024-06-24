@@ -1,0 +1,20 @@
+meta {
+  name: atualizarAlimento
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{backend_url}}:{{backend_port}}/nutria/alimento/atualizar
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id_usuario": "{{id_usuario}}",
+    "id_alimento": 2,
+    "marca_alimento": "TEST2112E@1#",
+    "alimento_verificado": true
+  }
+}

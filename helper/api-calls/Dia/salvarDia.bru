@@ -1,0 +1,19 @@
+meta {
+  name: salvarDia
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{backend_url}}:{{backend_port}}/nutria/dia/salvar
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id_usuario": "{{id_usuario}}",
+    "dt_dia": "2024-05-06",
+    "peso_dia": null
+  }
+}

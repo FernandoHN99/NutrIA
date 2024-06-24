@@ -1,0 +1,18 @@
+meta {
+  name: atualizarDadosUsuario
+  type: http
+  seq: 5
+}
+
+patch {
+  url: {{backend_url}}:{{backend_port}}/nutria/usuario/atualizar/dados
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id_usuario": "{{id_usuario}}",
+    "sexo": "H"
+  }
+}

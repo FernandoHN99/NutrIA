@@ -1,0 +1,15 @@
+meta {
+  name: pegarDiasUsuario
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{backend_url}}:{{backend_port}}/nutria/dia/{{id_usuario}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {}
+}

@@ -1,0 +1,18 @@
+meta {
+  name: atualizarContaUsuario
+  type: http
+  seq: 3
+}
+
+patch {
+  url: {{backend_url}}:{{backend_port}}/nutria/usuario/atualizar/conta
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id_usuario": "{{id_usuario}}",
+    "password": "123456789"
+  }
+}

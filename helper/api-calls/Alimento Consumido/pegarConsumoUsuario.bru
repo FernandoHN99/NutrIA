@@ -1,0 +1,20 @@
+meta {
+  name: pegarConsumoUsuario
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{backend_url}}:{{backend_port}}/nutria/alimento-consumido/{{id_usuario}}
+  body: json
+  auth: none
+}
+
+query {
+  ~dataInicio: 2023-12-28
+  ~dataFim: 2026-01-01
+}
+
+body:json {
+  {}
+}

@@ -1,0 +1,25 @@
+meta {
+  name: criarUsuario
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{backend_url}}:{{backend_port}}/nutria/usuario/criar
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "example006@gmail.com",
+    "nome": "barriquello branco",
+    "sobrenome": "brinquedo ass",
+    "password": "123456789",
+    "dt_nascimento": "2023-10-21",
+    "pais": "Brasil",
+    "sexo": "M",  
+    "sistema_metrico": "METRICo",
+    "perfil_alimentar": "VEGETArIAnO"
+  }
+}

@@ -1,0 +1,15 @@
+meta {
+  name: pegarAlimentosUsuario
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{backend_url}}:{{backend_port}}/nutria/alimento/buscar/{{id_usuario}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {}
+}
