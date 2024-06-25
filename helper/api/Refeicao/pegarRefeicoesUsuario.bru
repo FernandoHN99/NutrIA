@@ -7,7 +7,11 @@ meta {
 get {
   url: {{backend_url}}:{{backend_port}}/nutria/refeicao/{{id_usuario}}
   body: json
-  auth: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{tokenBearer}}
 }
 
 body:json {
