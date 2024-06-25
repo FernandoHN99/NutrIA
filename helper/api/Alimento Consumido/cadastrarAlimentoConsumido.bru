@@ -7,7 +7,11 @@ meta {
 post {
   url: {{backend_url}}:{{backend_port}}/nutria/alimento-consumido/criar
   body: json
-  auth: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{tokenBearer}}
 }
 
 body:json {
@@ -23,7 +27,6 @@ body:json {
     "qtde_carboidrato": 10,
     "qtde_gordura": 10,
     "qtde_alcool": 10,
-    "id_usuario": "{{id_usuario}}",
     "kcal": 100.1
   }
   

@@ -5,14 +5,18 @@ meta {
 }
 
 get {
-  url: {{backend_url}}:{{backend_port}}/nutria/alimento-consumido/{{id_usuario}}
+  url: {{backend_url}}:{{backend_port}}/nutria/alimento-consumido/buscar
   body: json
-  auth: none
+  auth: bearer
 }
 
 query {
   ~dataInicio: 2023-12-28
   ~dataFim: 2026-01-01
+}
+
+auth:bearer {
+  token: {{tokenBearer}}
 }
 
 body:json {
