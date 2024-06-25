@@ -7,12 +7,15 @@ meta {
 delete {
   url: {{backend_url}}:{{backend_port}}/nutria/dia/deletar
   body: json
-  auth: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{tokenBearer}}
 }
 
 body:json {
   {
-    "id_usuario": "{{id_usuario}}",
     "dt_dia": "2024-05-06"
   }
 }
