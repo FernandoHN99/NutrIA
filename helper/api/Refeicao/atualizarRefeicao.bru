@@ -7,14 +7,17 @@ meta {
 patch {
   url: {{backend_url}}:{{backend_port}}/nutria/refeicao/atualizar
   body: json
-  auth: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{tokenBearer}}
 }
 
 body:json {
   {
-    "id_usuario": "{{id_usuario}}",
-    "numero_refeicao": 3,
+    "numero_refeicao": 1,
     "nome_refeicao": "Janta",
-    "ativa": false
+    "ativa": true
   }
 }
