@@ -24,7 +24,7 @@ export default class DiaController{
    }
 
    public async obterAlimentosUsuario(req: Request, res: Response): Promise<JsonReponseSucesso>{
-      const usuarioID: string = req.params.id_usuario;
+      const usuarioID: string = req.body.id_usuario;
       if(!validate(usuarioID)){
          JsonReponseErro.lancar(400, 'ID do usuário inválido');
       }

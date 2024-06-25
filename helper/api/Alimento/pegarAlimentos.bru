@@ -5,19 +5,19 @@ meta {
 }
 
 get {
-  url: {{backend_url}}:{{backend_port}}/nutria/alimento/buscar
+  url: {{backend_url}}:{{backend_port}}/nutria/alimento/listar?pegar=10&nome=Fei
   body: json
   auth: bearer
 }
 
 query {
-  ~pegar: 10
+  pegar: 10
+  nome: Fei
   ~pular: 20
-  ~nome: Fei
 }
 
 auth:bearer {
-  token: eyJhbGciOiJIUzI1NiIsImtpZCI6ImNWMEZYOU1HOWVOV0VLemwiLCJ0eXAiOiJKV1QifQ.eyJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzE5MzM4NjIzLCJpYXQiOjE3MTkzMzUwMjMsImlzcyI6Imh0dHBzOi8va3Z1b2xzYWZnZW1kZXNvc3Fhamkuc3VwYWJhc2UuY28vYXV0aC92MSIsInN1YiI6IjM1OTM0ZWUyLWM1MjAtNGYyMi1iMTE4LTY4YWU3MjVlM2E2ZSIsImVtYWlsIjoiZXhhbXBsZTAwOEBnbWFpbC5jb20iLCJwaG9uZSI6IiIsImFwcF9tZXRhZGF0YSI6eyJwcm92aWRlciI6ImVtYWlsIiwicHJvdmlkZXJzIjpbImVtYWlsIl19LCJ1c2VyX21ldGFkYXRhIjp7fSwicm9sZSI6ImF1dGhlbnRpY2F0ZWQiLCJhYWwiOiJhYWwxIiwiYW1yIjpbeyJtZXRob2QiOiJwYXNzd29yZCIsInRpbWVzdGFtcCI6MTcxOTMzNTAyM31dLCJzZXNzaW9uX2lkIjoiZjk0ODNiMjEtMTQzNi00YWUyLWEyM2YtMTBkNGFkNmIyMTM4IiwiaXNfYW5vbnltb3VzIjpmYWxzZX0.z4Tzef5okdVeusIvYXiiN_6ZTMT3iM2MdEKeHkHlwoo
+  token: {{tokenBearer}}
 }
 
 body:json {

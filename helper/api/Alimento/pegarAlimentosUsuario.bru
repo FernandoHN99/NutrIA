@@ -5,9 +5,13 @@ meta {
 }
 
 get {
-  url: {{backend_url}}:{{backend_port}}/nutria/alimento/buscar/{{id_usuario}}
+  url: {{backend_url}}:{{backend_port}}/nutria/alimento/usuario/buscar
   body: json
-  auth: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{tokenBearer}}
 }
 
 body:json {
