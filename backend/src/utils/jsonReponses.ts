@@ -9,7 +9,6 @@ abstract class JsonResponse {
       this.codigo = codigo;
       this.mensagem = mensagem;
    }
-
 }
 
 class JsonReponseErro extends JsonResponse {
@@ -23,7 +22,6 @@ class JsonReponseErro extends JsonResponse {
    static lancar(codigo: number, mensagem: string, erro: any = {}) {
       throw new JsonReponseErro(codigo, mensagem, erro);
    }
-   
 }
 
 class JsonReponseSucesso extends JsonResponse{
@@ -33,7 +31,6 @@ class JsonReponseSucesso extends JsonResponse{
       super(true, codigo, mensagem);
       this.data = data;
    }
-
 }
 
 export { JsonReponseErro, JsonReponseSucesso};

@@ -14,5 +14,7 @@ export const ANON_KEY: string = process.env.ANON_KEY ?? '';
 export const SERVICE_KEY: string = process.env.SERVICE_KEY ?? '';
 export const API_EXTERNAL_URL: string = process.env.API_EXTERNAL_URL ?? '';
 
+export const JWT_SECRET: string = process.env.JWT_SECRET ?? '';
+
 
 export const tiposDeCartao: Array<string> = ['MACROS', 'CALORIAS', 'DIETA FLEXIVEL'];
