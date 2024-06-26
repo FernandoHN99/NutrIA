@@ -1,6 +1,7 @@
 import { Entity, Column, PrimaryColumn, BaseEntity, ManyToOne, JoinColumn, OneToMany} from "typeorm";
 import Usuario from "./usuario";
 import AlimentoConsumido from "./alimentoConsumido";
+import AlimentoFavorito from "./alimentoFavorito";
 import { criarAlimentoObject } from "../schemas/alimento/criarAlimentoSchema";
 import { atualizarAlimentoObject } from "../schemas/alimento/atualizarAlimentoSchema";
 
@@ -41,6 +42,10 @@ export default class Alimento extends BaseEntity {
    @OneToMany(() => AlimentoConsumido, (alimentoConsumido) => alimentoConsumido.alimento)
    @JoinColumn({ name: 'id_alimento' })
    alimentosConsumidos: AlimentoConsumido[];
+
+   @OneToMany(() => AlimentoFavorito, (alimentoFavorito) => alimentoFavorito.alimento)
+   @JoinColumn({ name: 'id_alimento' })
+   usuariosFavoritados: AlimentoFavorito[];
 
    constructor(dadosCriacao: criarAlimentoObject) {
       super();

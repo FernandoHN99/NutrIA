@@ -1,0 +1,21 @@
+meta {
+  name: atualizarAlimentoFavorito
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{backend_url}}:{{backend_port}}/nutria/alimento/favoritar
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{tokenBearer}}
+}
+
+body:json {
+  {
+    "id_alimento": 8
+  }
+}

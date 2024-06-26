@@ -1,5 +1,6 @@
-DROP TABLE IF EXISTS alimento_favoritado CASCADE;
-CREATE TABLE alimento_favoritado (
+-- Active: 1714012903894@@aws-0-sa-east-1.pooler.supabase.com@5432@postgres
+DROP TABLE IF EXISTS alimento_favorito CASCADE;
+CREATE TABLE alimento_favorito (
 	id_usuario UUID,
 	id_alimento INTEGER,
 	dtt_alimento_favoritado TIMESTAMP NOT NULL,

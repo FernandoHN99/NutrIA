@@ -76,7 +76,7 @@ export default class Util {
       to(valor: any) {
          return valor;
       }
-   };
+   }
 
    static transformerByteaString = {
       from(valor: any): string {
@@ -86,7 +86,4 @@ export default class Util {
          return valor;
       }
    };
-
-
-
 }
