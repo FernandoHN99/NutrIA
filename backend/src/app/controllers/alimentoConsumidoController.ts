@@ -5,7 +5,7 @@ import { buscarAlimentosConsumidosSchema } from '../schemas/alimentoConsumido/bu
 import { criarAlimentoConsumidoSchema } from '../schemas/alimentoConsumido/criarAlimentoConsumidoSchema';
 import { atualizarAlimentoConsumidoSchema } from '../schemas/alimentoConsumido/atualizarAlimentoConsumidoSchema';
 import { deletarAlimentoConsumidoSchema } from '../schemas/alimentoConsumido/deletarAlimentoConsumido';
-import validate from 'uuid-validate'
+import Util from '../../utils/util';
 
 export default class AlimentoConsumidoController {
    private alimentoConsumidoService: AlimentoConsumidoService;
@@ -15,15 +15,14 @@ export default class AlimentoConsumidoController {
    }
 
    public async obterConsumoUsuario(req: Request, res: Response): Promise<JsonReponseSucesso> {
-      const usuarioID: string = req.body.id_usuario;
-      if (!validate(usuarioID)) {
-         JsonReponseErro.lancar(400, 'ID do usuário inválido');
+      if (!Util.autenticarParamUsuarioID(req)) {
+         JsonReponseErro.lancar(401, 'ID do usuário inválido');
       }
       const resultadoParse: any = buscarAlimentosConsumidosSchema.safeParse(req.query)
       if (!resultadoParse.success) {
          JsonReponseErro.lancar(400, 'JSON inválido', resultadoParse.error);
       }
-      const retornoConsumoUsuario = await this.alimentoConsumidoService.obterConsumoUsuario(usuarioID, resultadoParse.data);
+   const retornoConsumoUsuario = await this.alimentoConsumidoService.obterConsumoUsuario(req.params.id_usuario, resultadoParse.data);
       return new JsonReponseSucesso(200, 'Consumo do usuário retornado com sucesso', retornoConsumoUsuario);
    }
 
