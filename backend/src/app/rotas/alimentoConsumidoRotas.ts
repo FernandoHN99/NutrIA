@@ -11,7 +11,7 @@ export default class AlimentoConsumidoRotas implements Rota {
    constructor() {
       this.roteador = Router()
       this.controller = new AlimentoConsumidoController();
-      this.roteador.get('/usuario/:id_usuario', Util.envolveFuncTryCatch(this.controller, this.controller.obterConsumoUsuario));
+      this.roteador.get('/usuario/:id', Util.envolveFuncTryCatch(this.controller, this.controller.obterConsumoUsuario));
       this.roteador.post('/criar', Util.envolveFuncTryCatch(this.controller, this.controller.cadastrarAlimentoConsumido));
       this.roteador.patch('/atualizar', Util.envolveFuncTryCatch(this.controller, this.controller.atualizarAlimentoConsumido));
       this.roteador.delete('/deletar', Util.envolveFuncTryCatch(this.controller, this.controller.deletarAlimentoConsumido));
