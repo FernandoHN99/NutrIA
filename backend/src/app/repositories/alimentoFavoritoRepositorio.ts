@@ -13,17 +13,6 @@ export default class AlimentoFavoritoRepositorio {
       return await this.repositorio.findOne({ where: { id_usuario : usuarioID, id_alimento: alimentoID } });
    }
 
-   // public async obterAlimentosFavoritosUsuario(usuarioID: string): Promise<AlimentoFavorito[]> {
-   //    return await this.repositorio.find({
-   //       where: {
-   //          id_usuario: usuarioID
-   //       },
-   //       order: {
-   //          dtt_alimento_favoritado: 'ASC'
-   //       },
-   //    });
-   // }
-
    public async obterAlimentosFavoritosUsuario(usuarioID: string): Promise<any[]> {
       return await this.repositorio.createQueryBuilder('af')
          .select([
