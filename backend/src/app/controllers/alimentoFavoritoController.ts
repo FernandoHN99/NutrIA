@@ -12,10 +12,7 @@ export default class AlimentoFavoritoController{
    }
 
    public async obterAlimentosFavoritosUsuario(req: Request, res: Response): Promise<JsonReponseSucesso>{
-      if (!Util.autenticarParamUsuarioID(req)) {
-         JsonReponseErro.lancar(401, 'ID do usuário inválido');
-      }
-      const retornoAlimentosFavoritos = await this.alimentoFavoritoService.obterAlimentosFavoritosUsuario(req.params.id);
+      const retornoAlimentosFavoritos = await this.alimentoFavoritoService.obterAlimentosFavoritosUsuario(req.body.id_usuario);
       return new JsonReponseSucesso(200, 'Alimentos favoritos do usuário retornado com sucesso', retornoAlimentosFavoritos);
    }
 

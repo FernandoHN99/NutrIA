@@ -15,14 +15,11 @@ export default class AlimentoConsumidoController {
    }
 
    public async obterConsumoUsuario(req: Request, res: Response): Promise<JsonReponseSucesso> {
-      if (!Util.autenticarParamUsuarioID(req)) {
-         JsonReponseErro.lancar(401, 'ID do usuário inválido');
-      }
       const resultadoParse: any = buscarAlimentosConsumidosSchema.safeParse(req.query)
       if (!resultadoParse.success) {
          JsonReponseErro.lancar(400, 'JSON inválido', resultadoParse.error);
       }
-   const retornoConsumoUsuario = await this.alimentoConsumidoService.obterConsumoUsuario(req.params.id_usuario, resultadoParse.data);
+   const retornoConsumoUsuario = await this.alimentoConsumidoService.obterConsumoUsuario(req.body.id_usuario, resultadoParse.data);
       return new JsonReponseSucesso(200, 'Consumo do usuário retornado com sucesso', retornoConsumoUsuario);
    }
 

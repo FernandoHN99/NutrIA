@@ -13,11 +13,7 @@ export default class DiaController{
    }
 
    public async obterDiasUsuario(req: Request, res: Response): Promise<JsonReponseSucesso>{
-      const usuarioID: string = req.body.id_usuario;
-      if(!validate(usuarioID)){
-         JsonReponseErro.lancar(400, 'ID do usuário inválido');
-      }
-      const retornoDias = await this.diaService.obterDiasUsuario(usuarioID);
+      const retornoDias = await this.diaService.obterDiasUsuario(req.body.id_usuario);
       return new JsonReponseSucesso(200, 'Dias retornados com sucesso', retornoDias);
    }
 

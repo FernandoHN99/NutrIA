@@ -18,9 +18,6 @@ export default class UsuarioController {
 
    public async obterUsuarioPorID(req: Request, res: Response): Promise<JsonReponseSucesso>{
       const usuarioID: string = req.body.id_usuario;
-      if(!validate(usuarioID)){
-         JsonReponseErro.lancar(400, 'ID do usuário inválido');
-      }
       let retornoConta = await this.usuarioService.obterContaPorID(usuarioID);
       let retornoUsuario = await this.usuarioService.obterUsuarioPorID(usuarioID);
       return new JsonReponseSucesso(200, 'Usuário retornado com sucesso', {...retornoUsuario, email: retornoConta.email});

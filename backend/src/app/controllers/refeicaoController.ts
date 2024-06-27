@@ -13,11 +13,7 @@ export default class DiaController{
    }
 
    public async obterRefeicoesUsuario(req: Request, res: Response): Promise<JsonReponseSucesso>{
-      const usuarioID: string = req.body.id_usuario;
-      if(!validate(usuarioID)){
-         JsonReponseErro.lancar(400, 'ID do usuário inválido');
-      }
-      const retornoRefeicoes = await this.refeicaoService.obterRefeicoesUsuario(usuarioID);
+      const retornoRefeicoes = await this.refeicaoService.obterRefeicoesUsuario(req.body.id_usuario);
       return new JsonReponseSucesso(200, 'Refeicoes retornados com sucesso', retornoRefeicoes);
    }
 

@@ -23,13 +23,9 @@ export default class AlimentoController{
    }
 
    public async obterAlimentosUsuario(req: Request, res: Response): Promise<JsonReponseSucesso>{
-      if (!Util.autenticarParamUsuarioID(req)) {
-         JsonReponseErro.lancar(401, 'ID do usuário inválido');
-      }
-      const retornoAlimentosUsuario = await this.alimentoService.obterAlimentosUsuario(req.params.id_usuario);
+      const retornoAlimentosUsuario = await this.alimentoService.obterAlimentosUsuario(req.body.id_usuario);
       return new JsonReponseSucesso(200, 'Alimentos retornados com sucesso', retornoAlimentosUsuario);
    }
-
 
    public async criarAlimento(req: Request, res: Response): Promise<JsonReponseSucesso>{
       const resultadoParse: any = criarAlimentoSchema.safeParse(req.body);
