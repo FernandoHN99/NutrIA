@@ -5,12 +5,12 @@ meta {
 }
 
 get {
-  url: {{backend_url}}:{{backend_port}}/nutria/alimento/listar
+  url: {{backend_url}}:{{backend_port}}/nutria/alimento/buscar
   body: json
   auth: bearer
 }
 
-query {
+params:query {
   ~nome: Feijao99999
   ~pegar: 100
   ~pular: 20

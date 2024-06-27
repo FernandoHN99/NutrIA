@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import { JsonReponseSucesso, JsonReponseErro } from "../../utils/jsonReponses";
 import AlimentoFavoritoService from '../services/alimentoFavoritoService';
-import validate from 'uuid-validate'
 import { salvarAlimentoFavoritoSchema } from '../schemas/alimentoFavorito/salvarAlimentoFavoritoSchema';
+import Util from '../../utils/util';
 
 export default class AlimentoFavoritoController{
    private alimentoFavoritoService: AlimentoFavoritoService;
@@ -12,11 +12,10 @@ export default class AlimentoFavoritoController{
    }
 
    public async obterAlimentosFavoritosUsuario(req: Request, res: Response): Promise<JsonReponseSucesso>{
-      const usuarioID: string = req.body.id_usuario;
-      if (!validate(usuarioID)) {
-         JsonReponseErro.lancar(400, 'ID do usuário inválido');
+      if (!Util.autenticarParamUsuarioID(req)) {
+         JsonReponseErro.lancar(401, 'ID do usuário inválido');
       }
-      const retornoAlimentosFavoritos = await this.alimentoFavoritoService.obterAlimentosFavoritosUsuario(usuarioID);
+      const retornoAlimentosFavoritos = await this.alimentoFavoritoService.obterAlimentosFavoritosUsuario(req.params.id);
       return new JsonReponseSucesso(200, 'Alimentos favoritos do usuário retornado com sucesso', retornoAlimentosFavoritos);
    }
 
