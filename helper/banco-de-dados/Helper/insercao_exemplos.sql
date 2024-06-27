@@ -1,4 +1,4 @@
--- Active: 1714012903894@@aws-0-sa-east-1.pooler.supabase.com@5432
+-- Active: 1714012903894@@aws-0-sa-east-1.pooler.supabase.com@5432@postgres
 -- usuario
 INSERT INTO usuario (id_usuario, nome, sobrenome, dt_nascimento, pais, sexo, sistema_metrico, perfil_alimentar)
 VALUES
@@ -60,6 +60,10 @@ VALUES
 INSERT INTO codigo_de_barras(codigo, id_alimento)
 VALUES 
 ('010101010101', 1);
+
+INSERT INTO codigo_de_barras(codigo, id_alimento)
+VALUES 
+('01010101010123', 2);
 
 -- alimento_favoritado
 INSERT INTO alimento_favoritado (id_usuario, id_alimento, dtt_alimento_favoritado)

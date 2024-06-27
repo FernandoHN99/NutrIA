@@ -4,10 +4,9 @@ import { buscarAlimentosSchema } from '../schemas/alimento/buscarAlimentosSchema
 import { atualizarAlimentoSchema } from '../schemas/alimento/atualizarAlimentoSchema';
 import { criarAlimentoSchema } from '../schemas/alimento/criarAlimentoSchema';
 import AlimentoService from '../services/alimentoService';
-import validate  from 'uuid-validate'
+import Util from '../../utils/util';
 
-
-export default class DiaController{
+export default class AlimentoController{
    private alimentoService: AlimentoService;
 
    constructor(){
@@ -24,11 +23,10 @@ export default class DiaController{
    }
 
    public async obterAlimentosUsuario(req: Request, res: Response): Promise<JsonReponseSucesso>{
-      const usuarioID: string = req.body.id_usuario;
-      if(!validate(usuarioID)){
-         JsonReponseErro.lancar(400, 'ID do usuário inválido');
+      if (!Util.autenticarParamUsuarioID(req)) {
+         JsonReponseErro.lancar(401, 'ID do usuário inválido');
       }
-      const retornoAlimentosUsuario = await this.alimentoService.obterAlimentosUsuario(usuarioID);
+      const retornoAlimentosUsuario = await this.alimentoService.obterAlimentosUsuario(req.params.id_usuario);
       return new JsonReponseSucesso(200, 'Alimentos retornados com sucesso', retornoAlimentosUsuario);
    }
 

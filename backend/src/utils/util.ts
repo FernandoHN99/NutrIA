@@ -22,7 +22,7 @@ export default class Util {
 
    static autenticarParamUsuarioID(req: Request) {
       const usuarioIDAuth: string = req.body.id_usuario;
-      const usuarioIDParam: string = req.params.id_usuario;
+      const usuarioIDParam: string = req.params.id;
       return usuarioIDAuth === usuarioIDParam;
    }
 

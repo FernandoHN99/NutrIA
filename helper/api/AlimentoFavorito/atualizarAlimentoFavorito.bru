@@ -5,7 +5,7 @@ meta {
 }
 
 patch {
-  url: {{backend_url}}:{{backend_port}}/nutria/alimento/favoritar
+  url: {{backend_url}}:{{backend_port}}/nutria/alimento-favorito/atualizar
   body: json
   auth: bearer
 }
@@ -16,6 +16,6 @@ auth:bearer {
 
 body:json {
   {
-    "id_alimento": 8
+    "id_alimento": 1
   }
 }
