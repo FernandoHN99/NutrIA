@@ -2,8 +2,10 @@ import { Entity, Column, PrimaryColumn, BaseEntity, ManyToOne, JoinColumn, OneTo
 import Usuario from "./usuario";
 import AlimentoConsumido from "./alimentoConsumido";
 import AlimentoFavorito from "./alimentoFavorito";
+import CodigoDeBarras from "./codigoDeBarras"
 import { criarAlimentoObject } from "../schemas/alimento/criarAlimentoSchema";
 import { atualizarAlimentoObject } from "../schemas/alimento/atualizarAlimentoSchema";
+import { join } from "path";
 
 @Entity('alimento')
 export default class Alimento extends BaseEntity {
@@ -46,6 +48,10 @@ export default class Alimento extends BaseEntity {
    @OneToMany(() => AlimentoFavorito, (alimentoFavorito) => alimentoFavorito.alimento)
    @JoinColumn({ name: 'id_alimento' })
    usuariosFavoritados: AlimentoFavorito[];
+
+   @ManyToOne( () => CodigoDeBarras, (codigoDeBarras) => codigoDeBarras.alimentos)
+   @JoinColumn({ name: 'id_alimento' })
+   codigoDeBarras: CodigoDeBarras;
 
    constructor(dadosCriacao: criarAlimentoObject) {
       super();

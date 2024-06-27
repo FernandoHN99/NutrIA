@@ -46,4 +46,8 @@ export default class AlimentoService{
       return await alimento.save();
    }
 
+   public async obterAlimentoPorCodigoDeBarras(codigoDeBarras: string): Promise<Alimento>{
+      return await this.alimentoRepo.obterAlimentoPorCodigoDeBarras(codigoDeBarras);
+   }
+
 }

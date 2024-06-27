@@ -47,4 +47,10 @@ export default class AlimentoRepositorio {
       });
    }
 
+   public async obterAlimentoPorCodigoDeBarras(codigoDeBarras: string){
+      return await this.repositorio.createQueryBuilder('a')
+         .innerJoin('a.codigoDeBarras', 'cb')
+         .where('cb.codigo = :codigoDeBarras', { codigoDeBarras })
+         .getOne();
+   }
 }

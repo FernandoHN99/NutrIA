@@ -51,5 +51,11 @@ export default class DiaController{
       const retornoAtualizacaoAlimento = await this.alimentoService.atualizarAlimento(resultadoParse.data);
       return new JsonReponseSucesso(201, 'Alimento atualizado com sucesso', retornoAtualizacaoAlimento);
    }
+
+   public async obterAlimentoPorCodigoDeBarras(req: Request, res: Response): Promise<JsonReponseSucesso>{
+      const codigoDeBarras: string = req.params.codigo;
+      const retornoAlimento = await this.alimentoService.obterAlimentoPorCodigoDeBarras(codigoDeBarras);
+      return new JsonReponseSucesso(200, 'Alimento retornado com sucesso', retornoAlimento);
+   }
    
 }

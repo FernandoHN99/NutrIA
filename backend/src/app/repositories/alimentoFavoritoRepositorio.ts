@@ -25,7 +25,6 @@ export default class AlimentoFavoritoRepositorio {
          .orderBy('af.dtt_alimento_favoritado', 'ASC')
          .orderBy('a.nome_alimento', 'ASC')
          .getMany();
-
    }
 
 }
