@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 const deletarAlimentoConsumidoSchema = z.object({
-   id_consumo: z.number().int().positive(),
+   id_alimento_consumido: z.number().int().positive(),
    
    id_usuario: z.string()
       .uuid('Formato Inválido: ID do Usuário'),

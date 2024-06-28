@@ -44,7 +44,7 @@ export default class ControleCaloriasService{
    }
 
    public async deletarAlimentoConsumido(deletarAlimentoConsumidoJSON: deletarAlimentoConsumidoObject): Promise<AlimentoConsumido>{
-      let alimentoConsumido = await this.obterAlimentoConsumido(deletarAlimentoConsumidoJSON.id_consumo, deletarAlimentoConsumidoJSON.id_usuario);
+      const alimentoConsumido = await this.obterAlimentoConsumido(deletarAlimentoConsumidoJSON.id_alimento_consumido, deletarAlimentoConsumidoJSON.id_usuario);
       return await alimentoConsumido.remove();
    }
 }
