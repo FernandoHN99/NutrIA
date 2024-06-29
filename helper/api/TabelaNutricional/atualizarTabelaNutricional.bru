@@ -1,11 +1,11 @@
 meta {
-  name: criarAlimento
+  name: atualizarTabelaNutricional
   type: http
-  seq: 3
+  seq: 1
 }
 
-post {
-  url: {{backend_url}}:{{backend_port}}/nutria/alimento/criar
+patch {
+  url: {{backend_url}}:{{backend_port}}/nutria/tabela-nutricional/atualizar
   body: json
   auth: bearer
 }
@@ -16,11 +16,8 @@ auth:bearer {
 
 body:json {
   {
-    "nome_alimento": "Feijao99999",
-    "estado_alimento": "COZIDO",
-    "grupo_alimentar": "ONIVORO",
-    "marca_alimento": "TESTE",
-    "dtt_criacao_alimento": 12,
+    "id_tabela_nutricional": 1,
+    "id_alimento": 1,
     "unidade_medida": "GRAMA",
     "porcao_padrao": 100,
     "kcal": 50.5,

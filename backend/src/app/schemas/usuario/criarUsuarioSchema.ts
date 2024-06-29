@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import Util from '../../../utils/util';
+import { listaSexosBiologicos, listaSistemasMedidas, listaPerfisAlimentares } from '../../../config/variaveis';
 
 const criarUsuarioSchema = z.object({
 
@@ -32,16 +33,16 @@ const criarUsuarioSchema = z.object({
 
    sexo: z.string()
       .transform(sexo => sexo.toLocaleUpperCase())
-      .refine(sexo => ['H', 'M'].includes(sexo), {message: 'Sexo Inválido'}),
+      .refine(sexo => listaSexosBiologicos.includes(sexo), {message: 'Sexo Inválido'}),
 
    sistema_metrico: z.string()
       .transform(sistema => sistema.toLocaleUpperCase())
-      .refine(sistema => ['METRICO', 'IMPERIAL'].includes(sistema), 
+      .refine(sistema => listaSistemasMedidas.includes(sistema), 
       {message: 'Sistema Métrico Inválido'}),
 
    perfil_alimentar: z.string()
       .transform(perfil => perfil.toLocaleUpperCase())
-      .refine(perfil => ['ONIVORO', 'VEGETARIANO', 'VEGANO'].includes(perfil), 
+      .refine(perfil => listaPerfisAlimentares.includes(perfil), 
          { message: 'Perfil Alimentar Inválido' }),
 })
 

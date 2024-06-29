@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { listaEstadosAlimentos, listaPerfisAlimentares } from '../../../config/variaveis';
 
 const criarAlimentoSchema = z.object({
    
@@ -10,11 +11,11 @@ const criarAlimentoSchema = z.object({
 
    estado_alimento: z.string()
       .transform(estado => estado.toLocaleUpperCase())
-      .refine(estado => ['CRU', 'COZIDO', 'ASSADO', 'FRITO', 'GRELHADO', 'PADRAO'].includes(estado), {message: 'Inválido: Estado do Alimento'}),
+      .refine(estado => listaEstadosAlimentos.includes(estado), {message: 'Inválido: Estado do Alimento'}),
 
-   grupo_excludente: z.string()
+   grupo_alimentar: z.string()
       .transform(grupo => grupo.toLocaleUpperCase())
-      .refine(grupo => ['NENHUM', 'VEGETARIANO', 'VEGANO'].includes(grupo), {message: 'Inválido: Grupo Excludente'}),
+      .refine(grupo => listaPerfisAlimentares.includes(grupo), {message: 'Inválido: Grupo Alimentar'}),
 
    marca_alimento: z.string().min(1)
       .nullish()

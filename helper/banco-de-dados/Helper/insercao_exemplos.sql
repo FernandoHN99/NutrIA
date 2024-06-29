@@ -43,18 +43,24 @@ VALUES
 
 
 -- alimento
-INSERT INTO alimento (id_usuario, nome_alimento, estado_alimento, marca_alimento, alimento_verificado, grupo_excludente) 
+INSERT INTO alimento (id_usuario, nome_alimento, estado_alimento, marca_alimento, alimento_verificado, grupo_alimentar) 
 VALUES 
 (NULL, 'Bvo', 'COZIDO', 'Marca X', false, 'ONIVORO');
 
-INSERT INTO alimento (id_alimento, nome_alimento, estado_alimento, marca_alimento, alimento_verificado, grupo_excludente) 
+INSERT INTO alimento (id_alimento, nome_alimento, estado_alimento, marca_alimento, alimento_verificado, grupo_alimentar) 
 VALUES 
 (2, 'Carne', 'COZIDO', 'Marca X', false, 'ONIVORO');
 
 -- tabela_nutricional
-INSERT INTO tabela_nutricional (id_alimento, unidade_medida, porcao_padrao, qtde_proteina, qtde_carboidrato, qtde_gordura, qtde_alcool)
-VALUES 
-(1, 'GRAMA', 200, 10, 20, 5, 0);
+INSERT INTO tabela_nutricional (
+    id_alimento, unidade_medida, porcao_padrao, kcal, qtde_proteina, qtde_carboidrato, 
+    qtde_gordura, qtde_alcool, qtde_acucar, qtde_fibra, qtde_saturada, qtde_trans, 
+    qtde_monosaturada, qtde_polisaturada, qtde_sodio, qtde_calcio, qtde_ferro, 
+    qtde_potassio, qtde_vitamina_a, qtde_vitamina_c, qtde_vitamina_d, qtde_vitamina_e
+) VALUES 
+(1, 'MILILITRO', 100, 250.0, 10.0, 30.0, 5.0, NULL, 5.0, 2.5, 1.0, 0.1, 0.3, 0.2, 200.0, 150.0, 2.0, 300.0, 500.0, 30, 5.0, 0.5),
+(2, 'GRAMA', 200, 180.0, 8.0, 20.0, 3.0, 0.0, 15.0, 3.0, 0.5, 0.0, 0.1, 0.1, 150.0, 120.0, 1.5, 250.0, 400.0, 25.0, 4.0, 0.3),
+(3, 'GRAMA', 15, 50.0, 1.0, 10.0, 1.0, 0.0, 8.0, 0.5, 0.1, 0.0, 0.05, 0.03, 30.0, 25.0, 0.3, 40.0, 80.0, 5.0, 0.8, 0.1);
 
 -- codigo_de_barras
 INSERT INTO codigo_de_barras(codigo, id_alimento)

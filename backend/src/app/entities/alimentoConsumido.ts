@@ -71,8 +71,8 @@ export default class AlimentoConsumido extends BaseEntity {
       }
    }
 
-   public atualizarDados(novosAtualizacao: atualizarAlimentoConsumidoObject) {
-      Object.assign(this, novosAtualizacao);
+   public atualizarDados(dadosAtualizacao: atualizarAlimentoConsumidoObject) {
+      Object.assign(this, dadosAtualizacao);
   }
 
 }

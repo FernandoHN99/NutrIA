@@ -13,8 +13,13 @@ export const PORTA_DB: number | undefined = process.env.DB_PORTA ?
 export const ANON_KEY: string = process.env.ANON_KEY ?? '';
 export const SERVICE_KEY: string = process.env.SERVICE_KEY ?? '';
 export const API_EXTERNAL_URL: string = process.env.API_EXTERNAL_URL ?? '';
-
 export const JWT_SECRET: string = process.env.JWT_SECRET ?? '';
 
 
 export const tiposDeCartao: Array<string> = ['MACROS', 'CALORIAS', 'DIETA FLEXIVEL'];
+export const listaRotasSemAuth: Array<string> = ['/nutria/usuario/criar', '/nutria/usuario/login'];
+export const listaEstadosAlimentos: Array<string> = ['CRU', 'COZIDO', 'ASSADO', 'FRITO', 'GRELHADO', 'PADRAO'];
+export const listaUnidadesMedida: Array<string> = ['GRAMA', 'MILILITRO', 'COLHER SOPA', 'COLHER CHA', 'XICARA PADRAO', 'XICARA CHA', 'XICARA CAFE', 'UNIDADE'];
+export const listaSexosBiologicos: Array<string> = ['H', 'M'];
+export const listaSistemasMedidas: Array<string> = ['METRICO', 'IMPERIAL'];
+export const listaPerfisAlimentares: Array<string> = ['ONIVORO', 'VEGETARIANO', 'VEGANO'];

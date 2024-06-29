@@ -2,9 +2,8 @@ import { Request, Response } from 'express';
 import { JsonReponseSucesso, JsonReponseErro } from "../../utils/jsonReponses";
 import { buscarAlimentosSchema } from '../schemas/alimento/buscarAlimentosSchema';
 import { atualizarAlimentoSchema } from '../schemas/alimento/atualizarAlimentoSchema';
-import { criarAlimentoSchema } from '../schemas/alimento/criarAlimentoSchema';
+import { criarAlimentoTabelaSchema } from '../schemas/alimento/criarAlimentoTabelaSchema ';
 import AlimentoService from '../services/alimentoService';
-import Util from '../../utils/util';
 
 export default class AlimentoController{
    private alimentoService: AlimentoService;
@@ -28,7 +27,7 @@ export default class AlimentoController{
    }
 
    public async criarAlimento(req: Request, res: Response): Promise<JsonReponseSucesso>{
-      const resultadoParse: any = criarAlimentoSchema.safeParse(req.body);
+      const resultadoParse: any = criarAlimentoTabelaSchema.safeParse(req.body);
       if(!resultadoParse.success){
          JsonReponseErro.lancar(400, 'JSON inválido', resultadoParse.error);
 

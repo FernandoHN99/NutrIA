@@ -1,6 +1,7 @@
 import Alimento from '../entities/alimento';
 import { ILike } from 'typeorm';
 import { AppDataSource } from '../../database/data-source';
+import { atualizarAlimentoObject } from '../schemas/alimento/atualizarAlimentoSchema';
 
 export default class AlimentoRepositorio {
 
@@ -52,5 +53,17 @@ export default class AlimentoRepositorio {
          .innerJoin('a.codigoDeBarras', 'cb')
          .where('cb.codigo = :codigoDeBarras', { codigoDeBarras })
          .getOne();
+   }
+
+   public async obterAlimentoUniqueVerificado(alimentoDados: atualizarAlimentoObject): Promise<Alimento>{
+      return await this.repositorio.findOne({ 
+         where: { 
+            nome_alimento: alimentoDados.nome_alimento,
+            estado_alimento: alimentoDados.estado_alimento,
+            grupo_alimentar: alimentoDados.grupo_alimentar,
+            marca_alimento: alimentoDados.marca_alimento,
+            alimento_verificado: true
+         }
+      });
    }
 }

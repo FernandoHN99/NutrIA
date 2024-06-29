@@ -3,9 +3,9 @@ import Usuario from "./usuario";
 import AlimentoConsumido from "./alimentoConsumido";
 import AlimentoFavorito from "./alimentoFavorito";
 import CodigoDeBarras from "./codigoDeBarras"
+import TabelaNutricional from "./tabelaNutricional";
 import { criarAlimentoObject } from "../schemas/alimento/criarAlimentoSchema";
 import { atualizarAlimentoObject } from "../schemas/alimento/atualizarAlimentoSchema";
-import { join } from "path";
 
 @Entity('alimento')
 export default class Alimento extends BaseEntity {
@@ -26,7 +26,7 @@ export default class Alimento extends BaseEntity {
    alimento_verificado: boolean;
 
    @Column('varchar', { length: 25 })
-   grupo_excludente: string;
+   grupo_alimentar: string;
 
    @Column('text')
    marca_alimento: string | null;
@@ -52,6 +52,10 @@ export default class Alimento extends BaseEntity {
    @ManyToOne( () => CodigoDeBarras, (codigoDeBarras) => codigoDeBarras.alimentos)
    @JoinColumn({ name: 'id_alimento' })
    codigoDeBarras: CodigoDeBarras;
+
+   @OneToMany(() => TabelaNutricional, (tabelaNutricional) => tabelaNutricional.alimento)
+   @JoinColumn({ name: 'id_alimento' })
+   tabelaNutricional: TabelaNutricional[];
 
    constructor(dadosCriacao: criarAlimentoObject) {
       super();
