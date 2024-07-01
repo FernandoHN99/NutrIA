@@ -2,6 +2,7 @@ import Alimento from '../entities/alimento';
 import { ILike } from 'typeorm';
 import { AppDataSource } from '../../database/data-source';
 import { atualizarAlimentoObject } from '../schemas/alimento/atualizarAlimentoSchema';
+import CodigoDeBarras from '../entities/codigoDeBarras';
 
 export default class AlimentoRepositorio {
 
@@ -21,6 +22,7 @@ export default class AlimentoRepositorio {
             alimento_verificado: 'DESC',
             nome_alimento: 'ASC'
          },
+         relations: ['codigosDeBarras', 'tabelaNutricional']
       });
    }
 
@@ -63,6 +65,14 @@ export default class AlimentoRepositorio {
             grupo_alimentar: alimentoDados.grupo_alimentar,
             marca_alimento: alimentoDados.marca_alimento,
             alimento_verificado: true
+         }
+      });
+   }
+
+   public async obterAlimentoPorID(idAlimento: number): Promise<Alimento>{
+      return await this.repositorio.findOne({ 
+         where: { 
+            id_alimento: idAlimento,
          }
       });
    }
