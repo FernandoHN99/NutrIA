@@ -16,7 +16,7 @@ DELETE FROM tabela_nutricional;
 
 DELETE FROM codigo_de_barras;
 
-DELETE FROM alimento_favoritado;
+DELETE FROM alimento_favorito;
 
 DELETE FROM prato;
 

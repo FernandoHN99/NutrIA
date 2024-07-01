@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryColumn, BaseEntity, ManyToOne, JoinColumn, OneToMany} from "typeorm";
+import { Entity, Column, PrimaryColumn, BaseEntity, ManyToOne, JoinColumn, OneToMany, OneToOne} from "typeorm";
 import Usuario from "./usuario";
 import AlimentoConsumido from "./alimentoConsumido";
 import AlimentoFavorito from "./alimentoFavorito";
@@ -49,9 +49,9 @@ export default class Alimento extends BaseEntity {
    @JoinColumn({ name: 'id_alimento' })
    usuariosFavoritados: AlimentoFavorito[];
 
-   @ManyToOne( () => CodigoDeBarras, (codigoDeBarras) => codigoDeBarras.alimentos)
+   @OneToMany(() => CodigoDeBarras, (codigoDeBarras) => codigoDeBarras.alimento)
    @JoinColumn({ name: 'id_alimento' })
-   codigoDeBarras: CodigoDeBarras;
+   codigosDeBarras: CodigoDeBarras[];
 
    @OneToMany(() => TabelaNutricional, (tabelaNutricional) => tabelaNutricional.alimento)
    @JoinColumn({ name: 'id_alimento' })

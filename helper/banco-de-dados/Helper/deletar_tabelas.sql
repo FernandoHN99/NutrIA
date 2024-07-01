@@ -1,5 +1,3 @@
-DELETE FROM auth.users;
-
 DROP TABLE IF EXISTS usuario CASCADE;
 
 DROP TABLE IF EXISTS cartao CASCADE;
@@ -16,7 +14,7 @@ DROP TABLE IF EXISTS tabela_nutricional CASCADE;
 
 DROP TABLE IF EXISTS codigo_de_barras CASCADE;
 
-DROP TABLE IF EXISTS alimento_favoritado CASCADE;
+DROP TABLE IF EXISTS alimento_favorito CASCADE;
 
 DROP TABLE IF EXISTS prato CASCADE;
 

@@ -1,18 +1,18 @@
-import { Entity, Column, PrimaryColumn, BaseEntity, ManyToOne, JoinColumn, OneToMany} from "typeorm";
+import { Entity, Column, PrimaryColumn, BaseEntity, ManyToOne, JoinColumn, OneToMany, OneToOne} from "typeorm";
 import Alimento from "./alimento";
-import Util from "../../utils/util";
 
 @Entity('codigo_de_barras')
 export default class CodigoDeBarras extends BaseEntity {
 
-   @Column('text')
+   @PrimaryColumn('text')
    codigo: string;
 
-   @PrimaryColumn('int4')
+   @Column('int4')
    id_alimento: number;
 
-   @OneToMany(() => Alimento, (alimento) => alimento.codigoDeBarras)
+   @ManyToOne(() => Alimento, (alimento) => alimento.codigosDeBarras)
    @JoinColumn({ name: "id_alimento" })
-   alimentos: Alimento[];
-  
+   alimento: Alimento;
+
 }
+

@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryColumn, BaseEntity, ManyToOne, JoinColumn} from "typeorm";
+import { Entity, Column, PrimaryColumn, BaseEntity, ManyToOne, JoinColumn, PrimaryGeneratedColumn} from "typeorm";
 import Alimento from "./alimento";
 import Util from "../../utils/util";
 import { criarTabelaNutricionalObject } from "../schemas/tabelaNutricional/criarTabelaNutricionalSchema";
@@ -7,7 +7,7 @@ import { atualizarTabelaNutricionalObject } from "../schemas/tabelaNutricional/a
 @Entity('tabela_nutricional')
 export default class TabelaNutricional extends BaseEntity {
 
-   @PrimaryColumn('int4', { generated: true })
+   @PrimaryGeneratedColumn()
    id_tabela_nutricional: number;
 
    @Column('int')
@@ -76,7 +76,7 @@ export default class TabelaNutricional extends BaseEntity {
    @Column('numeric', { precision: 6, scale: 1, transformer: Util.transformerStringNumber })
    qtde_vitamina_e: number;
 
-   @ManyToOne(() => Alimento, (alimento) => alimento.codigoDeBarras)
+   @ManyToOne(() => Alimento, (alimento) => alimento.codigosDeBarras)
    @JoinColumn({ name: "id_alimento" })
    alimento: Alimento;
 

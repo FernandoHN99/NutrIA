@@ -65,11 +65,9 @@ INSERT INTO tabela_nutricional (
 -- codigo_de_barras
 INSERT INTO codigo_de_barras(codigo, id_alimento)
 VALUES 
-('010101010101', 1);
+('01010101101212101', 39);
 
-INSERT INTO codigo_de_barras(codigo, id_alimento)
-VALUES 
-('01010101010123', 2);
+INSERT INTO codigo_de_barras(codigo, id_alimento) VALUES ('0', 1);
 
 -- alimento_favoritado
 INSERT INTO alimento_favoritado (id_usuario, id_alimento, dtt_alimento_favoritado)

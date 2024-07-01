@@ -28,7 +28,7 @@ CREATE TABLE tabela_nutricional(
 		qtde_carboidrato >= 0 AND qtde_gordura >= 0 AND kcal >= 0 AND
       qtde_alcool >= 0 AND qtde_acucar >= 0 AND qtde_fibra >= 0 AND
       qtde_saturada >= 0 AND qtde_monosaturada >= 0 AND qtde_polisaturada >= 0
-      AND qt_trans >= 0 AND qtde_sodio >= 0 AND qtde_calcio >= 0 AND
+      AND qtde_trans >= 0 AND qtde_sodio >= 0 AND qtde_calcio >= 0 AND
       qtde_ferro >= 0 AND qtde_potassio >= 0 AND qtde_vitamina_a >= 0 AND
       qtde_vitamina_c >= 0 AND qtde_vitamina_d >= 0 AND qtde_vitamina_e >= 0
 	),

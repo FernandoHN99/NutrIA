@@ -4,7 +4,7 @@ import { atualizarAlimentoObject } from '../schemas/alimento/atualizarAlimentoSc
 import { criarAlimentoTabelaObject } from "../schemas/alimento/criarAlimentoTabelaSchema ";
 import { JsonReponseErro } from "../../utils/jsonReponses";
 import Alimento from "../entities/alimento";
-import TabelaNutricionalService from "./tabelaNutricionalService";
+import Eventos from "../../utils/eventos";
 
 export default class AlimentoService{
    
@@ -28,10 +28,11 @@ export default class AlimentoService{
    }
    
    public async criarAlimento(dadosCriacaoJSON: criarAlimentoTabelaObject): Promise<any>{
-      const tabelaNutricionalService = new TabelaNutricionalService();
       const alimento = new Alimento(dadosCriacaoJSON);
       await alimento.save();
-      return await tabelaNutricionalService.criarTabelaNutrcional({...dadosCriacaoJSON, id_alimento: alimento.id_alimento});
+      dadosCriacaoJSON.id_alimento = alimento.id_alimento;
+      Eventos.emitir('alimentoCriado', dadosCriacaoJSON);
+      return alimento;
    }
 
    private async obterAlimentoUsuario(idAlimento: number, usuarioID: string): Promise<Alimento>{
@@ -65,6 +66,10 @@ export default class AlimentoService{
          JsonReponseErro.lancar(404, 'Alimento não encontrado');
       }
       return alimento;
+   }
+
+   public async obterAlimentoPorID(idAlimento: number): Promise<Alimento>{
+      return await this.alimentoRepo.obterAlimentoPorID(idAlimento);
    }
 
 }

@@ -7,12 +7,10 @@ import { atualizarUsuarioContaObject } from '../schemas/usuario/atualizarUsuario
 import { efetuarLoginObject } from '../schemas/usuario/efetuarLoginSchema';
 import { createClient } from '@supabase/supabase-js'
 import { JsonReponseErro } from '../../utils/jsonReponses';
-import CartaoService from './cartaoService';
-
+import Eventos from '../../utils/eventos';
 export default class UsuarioService{
 
    private usuarioRepo: UsuarioRepositorio;
-   private cartaoService: CartaoService;
    private clienteSupabase: any;
 
    constructor() {
@@ -39,7 +37,9 @@ export default class UsuarioService{
    public async criarUsuario(id_conta: string, dadosUsuario: criarUsuarioObject): Promise<Usuario> {
       dadosUsuario.id_usuario = id_conta;
       const novoUsuario: Usuario = new Usuario(dadosUsuario);
-      return await novoUsuario.save();
+      await novoUsuario.save();
+      Eventos.emitir('usuarioCriado', novoUsuario.id_usuario);
+      return novoUsuario;
    }
 
    public async criarConta(criarContaJSON: criarUsuarioObject): Promise<any> {
