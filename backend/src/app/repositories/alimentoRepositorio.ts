@@ -36,6 +36,7 @@ export default class AlimentoRepositorio {
             alimento_verificado: 'DESC',
             nome_alimento: 'ASC'
          },
+         relations: ['tabelaNutricional'],
          take: pegar,
          skip: pular
      });
