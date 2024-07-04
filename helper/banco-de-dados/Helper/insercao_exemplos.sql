@@ -75,9 +75,9 @@ VALUES
 ('a60fdf7b-c7f4-4778-b022-7c71040290cd', 1, CURRENT_TIMESTAMP);
 
 -- prato
-INSERT INTO prato (id_prato, id_usuario, nome_prato, dtt_criacao_prato, dtt_prato_favoritado)
+INSERT INTO prato (id_usuario, nome_prato, dtt_criacao_prato, dtt_prato_favoritado)
 VALUES 
-(1, 'a60fdf7b-c7f4-4778-b022-7c71040290cd', 'ARROZ-FEIJAO-CARNE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+('fb70e9cd-36ef-4f5b-be07-62e124dd9472', '01', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 INSERT INTO prato (id_prato, id_usuario, nome_prato, dtt_criacao_prato, dtt_prato_favoritado)
 VALUES 
