@@ -21,6 +21,13 @@ export default class PratoRepositorio {
       });
    }
 
-
+   public async pegarPratoUnique(nomePrato: string, usuarioID: string): Promise<Prato | null> {
+      return await this.repositorio.findOne({
+         where: {
+            nome_prato: nomePrato,
+            id_usuario: usuarioID
+         }
+      });
+   }
 
 }
