@@ -12,7 +12,7 @@ export default class TabelaNutricionalRotas implements Rota {
       this.roteador = Router()
       this.controller = new TabelaNutricionalController();
 
-      this.roteador.post('/criar', Util.envolveFuncTryCatch(this.controller, this.controller.criarTabelaNutricional));
+      this.roteador.post('/criar', Util.envolveFuncTryCatch(this.controller, this.controller.criarNovaTabelaNutricional));
       this.roteador.patch('/atualizar', Util.envolveFuncTryCatch(this.controller, this.controller.atualizarTabelaNutricional));
 
       console.log('Rotas Tabela Nutricional: Ativo');

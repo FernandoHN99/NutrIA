@@ -11,12 +11,30 @@ export default class TabelaNutricionalRepositorio {
 
    public async pegarTabelaPorId(tabelaID: number): Promise<TabelaNutricional | null> {
       return await this.repositorio.findOne({
-          where: {
-              id_tabela_nutricional: tabelaID,
-          },
-          relations: ['alimento']
+         where: {
+            id_tabela_nutricional: tabelaID,
+         },
+         relations: ['alimento']
       });
-  }
-  
+   }
+
+   public async pegarTabelaUnique(idAlimento: number, unidadeMedida: string): Promise<TabelaNutricional | null> {
+      return await this.repositorio.findOne({
+         where: {
+            id_alimento: idAlimento,
+            unidade_medida: unidadeMedida
+         },
+         relations: ['alimento']
+      });
+   }
+
+   public async pegarTabelaPorIdAlimento(idAlimento: number): Promise<TabelaNutricional | null> {
+      return await this.repositorio.findOne({
+         where: {
+            id_alimento: idAlimento,
+         },
+         relations: ['alimento']
+      });
+   }
 
 }

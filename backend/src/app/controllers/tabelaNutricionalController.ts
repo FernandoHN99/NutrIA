@@ -1,22 +1,22 @@
 import { Request, Response } from 'express';
 import { JsonReponseSucesso, JsonReponseErro } from "../../utils/jsonReponses";
 import TabelaNutricionalService from '../services/tabelaNutricionalService';
-import { criarTabelaNutricionalSchema } from '../schemas/tabelaNutricional/criarTabelaNutricionalSchema';
+import { criarNovaTabelaNutricionalSchema } from '../schemas/tabelaNutricional/criarNovaTabelaNutricionalSchema';
 import { atualizarTabelaNutricionalSchema } from '../schemas/tabelaNutricional/atualizarTabelaNutricionalSchema';
 
 export default class TabelaNutricionalController{
-   private alimentoService: TabelaNutricionalService;
+   private tabelaNutricionalService: TabelaNutricionalService;
 
    constructor(){
-      this.alimentoService = new TabelaNutricionalService();
+      this.tabelaNutricionalService = new TabelaNutricionalService();
    }
 
-   public async criarTabelaNutricional(req: Request, res: Response): Promise<JsonReponseSucesso>{
-      const resultadoParse: any = criarTabelaNutricionalSchema.safeParse(req.body);
+   public async criarNovaTabelaNutricional(req: Request, res: Response): Promise<JsonReponseSucesso>{
+      const resultadoParse: any = criarNovaTabelaNutricionalSchema.safeParse(req.body);
       if(!resultadoParse.success){
          JsonReponseErro.lancar(400, 'JSON inválido', resultadoParse.error);
       };
-      const retornoCriacaoTabela = await this.alimentoService.criarTabelaNutrcional(resultadoParse.data);
+      const retornoCriacaoTabela = await this.tabelaNutricionalService.criarNovaTabelaNutricional(resultadoParse.data);
       return new JsonReponseSucesso(201, 'Tabela nutricional criada com sucesso', retornoCriacaoTabela);
    }
 
@@ -25,7 +25,7 @@ export default class TabelaNutricionalController{
       if(!resultadoParse.success){
          JsonReponseErro.lancar(400, 'JSON inválido', resultadoParse.error);
       };
-      const retornoAtualizacaoTabela = await this.alimentoService.atualizarTabelaNutricional(resultadoParse.data);
+      const retornoAtualizacaoTabela = await this.tabelaNutricionalService.atualizarTabelaNutricional(resultadoParse.data);
       return new JsonReponseSucesso(201, 'Alimento atualizado com sucesso', {retornoAtualizacaoTabela});
    }
    

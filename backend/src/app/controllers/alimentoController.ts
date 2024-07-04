@@ -27,10 +27,9 @@ export default class AlimentoController{
    }
 
    public async criarAlimento(req: Request, res: Response): Promise<JsonReponseSucesso>{
-      const resultadoParse: any = criarAlimentoTabelaSchema.safeParse(req.body);
+      const resultadoParse: any = criarAlimentoTabelaSchema.safeParse(req.body);``
       if(!resultadoParse.success){
          JsonReponseErro.lancar(400, 'JSON inválido', resultadoParse.error);
-
       };
       const retornoCriacaoAlimento = await this.alimentoService.criarAlimento(resultadoParse.data);
       return new JsonReponseSucesso(201, 'Alimento criado com sucesso', retornoCriacaoAlimento);
