@@ -1,11 +1,11 @@
 meta {
-  name: criarPrato
+  name: atualizarPrato
   type: http
-  seq: 2
+  seq: 3
 }
 
-post {
-  url: {{backend_url}}:{{backend_port}}/nutria/prato/criar
+patch {
+  url: {{backend_url}}:{{backend_port}}/nutria/prato/atualizar
   body: json
   auth: bearer
 }
@@ -17,7 +17,6 @@ auth:bearer {
 body:json {
   {
     "nome_prato": "03",
-    "dtt_criacao_prato": "CURRENT_TIMESTAMP",
     "prato_favoritado": true
   }
 }

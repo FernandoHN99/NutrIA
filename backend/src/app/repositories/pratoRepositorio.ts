@@ -30,4 +30,12 @@ export default class PratoRepositorio {
       });
    }
 
+   public async pegarPratoPorID(pratoID: number): Promise<Prato | null> {
+      return await this.repositorio.findOne({
+         where: {
+            id_prato: pratoID
+         }
+      });
+   }
+
 }

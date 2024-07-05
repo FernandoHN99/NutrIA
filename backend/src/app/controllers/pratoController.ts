@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { JsonReponseSucesso, JsonReponseErro } from "../../utils/jsonReponses";
 import PratoService from '../services/pratoService';
 import { criarPratoSchema } from '../schemas/prato/criarPratoSchema';
-
+import { atualizarPratoSchema } from '../schemas/prato/atualizarPratoSchema';
 
 export default class PratoController{
    private pratoSerivce: PratoService;
@@ -23,7 +23,15 @@ export default class PratoController{
       };
       const retornoPrato = await this.pratoSerivce.criarPrato(resultadoParse.data);
       return new JsonReponseSucesso(200, 'Prato criado com sucesso', retornoPrato);
+   }
 
+   public async atualizarPrato(req: Request, res: Response): Promise<JsonReponseSucesso>{
+      const resultadoParse: any = atualizarPratoSchema.safeParse(req.body);
+      if(!resultadoParse.success){
+         JsonReponseErro.lancar(400, 'JSON inválido', resultadoParse.error);
+      };
+      const retornoPrato = await this.pratoSerivce.atualizarPrato(resultadoParse.data);
+      return new JsonReponseSucesso(200, 'Prato atualizado com sucesso', retornoPrato);
    }
 
 }
