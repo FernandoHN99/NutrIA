@@ -9,9 +9,15 @@ export default class AlimentoFavoritoRepositorio {
       this.repositorio = AppDataSource.getRepository(AlimentoFavorito);
    }
 
-   public async obterAlimentoFavorito(usuarioID: string, alimentoID: number): Promise<AlimentoFavorito | null> {
-      return await this.repositorio.findOne({ where: { id_usuario : usuarioID, id_alimento: alimentoID } });
+   public async obterAlimentoFavoritoUsuario(usuarioID: string, alimentoID: number): Promise<AlimentoFavorito | null> {
+      return await this.repositorio.findOne({ 
+         where: { 
+            id_usuario : usuarioID,
+            id_alimento: alimentoID 
+         } 
+      });
    }
+
 
    public async obterAlimentosFavoritosUsuario(usuarioID: string): Promise<any[]> {
       return await this.repositorio.createQueryBuilder('af')

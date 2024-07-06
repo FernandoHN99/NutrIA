@@ -1,6 +1,7 @@
 import AlimentoFavorito from "../entities/alimentoFavorito";
 import AlimentoFavoritoRepositorio from "../repositories/alimentoFavoritoRepositorio";
 import { salvarAlimentoFavoritoObject } from "../schemas/alimentoFavorito/salvarAlimentoFavoritoSchema";
+import { JsonReponseErro } from "../../utils/jsonReponses";
 
 export default class AlimentoFavoritoService{
    
@@ -15,8 +16,9 @@ export default class AlimentoFavoritoService{
    }
 
    public async atualizarAlimentoFavorito(dadosSalvarAlimentoFavorito: salvarAlimentoFavoritoObject): Promise<AlimentoFavorito | {}>{
-      let alimentoFavorito: AlimentoFavorito | null = await this.alimentoFavoritoRepo.obterAlimentoFavorito(
-         dadosSalvarAlimentoFavorito.id_usuario, dadosSalvarAlimentoFavorito.id_alimento
+      let alimentoFavorito = await this.alimentoFavoritoRepo.obterAlimentoFavoritoUsuario(
+         dadosSalvarAlimentoFavorito.id_usuario, 
+         dadosSalvarAlimentoFavorito.id_alimento
       );
       if(!alimentoFavorito){
          alimentoFavorito = new AlimentoFavorito(dadosSalvarAlimentoFavorito)

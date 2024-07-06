@@ -19,7 +19,7 @@ export default class AlimentoFavorito extends BaseEntity {
    @JoinColumn({ name: 'id_usuario' })
    usuario: Usuario;
 
-   @ManyToOne(() => Alimento, alimento => alimento.usuariosFavoritados)
+   @ManyToOne(() => Alimento, alimento => alimento.alimentosFavoritos)
    @JoinColumn({ name: 'id_alimento' })
    alimento: Alimento;
 

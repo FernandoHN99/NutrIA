@@ -13,7 +13,7 @@ export default class AlimentoFavoritoController{
 
    public async obterAlimentosFavoritosUsuario(req: Request, res: Response): Promise<JsonReponseSucesso>{
       const retornoAlimentosFavoritos = await this.alimentoFavoritoService.obterAlimentosFavoritosUsuario(req.body.id_usuario);
-      return new JsonReponseSucesso(200, 'Alimentos favoritos do usuário retornado com sucesso', retornoAlimentosFavoritos);
+      return new JsonReponseSucesso(200, 'Alimentos favoritos retornados com sucesso', retornoAlimentosFavoritos);
    }
 
    public async atualizarAlimentoFavorito(req: Request, res: Response): Promise<JsonReponseSucesso>{

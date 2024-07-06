@@ -51,12 +51,13 @@ export default class AlimentoRepositorio {
       });
    }
 
-   public async obterAlimentoPorCodigoDeBarras(codigoDeBarras: string){
+   public async obterAlimentoPorCodigoDeBarras(codigoDeBarras: string): Promise<Alimento | undefined> {
       return await this.repositorio.createQueryBuilder('a')
-         .innerJoin('a.codigoDeBarras', 'cb')
+         .innerJoin('a.codigosDeBarras', 'cb')
          .where('cb.codigo = :codigoDeBarras', { codigoDeBarras })
          .getOne();
    }
+   
 
    public async obterAlimentoUniqueVerificado(alimentoDados: atualizarAlimentoObject): Promise<Alimento>{
       return await this.repositorio.findOne({ 

@@ -47,7 +47,7 @@ export default class Alimento extends BaseEntity {
 
    @OneToMany(() => AlimentoFavorito, (alimentoFavorito) => alimentoFavorito.alimento)
    @JoinColumn({ name: 'id_alimento' })
-   usuariosFavoritados: AlimentoFavorito[];
+   alimentosFavoritos: AlimentoFavorito[];
 
    @OneToMany(() => CodigoDeBarras, (codigoDeBarras) => codigoDeBarras.alimento)
    @JoinColumn({ name: 'id_alimento' })
