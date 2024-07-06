@@ -22,7 +22,7 @@ export default class AlimentoRepositorio {
             alimento_verificado: 'DESC',
             nome_alimento: 'ASC'
          },
-         relations: ['codigosDeBarras', 'tabelaNutricional']
+         relations: ['codigosDeBarras', 'tabelasNutricionais']
       });
    }
 
@@ -36,7 +36,7 @@ export default class AlimentoRepositorio {
             alimento_verificado: 'DESC',
             nome_alimento: 'ASC'
          },
-         relations: ['tabelaNutricional'],
+         relations: ['tabelasNutricionais'],
          take: pegar,
          skip: pular
      });
@@ -53,7 +53,12 @@ export default class AlimentoRepositorio {
 
    public async obterAlimentoPorCodigoDeBarras(codigoDeBarras: string): Promise<Alimento | undefined> {
       return await this.repositorio.createQueryBuilder('a')
+         .select([
+            'a',
+            'tb'
+         ])
          .innerJoin('a.codigosDeBarras', 'cb')
+         .innerJoin('a.tabelasNutricionais', 'tb')
          .where('cb.codigo = :codigoDeBarras', { codigoDeBarras })
          .getOne();
    }

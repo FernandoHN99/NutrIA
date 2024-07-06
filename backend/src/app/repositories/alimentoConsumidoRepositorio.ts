@@ -25,15 +25,19 @@ export default class AlimentoConsumidoRepositorio {
             'ac',
             'a.nome_alimento',
             'r.nome_refeicao',
+            'tb'
          ])
          .innerJoin('ac.alimento', 'a')
          .innerJoin('ac.refeicao', 'r')
+         .innerJoin('a.tabelasNutricionais', 'tb')
          .where('ac.id_usuario = :usuarioID', { usuarioID })
          .andWhere('ac.dt_dia >= :dataInicio', { dataInicio })
          .andWhere('ac.dt_dia <= :dataFim', { dataFim })
-         .orderBy('ac.dt_dia', 'ASC')
+         .orderBy('a.nome_alimento', 'ASC')
          .orderBy('r.numero_refeicao', 'ASC')
+         .orderBy('ac.dt_dia', 'DESC')
          .getMany();
+         // .getRawMany();
    }
 
 }

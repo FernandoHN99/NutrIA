@@ -47,10 +47,10 @@ JOIN refeicao r
    ON r.numero_refeicao = ac.numero_refeicao 
    AND r.id_usuario = ac.id_usuario
 WHERE
-    ac.id_usuario = 'fd4fa7b5-68dd-4754-981f-90565beb14d6'
-    AND ac.dt_dia >= '2024-04-12'
+    ac.dt_dia >= '2024-04-12'
     AND ac.dt_dia <= '2025-04-12'
-ORDER BY ac.dt_dia ASC, r.numero_refeicao ASC;
+    AND ac.id_usuario = '3d098f6f-c8cb-413f-bb4d-73a8fd5d4558'
+ORDER BY ac.dt_dia DESC, r.numero_refeicao ASC, a.nome_alimento ASC;
 
 
 SELECT 

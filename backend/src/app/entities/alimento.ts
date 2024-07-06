@@ -55,7 +55,7 @@ export default class Alimento extends BaseEntity {
 
    @OneToMany(() => TabelaNutricional, (tabelaNutricional) => tabelaNutricional.alimento)
    @JoinColumn({ name: 'id_alimento' })
-   tabelaNutricional: TabelaNutricional[];
+   tabelasNutricionais: TabelaNutricional[];
 
    constructor(dadosCriacao: criarAlimentoObject) {
       super();

@@ -76,7 +76,7 @@ export default class TabelaNutricional extends BaseEntity {
    @Column('numeric', { precision: 6, scale: 1, transformer: Util.transformerStringNumber })
    qtde_vitamina_e: number;
 
-   @ManyToOne(() => Alimento, (alimento) => alimento.codigosDeBarras)
+   @ManyToOne(() => Alimento, (alimento) => alimento.tabelasNutricionais)
    @JoinColumn({ name: "id_alimento" })
    alimento: Alimento;
 

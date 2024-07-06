@@ -14,8 +14,7 @@ export default class AlimentoService{
       this.alimentoRepo = new AlimentoRepositorio()
    }
 
-   public async obterAlimentos(buscarAlimentos: buscarAlimentosOject): Promise<Alimento[]>{
-      console.log(buscarAlimentos);
+   public async buscarAlimentos(buscarAlimentos: buscarAlimentosOject): Promise<Alimento[]>{
          return await this.alimentoRepo.obterAlimentosPorNome(
             buscarAlimentos.nome, 
             parseFloat(buscarAlimentos.pegar),

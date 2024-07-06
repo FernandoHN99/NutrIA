@@ -12,12 +12,12 @@ export default class AlimentoController{
       this.alimentoService = new AlimentoService();
    }
 
-   public async obterAlimentos(req: Request, res: Response): Promise<JsonReponseSucesso>{
+   public async buscarAlimentos(req: Request, res: Response): Promise<JsonReponseSucesso>{
       const resultadoParse: any = buscarAlimentosSchema.safeParse(req.query); 
       if (!resultadoParse.success){
          JsonReponseErro.lancar(400, 'Parametros inválidos', resultadoParse.error);
       };
-      const retornoAlimentos = await this.alimentoService.obterAlimentos(resultadoParse.data);
+      const retornoAlimentos = await this.alimentoService.buscarAlimentos(resultadoParse.data);
       return new JsonReponseSucesso(200, 'Alimentos retornados com sucesso', retornoAlimentos);
    }
 

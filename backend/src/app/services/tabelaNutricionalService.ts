@@ -21,7 +21,7 @@ export default class TabelaNutricionalService{
       const tabelaNutricionalAtual: TabelaNutricional | null = await this.tabelaNutricionalRepo
          .pegarTabelaUnique(dadosCriacaoJSON.id_alimento, dadosCriacaoJSON.unidade_medida);
       if(tabelaNutricionalAtual){
-         JsonReponseErro.lancar(404, 'Tabela Nutricional com essa unidade de medida já existe para este alimento', tabelaNutricionalAtual);
+         JsonReponseErro.lancar(409, 'Tabela Nutricional com essa unidade de medida já existe para este alimento', tabelaNutricionalAtual);
       }
       const tabelaNutricional = await this.tabelaNutricionalRepo.pegarTabelaPorIdAlimento(dadosCriacaoJSON.id_alimento);
       if(!tabelaNutricional){

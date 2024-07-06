@@ -1,7 +1,7 @@
 meta {
   name: deletarAlimentoConsumido
   type: http
-  seq: 4
+  seq: 3
 }
 
 delete {
@@ -10,17 +10,12 @@ delete {
   auth: bearer
 }
 
-query {
-  ~dataInicio: 2023-12-28
-  ~dataFim: 2026-01-01
-}
-
 auth:bearer {
   token: {{tokenBearer}}
 }
 
 body:json {
   {
-    "id_alimento_consumido": 29
+    "id_alimento_consumido": 3
   }
 }

@@ -1,0 +1,27 @@
+meta {
+  name: ObterConsumoUsuario
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{backend_url}}:{{backend_port}}/nutria/alimento-consumido/usuario?dataInicio=01/01/2001&dataFim=01/01/2025
+  body: json
+  auth: bearer
+}
+
+query {
+  dataInicio: 01/01/2001
+  dataFim: 01/01/2025
+}
+
+auth:bearer {
+  token: {{tokenBearer}}
+}
+
+body:json {
+  {
+  
+  }
+  
+}
