@@ -1,11 +1,11 @@
-import { Entity, Column, PrimaryColumn, BaseEntity, ManyToOne, JoinColumn, OneToMany, OneToOne } from "typeorm";
+import { Entity, Column, PrimaryColumn, BaseEntity, ManyToOne, JoinColumn } from "typeorm";
 import { criarAlimentoConsumidoObject } from "../schemas/alimentoConsumido/criarAlimentoConsumidoSchema";
 import { atualizarAlimentoConsumidoObject } from "../schemas/alimentoConsumido/atualizarAlimentoConsumidoSchema";
 import Usuario from "./usuario";
 import Alimento from "./alimento";
 import Refeicao from "./refeicao";
+import Prato from "./prato";
 import Util from '../../utils/util';
-
 
 @Entity('alimento_consumido')
 export default class AlimentoConsumido extends BaseEntity {
@@ -58,6 +58,10 @@ export default class AlimentoConsumido extends BaseEntity {
    @ManyToOne(() => Alimento, alimento => alimento.alimentosConsumidos)
    @JoinColumn({ name: 'id_alimento' })
    alimento: Alimento;
+
+   @ManyToOne(() => Prato, prato => prato.alimentosConsumidos)
+   @JoinColumn({ name: 'id_prato'})
+   prato: Prato;
 
    @ManyToOne(() => Refeicao, refeicao => refeicao.alimentosConsumidos)
    @JoinColumn({ name: 'numero_refeicao', referencedColumnName: 'numero_refeicao' })
