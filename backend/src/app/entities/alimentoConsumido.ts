@@ -36,19 +36,19 @@ export default class AlimentoConsumido extends BaseEntity {
    @Column('numeric', { precision: 5, scale: 1, transformer: Util.transformerStringNumber })
    qtde_utilizada: number;
 
-   @Column('numeric', { precision: 5, scale: 1, transformer: Util.transformerStringNumber })
+   @Column('numeric', { precision: 6, scale: 1, transformer: Util.transformerStringNumber })
    qtde_proteina: number;
 
-   @Column('numeric', { precision: 5, scale: 1, transformer: Util.transformerStringNumber  })
+   @Column('numeric', { precision: 6, scale: 1, transformer: Util.transformerStringNumber })
    qtde_carboidrato: number;
 
-   @Column('numeric', { precision: 5, scale: 1, transformer: Util.transformerStringNumber })
+   @Column('numeric', { precision: 6, scale: 1, transformer: Util.transformerStringNumber })
    qtde_gordura: number;
 
-   @Column('numeric', { precision: 5, scale: 1, transformer: Util.transformerStringNumber  })
+   @Column('numeric', { precision: 6, scale: 1, transformer: Util.transformerStringNumber })
    qtde_alcool: number;
 
-   @Column('numeric', { precision: 5, scale: 1, transformer: Util.transformerStringNumber })
+   @Column('numeric', { precision: 6, scale: 1, transformer: Util.transformerStringNumber })
    kcal: number;
 
    @ManyToOne(() => Usuario, usuario => usuario.alimentosConsumidos)

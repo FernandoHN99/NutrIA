@@ -97,7 +97,7 @@ CREATE TABLE tabela_nutricional(
    id_tabela_nutricional SERIAL,
 	id_alimento INTEGER NOT NULL,
 	unidade_medida TEXT NOT NULL,
-	porcao_padrao INTEGER  NOT NULL,
+	porcao_padrao INTEGER NOT NULL,
    kcal NUMERIC(6,1) NOT NULL,
 	qtde_proteina NUMERIC(6,1) NOT NULL,
 	qtde_carboidrato NUMERIC(6,1) NOT NULL,
@@ -131,7 +131,7 @@ CREATE TABLE tabela_nutricional(
 			'GRAMA', 'MILILITRO', 'COLHER SOPA', 'COLHER CHA',
 			'XICARA PADRAO', 'XICARA CHA', 'XICARA CAFE', 'UNIDADE'
 		)
-	), 
+	),
    CONSTRAINT tabela_nutricional_unique_id_alimento_unidade_porcao UNIQUE (id_alimento, unidade_medida, porcao_padrao),
 	CONSTRAINT tabela_nutricional_fk_id_alimento FOREIGN KEY (id_alimento) REFERENCES alimento(id_alimento) ON DELETE CASCADE,
 	PRIMARY KEY (id_tabela_nutricional)
@@ -149,6 +149,29 @@ CREATE TABLE prato (
 	PRIMARY KEY (id_prato)
 );
 
+--alimento_prato
+DROP TABLE IF EXISTS alimento_prato CASCADE;
+CREATE TABLE alimento_prato ( 
+   id_alimento_prato SERIAL,
+	id_prato INTEGER NOT NULL,
+	id_alimento INTEGER NOT NULL,
+	unidade_medida TEXT NOT NULL,
+   porcao_padrao INTEGER NOT NULL,
+	qtde_utilizada NUMERIC(5,1) NOT NULL,
+	qtde_proteina NUMERIC(6,1) NOT NULL,
+	qtde_carboidrato NUMERIC(6,1) NOT NULL,
+	qtde_gordura NUMERIC(6,1) NOT NULL,
+	qtde_alcool NUMERIC(6,1) NOT NULL,
+   kcal NUMERIC(6,1) NOT NULL,
+	CONSTRAINT alimento_prato_check_valores_maiores_que_zero CHECK (
+		porcao_padrao > 0 AND qtde_proteina >= 0 AND 
+		qtde_carboidrato >= 0 AND qtde_gordura >= 0 AND qtde_alcool >= 0 AND qtde_utilizada > 0
+	),
+	CONSTRAINT alimento_prato_fk_id_prato FOREIGN KEY (id_prato) REFERENCES prato(id_prato) ON DELETE CASCADE,
+	CONSTRAINT alimento_prato_fk_id_alimento FOREIGN KEY (id_alimento) REFERENCES alimento(id_alimento) ON DELETE CASCADE,
+   PRIMARY KEY (id_alimento_prato)
+);
+
 --alimento_consumido
 DROP TABLE IF EXISTS alimento_consumido CASCADE;
 CREATE TABLE alimento_consumido (
@@ -159,13 +182,13 @@ CREATE TABLE alimento_consumido (
 	id_prato INTEGER,
 	dt_dia DATE NOT NULL,
 	unidade_medida TEXT NOT NULL,
-	porcao_padrao INTEGER,
+	porcao_padrao INTEGER NOT NULL,
 	qtde_utilizada NUMERIC(5,1) NOT NULL,
-	qtde_proteina NUMERIC(5,1) NOT NULL,
-	qtde_carboidrato NUMERIC(5,1) NOT NULL,
-	qtde_gordura NUMERIC(5,1) NOT NULL,
-	qtde_alcool NUMERIC(5,1) NOT NULL,
-	kcal NUMERIC(5,1) NOT NULL,
+	qtde_proteina NUMERIC(6,1) NOT NULL,
+	qtde_carboidrato NUMERIC(6,1) NOT NULL,
+	qtde_gordura NUMERIC(6,1) NOT NULL,
+	qtde_alcool NUMERIC(6,1) NOT NULL,
+   kcal NUMERIC(6,1) NOT NULL,
 	CONSTRAINT alimento_consumido_check_valores_maiores_que_zero CHECK (
       porcao_padrao > 0 AND qtde_proteina >= 0 AND 
 	   qtde_carboidrato >= 0 AND qtde_gordura >= 0 AND qtde_alcool >= 0 AND kcal > 0 AND qtde_utilizada > 0 

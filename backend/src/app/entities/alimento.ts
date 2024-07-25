@@ -4,6 +4,7 @@ import AlimentoConsumido from "./alimentoConsumido";
 import AlimentoFavorito from "./alimentoFavorito";
 import CodigoDeBarras from "./codigoDeBarras"
 import TabelaNutricional from "./tabelaNutricional";
+import AlimentoPrato from "./alimentoPrato";
 import { criarAlimentoObject } from "../schemas/alimento/criarAlimentoSchema";
 import { atualizarAlimentoObject } from "../schemas/alimento/atualizarAlimentoSchema";
 
@@ -56,6 +57,11 @@ export default class Alimento extends BaseEntity {
    @OneToMany(() => TabelaNutricional, (tabelaNutricional) => tabelaNutricional.alimento)
    @JoinColumn({ name: 'id_alimento' })
    tabelasNutricionais: TabelaNutricional[];
+
+   @OneToOne(() => AlimentoPrato, (alimentoPrato) => alimentoPrato.alimento)
+   @JoinColumn({ name: 'id_alimento' })
+   alimentoPrato: AlimentoPrato;
+
 
    constructor(dadosCriacao: criarAlimentoObject) {
       super();
