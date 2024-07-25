@@ -11,7 +11,7 @@ export default class PratoController{
       this.pratoSerivce = new PratoService();
    }
 
-   public async obterDiasUsuario(req: Request, res: Response): Promise<JsonReponseSucesso>{
+   public async obterPratosUsuario(req: Request, res: Response): Promise<JsonReponseSucesso>{
       const retornoPratos = await this.pratoSerivce.obterPratosUsuario(req.body.id_usuario);
       return new JsonReponseSucesso(200, 'Pratos retornados com sucesso', retornoPratos);
    }

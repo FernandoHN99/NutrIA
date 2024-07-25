@@ -16,6 +16,7 @@ export default class PratoRepositorio {
             id_usuario: usuarioID 
          }, 
          order: {
+            prato_favoritado: 'DESC',
             nome_prato: 'ASC'
          } 
       });
