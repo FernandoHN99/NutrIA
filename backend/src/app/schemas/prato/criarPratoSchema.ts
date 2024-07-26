@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import Util from '../../../utils/util';
+import { criarAlimentoPratoSchema } from '../alimentoPrato/criarAlimentoPratoSchema';
 
 const criarPratoSchema = z.object({
 
@@ -13,7 +14,9 @@ const criarPratoSchema = z.object({
       .transform(() => Util.criarStrData()),
 
    prato_favoritado: z.boolean(),
-      
+
+   alimentos_prato: z.array(criarAlimentoPratoSchema)
+      .min(1, 'O prato deve conter pelo menos um alimento')
 })
 
 type criarPratoObject = z.infer<typeof criarPratoSchema>

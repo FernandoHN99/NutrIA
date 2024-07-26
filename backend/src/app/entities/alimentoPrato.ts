@@ -2,6 +2,7 @@ import { Entity, Column, BaseEntity, OneToOne, ManyToOne, JoinColumn, PrimaryGen
 import Util from '../../utils/util';
 import Prato from "./prato";
 import Alimento from "./alimento";
+import { criarAlimentoPratoObject } from "../schemas/alimentoPrato/criarAlimentoPratoSchema";
 
 @Entity('alimento_prato')
 export default class AlimentoPrato extends BaseEntity {
@@ -47,12 +48,12 @@ export default class AlimentoPrato extends BaseEntity {
    @JoinColumn({ name: 'id_alimento' })
    alimento: Alimento;
 
-   // constructor(dadosCriacao: criarPratoObject) {
-   //    super();
-   //    if(dadosCriacao){
-   //       Object.assign(this, dadosCriacao);
-   //    }
-   // }
+   constructor(dadosCriacao: criarAlimentoPratoObject) {
+      super();
+      if(dadosCriacao){
+         Object.assign(this, dadosCriacao);
+      }
+   }
 
    // public atualizarDados(dadosAtualizacao: atualizarPratoObject) {
    //    Object.assign(this, dadosAtualizacao);

@@ -18,7 +18,8 @@ export default class PratoRepositorio {
          order: {
             prato_favoritado: 'DESC',
             nome_prato: 'ASC'
-         } 
+         },
+         relations: ['alimentosPrato']
       });
    }
 
