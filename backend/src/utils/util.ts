@@ -86,4 +86,8 @@ export default class Util {
          return valor;
       }
    };
+
+   static contarNumeroKeysJSON(json: any): number {
+      return Object.keys(json).length;
+   }
 }

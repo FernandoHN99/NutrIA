@@ -32,10 +32,11 @@ export default class PratoRepositorio {
       });
    }
 
-   public async pegarPratoPorID(pratoID: number): Promise<Prato | null> {
+   public async pegarPratoPorID(pratoID: number, usuarioID: string): Promise<Prato | null> {
       return await this.repositorio.findOne({
          where: {
-            id_prato: pratoID
+            id_prato: pratoID,
+            id_usuario: usuarioID
          }
       });
    }

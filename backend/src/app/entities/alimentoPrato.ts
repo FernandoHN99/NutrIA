@@ -3,6 +3,8 @@ import Util from '../../utils/util';
 import Prato from "./prato";
 import Alimento from "./alimento";
 import { criarAlimentoPratoObject } from "../schemas/alimentoPrato/criarAlimentoPratoSchema";
+import { atualizarAlimentoPratoObject } from "../schemas/alimentoPrato/atualizarAlimentoPratoSchema";
+import { upsertAlimentoPratoObject } from "../schemas/alimentoPrato/upsertAlimentoPratoSchema";
 
 @Entity('alimento_prato')
 export default class AlimentoPrato extends BaseEntity {
@@ -55,7 +57,7 @@ export default class AlimentoPrato extends BaseEntity {
       }
    }
 
-   // public atualizarDados(dadosAtualizacao: atualizarPratoObject) {
-   //    Object.assign(this, dadosAtualizacao);
-   // }
+   public atualizarDados(dadosAtualizacao: atualizarAlimentoPratoObject): void {
+      Object.assign(this, dadosAtualizacao);
+   }
 }

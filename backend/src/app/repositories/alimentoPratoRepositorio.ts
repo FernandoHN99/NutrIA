@@ -9,7 +9,16 @@ export default class AlimentoPratoRepositorio {
       this.repositorio = AppDataSource.getRepository(AlimentoPrato);
    }
 
-   public getRepositorio(): any {
-      return this.repositorio;
+   public async inserirAlimentosPrato(listaAlimentosPrato: AlimentoPrato[]): Promise <AlimentoPrato[]> {
+      return await this.repositorio.save(listaAlimentosPrato);
+   }
+
+   public async pegarAlimentoPratoPorID(alimentoPratoID: number, pratoID: number): Promise<AlimentoPrato | null> {
+      return await this.repositorio.findOne({
+         where: {
+            id_alimento_prato: alimentoPratoID,
+            id_prato: pratoID
+         }
+      });
    }
 }

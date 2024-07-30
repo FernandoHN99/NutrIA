@@ -2,7 +2,10 @@ import { z } from 'zod';
 
 const criarAlimentoPratoSchema = z.object({
    
-   id_prato: z.any(),
+   id_prato: z.number()
+      .int()
+      .positive()
+      .optional(),
 
    id_alimento: z.number()
       .int()

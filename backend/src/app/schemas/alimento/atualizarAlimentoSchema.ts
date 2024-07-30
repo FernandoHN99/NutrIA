@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { criarAlimentoSchema, criarAlimentoObject } from './criarAlimentoSchema';
+import { criarAlimentoSchema } from './criarAlimentoSchema';
 
 const atualizarAlimentoSchema = criarAlimentoSchema
    .partial()
@@ -22,6 +22,7 @@ const atualizarAlimentoSchema = criarAlimentoSchema
       data => Object.keys(data).length > 2, 
       { message: 'Nenhum dado fornecido para atualização' } 
    );
+
 
 type atualizarAlimentoObject = z.infer<typeof atualizarAlimentoSchema>
 
