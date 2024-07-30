@@ -6,6 +6,7 @@ import { atualizarPratoCompletoObject } from "../schemas/prato/atualizarPratoCom
 import { upsertAlimentoPratoObject } from "../schemas/alimentoPrato/upsertAlimentoPratoSchema";
 import AlimentoPratoService from "./alimentoPratoService";
 import Util from "../../utils/util";
+
 export default class PratoService {
 
    private pratoRepo: PratoRepositorio;
@@ -36,15 +37,15 @@ export default class PratoService {
       if (!prato) {
          JsonReponseErro.lancar(404, 'Prato do usuário não encontrado');
       }
-      if(Util.contarNumeroKeysJSON(dadosPrato) > 2){
-         prato!.atualizarDados(dadosPrato);
-         await prato!.save();
-      }
       if (dadosAlimentoPrato && Util.contarNumeroKeysJSON(dadosAlimentoPrato) > 1) {
          alimentoPrato = await this.alimentoPratoService.upsertAlimentoPrato(
             dadosAlimentoPrato as upsertAlimentoPratoObject, 
             dadosPrato.id_prato
          );
+      }
+      if(Util.contarNumeroKeysJSON(dadosPrato) > 2){
+         prato!.atualizarDados(dadosPrato);
+         await prato!.save();
       }
       return { ...prato, alimento_prato: alimentoPrato };
    }
