@@ -21,10 +21,10 @@ export default class TabelaNutricionalRepositorio {
       });
    }
 
-   public async pegarTabelasUsuarioPorIdAlimento(idAlimento: number, usuarioID: string): Promise<TabelaNutricional[]> {
+   public async pegarTabelasUsuarioPorIdAlimento(alimentoID: number, usuarioID: string): Promise<TabelaNutricional[]> {
       return await this.repositorio.find({
          where: {
-            id_alimento: idAlimento,
+            id_alimento: alimentoID,
             alimento: {
                id_usuario: usuarioID
             }

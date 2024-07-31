@@ -4,6 +4,8 @@ import { criarTabelaNutricionalObject } from "../schemas/tabelaNutricional/criar
 import { atualizarTabelaNutricionalObject } from "../schemas/tabelaNutricional/atualizarTabelaNutricionalSchema";
 import TabelaNutricionalRepositorio from "../repositories/tabelaNutricionalRepositorio";
 import { criarNovaTabelaNutricionalObject } from "../schemas/tabelaNutricional/criarNovaTabelaNutricionalSchema";
+import { deletarTabelaNutricionalObject } from "../schemas/tabelaNutricional/deletarTabelaNutricionalSchema";
+
 export default class TabelaNutricionalService{
 
    private tabelaNutricionalRepo: TabelaNutricionalRepositorio;
@@ -57,5 +59,26 @@ export default class TabelaNutricionalService{
       return tabelaNutricional!.save()
    }
 
+   public async deletarTabelaNutricional(dadosDelecaoJSON: deletarTabelaNutricionalObject): Promise<TabelaNutricional>{
+      const tabelaNutricional = await this.tabelaNutricionalRepo.pegarTabelaUsuarioPorId(
+         dadosDelecaoJSON.id_tabela_nutricional,
+         dadosDelecaoJSON.id_usuario
+      );
+      if(!tabelaNutricional){
+         JsonReponseErro.lancar(404, 'Tabela Nutricional do usuário não encontrada');
+      }
+      const tabelasNutricionais = await this.tabelaNutricionalRepo.pegarTabelasUsuarioPorIdAlimento(
+         tabelaNutricional!.alimento?.id_alimento,
+         dadosDelecaoJSON.id_usuario
+      );
+      if(!tabelasNutricionais || tabelasNutricionais?.length === 1){
+         JsonReponseErro.lancar(403, 'Alimento necessita ter pelo menos uma tabela nutricional');
+      }
+      if(tabelaNutricional!.alimento?.alimento_verificado){
+         JsonReponseErro.lancar(403, 'Alimento verificado, não é possível deletar', 
+            { id_alimento: tabelaNutricional!.alimento.id_alimento });
+      }
+      return await tabelaNutricional!.remove();
+   }
 
 }
