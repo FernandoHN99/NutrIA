@@ -4,7 +4,8 @@ import { listaUnidadesMedida } from '../../../config/variaveis';
 const criarTabelaNutricionalSchema = z.object({
 
    id_usuario: z.string()
-      .uuid('Formato Inválido: ID do Usuário'),
+      .uuid()
+      .optional(),
 
    id_alimento: z.number()
       .nullable()

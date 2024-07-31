@@ -1,17 +1,19 @@
 import AlimentoRepositorio from "../repositories/alimentoRepositorio";
 import { buscarAlimentosOject } from "../schemas/alimento/buscarAlimentosSchema";
 import { atualizarAlimentoObject } from '../schemas/alimento/atualizarAlimentoSchema';
-import { criarAlimentoTabelaObject } from "../schemas/alimento/criarAlimentoTabelaSchema ";
+import { criarAlimentoCompletoObject } from "../schemas/alimento/criarAlimentoCompletoSchema";
 import { JsonReponseErro } from "../../utils/jsonReponses";
 import Alimento from "../entities/alimento";
-import Eventos from "../../utils/eventos";
+import TabelaNutricionalService from "./tabelaNutricionalService";
 
 export default class AlimentoService{
    
    private alimentoRepo: AlimentoRepositorio;
+   private tabelaNutricionalService: TabelaNutricionalService;
 
    constructor(){
       this.alimentoRepo = new AlimentoRepositorio()
+      this.tabelaNutricionalService = new TabelaNutricionalService();
    }
 
    public async buscarAlimentos(buscarAlimentos: buscarAlimentosOject): Promise<Alimento[]>{
@@ -26,12 +28,13 @@ export default class AlimentoService{
       return await this.alimentoRepo.obterAlimentosDoUsuario(usuarioID)
    }
    
-   public async criarAlimento(dadosCriacaoJSON: criarAlimentoTabelaObject): Promise<any>{
-      const alimento = new Alimento(dadosCriacaoJSON);
+   public async criarAlimento(dadosCriacaoJSON: criarAlimentoCompletoObject): Promise<{}>{
+      const { tabelaNutricional: dadosTabelaNutricional, ...dadosAlimento } = dadosCriacaoJSON;
+      const alimento = new Alimento(dadosAlimento);
       await alimento.save();
-      dadosCriacaoJSON.id_alimento = alimento.id_alimento;
-      Eventos.emitir('alimentoCriado', dadosCriacaoJSON);
-      return alimento;
+      dadosTabelaNutricional.id_alimento = alimento.id_alimento;
+      const retornoCriacaoTabela = await this.tabelaNutricionalService.criarTabelaNutricional(dadosTabelaNutricional);
+      return { ...alimento, tabelaNutricional: retornoCriacaoTabela };
    }
 
    private async obterAlimentoUsuario(idAlimento: number, usuarioID: string): Promise<Alimento>{
