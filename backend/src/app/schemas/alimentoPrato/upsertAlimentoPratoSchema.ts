@@ -4,7 +4,7 @@ import { atualizarAlimentoPratoSchema } from './atualizarAlimentoPratoSchema';
 
 const upsertAlimentoPratoSchema = z.union([
    atualizarAlimentoPratoSchema,
-   criarAlimentoPratoSchema,
+   criarAlimentoPratoSchema
 ])
 .refine((data) => {
    if ('id_alimento_prato' in data) {

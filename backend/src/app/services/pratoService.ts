@@ -1,12 +1,10 @@
 import { JsonReponseErro } from "../../utils/jsonReponses";
 import PratoRepositorio from "../repositories/pratoRepositorio";
 import Prato from "../entities/prato";
-import { criarPratoCompletoObject } from "../schemas/prato/criarPratoCompletoSchema";
-import { atualizarPratoCompletoObject } from "../schemas/prato/atualizarPratoCompletoSchema";
-import { upsertAlimentoPratoObject } from "../schemas/alimentoPrato/upsertAlimentoPratoSchema";
 import AlimentoPratoService from "./alimentoPratoService";
+import { criarPratoCompletoObject } from "../schemas/prato/criarPratoCompletoSchema";
+import { atualizarPratoObject } from "../schemas/prato/atualizarPratoSchema";
 import { deletarPratoObject } from "../schemas/prato/deletarPratoSchema";
-import Util from "../../utils/util";
 
 export default class PratoService {
 
@@ -31,23 +29,13 @@ export default class PratoService {
       return { ...novoPrato, alimentos_prato: alimentosPratoInseridos };
    }
 
-   public async atualizarPrato(dadosAtualizacaoJSON: atualizarPratoCompletoObject): Promise<{}> {
-      let alimentoPrato;
-      const { alimento_prato: dadosAlimentoPrato, ...dadosPrato } = dadosAtualizacaoJSON;
-      const prato = await this.pratoRepo.pegarPratoPorID(dadosPrato.id_prato, dadosPrato.id_usuario);
+   public async atualizarPrato(dadosAtualizacaoJSON: atualizarPratoObject): Promise<{}> {
+      const prato = await this.pratoRepo.pegarPratoPorID(dadosAtualizacaoJSON.id_prato, dadosAtualizacaoJSON.id_usuario);
       if (!prato) {
          JsonReponseErro.lancar(404, 'Prato do usuário não encontrado');
       }
-      if (dadosAlimentoPrato && Util.contarNumeroKeysJSON(dadosAlimentoPrato) > 1) {
-         // @ts-ignore
-         dadosAlimentoPrato.id_prato = dadosPrato.id_prato;
-         alimentoPrato = await this.alimentoPratoService.upsertAlimentoPrato(dadosAlimentoPrato, dadosPrato.id_usuario);
-      }
-      if(Util.contarNumeroKeysJSON(dadosPrato) > 2){
-         prato!.atualizarDados(dadosPrato);
-         await prato!.save();
-      }
-      return { ...prato, alimento_prato: alimentoPrato };
+      prato!.atualizarDados(dadosAtualizacaoJSON);
+      return await prato!.save();
    }
 
    public async deletarPrato(dadosDelecaoJSON: deletarPratoObject): Promise<{}> {

@@ -15,9 +15,19 @@ export default class AlimentoPratoRepositorio {
 
    public async pegarAlimentoPratoUsuarioPorID(alimentoPratoID: number, usuarioID: string): Promise<AlimentoPrato | null> {
       return await this.repositorio.findOne({
-
          where: {
             id_alimento_prato: alimentoPratoID,
+            prato: {
+               id_usuario: usuarioID
+            }
+         }
+      });
+   }
+
+   public async pegarAlimentosPratoUsuarioPorPratoID(pratoID: number, usuarioID: string): Promise<AlimentoPrato[]> {
+      return await this.repositorio.find({
+         where: {
+            id_prato: pratoID,
             prato: {
                id_usuario: usuarioID
             }

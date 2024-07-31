@@ -13,7 +13,10 @@ const atualizarPratoSchema = criarPratoSchema
       id_prato: z.number()
          .int()
          .positive() 
-   });
+   })
+   .refine(data => Object.keys(data).length > 2,
+      { message: 'Dados insuficientes para atualização do prato' }
+   );
 
 
 type atualizarPratoObject = z.infer<typeof atualizarPratoSchema>;

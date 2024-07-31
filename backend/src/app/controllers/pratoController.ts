@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { JsonReponseSucesso, JsonReponseErro } from "../../utils/jsonReponses";
 import PratoService from '../services/pratoService';
 import { criarPratoCompletoSchema } from '../schemas/prato/criarPratoCompletoSchema';
-import { atualizarPratoCompletoSchema } from '../schemas/prato/atualizarPratoCompletoSchema';
+import { atualizarPratoSchema } from '../schemas/prato/atualizarPratoSchema';
 import { deletarPratoSchema } from '../schemas/prato/deletarPratoSchema';
 
 export default class PratoController{
@@ -27,7 +27,7 @@ export default class PratoController{
    }
 
    public async atualizarPrato(req: Request, res: Response): Promise<JsonReponseSucesso>{
-      const resultadoParse: any = atualizarPratoCompletoSchema.safeParse(req.body);
+      const resultadoParse: any = atualizarPratoSchema.safeParse(req.body);
       if(!resultadoParse.success){
          JsonReponseErro.lancar(400, 'JSON inválido', resultadoParse.error);
       };

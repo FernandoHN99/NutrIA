@@ -13,8 +13,9 @@ export default class AlimentoPratoRotas implements Rota {
       this.controller = new AlimentoPratoController();
 
       this.roteador.delete('/deletar', Util.envolveFuncTryCatch(this.controller, this.controller.deletarAlimentoPrato));
+      this.roteador.put('/upsert', Util.envolveFuncTryCatch(this.controller, this.controller.upsertAlimentoPrato));
 
-      console.log('Rotas Prato: Ativo');
+      console.log('Rotas Alimentos Prato: Ativo');
    }
    
 }
