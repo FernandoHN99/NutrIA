@@ -15,6 +15,7 @@ export default class PratoRotas implements Rota {
       this.roteador.get('/usuario', Util.envolveFuncTryCatch(this.controller, this.controller.obterPratosUsuario));
       this.roteador.post('/criar', Util.envolveFuncTryCatch(this.controller, this.controller.criarPrato));
       this.roteador.patch('/atualizar', Util.envolveFuncTryCatch(this.controller, this.controller.atualizarPrato));
+      this.roteador.delete('/deletar', Util.envolveFuncTryCatch(this.controller, this.controller.deletarPrato));
 
       console.log('Rotas Prato: Ativo');
    }

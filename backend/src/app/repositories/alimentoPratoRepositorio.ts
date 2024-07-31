@@ -13,11 +13,14 @@ export default class AlimentoPratoRepositorio {
       return await this.repositorio.save(listaAlimentosPrato);
    }
 
-   public async pegarAlimentoPratoPorID(alimentoPratoID: number, pratoID: number): Promise<AlimentoPrato | null> {
+   public async pegarAlimentoPratoUsuarioPorID(alimentoPratoID: number, usuarioID: string): Promise<AlimentoPrato | null> {
       return await this.repositorio.findOne({
+
          where: {
             id_alimento_prato: alimentoPratoID,
-            id_prato: pratoID
+            prato: {
+               id_usuario: usuarioID
+            }
          }
       });
    }

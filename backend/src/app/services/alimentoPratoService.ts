@@ -4,6 +4,7 @@ import AlimentoPratoRepositorio from "../repositories/alimentoPratoRepositorio";
 import { atualizarAlimentoPratoObject } from "../schemas/alimentoPrato/atualizarAlimentoPratoSchema";
 import { upsertAlimentoPratoObject } from "../schemas/alimentoPrato/upsertAlimentoPratoSchema";
 import { criarAlimentoPratoObject } from "../schemas/alimentoPrato/criarAlimentoPratoSchema";
+import { deletarAlimentoPratoObject } from "../schemas/alimentoPrato/deletarAlimentoPratoSchema";
 
 export default class AlimentoPratoService {
 
@@ -13,8 +14,7 @@ export default class AlimentoPratoService {
       this.alimentoPratoRepo = new AlimentoPratoRepositorio()
    }
 
-   public async criarAlimentoPrato(dadosCriacaoJSON: criarAlimentoPratoObject, pratoID: number): Promise<AlimentoPrato> {
-      dadosCriacaoJSON.id_prato = pratoID;
+   public async criarAlimentoPrato(dadosCriacaoJSON: criarAlimentoPratoObject): Promise<AlimentoPrato> {
       const alimentoPrato = new AlimentoPrato(dadosCriacaoJSON);
       return await alimentoPrato.save();
    }
@@ -24,29 +24,34 @@ export default class AlimentoPratoService {
       return await this.alimentoPratoRepo.inserirAlimentosPrato(alimentosPratoInsercao);
    }
 
-   public async atualizarAlimentoPrato(dadosAtualizacaoJSON: atualizarAlimentoPratoObject, pratoID: number): Promise<AlimentoPrato> {
-      const alimentoPrato = await this.alimentoPratoRepo.pegarAlimentoPratoPorID(
-         dadosAtualizacaoJSON.id_alimento_prato, 
-         pratoID
+   public async atualizarAlimentoPrato(dadosAtualizacaoJSON: atualizarAlimentoPratoObject, usuarioID: string): Promise<AlimentoPrato> {
+      const alimentoPrato = await this.alimentoPratoRepo.pegarAlimentoPratoUsuarioPorID(
+         dadosAtualizacaoJSON.id_alimento_prato,
+         usuarioID
       );
-      if (!alimentoPrato || alimentoPrato.id_prato !== pratoID) {
+      if (!alimentoPrato) {
          JsonReponseErro.lancar(404, 'Alimento do prato não encontrado para o usuário');
       }
       alimentoPrato!.atualizarDados(dadosAtualizacaoJSON);
       return await alimentoPrato!.save();
    }
 
-   public async upsertAlimentoPrato(dadosUpsertJSON: upsertAlimentoPratoObject, pratoID: number): Promise<AlimentoPrato> {
+   public async upsertAlimentoPrato(dadosUpsertJSON: upsertAlimentoPratoObject, usuarioID: string): Promise<AlimentoPrato> {
       if('id_alimento_prato' in dadosUpsertJSON!){
-         return await this.atualizarAlimentoPrato(
-            dadosUpsertJSON as atualizarAlimentoPratoObject, 
-            pratoID
-         );
+         return await this.atualizarAlimentoPrato(dadosUpsertJSON, usuarioID);
       }
-      return await this.criarAlimentoPrato(
-         dadosUpsertJSON as criarAlimentoPratoObject, 
-         pratoID!
+      return await this.criarAlimentoPrato(dadosUpsertJSON);
+   }
+
+   public async deletarAlimentoPrato(dadosDeletarJSON: deletarAlimentoPratoObject): Promise<AlimentoPrato> {
+      const alimentoPrato = await this.alimentoPratoRepo.pegarAlimentoPratoUsuarioPorID(
+         dadosDeletarJSON.id_alimento_prato,
+         dadosDeletarJSON.id_usuario
       );
+      if (!alimentoPrato) {
+         JsonReponseErro.lancar(404, 'Alimento do prato não encontrado para o usuário');
+      }
+      return await alimentoPrato!.remove();
    }
 
    private mapearAlimentosPrato(alimentosPrato: AlimentoPrato[], pratoID: number): AlimentoPrato[] {

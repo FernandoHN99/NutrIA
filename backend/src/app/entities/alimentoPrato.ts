@@ -4,7 +4,6 @@ import Prato from "./prato";
 import Alimento from "./alimento";
 import { criarAlimentoPratoObject } from "../schemas/alimentoPrato/criarAlimentoPratoSchema";
 import { atualizarAlimentoPratoObject } from "../schemas/alimentoPrato/atualizarAlimentoPratoSchema";
-import { upsertAlimentoPratoObject } from "../schemas/alimentoPrato/upsertAlimentoPratoSchema";
 
 @Entity('alimento_prato')
 export default class AlimentoPrato extends BaseEntity {

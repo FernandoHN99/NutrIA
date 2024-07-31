@@ -3,6 +3,7 @@ import { JsonReponseSucesso, JsonReponseErro } from "../../utils/jsonReponses";
 import PratoService from '../services/pratoService';
 import { criarPratoCompletoSchema } from '../schemas/prato/criarPratoCompletoSchema';
 import { atualizarPratoCompletoSchema } from '../schemas/prato/atualizarPratoCompletoSchema';
+import { deletarPratoSchema } from '../schemas/prato/deletarPratoSchema';
 
 export default class PratoController{
    private pratoSerivce: PratoService;
@@ -32,6 +33,15 @@ export default class PratoController{
       };
       const retornoPrato = await this.pratoSerivce.atualizarPrato(resultadoParse.data);
       return new JsonReponseSucesso(200, 'Prato atualizado com sucesso', retornoPrato);
+   }
+
+   public async deletarPrato(req: Request, res: Response): Promise<JsonReponseSucesso>{
+      const resultadoParse: any = deletarPratoSchema.safeParse(req.body);
+      if(!resultadoParse.success){
+         JsonReponseErro.lancar(400, 'JSON inválido', resultadoParse.error);
+      };
+      const retornoPratoDeletado = await this.pratoSerivce.deletarPrato(resultadoParse.data);
+      return new JsonReponseSucesso(200, 'Prato deletado com sucesso', retornoPratoDeletado);
    }
 
 }

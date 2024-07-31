@@ -5,6 +5,7 @@ import { criarPratoCompletoObject } from "../schemas/prato/criarPratoCompletoSch
 import { atualizarPratoCompletoObject } from "../schemas/prato/atualizarPratoCompletoSchema";
 import { upsertAlimentoPratoObject } from "../schemas/alimentoPrato/upsertAlimentoPratoSchema";
 import AlimentoPratoService from "./alimentoPratoService";
+import { deletarPratoObject } from "../schemas/prato/deletarPratoSchema";
 import Util from "../../utils/util";
 
 export default class PratoService {
@@ -38,16 +39,23 @@ export default class PratoService {
          JsonReponseErro.lancar(404, 'Prato do usuário não encontrado');
       }
       if (dadosAlimentoPrato && Util.contarNumeroKeysJSON(dadosAlimentoPrato) > 1) {
-         alimentoPrato = await this.alimentoPratoService.upsertAlimentoPrato(
-            dadosAlimentoPrato as upsertAlimentoPratoObject, 
-            dadosPrato.id_prato
-         );
+         // @ts-ignore
+         dadosAlimentoPrato.id_prato = dadosPrato.id_prato;
+         alimentoPrato = await this.alimentoPratoService.upsertAlimentoPrato(dadosAlimentoPrato, dadosPrato.id_usuario);
       }
       if(Util.contarNumeroKeysJSON(dadosPrato) > 2){
          prato!.atualizarDados(dadosPrato);
          await prato!.save();
       }
       return { ...prato, alimento_prato: alimentoPrato };
+   }
+
+   public async deletarPrato(dadosDelecaoJSON: deletarPratoObject): Promise<{}> {
+      const prato = await this.pratoRepo.pegarPratoPorID(dadosDelecaoJSON.id_prato, dadosDelecaoJSON.id_usuario);
+      if (!prato) {
+         JsonReponseErro.lancar(404, 'Prato do usuário não encontrado');
+      }
+      return await prato!.remove();
    }
 
 }

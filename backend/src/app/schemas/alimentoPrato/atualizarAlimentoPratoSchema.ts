@@ -11,7 +11,7 @@ const atualizarAlimentoPratoSchema = criarAlimentoPratoSchema
    })
    .refine(data => Object.keys(data).length > 1, 
       { message: 'Dados insuficientes para atualização do alimento do prato' } 
-   );
+   )
 
 
 type atualizarAlimentoPratoObject = z.infer<typeof atualizarAlimentoPratoSchema>
