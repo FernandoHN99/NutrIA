@@ -9,29 +9,25 @@ export default class TabelaNutricionalRepositorio {
       this.repositorio = AppDataSource.getRepository(TabelaNutricional);
    }
 
-   public async pegarTabelaPorId(tabelaID: number): Promise<TabelaNutricional | null> {
+   public async pegarTabelaUsuarioPorId(tabelaID: number, usuarioID: string): Promise<TabelaNutricional | null> {
       return await this.repositorio.findOne({
          where: {
             id_tabela_nutricional: tabelaID,
+            alimento: {
+               id_usuario: usuarioID
+            }
          },
          relations: ['alimento']
       });
    }
 
-   public async pegarTabelaUnique(idAlimento: number, unidadeMedida: string): Promise<TabelaNutricional | null> {
-      return await this.repositorio.findOne({
+   public async pegarTabelasUsuarioPorIdAlimento(idAlimento: number, usuarioID: string): Promise<TabelaNutricional[]> {
+      return await this.repositorio.find({
          where: {
             id_alimento: idAlimento,
-            unidade_medida: unidadeMedida
-         },
-         relations: ['alimento']
-      });
-   }
-
-   public async pegarTabelaPorIdAlimento(idAlimento: number): Promise<TabelaNutricional | null> {
-      return await this.repositorio.findOne({
-         where: {
-            id_alimento: idAlimento,
+            alimento: {
+               id_usuario: usuarioID
+            }
          },
          relations: ['alimento']
       });

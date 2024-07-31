@@ -18,35 +18,36 @@ export default class TabelaNutricionalService{
    }
 
    public async criarNovaTabelaNutricional(dadosCriacaoJSON: criarNovaTabelaNutricionalObject): Promise<TabelaNutricional> {
-      const tabelaNutricionalAtual: TabelaNutricional | null = await this.tabelaNutricionalRepo
-         .pegarTabelaUnique(dadosCriacaoJSON.id_alimento, dadosCriacaoJSON.unidade_medida);
-      if(tabelaNutricionalAtual){
-         JsonReponseErro.lancar(409, 'Tabela Nutricional com essa unidade de medida já existe para este alimento', tabelaNutricionalAtual);
+      const tabelasNutricionais = await this.tabelaNutricionalRepo.pegarTabelasUsuarioPorIdAlimento(
+         dadosCriacaoJSON.id_alimento, 
+         dadosCriacaoJSON.id_usuario
+      );
+      if(!tabelasNutricionais || tabelasNutricionais?.length === 0){
+         JsonReponseErro.lancar(404, 'Alimento não encontrado para o usuário');
       }
-      const tabelaNutricional = await this.tabelaNutricionalRepo.pegarTabelaPorIdAlimento(dadosCriacaoJSON.id_alimento);
-      if(!tabelaNutricional){
-         JsonReponseErro.lancar(404, 'Alimento não encontrado');
+      const tabelaNutricionalUnique = tabelasNutricionais.find(
+         tabelaNutricional => tabelaNutricional.unidade_medida === dadosCriacaoJSON.unidade_medida
+      );
+      if (tabelaNutricionalUnique){
+         JsonReponseErro.lancar(409, 'Tabela nutricional com essa unidade de medida já existe para este alimento', 
+            { id_tabela_nutricional: tabelaNutricionalUnique.id_tabela_nutricional }
+         );
       }
-      const alimento = tabelaNutricional!.alimento;
-      if(dadosCriacaoJSON.id_usuario !== alimento.id_usuario){
-         JsonReponseErro.lancar(403, 'Usuário não autorizado');
-      }
+      const alimento = tabelasNutricionais[0].alimento
       if(alimento.alimento_verificado){
          JsonReponseErro.lancar(400, 'Alimento verificado, não é possível criar tabela nutricional', 
-            { id_alimento: tabelaNutricional!.alimento.id_alimento });
+         { id_alimento: alimento.id_alimento });
       }
       return await this.criarTabelaNutricional(dadosCriacaoJSON);
    }
 
    public async atualizarTabelaNutricional(dadosAtualizacaoJSON: atualizarTabelaNutricionalObject): Promise<TabelaNutricional>{
-      const tabelaNutricional: TabelaNutricional | null = await this.tabelaNutricionalRepo.pegarTabelaPorId(
-         dadosAtualizacaoJSON.id_tabela_nutricional
+      const tabelaNutricional = await this.tabelaNutricionalRepo.pegarTabelaUsuarioPorId(
+         dadosAtualizacaoJSON.id_tabela_nutricional,
+         dadosAtualizacaoJSON.id_usuario
       );
       if(!tabelaNutricional){
-         JsonReponseErro.lancar(404, 'Tabela Nutricional não encontrada');
-      }
-      if(dadosAtualizacaoJSON.id_usuario !== tabelaNutricional!.alimento.id_usuario){
-         JsonReponseErro.lancar(403, 'Usuário não autorizado');
+         JsonReponseErro.lancar(404, 'Tabela Nutricional do usuário não encontrada');
       }
       if(tabelaNutricional!.alimento.alimento_verificado){
          JsonReponseErro.lancar(400, 'Alimento verificado, não é possível atualizar', 

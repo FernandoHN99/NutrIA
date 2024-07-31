@@ -8,8 +8,8 @@ const criarTabelaNutricionalSchema = z.object({
       .optional(),
 
    id_alimento: z.number()
-      .nullable()
-      .default(null),
+      .positive()
+      .optional(),
 
    unidade_medida: z.string()
       .transform(unidade_medida => unidade_medida.toLocaleUpperCase())

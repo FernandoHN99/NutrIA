@@ -26,7 +26,7 @@ export default class TabelaNutricionalController{
          JsonReponseErro.lancar(400, 'JSON inválido', resultadoParse.error);
       };
       const retornoAtualizacaoTabela = await this.tabelaNutricionalService.atualizarTabelaNutricional(resultadoParse.data);
-      return new JsonReponseSucesso(201, 'Alimento atualizado com sucesso', {retornoAtualizacaoTabela});
+      return new JsonReponseSucesso(201, 'Alimento atualizado com sucesso', retornoAtualizacaoTabela );
    }
    
 }
