@@ -64,7 +64,6 @@ export default class AlimentoService{
 
    public async obterAlimentoPorCodigoDeBarras(codigoDeBarras: string): Promise<Alimento>{
       const alimento = await this.alimentoRepo.obterAlimentoPorCodigoDeBarras(codigoDeBarras);
-      console.log(codigoDeBarras);
       if(!alimento){
          JsonReponseErro.lancar(404, 'Alimento não encontrado');
       }
