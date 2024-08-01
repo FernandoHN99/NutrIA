@@ -1,9 +1,8 @@
 import { Request, Response } from 'express';
 import { JsonReponseSucesso, JsonReponseErro } from "../../utils/jsonReponses";
-import validate  from 'uuid-validate'
 import DiaService from '../services/diaService';
 import { salvarDiaSchema } from '../schemas/dia/salvarDiaSchema';
-import { deletarDiaObject, deletarDiaSchema } from '../schemas/dia/deletarDiaSchema';
+import { deletarDiaSchema } from '../schemas/dia/deletarDiaSchema';
 
 export default class DiaController{
    private diaService: DiaService;

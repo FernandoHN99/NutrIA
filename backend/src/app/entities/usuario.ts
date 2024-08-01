@@ -6,6 +6,7 @@ import Alimento from "./alimento";
 import AlimentoConsumido from "./alimentoConsumido";
 import AlimentoFavorito from "./alimentoFavorito";
 import Prato from "./prato";
+import Perfil from "./perfil";
 import { atualizarUsuarioDadosObject } from "../schemas/usuario/atualizarUsuarioDadosSchema";
 import { criarUsuarioObject } from "../schemas/usuario/criarUsuarioSchema";
 
@@ -63,6 +64,10 @@ export default class Usuario extends BaseEntity {
    @OneToMany(() => Prato, (prato) => prato.usuario)
    @JoinColumn({ name: 'id_usuario' })
    pratos: Prato[]
+
+   @OneToMany(() => Perfil, (perfil) => perfil.usuario)
+   @JoinColumn({ name: 'id_usuario' })
+   perfis: Perfil[]
 
    constructor(dadosCriarUsuario: criarUsuarioObject) {
       super();

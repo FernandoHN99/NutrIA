@@ -23,7 +23,7 @@ CREATE TABLE perfil (
 		AND tmt > 0 AND tmf > 0 AND tmb > 0 
 	),
 	CONSTRAINT check_nivel_atividade CHECK (
-		nivel_atividade IN ('SENDENTARIO', 'LEVE', 'MODERADO')
+		nivel_atividade IN ('SENDENTARIO', 'LEVE', 'MODERADO', 'INTENSO', 'EXTREMO')
 	), 
 	CONSTRAINT check_objetivo CHECK (
 		objetivo IN ('PERDA', 'MANUTENCAO', 'GANHO')
