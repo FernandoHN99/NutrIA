@@ -2,7 +2,6 @@ import CartaoService from "../services/cartaoService";
 import { Request, Response } from 'express';
 import { JsonReponseSucesso, JsonReponseErro } from "../../utils/jsonReponses";
 import { atualizarCartaoSchema } from "../schemas/cartao/atualizarCartao";
-import Util from "../../utils/util";
 
 export default class CartaoController{
    private cartaoService: CartaoService;
@@ -12,7 +11,7 @@ export default class CartaoController{
    }
 
    public async obterCartoesUsuario(req: Request, res: Response): Promise<JsonReponseSucesso>{
-      const retornoCartoes = await this.cartaoService.pegarCartoesUsuario(req.params.id_usuario);
+      const retornoCartoes = await this.cartaoService.pegarCartoesUsuario(req.body.id_usuario);
       return new JsonReponseSucesso(200, 'Cartoes retornados com sucesso', retornoCartoes);
    }
 

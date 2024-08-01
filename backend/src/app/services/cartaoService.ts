@@ -12,17 +12,13 @@ export default class CartaoService{
       this.cartaoRepo = new CartaoRepositorio()
    }
 
-   public async pegarCartoesUsuario(usuarioID: string): Promise<Cartao[] | null> {
-      const cartoesRetornados = await this.cartaoRepo.pegarCartoesUsuario(usuarioID);
-      if(!cartoesRetornados || cartoesRetornados.length === 0){
-         JsonReponseErro.lancar(500, 'Usuário inválido / Usuário não possui cartões');
-      }
-      return cartoesRetornados;
+   public async pegarCartoesUsuario(usuarioID: string): Promise<Cartao[]> {
+      return await this.cartaoRepo.pegarCartoesUsuario(usuarioID);
    }
 
    public async criarCartoesUsuario(usuarioID: string): Promise<Cartao[]> {
       const listaCartoes = this.criarListaCartoes(usuarioID);
-      await this.cartaoRepo.criarCartaoUsuario(listaCartoes);
+      await this.cartaoRepo.criarCartoesUsuario(listaCartoes);
       return listaCartoes;
    }
 

@@ -10,11 +10,17 @@ export default class CartaoRepositorio{
       this.repositorio = AppDataSource.getRepository(Cartao);
    }
 
-   public async pegarCartoesUsuario(usuarioID: string): Promise<Cartao[] | null> {
-      return await this.repositorio.find({ where: { id_usuario: usuarioID }, order: { dtt_interacao_cartao: 'DESC' }});
+   public async pegarCartoesUsuario(usuarioID: string): Promise<Cartao[]> {
+      return await this.repositorio.find({ 
+         where: { 
+            id_usuario: usuarioID 
+         }, order: { 
+            dtt_interacao_cartao: 'DESC' 
+         }
+      });
    }
 
-   public async criarCartaoUsuario(listaCartoes: Cartao[]): Promise<Cartao> {
+   public async criarCartoesUsuario(listaCartoes: Cartao[]): Promise<Cartao> {
       return await this.repositorio.insert(listaCartoes);
    }
 
