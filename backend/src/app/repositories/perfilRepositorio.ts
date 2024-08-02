@@ -20,4 +20,16 @@ export default class PerfilRepositorio {
       });
    }
 
+   public async obterPerfilUnique(usuarioID: string, dtCriacao: string): Promise<Perfil> {
+      return await this.repositorio.findOne({ 
+         where: { 
+            id_usuario: usuarioID,
+            dt_criacao_perfil: dtCriacao
+         }, 
+         order: { 
+            dt_criacao_perfil: 'DESC' 
+         } 
+      });
+   }
+
 }

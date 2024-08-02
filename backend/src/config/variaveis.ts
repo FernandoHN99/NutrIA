@@ -22,3 +22,5 @@ export const listaUnidadesMedida: Array<string> = ['GRAMA', 'MILILITRO', 'COLHER
 export const listaSexosBiologicos: Array<string> = ['H', 'M'];
 export const listaSistemasMedidas: Array<string> = ['METRICO', 'IMPERIAL'];
 export const listaPerfisAlimentares: Array<string> = ['ONIVORO', 'VEGETARIANO', 'VEGANO'];
+export const listaNiveisDeAtividade: Array<string> = ['SENDENTARIO', 'LEVE', 'MODERADO', 'INTENSO', 'EXTREMO'];
+export const listaObjetivos: Array<string> = ['PERDA', 'MANUTENCAO', 'GANHO'];

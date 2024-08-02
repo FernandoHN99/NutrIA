@@ -1,0 +1,36 @@
+meta {
+  name: criarPerfil
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{backend_url}}:{{backend_port}}/nutria/perfil/criar
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{tokenBearer}}
+}
+
+body:json {
+  {
+    "peso_inicial": 70.5,
+    "peso_final": 68.0,
+    "altura": 175.0,
+    "nivel_atividade": "MODERADO",
+    "objetivo": "PERDA",
+    "tmb": 1500,
+    "tmt": 2000,
+    "tmf": 2500,
+    "meta_proteina": 100,
+    "meta_carboidrato": 200,
+    "meta_gordura": 50,
+    "proteina_peso": 1.5,
+    "carboidrato_peso": 3.0,
+    "gordura_peso": 1.0,
+    "dt_criacao_perfil": "2023-07-25"
+  }
+  
+}
