@@ -14,6 +14,7 @@ export default class PerfilRotas implements Rota {
 
       this.roteador.get('/usuario', Util.envolveFuncTryCatch(this.controller, this.controller.obterPerfisUsuario));
       this.roteador.post('/criar', Util.envolveFuncTryCatch(this.controller, this.controller.criarPerfil));
+      this.roteador.patch('/atualizar', Util.envolveFuncTryCatch(this.controller, this.controller.atualizarPerfil));
 
       console.log('Rotas Perfil: Ativo');
    }

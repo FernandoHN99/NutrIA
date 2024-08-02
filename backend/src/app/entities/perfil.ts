@@ -1,5 +1,6 @@
 import { Entity, Column, BaseEntity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, Check, Unique } from "typeorm";
 import { criarPerfilObject } from "../schemas/perfil/criarPerfilSchema";
+import { atualizarPerfilObject } from "../schemas/perfil/atualizarPerfilSchema";
 import Usuario from "./usuario";
 import Util from "../../utils/util";
 
@@ -12,13 +13,13 @@ export default class Perfil extends BaseEntity {
    @Column({ type: 'uuid' })
    id_usuario: string;
 
-   @Column({ type: 'numeric', precision: 4, scale: 1 })
+   @Column({ type: 'numeric', precision: 4, scale: 1, transformer: Util.transformerStringNumber })
    peso_inicial: number;
 
-   @Column({ type: 'numeric', precision: 4, scale: 1 })
+   @Column({ type: 'numeric', precision: 4, scale: 1, transformer: Util.transformerStringNumber })
    peso_final: number;
 
-   @Column({ type: 'numeric', precision: 4, scale: 1 })
+   @Column({ type: 'numeric', precision: 4, scale: 1, transformer: Util.transformerStringNumber })
    altura: number;
 
    @Column({ type: 'varchar', length: 15 })
@@ -68,7 +69,7 @@ export default class Perfil extends BaseEntity {
       }
    }
 
-   public atualizarDados(dadosAtualizacao: criarPerfilObject) {
+   public atualizarDados(dadosAtualizacao: criarPerfilObject | atualizarPerfilObject) {
       Object.assign(this, dadosAtualizacao);
    }
 }
