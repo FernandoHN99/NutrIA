@@ -3,8 +3,7 @@ import { z } from 'zod';
 const criarAlimentoPratoSchema = z.object({
 
    id_usuario: z.string()
-   .uuid()
-   .optional(),
+      .uuid(),
    
    id_prato: z.number()
       .int()

@@ -1,9 +1,10 @@
 import { z } from 'zod';
 import { criarUsuarioSchema } from './criarUsuarioSchema';
 
-const atualizarUsuarioContaSchema = criarUsuarioSchema.partial()
-   .pick({email: true, password: true})
-   .extend({ id_usuario: z.string().uuid('Formato Inválido: ID do Usuário') })
+const atualizarUsuarioContaSchema = criarUsuarioSchema
+   .partial()
+   .pick({ email: true, password: true, id_usuario: true })
+   .required({ id_usuario: true })
    .refine(data => Object.keys(data).length > 1, {
       message: 'Nenhum dado fornecido para atualização de conta',
    });

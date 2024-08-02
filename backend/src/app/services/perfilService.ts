@@ -1,7 +1,8 @@
-import PerfilRepositorio from "../repositories/perfilRepositorio";
 import { JsonReponseErro } from "../../utils/jsonReponses";
-import Perfil from "../entities/perfil";
 import { criarPerfilObject } from "../schemas/perfil/criarPerfilSchema";
+import { atualizarPerfilObject } from "../schemas/perfil/atualizarPerfilSchema";
+import PerfilRepositorio from "../repositories/perfilRepositorio";
+import Perfil from "../entities/perfil";
 
 export default class PerfilService{
    
@@ -23,6 +24,16 @@ export default class PerfilService{
       }else{
          perfil = new Perfil(dadosPerfil);
       }
+      return await perfil.save();
+   }
+
+   public async atualizarPerfil(dadosPerfil: atualizarPerfilObject): Promise<Perfil> {
+      let perfil: Perfil;
+      perfil = await this.perfilRepo.obterPerfilPorID(dadosPerfil.id_perfil);
+      if(!perfil){
+         JsonReponseErro.lancar(404, 'Perfil não encontrado');
+      }
+      perfil.atualizarDados(dadosPerfil);
       return await perfil.save();
    }
 

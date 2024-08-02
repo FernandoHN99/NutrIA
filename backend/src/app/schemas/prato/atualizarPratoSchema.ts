@@ -3,9 +3,7 @@ import { criarPratoSchema  } from './criarPratoSchema';
 
 const atualizarPratoSchema = criarPratoSchema
    .partial()
-   .required({
-      id_usuario: true
-   })
+   .required({ id_usuario: true })
    .omit({
       dtt_criacao_prato: true 
    })
