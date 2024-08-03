@@ -17,6 +17,7 @@ export default class UsuarioRotas implements Rota {
       this.roteador.patch('/atualizar/dados', Util.envolveFuncTryCatch(this.controller, this.controller.atualizarUsuarioDados));    
       this.roteador.post('/criar', Util.envolveFuncTryCatch(this.controller, this.controller.criarUsuario));    
       this.roteador.post('/login', Util.envolveFuncTryCatch(this.controller, this.controller.fazerLogin));
+      this.roteador.post('/refresh-token', Util.envolveFuncTryCatch(this.controller, this.controller.obterNovoTokenAcesso));    
       this.roteador.get('/obter', Util.envolveFuncTryCatch(this.controller, this.controller.obterUsuarioPorID));    
       
       console.log('Rotas Usuário: Ativo');

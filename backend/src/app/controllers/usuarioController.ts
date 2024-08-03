@@ -1,12 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import UsuarioService from '../services/usuarioService';
-import validate  from 'uuid-validate'
 import { efetuarLoginSchema } from '../schemas/usuario/efetuarLoginSchema';
 import { criarUsuarioSchema, criarUsuarioObject } from '../schemas/usuario/criarUsuarioSchema';
 import { atualizarUsuarioContaSchema } from '../schemas/usuario/atualizarUsuarioContaSchema';
 import { atualizarUsuarioDadosSchema } from '../schemas/usuario/atualizarUsuarioDadosSchema';
 import { JsonReponseSucesso, JsonReponseErro } from '../../utils/jsonReponses';
-import { atualizarUsuarioDadosObject } from '../schemas/usuario/atualizarUsuarioDadosSchema';
+import { obterNovoTokenAcessoSchema } from '../schemas/usuario/obterNovoTokenAcessoSchema';
 
 export default class UsuarioController {
 
@@ -61,4 +60,12 @@ export default class UsuarioController {
       return new JsonReponseSucesso(200, 'Login efetuado com sucesso', retornoLogin);
    }
    
+   public async obterNovoTokenAcesso(req: Request, res: Response): Promise<JsonReponseSucesso> {
+      const resultadoParse: any = obterNovoTokenAcessoSchema.safeParse(req.body);
+      if (!resultadoParse.success){
+         JsonReponseErro.lancar(400, 'Token inválido');
+      }
+      let retornoToken = await this.usuarioService.obterNovoTokenAcesso(resultadoParse.data.refresh_token);
+      return new JsonReponseSucesso(200, 'Token de acesso atualizado com sucesso', retornoToken);
+   }
 }

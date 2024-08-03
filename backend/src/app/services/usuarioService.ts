@@ -82,6 +82,15 @@ export default class UsuarioService{
       return data.session;
    }
 
+   public async obterNovoTokenAcesso(refreshToken: string): Promise<any>  {
+      this.setClienteSupabase()
+      const { data, error } = await this.clienteSupabase.auth.refreshSession({ refresh_token: refreshToken })
+      if(error || !data?.session){
+         JsonReponseErro.lancar(401, 'Token não autorizado', error);
+      }
+      return data.session;
+   }
+
    private setClienteSupabase(){
       this.clienteSupabase = createClient(API_EXTERNAL_URL, SERVICE_KEY);
    }

@@ -1,5 +1,4 @@
 import 'reflect-metadata';
-// import jwt from 'jsonwebtoken';
 import jwt, { TokenExpiredError } from 'jsonwebtoken';
 import express, { Request, Response, NextFunction } from 'express';
 import cookieParser from 'cookie-parser';

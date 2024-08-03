@@ -1,0 +1,21 @@
+meta {
+  name: refreshToken
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{backend_url}}:{{backend_port}}/nutria/usuario/refresh-token
+  body: json
+  auth: none
+}
+
+auth:bearer {
+  token: 
+}
+
+body:json {
+  {
+    "token": "oH6hjBdWKqMN-Lnx4tSO3w"
+  }
+}

@@ -1,3 +1,4 @@
+-- Active: 1722637660149@@aws-0-sa-east-1.pooler.supabase.com@6543@postgres
 --auth.users
 DELETE FROM auth.users;
 
@@ -210,7 +211,7 @@ CREATE TABLE alimento_favorito (
 	PRIMARY KEY(id_usuario, id_alimento)
 );
 
--- perfil
+--perfil
 DROP TABLE IF EXISTS perfil CASCADE;
 CREATE TABLE perfil (
 	id_perfil SERIAL,
@@ -245,3 +246,5 @@ CREATE TABLE perfil (
 	CONSTRAINT perfil_fk_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario) ON DELETE CASCADE,
 	PRIMARY KEY (id_perfil)
 );
+
+

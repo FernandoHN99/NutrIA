@@ -16,7 +16,7 @@ export const JWT_SECRET: string = process.env.JWT_SECRET ?? '';
 
 
 export const tiposDeCartao: Array<string> = ['MACROS', 'CALORIAS', 'DIETA FLEXIVEL'];
-export const listaRotasSemAuth: Array<string> = ['/nutria/usuario/criar', '/nutria/usuario/login'];
+export const listaRotasSemAuth: Array<string> = ['/nutria/usuario/criar', '/nutria/usuario/login', '/nutria/usuario/refresh-token'];
 export const listaEstadosAlimentos: Array<string> = ['CRU', 'COZIDO', 'ASSADO', 'FRITO', 'GRELHADO', 'PADRAO'];
 export const listaUnidadesMedida: Array<string> = ['GRAMA', 'MILILITRO', 'COLHER SOPA', 'COLHER CHA', 'XICARA PADRAO', 'XICARA CHA', 'XICARA CAFE', 'UNIDADE'];
 export const listaSexosBiologicos: Array<string> = ['H', 'M'];
