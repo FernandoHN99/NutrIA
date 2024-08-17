@@ -1,76 +1,79 @@
-import React, { useState, useRef } from 'react';
-import { View, ScrollView, StyleSheet, Keyboard } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { ScrollView, StyleSheet, Keyboard, KeyboardAvoidingView, Platform } from 'react-native';
 import theme from '../styles/theme';
-import { getResponsiveSizeWidth } from '../utils/utils';
+import { getResponsiveSizeWidth, getResponsiveSizeHeight } from '../utils/utils';
 import ChatInput from '../components/ChatBot/ChatInput';
-import MessagesBot from '../components/ChatBot/MessagesBot';
+import MessagesChatbot from '../components/ChatBot/MessagesChatbot';
+import GenderSelection from '../components/ChatBot/GenderSelection';
 
 const SignUpScreen = () => {
-   const scrollViewRef = useRef<ScrollView>(null); // Tipo definido para ScrollView
-
-   const questions = [
-      "Qual seu nome?",
-      "Qual é o seu email?",
-      "Escolha uma senha.",
-      "Qual sua idade?",
-      "Qual é o seu gênero?"
-   ];
-
-   const [messages, setMessages] = useState([
+   const scrollViewRef = useRef<ScrollView>(null);
+   const [step, setStep] = useState(0);
+   const [messages, setMessages] = useState<{ _id: number; text: string; user: string; }[]>([
       {
-         _id: 1,
+         _id: -1,
          text: "Sua jornada está prestes a começar... \n\nPara isso, responda algumas perguntas para entendermos um pouco mais sobre você!",
          user: "NutrIA",
       },
    ]);
 
-   const [step, setStep] = useState(0);
-   const [inputText, setInputText] = useState('');
+   useEffect(() => {
+      const botResponse = {
+         _id: Math.random(),
+         text: flowSignUp[step]?.question || "Fim do cadastro!",
+         user: "NutrIA",
+      };
 
-   const handleSend = () => {
-      
-      if (inputText.trim()) {
-         Keyboard.dismiss();
+      setMessages([...messages, botResponse]);
 
-         const userMessage = {
-            _id: parseFloat(Math.random().toString()),
-            text: inputText,
-            user: "Você",
-         };
+      scrollViewRef.current?.scrollToEnd({ animated: true });
+   }, [step]);
 
-         setMessages([...messages, userMessage]);
+   const nextQuestion = (userAnswer: string) => {
+      const userMessage = {
+         _id: Math.random(),
+         text: userAnswer.trim(),
+         user: "Você",
+      };
+      setMessages([...messages, userMessage]);
 
-         setTimeout(() => {
-            const botResponse = {
-               _id: parseFloat(Math.random().toString()),
-               text: step < questions.length ? questions[step] : "Cadastro concluído! Obrigado por se cadastrar.",
-               user: "NutrIA",
-            };
+      setTimeout(() => {
+         setStep(step+ 1);
+      }, 1000);
+   };
 
-            if (step < questions.length) setStep(step + 1);
-
-            setMessages(previousMessages => [...previousMessages, botResponse]);
-
-            scrollViewRef.current?.scrollToEnd({ animated: true });
-         }, 1000);
-
-         setInputText('');
-      }
+   const flowSignUp: { [key: number]: { question: string; component: JSX.Element } } = {
+      0: {
+         question: "Qual seu nome?",
+         component: <ChatInput onSubmit={nextQuestion} />,
+      },
+      1: {
+         question: "Qual é o seu sexo?",
+         component: <GenderSelection onSelect={nextQuestion} />,
+      },
+      2: {
+         question: "Qual é o seu sexo?",
+         component: <GenderSelection onSelect={nextQuestion} />,
+      },
    };
 
    return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView
+         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+         style={styles.container}
+         keyboardVerticalOffset={Platform.select({ ios: getResponsiveSizeHeight(10), android: getResponsiveSizeHeight(10) })}
+      >
          <ScrollView
             ref={scrollViewRef}
             contentContainerStyle={styles.chatContainer}
             onContentSizeChange={() => scrollViewRef.current?.scrollToEnd({ animated: true })}
          >
             {messages.map(message => (
-               <MessagesBot key={message._id} text={message.text} user={message.user} />
+               <MessagesChatbot key={message._id} text={message.text} user={message.user} />
             ))}
          </ScrollView>
-         <ChatInput value={inputText} onChange={setInputText} onSend={handleSend} />
-      </View>
+         {flowSignUp[step]?.component}
+      </KeyboardAvoidingView>
    );
 };
 
@@ -82,7 +85,7 @@ const styles = StyleSheet.create({
    },
    chatContainer: {
       padding: getResponsiveSizeWidth(5),
-   }
+   },
 });
 
 export default SignUpScreen;

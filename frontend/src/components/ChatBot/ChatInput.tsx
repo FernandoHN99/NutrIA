@@ -1,25 +1,39 @@
-import React, { useState, useRef } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Keyboard } from 'react-native';
+import React, { useState } from 'react';
+import { View, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import theme from '../../styles/theme';
 import { getResponsiveSizeHeight, getResponsiveSizeWidth } from '../../utils/utils';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const ChatInput = ({ value, onChange, onSend }: { value: string, onChange: (text: string) => void, onSend: () => void }) => (
-   <View style={styles.inputContainer}>
-      <TextInput
-         style={styles.textInput}
-         value={value}
-         onChangeText={onChange}
-         placeholder="Digite aqui..."
-         placeholderTextColor={theme.colors.color04}
-         multiline
-      />
-      <TouchableOpacity onPress={onSend} style={styles.sendButton}>
-         <Icon name="send-outline" size={24} color={theme.colors.color01} />
-      </TouchableOpacity>
-   </View>
-);
+interface ChatInputProps {
+   onSubmit: (userAnswer: string) => void;
+}
 
+const ChatInput: React.FC<ChatInputProps> = ({ onSubmit }) => {
+   const [text, setText] = useState<string>('');
+
+   const handleSend = () => {
+      if (text.trim()) {
+         onSubmit(text.trim());
+         setText('');
+      }
+   };
+
+   return (
+      <View style={styles.inputContainer}>
+         <TextInput
+            style={styles.textInput}
+            value={text}
+            onChangeText={setText}
+            placeholder="Digite aqui..."
+            placeholderTextColor={theme.colors.color04}
+            multiline
+         />
+         <TouchableOpacity onPress={handleSend} style={styles.sendButton}>
+            <Icon name="send-outline" size={24} color={theme.colors.color01} />
+         </TouchableOpacity>
+      </View>
+   );
+};
 
 const styles = StyleSheet.create({
    inputContainer: {
@@ -28,7 +42,7 @@ const styles = StyleSheet.create({
       padding: getResponsiveSizeWidth(5),
       backgroundColor: theme.colors.color01,
       borderTopWidth: 1,
-      borderColor: theme.colors.color04,
+      borderColor: theme.colors.color05,
    },
    textInput: {
       fontFamily: 'NotoSans-Regular',

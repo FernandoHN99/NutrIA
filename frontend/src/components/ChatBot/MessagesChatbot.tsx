@@ -4,9 +4,9 @@ import theme from '../../styles/theme';
 import { getResponsiveSizeHeight, getResponsiveSizeWidth } from '../../utils/utils';
 
 
-const MessagesBot = ({ text, user }: { text: string, user: string }) => (
+const MessagesChatbot = ({ text, user }: { text: string, user: string }) => (
    <View style={user === "Você" ? styles.userMessage : styles.botMessage}>
-      <Text style={user === "Você" ? styles.userText : styles.botText}>{text}</Text>
+      <Text style={styles.textMessage}>{text}</Text>
    </View>
 );
 
@@ -28,16 +28,11 @@ const styles = StyleSheet.create({
       alignSelf: 'flex-end',
       maxWidth: '80%',
    },
-   botText: {
+   textMessage: {
       color: theme.colors.color01,
       fontFamily: 'NotoSans-Regular',
-      fontSize: getResponsiveSizeWidth(3.5),
-   },
-   userText: {
-      color: theme.colors.color01,
-      fontFamily: 'NotoSans-Regular',
-      fontSize: getResponsiveSizeWidth(3.5),
-   },
+      fontSize: getResponsiveSizeWidth(3.7),
+   }
 });
 
-export default MessagesBot;
+export default MessagesChatbot;
