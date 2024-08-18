@@ -7,6 +7,7 @@ import MessagesChatbot from '../components/ChatBot/MessagesChatbot';
 import GenderSelection from '../components/ChatBot/GenderSelection';
 
 const SignUpScreen = () => {
+
    const scrollViewRef = useRef<ScrollView>(null);
    const [step, setStep] = useState(0);
    const [messages, setMessages] = useState<{ _id: number; text: string; user: string; }[]>([
@@ -59,9 +60,9 @@ const SignUpScreen = () => {
 
    return (
       <KeyboardAvoidingView
-         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-         style={styles.container}
-         keyboardVerticalOffset={Platform.select({ ios: getResponsiveSizeHeight(10), android: getResponsiveSizeHeight(10) })}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+      keyboardVerticalOffset={Platform.select({ ios: getResponsiveSizeHeight(10), android: getResponsiveSizeHeight(10) })}
       >
          <ScrollView
             ref={scrollViewRef}
@@ -80,12 +81,13 @@ const SignUpScreen = () => {
 const styles = StyleSheet.create({
    container: {
       flex: 1,
-      backgroundColor: theme.colors.color01,
       justifyContent: 'flex-end',
+      backgroundColor: theme.colors.backgroundColor,
+
    },
    chatContainer: {
       padding: getResponsiveSizeWidth(5),
-   },
+   }
 });
 
 export default SignUpScreen;

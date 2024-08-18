@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Keyboard } from 'react-native';
 import theme from '../../styles/theme';
 import { getResponsiveSizeHeight, getResponsiveSizeWidth } from '../../utils/utils';
-
+import { hexToRgba } from '../../utils/utils';
 
 const MessagesChatbot = ({ text, user }: { text: string, user: string }) => (
    <View style={user === "Você" ? styles.userMessage : styles.botMessage}>
@@ -13,7 +13,7 @@ const MessagesChatbot = ({ text, user }: { text: string, user: string }) => (
 
 const styles = StyleSheet.create({
    botMessage: {
-      backgroundColor: theme.colors.color05,
+      backgroundColor: hexToRgba(theme.colors.color04, '0.5'),
       padding: getResponsiveSizeWidth(4),
       borderRadius: getResponsiveSizeWidth(10),
       marginVertical: getResponsiveSizeHeight(1),
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
       maxWidth: '80%',
    },
    userMessage: {
-      backgroundColor: theme.colors.color03,
+      backgroundColor: theme.colors.color02,
       padding: getResponsiveSizeWidth(4),
       borderRadius: getResponsiveSizeWidth(10),
       marginVertical: getResponsiveSizeHeight(1),
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
       maxWidth: '80%',
    },
    textMessage: {
-      color: theme.colors.color01,
+      color: theme.colors.black,
       fontFamily: 'NotoSans-Regular',
       fontSize: getResponsiveSizeWidth(3.7),
    }

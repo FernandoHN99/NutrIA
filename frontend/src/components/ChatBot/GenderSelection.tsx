@@ -33,7 +33,6 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       justifyContent: 'space-around',
       alignItems: 'center',
-      // marginHorizontal: 'auto',
       marginVertical: getResponsiveSizeHeight(2.5),
    },
    button: {

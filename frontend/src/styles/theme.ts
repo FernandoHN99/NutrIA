@@ -1,4 +1,5 @@
 import { getResponsiveSizeWidth } from "../utils/utils";
+import { hexToRgba } from "../utils/utils";
 
 const theme = {
    colors: {
@@ -9,6 +10,7 @@ const theme = {
       color05: '#204e4a',
       white: '#ffffff',
       black: '#000000',
+      backgroundColor: '#CAD8CF', // hexToRgba('#297045', '0.2')
    },
    fonts: {
       sizes: {

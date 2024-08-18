@@ -2,7 +2,9 @@ import React from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { getResponsiveSizeHeight, getResponsiveSizeWidth } from '../utils/utils';
 import theme from '../styles/theme';
+
 const LoginScreen = () => {
+
 
    const handleLogin = () => {
       console.log('Login button pressed');
@@ -36,7 +38,7 @@ const styles = StyleSheet.create({
       flex: 1,
       justifyContent: 'center',
       paddingHorizontal: getResponsiveSizeWidth(10),
-      backgroundColor: theme.colors.color01,
+      backgroundColor: theme.colors.backgroundColor,
    },
    heading: {
       fontFamily: 'NotoSans-Bold',
@@ -53,7 +55,7 @@ const styles = StyleSheet.create({
       width: '100%',
       paddingVertical: getResponsiveSizeHeight(2),
       paddingHorizontal: getResponsiveSizeWidth(4),
-      borderColor: theme.colors.color03,
+      borderColor: theme.colors.color05,
       borderWidth: 1,
       borderRadius: theme.borderRadius.small,
       marginBottom: getResponsiveSizeHeight(2),

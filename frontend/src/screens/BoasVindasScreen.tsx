@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, TouchableOpacity, Pressable } from 'react-nativ
 import { getResponsiveSizeHeight, getResponsiveSizeWidth } from '../utils/utils';
 import theme from '../styles/theme';
 import LogoIcon from '../components/LogoIcon';
-
 const BoasVindasScreen = ({ navigation }: { navigation: any }) => {
 
    const fazerLogin = () => {
@@ -32,6 +31,7 @@ const styles = StyleSheet.create({
       flex: 1,
       justifyContent: 'space-between',
       paddingHorizontal: getResponsiveSizeWidth(10),
+      backgroundColor: theme.colors.backgroundColor,
    },
    content: {
       flex: 1,

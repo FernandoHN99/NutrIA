@@ -4,6 +4,8 @@ import BoasVindasScreen from '../screens/BoasVindasScreen';
 import LoginScreen from '../screens/LoginScreen';
 import theme from '../styles/theme';
 import SignUpScreen from '../screens/SignUpScreen';
+import { hexToRgba } from '../utils/utils';
+
 const Stack = createNativeStackNavigator();
 
 const UnauthenticatedNavigator = () => {
@@ -12,7 +14,7 @@ const UnauthenticatedNavigator = () => {
          <Stack.Screen
             name="Boas-Vindas"
             component={BoasVindasScreen}
-            options={{ title: 'Boas-Vindas', headerShown: false }}
+            options={{ headerShown: false }}
          />
          <Stack.Screen
             name="Login"
@@ -30,10 +32,7 @@ const UnauthenticatedNavigator = () => {
 
 const styles = {
    headerNavigator: {
-      headerStyle: {
-         backgroundColor: theme.colors.color01,
-      },
-      headerTitleAlign: 'center' as const
+      headerTitleAlign: 'center' as const,
    },
    screenOptionLogin: {
       title: '',
@@ -45,7 +44,10 @@ const styles = {
       title: 'NutrIA',
       headerTintColor: theme.colors.color05,
       headerBackTitleVisible: false,
-      // headerTransparent: true,
+      // headerShadowVisible: false,
+      headerStyle: {
+         backgroundColor: theme.colors.backgroundColor,
+      },
    }
 };
 

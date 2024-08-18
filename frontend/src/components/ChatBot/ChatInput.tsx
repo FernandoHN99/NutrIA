@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import theme from '../../styles/theme';
-import { getResponsiveSizeHeight, getResponsiveSizeWidth } from '../../utils/utils';
+import { getResponsiveSizeHeight, getResponsiveSizeWidth, hexToRgba } from '../../utils/utils';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 interface ChatInputProps {
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       alignItems: 'center',
       padding: getResponsiveSizeWidth(5),
-      backgroundColor: theme.colors.color01,
+      // backgroundColor: theme.colors.backgroundColor,
       borderTopWidth: 1,
       borderColor: theme.colors.color05,
    },
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
       borderRadius: getResponsiveSizeWidth(10),
       borderColor: theme.colors.color05,
       borderWidth: 1.5,
-      backgroundColor: theme.colors.color01,
+      backgroundColor: hexToRgba(theme.colors.color01, '0.3'),
       paddingHorizontal: getResponsiveSizeWidth(5),
       color: theme.colors.color05,
       paddingVertical: getResponsiveSizeHeight(1.5),
