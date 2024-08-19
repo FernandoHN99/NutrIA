@@ -11,13 +11,11 @@ const GenderSelection: React.FC<GenderSelectionProps> = ({ onSelect }) => {
   return (
     <View style={styles.viewContainer}>
       <TouchableOpacity onPress={() => onSelect('Homem')} 
-         style={[styles.button, 
-            {backgroundColor: theme.colors.color05}]}>
+         style={styles.button}>
          <Text style={styles.buttonText}>Homem</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => onSelect('Mulher')} 
-         style={[styles.button, 
-            {backgroundColor: theme.colors.color04}]}>
+         style={styles.button}>
          <Text style={styles.buttonText}>Mulher</Text>
       </TouchableOpacity>
     </View>
@@ -33,21 +31,21 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       justifyContent: 'space-around',
       alignItems: 'center',
-      marginVertical: getResponsiveSizeHeight(2.5),
    },
    button: {
       flex: 0.45,
       justifyContent: 'center',
       alignItems: 'center',
       borderRadius: getResponsiveSizeWidth(10),
-      width: getResponsiveSizeWidth(10),
-      height: getResponsiveSizeWidth(10),
-
+      padding: getResponsiveSizeHeight(1.5),
+      marginBottom: getResponsiveSizeHeight(1),
+      borderColor: theme.colors.color05,
+      borderWidth: 1,
    },
    buttonText: {
       fontFamily: 'NotoSans-Bold',
       fontSize: getResponsiveSizeWidth(4),
-      color: theme.colors.color01,
+      color: theme.colors.color05,
    },
 
 });

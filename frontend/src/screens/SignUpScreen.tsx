@@ -5,6 +5,9 @@ import { getResponsiveSizeWidth, getResponsiveSizeHeight } from '../utils/utils'
 import ChatInput from '../components/ChatBot/ChatInput';
 import MessagesChatbot from '../components/ChatBot/MessagesChatbot';
 import GenderSelection from '../components/ChatBot/GenderSelection';
+import DateSelector from '../components/ChatBot/DateSelector';
+import PicklistSelector from '../components/ChatBot/PicklistSelector';
+import NumberInput from '../components/ChatBot/NumberInput';
 
 const SignUpScreen = () => {
 
@@ -30,16 +33,16 @@ const SignUpScreen = () => {
       scrollViewRef.current?.scrollToEnd({ animated: true });
    }, [step]);
 
-   const nextQuestion = (userAnswer: string) => {
+   const nextQuestion = (userAnswer: any) => {
       const userMessage = {
          _id: Math.random(),
-         text: userAnswer.trim(),
+         text: (userAnswer.toString()).trim(),
          user: "Você",
       };
       setMessages([...messages, userMessage]);
 
       setTimeout(() => {
-         setStep(step+ 1);
+         setStep(step + 1);
       }, 1000);
    };
 
@@ -47,22 +50,59 @@ const SignUpScreen = () => {
       0: {
          question: "Qual seu nome?",
          component: <ChatInput onSubmit={nextQuestion} />,
+
       },
       1: {
-         question: "Qual é o seu sexo?",
-         component: <GenderSelection onSelect={nextQuestion} />,
+         question: "Qual seu sobrenome?",
+         component: <ChatInput onSubmit={nextQuestion} />,
       },
       2: {
-         question: "Qual é o seu sexo?",
+         question: "Qual é sua data de nascimento?",
+         component: <DateSelector onSelect={nextQuestion} />,
+      },
+      3: {
+         question: "Qual é o seu sexo biológico?",
          component: <GenderSelection onSelect={nextQuestion} />,
+      },
+      4: {
+         question: "Sua alimentação se enquadra em qual categoria?",
+         component: <PicklistSelector onSelect={nextQuestion} picklistOptions={['Onívora', 'Vegetariana', 'Vegana']} />,
+      },
+      5: {
+         question: "Qual é o seu peso atual?",
+         component: <NumberInput onSubmit={nextQuestion} maxValue={500} maxLength={6} allowDecimal={true} unidadeMedida='kg' />,
+      },
+      6: {
+         question: "Qual é sua altura?",
+         component: <NumberInput onSubmit={nextQuestion} maxValue={300} maxLength={3} allowDecimal={false} unidadeMedida='cm' />,
+      },
+      7: {
+         question: "Qual é seu nível de atividade?",
+         component: 
+            <PicklistSelector
+               onSelect={nextQuestion}
+               picklistOptions={['Sedentário', 'Leve', 'Moderado', 'Intenso', 'Muito Intenso']}
+            />,
+      },
+      8: {
+         question: "Qual é seu objetivo?",
+         component: 
+            <PicklistSelector
+               onSelect={nextQuestion}
+               picklistOptions={['Perda de Peso', 'Manutenção', 'Ganho de Peso']}
+            />,
+      },
+      9: {
+         question: "Qual é a sua meta de peso?",
+         component: <NumberInput onSubmit={nextQuestion} maxValue={500} maxLength={6} allowDecimal={true} unidadeMedida='kg'/>,
       },
    };
 
    return (
       <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}
-      keyboardVerticalOffset={Platform.select({ ios: getResponsiveSizeHeight(10), android: getResponsiveSizeHeight(10) })}
+         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+         style={styles.container}
+         keyboardVerticalOffset={Platform.select({ ios: getResponsiveSizeHeight(10), android: getResponsiveSizeHeight(10) })}
       >
          <ScrollView
             ref={scrollViewRef}

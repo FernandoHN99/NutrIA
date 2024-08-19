@@ -40,7 +40,6 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       alignItems: 'center',
       padding: getResponsiveSizeWidth(5),
-      // backgroundColor: theme.colors.backgroundColor,
       borderTopWidth: 1,
       borderColor: theme.colors.color05,
    },
