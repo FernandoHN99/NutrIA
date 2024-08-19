@@ -3,15 +3,20 @@ import { View, Text, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 import { getResponsiveSizeWidth, getResponsiveSizeHeight } from '../../utils/utils';
 import theme from '../../styles/theme';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { hexToRgba } from '../../utils/utils';
+import InfoHelper from '../InfoHelper';
 
 interface PicklistSelectorProps {
-   picklistOptions: string[];
    onSelect: (option: string) => void;
+   picklistOptions: string[];
+   helperText?: string;
+   helperTitle?: string;
 }
 
-const PicklistSelector: React.FC<PicklistSelectorProps> = ({ onSelect, picklistOptions }) => {
+const PicklistSelector: React.FC<PicklistSelectorProps> = ({ onSelect, picklistOptions, helperTitle, helperText }) => {
    const [selectedOption, setSelectedOption] = useState<string | undefined>(undefined);
    const [showModal, setShowModal] = useState(false);
+   const [showHelper, setShowHelper] = useState(false);
 
    const handleSelectOption = (option: string) => {
       setSelectedOption(option);
@@ -28,6 +33,16 @@ const PicklistSelector: React.FC<PicklistSelectorProps> = ({ onSelect, picklistO
    return (
       <View style={styles.viewContainer}>
          <View style={styles.viewInput}>
+            {helperTitle ? (
+               <View style={{ flexBasis: '15%' }}>
+                  <Icon
+                     name="information-circle-outline"
+                     color={theme.colors.color05}
+                     size={getResponsiveSizeWidth(10)}
+                     onPress={() => setShowHelper(true)}
+                  />
+               </View>
+            ) : null}
             <TouchableOpacity onPress={() => setShowModal(true)} style={styles.selector}>
                <Text style={styles.buttonText}>
                   {selectedOption || 'Selecionar Opção'}
@@ -39,14 +54,25 @@ const PicklistSelector: React.FC<PicklistSelectorProps> = ({ onSelect, picklistO
                </TouchableOpacity>
             )}
          </View>
+
+         {showHelper && helperTitle && (
+            <Modal transparent={true} animationType="fade" visible={showHelper}>
+               <View style={styles.modalHelperContainer}>
+                  <View style={styles.helperComponentContainer}>
+                     <InfoHelper onClose={() => setShowHelper(false)} titleText={helperTitle} contentText={helperText}/>
+                  </View>
+               </View>
+            </Modal>
+         )}
+
          {showModal && (
             <Modal transparent={true} animationType="slide">
                <View style={styles.modalContainer}>
                   <View style={styles.pickerContainer}>
                      {picklistOptions.map(option => (
-                        <TouchableOpacity 
-                           key={option} 
-                           onPress={() => handleSelectOption(option)} 
+                        <TouchableOpacity
+                           key={option}
+                           onPress={() => handleSelectOption(option)}
                            style={styles.optionButton}
                         >
                            <Text style={styles.optionText}>{option}</Text>
@@ -69,7 +95,7 @@ const styles = StyleSheet.create({
    viewInput: {
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'space-evenly',
+      justifyContent: 'center',
    },
    selector: {
       alignItems: 'center',
@@ -77,7 +103,7 @@ const styles = StyleSheet.create({
       paddingVertical: getResponsiveSizeHeight(1),
       borderColor: theme.colors.color05,
       borderWidth: 1,
-      flexBasis: '70%',
+      flex: 1,
    },
    buttonText: {
       fontFamily: 'NotoSans-Bold',
@@ -105,15 +131,6 @@ const styles = StyleSheet.create({
       color: theme.colors.color05,
       textAlign: 'center',
    },
-   doneButton: {
-      alignItems: 'center',
-      padding: getResponsiveSizeHeight(1.5),
-   },
-   doneButtonText: {
-      fontFamily: 'NotoSans-Bold',
-      fontSize: getResponsiveSizeWidth(4),
-      color: theme.colors.color05,
-   },
    sendButton: {
       justifyContent: 'center',
       alignItems: 'center',
@@ -121,6 +138,17 @@ const styles = StyleSheet.create({
       backgroundColor: theme.colors.color05,
       borderRadius: getResponsiveSizeHeight(10),
       padding: getResponsiveSizeWidth(3),
+   },
+   modalHelperContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: hexToRgba(theme.colors.black, '0.7'),
+   },
+   helperComponentContainer: {
+      borderRadius: 10,
+      alignItems: 'center',
+      width: '90%',
    },
 });
 

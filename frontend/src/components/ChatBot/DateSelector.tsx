@@ -93,10 +93,10 @@ const styles = StyleSheet.create({
    dateSelector: {
       alignItems: 'center',
       borderRadius: getResponsiveSizeWidth(10),
-      paddingVertical: getResponsiveSizeHeight(1),
+      padding: getResponsiveSizeHeight(1),
       borderColor: theme.colors.color05,
       borderWidth: 1,
-      flexBasis: '70%',
+      flex: 1,
    },
    buttonText: {
       fontFamily: 'NotoSans-Bold',

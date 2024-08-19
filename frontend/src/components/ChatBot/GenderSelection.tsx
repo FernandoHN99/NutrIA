@@ -10,13 +10,13 @@ interface GenderSelectionProps {
 const GenderSelection: React.FC<GenderSelectionProps> = ({ onSelect }) => {
   return (
     <View style={styles.viewContainer}>
-      <TouchableOpacity onPress={() => onSelect('Homem')} 
+      <TouchableOpacity onPress={() => onSelect('Masculino')} 
          style={styles.button}>
-         <Text style={styles.buttonText}>Homem</Text>
+         <Text style={styles.buttonText}>Masculino</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => onSelect('Mulher')} 
+      <TouchableOpacity onPress={() => onSelect('Feminino')} 
          style={styles.button}>
-         <Text style={styles.buttonText}>Mulher</Text>
+         <Text style={styles.buttonText}>Feminino</Text>
       </TouchableOpacity>
     </View>
   );

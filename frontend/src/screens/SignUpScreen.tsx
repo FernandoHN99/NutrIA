@@ -8,22 +8,23 @@ import GenderSelection from '../components/ChatBot/GenderSelection';
 import DateSelector from '../components/ChatBot/DateSelector';
 import PicklistSelector from '../components/ChatBot/PicklistSelector';
 import NumberInput from '../components/ChatBot/NumberInput';
+import EmailInput from '../components/ChatBot/EmailInput';
+import PasswordInput from '../components/ChatBot/PasswordInput';
 
 const SignUpScreen = () => {
 
    const scrollViewRef = useRef<ScrollView>(null);
    const [step, setStep] = useState(0);
-   const [messages, setMessages] = useState<{ _id: number; text: string; user: string; }[]>([
+   const [answers, setAnswers] = useState<any>({});
+   const [messages, setMessages] = useState<{ text: string; user: string; }[]>([
       {
-         _id: -1,
          text: "Sua jornada está prestes a começar... \n\nPara isso, responda algumas perguntas para entendermos um pouco mais sobre você!",
          user: "NutrIA",
-      },
+      }
    ]);
 
    useEffect(() => {
       const botResponse = {
-         _id: Math.random(),
          text: flowSignUp[step]?.question || "Fim do cadastro!",
          user: "NutrIA",
       };
@@ -34,23 +35,25 @@ const SignUpScreen = () => {
    }, [step]);
 
    const nextQuestion = (userAnswer: any) => {
+      setAnswers({ ...answers, [step]: userAnswer });
+
       const userMessage = {
-         _id: Math.random(),
-         text: (userAnswer.toString()).trim(),
+         text: (step <= 10 ? (userAnswer.toString()).trim() : userAnswer.replace(/./g, '*')),
          user: "Você",
       };
-      setMessages([...messages, userMessage]);
 
+      setMessages([...messages, userMessage]);
+      
       setTimeout(() => {
          setStep(step + 1);
       }, 1000);
    };
+   
 
-   const flowSignUp: { [key: number]: { question: string; component: JSX.Element } } = {
+   const flowSignUp: { [key: number]: { question: string; component: JSX.Element; } } = {
       0: {
          question: "Qual seu nome?",
          component: <ChatInput onSubmit={nextQuestion} />,
-
       },
       1: {
          question: "Qual seu sobrenome?",
@@ -79,10 +82,12 @@ const SignUpScreen = () => {
       7: {
          question: "Qual é seu nível de atividade?",
          component: 
-            <PicklistSelector
-               onSelect={nextQuestion}
-               picklistOptions={['Sedentário', 'Leve', 'Moderado', 'Intenso', 'Muito Intenso']}
-            />,
+         <PicklistSelector
+            onSelect={nextQuestion}
+            picklistOptions={['Sedentário', 'Leve', 'Moderado', 'Intenso', 'Muito Intenso']}
+            helperTitle='Sobre nível de atividade física'
+            helperText={`Sedentário: Exercício mínimo \n Leve: 1-3 dias por semana \n Moderado: 3-5 dias por semana \n Intenso: 6-7 dias por semana \n Muito Intenso: Atleta, 2x por dia`}
+         />,
       },
       8: {
          question: "Qual é seu objetivo?",
@@ -95,6 +100,18 @@ const SignUpScreen = () => {
       9: {
          question: "Qual é a sua meta de peso?",
          component: <NumberInput onSubmit={nextQuestion} maxValue={500} maxLength={6} allowDecimal={true} unidadeMedida='kg'/>,
+      },
+      10: {
+         question: "Qual o seu email?",
+         component: <EmailInput onSubmit={nextQuestion} />,
+      },
+      11: {
+         question: "Digite uma senha.",
+         component: <PasswordInput onSubmit={nextQuestion} />,
+      },
+      12: {
+         question: "Digite a senha novamente.",
+         component: <PasswordInput onSubmit={nextQuestion} passwordCheck={answers[11]}/>,
       },
    };
 
@@ -110,7 +127,7 @@ const SignUpScreen = () => {
             onContentSizeChange={() => scrollViewRef.current?.scrollToEnd({ animated: true })}
          >
             {messages.map(message => (
-               <MessagesChatbot key={message._id} text={message.text} user={message.user} />
+               <MessagesChatbot text={message.text} user={message.user} />
             ))}
          </ScrollView>
          {flowSignUp[step]?.component}
