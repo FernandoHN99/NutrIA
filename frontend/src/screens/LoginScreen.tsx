@@ -1,34 +1,48 @@
 import React from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { getResponsiveSizeHeight, getResponsiveSizeWidth } from '../utils/utils';
 import theme from '../styles/theme';
+import useFazerLogin from '../api/hooks/usuario/useFazerLogin';
 
 const LoginScreen = () => {
-
+   const [email, setEmail] = React.useState('');
+   const [password, setPassword] = React.useState('');
+   const { data, loading, error, login } = useFazerLogin();
 
    const handleLogin = () => {
-      console.log('Login button pressed');
+      if(!email || !password) return;
+      login({ email, password });
    };
 
    return (
       <View style={styles.container}>
-            <Text style={styles.heading}>NutrIA</Text>
+         <Text style={styles.heading}>NutrIA</Text>
          <View style={styles.form}>
             <TextInput
                style={styles.input}
                placeholder="Email"
-               placeholderTextColor={theme.colors.color04}
+               placeholderTextColor={theme.colors.color05}
+               keyboardType="email-address"
+               onChangeText={setEmail}
+               value={email}
             />
             <TextInput
                style={styles.input}
                placeholder="Senha"
-               placeholderTextColor={theme.colors.color04}
+               placeholderTextColor={theme.colors.color05}
                secureTextEntry
+               onChangeText={setPassword}
+               value={password}
             />
             <TouchableOpacity style={styles.button} onPress={handleLogin}>
-               <Text style={styles.buttonText}>Entrar</Text>
+               {loading ? (
+                  <ActivityIndicator color={theme.colors.color01} />
+               ) : (
+                  <Text style={styles.buttonText}>Entrar</Text>
+               )}
             </TouchableOpacity>
          </View>
+         {error && <Text style={styles.errorText}>{'Credenciais Inválidas'}</Text>}
       </View>
    );
 };
@@ -75,6 +89,12 @@ const styles = StyleSheet.create({
       color: theme.colors.color01,
       textAlign: 'center',
       fontSize: getResponsiveSizeWidth(4),
+   },
+   errorText: {
+      color: theme.colors.color05,
+      fontSize: getResponsiveSizeWidth(4),
+      marginTop: getResponsiveSizeHeight(3),
+      textAlign: 'center',
    }
 });
 
