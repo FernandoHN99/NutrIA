@@ -29,7 +29,9 @@ export default class UsuarioController {
       };
       const retornoContaCriada = await this.usuarioService.criarConta(resultadoParse.data);
       const retornoUsuarioCriacao =  await this.usuarioService.criarUsuario(retornoContaCriada.id, resultadoParse.data);
-      return new JsonReponseSucesso(201, 'Usuário criado com sucesso', { email: retornoContaCriada.email, ...retornoUsuarioCriacao });
+      const retornoLogin = await this.usuarioService.fazerLogin(resultadoParse.data)
+      return new JsonReponseSucesso(201, 'Usuário criado com sucesso', { ...retornoLogin });
+      
    }
 
    public async atualizarUsuarioConta(req: Request, res: Response): Promise<JsonReponseSucesso> {
@@ -56,7 +58,7 @@ export default class UsuarioController {
          JsonReponseErro.lancar(400, 'JSON inválido', resultadoParse.error);
       };
 
-      let retornoLogin = await this.usuarioService.fazerLogin(resultadoParse.data);
+      const retornoLogin = await this.usuarioService.fazerLogin(resultadoParse.data);
       return new JsonReponseSucesso(200, 'Login efetuado com sucesso', retornoLogin);
    }
    
