@@ -12,9 +12,6 @@ interface NumberInputProps {
    unidadeMedida?: string;
 }
 
-const MAX_VALUE = 99; // Valor máximo permitido
-
-
 const NumberInput: React.FC<NumberInputProps> = ({ onSubmit, allowDecimal, maxValue, maxLength, unidadeMedida }) => {
    const [text, setText] = useState<string>('');
 
@@ -83,9 +80,6 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      padding: getResponsiveSizeWidth(5),
-      borderTopWidth: 1,
-      borderColor: theme.colors.color05,
    },
    unidadeContainer: {
       borderWidth: 1.5,

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import theme from '../../styles/theme';
 import { getResponsiveSizeHeight, getResponsiveSizeWidth, hexToRgba } from '../../utils/utils';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -21,7 +21,7 @@ const EmailInput: React.FC<EmailInputProps> = ({ onSubmit }) => {
          onSubmit(text.trim().toLocaleLowerCase());
          setText('');
       } else {
-         alert('Email inválido');
+         Alert.alert('Email Inválido', 'Por favor, digite um email válido.');
       }
    };
 
@@ -47,9 +47,6 @@ const styles = StyleSheet.create({
    inputContainer: {
       flexDirection: 'row',
       alignItems: 'center',
-      padding: getResponsiveSizeWidth(5),
-      borderTopWidth: 1,
-      borderColor: theme.colors.color05,
    },
    textInput: {
       fontFamily: 'NotoSans-Regular',

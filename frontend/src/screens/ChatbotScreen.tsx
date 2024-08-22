@@ -1,11 +1,15 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { WebView } from 'react-native-webview';
 
 const ChatbotScreen = () => {
    return (
-      <View style={styles.container}>
-         <Text>ChatBot</Text>
-      </View>
+      // <View style={{ flex: 1 }}>
+    <WebView
+      style={styles.container}
+      source={{ uri: 'https://chatgpt.com' }}
+    />
+   //  </View>
    );
 };
 

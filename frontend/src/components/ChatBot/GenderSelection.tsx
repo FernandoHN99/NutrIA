@@ -25,11 +25,8 @@ const GenderSelection: React.FC<GenderSelectionProps> = ({ onSelect }) => {
 
 const styles = StyleSheet.create({
    viewContainer: {
-      borderTopColor: theme.colors.color05,
-      borderTopWidth: 1,
-      padding: getResponsiveSizeHeight(2.5),
       flexDirection: 'row',
-      justifyContent: 'space-around',
+      justifyContent: 'space-between',
       alignItems: 'center',
    },
    button: {

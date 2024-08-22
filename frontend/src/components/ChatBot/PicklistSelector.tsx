@@ -31,7 +31,6 @@ const PicklistSelector: React.FC<PicklistSelectorProps> = ({ onSelect, picklistO
    };
 
    return (
-      <View style={styles.viewContainer}>
          <View style={styles.viewInput}>
             {helperTitle ? (
                <View style={{ flexBasis: '15%' }}>
@@ -53,7 +52,6 @@ const PicklistSelector: React.FC<PicklistSelectorProps> = ({ onSelect, picklistO
                   <Icon name="send-outline" size={getResponsiveSizeWidth(7)} color={theme.colors.color01} />
                </TouchableOpacity>
             )}
-         </View>
 
          {showHelper && helperTitle && (
             <Modal transparent={true} animationType="fade" visible={showHelper}>
@@ -87,11 +85,6 @@ const PicklistSelector: React.FC<PicklistSelectorProps> = ({ onSelect, picklistO
 };
 
 const styles = StyleSheet.create({
-   viewContainer: {
-      borderTopColor: theme.colors.color05,
-      borderTopWidth: 1,
-      padding: getResponsiveSizeHeight(2.5),
-   },
    viewInput: {
       flexDirection: 'row',
       alignItems: 'center',

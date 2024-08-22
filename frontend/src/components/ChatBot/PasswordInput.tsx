@@ -56,9 +56,6 @@ const styles = StyleSheet.create({
    inputContainer: {
       flexDirection: 'row',
       alignItems: 'center',
-      padding: getResponsiveSizeWidth(5),
-      borderTopWidth: 1,
-      borderColor: theme.colors.color05,
    },
    textInput: {
       fontFamily: 'NotoSans-Regular',

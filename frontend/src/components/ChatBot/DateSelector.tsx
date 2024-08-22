@@ -34,18 +34,16 @@ const DateSelector: React.FC<DateSelectorProps> = ({ onSelect }) => {
 
    return (
       <View style={styles.viewContainer}>
-         <View style={styles.viewInput}>
-            <TouchableOpacity onPress={showDatepicker} style={styles.dateSelector}>
-               <Text style={styles.buttonText}>
-                  {date ? date.toLocaleDateString() : 'Selecionar Data de Nascimento'}
-               </Text>
+         <TouchableOpacity onPress={showDatepicker} style={styles.dateSelector}>
+            <Text style={styles.buttonText}>
+               {date ? date.toLocaleDateString() : 'Selecionar Data de Nascimento'}
+            </Text>
+         </TouchableOpacity>
+         {date && (
+            <TouchableOpacity onPress={handleSend} style={styles.sendButton}>
+               <Icon name="send-outline" size={getResponsiveSizeWidth(7)} color={theme.colors.color01} />
             </TouchableOpacity>
-            {date && (
-               <TouchableOpacity onPress={handleSend} style={styles.sendButton}>
-                  <Icon name="send-outline" size={getResponsiveSizeWidth(7)} color={theme.colors.color01} />
-               </TouchableOpacity>
-            )}
-         </View>
+         )}
          {show && (
             Platform.OS === 'ios' ? (
                <Modal transparent={true} animationType="slide">
@@ -57,7 +55,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({ onSelect }) => {
                            display="spinner"
                            onChange={onChange}
                            style={styles.dateTimePicker}
-                           maximumDate={new Date()} 
+                           maximumDate={new Date()}
                         />
                         <TouchableOpacity onPress={() => setShow(false)} style={styles.doneButton}>
                            <Text style={styles.doneButtonText}>Concluído</Text>
@@ -81,11 +79,6 @@ const DateSelector: React.FC<DateSelectorProps> = ({ onSelect }) => {
 
 const styles = StyleSheet.create({
    viewContainer: {
-      borderTopColor: theme.colors.color05,
-      borderTopWidth: 1,
-      padding: getResponsiveSizeHeight(2.5),
-   },
-   viewInput: {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-evenly',

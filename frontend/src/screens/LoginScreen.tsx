@@ -42,7 +42,7 @@ const LoginScreen = () => {
                )}
             </TouchableOpacity>
          </View>
-         {error && <Text style={styles.errorText}>{'Credenciais Inválidas'}</Text>}
+         {error && <Text style={styles.errorText}>Credenciais Inválidas</Text>}
       </View>
    );
 };
