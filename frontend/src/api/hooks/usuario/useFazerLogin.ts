@@ -15,8 +15,7 @@ const useFazerLogin = () => {
       setError(null);
       try {
          const response = await fazerLoginService(credenciais);
-         console.log(response?.data.data.access_token)
-         saveToken(response?.data.data.access_token)
+         saveToken(response?.data?.data?.access_token)
          setData(response.data.data);
       } catch (err) {
          setError(JSON.stringify((err as any)?.response?.data));
