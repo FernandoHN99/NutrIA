@@ -1,18 +1,27 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { getResponsiveSizeHeight, getResponsiveSizeWidth } from '../utils/utils';
 import theme from '../styles/theme';
 import useFazerLogin from '../api/hooks/usuario/useFazerLogin';
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation, route }: { navigation: any, route: any }) => {
+
+   const { setIsAuthenticated } = route.params;
+
    const [email, setEmail] = React.useState('');
    const [password, setPassword] = React.useState('');
    const { data, loading, error, login } = useFazerLogin();
 
-   const handleLogin = () => {
+   const handleLogin = async () => {
       if(!email || !password) return;
-      login({ email, password });
+      await login({ email, password });
    };
+
+   useEffect(() => {
+      if (data) {
+         setIsAuthenticated(true)
+      }
+   }, [data]);
 
    return (
       <View style={styles.container}>
