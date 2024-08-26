@@ -31,27 +31,27 @@ const PicklistSelector: React.FC<PicklistSelectorProps> = ({ onSelect, picklistO
    };
 
    return (
-         <View style={styles.viewInput}>
-            {helperTitle ? (
-               <View style={{ flexBasis: '15%' }}>
-                  <Icon
-                     name="information-circle-outline"
-                     color={theme.colors.color05}
-                     size={getResponsiveSizeWidth(10)}
-                     onPress={() => setShowHelper(true)}
-                  />
-               </View>
-            ) : null}
-            <TouchableOpacity onPress={() => setShowModal(true)} style={styles.selector}>
-               <Text style={styles.buttonText}>
-                  {selectedOption || 'Selecionar Opção'}
-               </Text>
+      <View style={styles.viewInput}>
+         {helperTitle ? (
+            <View style={{ flexBasis: '15%' }}>
+               <Icon
+                  name="information-circle-outline"
+                  color={theme.colors.color05}
+                  size={getResponsiveSizeWidth(10)}
+                  onPress={() => setShowHelper(true)}
+               />
+            </View>
+         ) : null}
+         <TouchableOpacity onPress={() => setShowModal(true)} style={styles.selector}>
+            <Text style={styles.buttonText}>
+               {selectedOption || 'Selecionar Opção'}
+            </Text>
+         </TouchableOpacity>
+         {selectedOption && (
+            <TouchableOpacity onPress={handleSend} style={styles.sendButton}>
+               <Icon name="send-outline" size={getResponsiveSizeWidth(7)} color={theme.colors.color01} />
             </TouchableOpacity>
-            {selectedOption && (
-               <TouchableOpacity onPress={handleSend} style={styles.sendButton}>
-                  <Icon name="send-outline" size={getResponsiveSizeWidth(7)} color={theme.colors.color01} />
-               </TouchableOpacity>
-            )}
+         )}
 
          {showHelper && helperTitle && (
             <Modal transparent={true} animationType="fade" visible={showHelper}>
