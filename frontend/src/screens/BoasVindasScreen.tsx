@@ -3,11 +3,10 @@ import { View, Text, StyleSheet, TouchableOpacity, Pressable } from 'react-nativ
 import { getResponsiveSizeHeight, getResponsiveSizeWidth } from '../utils/utils';
 import theme from '../styles/theme';
 import LogoIcon from '../components/LogoIcon';
+
+
 const BoasVindasScreen = ({ navigation }: { navigation: any }) => {
 
-   const fazerLogin = () => {
-      console.log('Texto "Já tenho uma conta!" foi clicado');
-   };
 
    return (
       <View style={styles.container}>
