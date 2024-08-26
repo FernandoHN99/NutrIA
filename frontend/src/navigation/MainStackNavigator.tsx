@@ -19,19 +19,11 @@ const MainStackNavigator = () => {
 
    return (
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
           {isAuthenticated ? (
-            <Stack.Screen 
-               name="Auth" 
-               component={AuthenticatedNavigator} />
-           ) : (
-              <Stack.Screen 
-                  name="Unauth" 
-                  component={UnauthenticatedNavigator} 
-                  initialParams={{ setIsAuthenticated }} 
-               />
+            <AuthenticatedNavigator/>
+         ) : (
+            <UnauthenticatedNavigator setIsAuthenticated={setIsAuthenticated}/>
           )}
-        </Stack.Navigator>
       </NavigationContainer>
     );
   };

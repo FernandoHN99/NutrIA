@@ -7,9 +7,8 @@ import SignUpScreen from '../screens/SignUpScreen';
 
 const Stack = createNativeStackNavigator();
 
-const UnauthenticatedNavigator = ({ route }: { route: any }) => {
+const UnauthenticatedNavigator = ({ setIsAuthenticated }: { setIsAuthenticated: any }) => {
 
-   const { setIsAuthenticated } = route.params;
 
    return (
       <Stack.Navigator initialRouteName='Boas-Vindas' screenOptions={styles.headerNavigator}>
