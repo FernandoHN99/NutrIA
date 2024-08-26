@@ -1,17 +1,23 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, ScrollView, StyleSheet, KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native';
+import { View, ScrollView, StyleSheet, KeyboardAvoidingView, Platform, ActivityIndicator, Alert } from 'react-native';
 import theme from '../styles/theme';
 import { getResponsiveSizeWidth, getResponsiveSizeHeight } from '../utils/utils';
 import MessagesChatbot from '../components/ChatBot/MessagesChatbot';
 import FlowSignUp from '../components/FlowSignUp';
+import fazerSignUp from '../api/hooks/usuario/fazerSignUp';
+import { useAuthToken } from '../utils/useAuthToken';
 
+const SignUpScreen = ({ navigation, route }: { navigation: any, route: any }) => {
 
-const SignUpScreen = () => {
+   const { setIsAuthenticated } = route.params;
 
    const scrollViewRef = useRef<ScrollView>(null);
-   const [loading, setLoading] = useState(false);
+   const [loadingChatbot, setLoadingChatbot] = useState(false);
    const [step, setStep] = useState(0);
-   const [answers, setAnswers] = useState<string[]>([]);
+   const [answers, setAnswers] = useState<any>({});
+   const { saveToken } = useAuthToken()
+
+
    const [messages, setMessages] = useState<{ _id: number, text: string; user: string; }[]>([
       {
          _id: Math.random(),
@@ -20,30 +26,67 @@ const SignUpScreen = () => {
       }
    ]);
 
+   const handleSignUp = async () => {
+      setIsAuthenticated(null)
+
+      // const jsonTESTE = {
+      //    "altura": "178 cm",
+      //    "peso_inicial": "76.75 kg",
+      //    "dt_nascimento": "09/11/1999",
+      //    "nivel_atividade": "Leve",
+      //    "objetivo": "Ganho de Peso",
+      //    "password": "1234567890",
+      //    "perfil_alimentar": "Vegetariana",
+      //    "peso_final": "70 kg",
+      //    "email": "testeeee01@gmail.com",
+      //    "nome": "Fernando",
+      //    "sexo": "Masculino",
+      //    "sobrenome": "Henriques"
+      // }
+
+      const { data, err } = await fazerSignUp(answers, saveToken);
+      if (data) {
+         setIsAuthenticated(true);
+         return;
+      }
+      if (err) {
+         console.log(err)
+         setIsAuthenticated(false);
+         const msgError = err?.codigo == '409' ? 'Email já cadastrado' : 'Erro ao criar a sua conta';
+         Alert.alert(msgError, 'Por favor, tente novamente.')
+      }
+   };
+
 
    useEffect(() => {
       const botResponse = {
          _id: Math.random(),
-         text: FlowSignUp(nextQuestion, answers)[step]?.question || "Fim do cadastro!",
+         text: FlowSignUpInstance[step]?.question || "Fim do cadastro!",
          user: "NutrIA",
       };
 
       setMessages([...messages, botResponse]);
-
-      setLoading(false);
+      setLoadingChatbot(false);   
       if (botResponse.text === "Fim do cadastro!") {
-         console.log("Fim do cadastro!");
+         setTimeout(() => { }, 1000);
+         handleSignUp()
       }
 
    }, [step]);
 
    const nextQuestion = (userAnswer: any) => {
-      setLoading(true);
-      setAnswers([...answers, userAnswer]);
+      setLoadingChatbot(true);
+      setAnswers({
+         ...answers,
+         [FlowSignUpInstance[step]['chave']]: userAnswer
+      });
 
       const userMessage = {
          _id: Math.random(),
-         text: (step <= 10 ? (userAnswer.toString()).trim() : userAnswer.replace(/./g, '*')),
+         text: (FlowSignUpInstance[step]['chave'] !== 'password'
+            ? (userAnswer.toString()).trim()
+            : userAnswer.replace(/./g, '*')
+         ),
          user: "Você",
       };
 
@@ -53,6 +96,8 @@ const SignUpScreen = () => {
          setStep(step + 1);
       }, 1000);
    };
+
+   const FlowSignUpInstance = FlowSignUp(nextQuestion, answers?.password)
 
    return (
       <KeyboardAvoidingView
@@ -70,11 +115,11 @@ const SignUpScreen = () => {
             ))}
          </ScrollView>
          <View style={styles.inputContainer}>
-         {loading ?
-            <ActivityIndicator size={'large'} color={theme.colors.color05} />
-            :
-            FlowSignUp(nextQuestion, answers)[step]?.component}
-      </View>
+            {loadingChatbot ?
+               <ActivityIndicator size={'large'} color={theme.colors.color05} />
+               :
+               FlowSignUpInstance[step]?.component}
+         </View>
       </KeyboardAvoidingView>
    );
 };

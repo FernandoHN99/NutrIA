@@ -1,4 +1,3 @@
-import { NavigationContainer } from '@react-navigation/native';
 import MainStackNavigator from './navigation/MainStackNavigator';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
@@ -24,7 +23,7 @@ const App = () => {
    }
 
    return (
-         <MainStackNavigator/>
+      <MainStackNavigator/>
    )
 }
 

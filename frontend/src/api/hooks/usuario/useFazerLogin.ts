@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { fazerLoginSchema } from '../../schemas/usuarioSchemas';
-import { fazerLogin } from '../../services/usuarioService';
+import { fazerLoginService } from '../../services/usuarioService';
 
 const useFazerLogin = () => {
    const [data, setData] = useState(null);
@@ -11,7 +11,7 @@ const useFazerLogin = () => {
       setLoading(true);
       setError(null);
       try {
-         const response = await fazerLogin(credenciais);
+         const response = await fazerLoginService(credenciais);
          setData(response.data);
       } catch (err) {
          setError(JSON.stringify((err as any)?.response?.data));
