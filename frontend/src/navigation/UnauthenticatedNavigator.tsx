@@ -4,11 +4,13 @@ import BoasVindasScreen from '../screens/BoasVindasScreen';
 import LoginScreen from '../screens/LoginScreen';
 import theme from '../styles/theme';
 import SignUpScreen from '../screens/SignUpScreen';
-import { hexToRgba } from '../utils/utils';
 
 const Stack = createNativeStackNavigator();
 
-const UnauthenticatedNavigator = () => {
+const UnauthenticatedNavigator = ({ route }: { route: any }) => {
+
+   const { setIsAuthenticated } = route.params;
+
    return (
       <Stack.Navigator initialRouteName='Boas-Vindas' screenOptions={styles.headerNavigator}>
          <Stack.Screen
@@ -25,10 +27,13 @@ const UnauthenticatedNavigator = () => {
             name="SignUp"
             component={SignUpScreen}
             options={styles.screenOptionSignUp}
+            initialParams={{ setIsAuthenticated }}
          />
       </Stack.Navigator>
    );
 };
+
+
 
 const styles = {
    headerNavigator: {
