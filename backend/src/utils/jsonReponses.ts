@@ -1,11 +1,11 @@
 abstract class JsonResponse {
-   public successo: boolean;
+   public sucesso: boolean;
    public codigo: number;
    public mensagem: string;
 
    
-   constructor(successo: boolean, codigo: number, mensagem: string) {
-      this.successo = successo;
+   constructor(sucesso: boolean, codigo: number, mensagem: string) {
+      this.sucesso = sucesso;
       this.codigo = codigo;
       this.mensagem = mensagem;
    }
