@@ -4,8 +4,9 @@ import theme from '../styles/theme';
 import { getResponsiveSizeWidth, getResponsiveSizeHeight } from '../utils/utils';
 import MessagesChatbot from '../components/ChatBot/MessagesChatbot';
 import FlowSignUp from '../components/FlowSignUp';
-import fazerSignUp from '../api/hooks/usuario/fazerSignUp';
-import { useAuthToken } from '../utils/useAuthToken';
+import useSignUp from '../api/hooks/usuario/useSignUp';
+import LoadingScreen from '../components/LoadingScreen';
+import CustomAlert from '../components/customAlert';
 
 const SignUpScreen = ({ navigation, route }: { navigation: any, route: any }) => {
 
@@ -15,7 +16,8 @@ const SignUpScreen = ({ navigation, route }: { navigation: any, route: any }) =>
    const [loadingChatbot, setLoadingChatbot] = useState(false);
    const [step, setStep] = useState(0);
    const [answers, setAnswers] = useState<any>({});
-   const { saveToken } = useAuthToken()
+
+   const { data, error, loading, fazerSignUp  } = useSignUp()
 
 
    const [messages, setMessages] = useState<{ _id: number, text: string; user: string; }[]>([
@@ -27,35 +29,35 @@ const SignUpScreen = ({ navigation, route }: { navigation: any, route: any }) =>
    ]);
 
    const handleSignUp = async () => {
-      setIsAuthenticated(null)
 
-      // const jsonTESTE = {
-      //    "altura": "178 cm",
-      //    "peso_inicial": "76.75 kg",
-      //    "dt_nascimento": "09/11/1999",
-      //    "nivel_atividade": "Leve",
-      //    "objetivo": "Ganho de Peso",
-      //    "password": "1234567890",
-      //    "perfil_alimentar": "Vegetariana",
-      //    "peso_final": "70 kg",
-      //    "email": "testeeee01@gmail.com",
-      //    "nome": "Fernando",
-      //    "sexo": "Masculino",
-      //    "sobrenome": "Henriques"
-      // }
+      const jsonTESTE = {
+         "altura": "178 cm",
+         "peso_inicial": "76.75 kg",
+         "dt_nascimento": "09/11/1999",
+         "nivel_atividade": "Leve",
+         "objetivo": "Ganho de Peso",
+         "password": "1234567890",
+         "perfil_alimentar": "Vegetariana",
+         "peso_final": "70 kg",
+         "email": "test121212e1212eee01@gmail.com",
+         "nome": "Fernando",
+         "sexo": "Masculino",
+         "sobrenome": "Henriques"
+      }
 
-      const { data, err } = await fazerSignUp(answers, saveToken);
+      await fazerSignUp(jsonTESTE);
+
+   }
+
+   useEffect(() => {
       if (data) {
          setIsAuthenticated(true);
-         return;
       }
-      if (err) {
-         console.log(err)
-         setIsAuthenticated(false);
-         const msgError = err?.codigo == '409' ? 'Email já cadastrado' : 'Erro ao criar a sua conta';
-         Alert.alert(msgError, 'Por favor, tente novamente.')
+      
+      if (error) {
+         CustomAlert(error, "Tente novamente.", () => navigation.replace('Boas-Vindas'))
       }
-   };
+   }, [data, error]);
 
 
    useEffect(() => {
@@ -67,7 +69,7 @@ const SignUpScreen = ({ navigation, route }: { navigation: any, route: any }) =>
 
       setMessages([...messages, botResponse]);
       setLoadingChatbot(false);   
-      if (botResponse.text === "Fim do cadastro!") {
+      if (botResponse.text !== "Fim do cadastro!") {
          setTimeout(() => { }, 1000);
          handleSignUp()
       }
@@ -98,6 +100,10 @@ const SignUpScreen = ({ navigation, route }: { navigation: any, route: any }) =>
    };
 
    const FlowSignUpInstance = FlowSignUp(nextQuestion, answers?.password)
+
+   if (loading || error) { 
+      return <LoadingScreen loadingMessage='Criando a sua conta...'/>
+   }
 
    return (
       <KeyboardAvoidingView

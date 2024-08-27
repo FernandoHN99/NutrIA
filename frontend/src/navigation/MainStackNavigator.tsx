@@ -13,9 +13,6 @@ const MainStackNavigator = () => {
    const {token, removeToken} = useAuthToken()
    const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(!!token);
 
-   if (isAuthenticated == null) {
-      return <LoadingScreen loadingMessage='Criando a sua conta...'/>
-   }
 
    return (
       <NavigationContainer>
