@@ -30,22 +30,7 @@ const SignUpScreen = ({ navigation, route }: { navigation: any, route: any }) =>
 
    const handleSignUp = async () => {
 
-      const jsonTESTE = {
-         "altura": "178 cm",
-         "peso_inicial": "76.75 kg",
-         "dt_nascimento": "09/11/1999",
-         "nivel_atividade": "Leve",
-         "objetivo": "Ganho de Peso",
-         "password": "1234567890",
-         "perfil_alimentar": "Vegetariana",
-         "peso_final": "70 kg",
-         "email": "test121212e1212eee01@gmail.com",
-         "nome": "Fernando",
-         "sexo": "Masculino",
-         "sobrenome": "Henriques"
-      }
-
-      await fazerSignUp(jsonTESTE);
+      await fazerSignUp(answers);
 
    }
 
@@ -69,7 +54,7 @@ const SignUpScreen = ({ navigation, route }: { navigation: any, route: any }) =>
 
       setMessages([...messages, botResponse]);
       setLoadingChatbot(false);   
-      if (botResponse.text !== "Fim do cadastro!") {
+      if (botResponse.text === "Fim do cadastro!") {
          setTimeout(() => { }, 1000);
          handleSignUp()
       }

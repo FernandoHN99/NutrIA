@@ -48,7 +48,7 @@ const FlowSignUp = (nextQuestion: (userAnswer: any) => void, password: string): 
       5: {
          chave: 'peso_inicial',
          question: "Qual é o seu peso atual?",
-         component: <NumberInput onSubmit={nextQuestion} maxValue={500} maxLength={6} allowDecimal={true} unidadeMedida='kg' />,
+         component: <NumberInput onSubmit={nextQuestion} maxValue={300} maxLength={6} allowDecimal={true} unidadeMedida='kg' />,
       },
       6: {
          chave: 'altura',
@@ -78,7 +78,7 @@ const FlowSignUp = (nextQuestion: (userAnswer: any) => void, password: string): 
       9: {
          chave: 'peso_final',
          question: "Qual é a sua meta de peso?",
-         component: <NumberInput onSubmit={nextQuestion} maxValue={500} maxLength={6} allowDecimal={true} unidadeMedida='kg' />,
+         component: <NumberInput onSubmit={nextQuestion} maxValue={300} maxLength={6} allowDecimal={true} unidadeMedida='kg' />,
       },
       10: {
          chave: 'email',
