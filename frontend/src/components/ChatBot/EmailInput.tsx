@@ -35,6 +35,7 @@ const EmailInput: React.FC<EmailInputProps> = ({ onSubmit }) => {
             placeholderTextColor={theme.colors.color04}
             keyboardType="email-address"
             autoComplete="email"
+            autoCapitalize='none'
          />
          <TouchableOpacity onPress={handleSend} style={styles.sendButton}>
             <Icon name="send-outline" size={24} color={theme.colors.color01} />

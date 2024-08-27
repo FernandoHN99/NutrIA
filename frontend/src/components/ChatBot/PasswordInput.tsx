@@ -41,6 +41,7 @@ const PasswordInput: React.FC<PasswordInputProps> = ({ onSubmit, passwordCheck }
             placeholderTextColor={theme.colors.color05}
             secureTextEntry={isSecure}
             autoComplete="password"
+            autoCapitalize='none'
          />
          <TouchableOpacity onPress={() => setIsSecure(!isSecure)} style={styles.eyeButton}>
             <Icon name={isSecure ? "eye-off-outline" : "eye-outline"} size={30} color={theme.colors.color05} />
