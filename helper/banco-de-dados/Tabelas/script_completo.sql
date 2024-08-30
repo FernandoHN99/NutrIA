@@ -1,4 +1,4 @@
--- Active: 1722637660149@@aws-0-sa-east-1.pooler.supabase.com@6543@postgres
+-- Active: 1725033897675@@aws-0-sa-east-1.pooler.supabase.com@6543@postgres
 --auth.users
 DELETE FROM auth.users;
 
@@ -73,7 +73,7 @@ CREATE TABLE alimento (
 	), 
 	CONSTRAINT check_estado_alimento CHECK (
 		estado_alimento IN (
-			'CRU', 'COZIDO', 'ASSADO', 'FRITO', 'GRELHADO', 'PADRAO')
+			'CRU', 'COZIDO', 'ASSADO', 'FRITO', 'GRELHADO', 'PADRAO', 'REFOGADO')
 	), 
    CONSTRAINT alimento_fk_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario),
 	PRIMARY KEY (id_alimento)
