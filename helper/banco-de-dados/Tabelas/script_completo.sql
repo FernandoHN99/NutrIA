@@ -1,4 +1,4 @@
--- Active: 1725033897675@@aws-0-sa-east-1.pooler.supabase.com@6543@postgres
+-- Active: 1724984475024@@aws-0-sa-east-1.pooler.supabase.com@5432@postgres
 --auth.users
 DELETE FROM auth.users;
 
