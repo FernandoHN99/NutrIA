@@ -1,6 +1,4 @@
 import { mapPerfisAlimentares, mapNiveisDeAtividade, mapObjetivos, mapSexosBiologicos, mapMultNiveisDeAtividade } from '../config/variaveis';
-import { capitalize } from './utils';
-import { formatarDataStrISO } from './utils';
 import { calcularTMB, calcularTMT, calcularTMF, calcularPesoCarboidrato, calcularIdade, arredondarValores } from './utils';
 
 const criaPerfilJSON = (input: any): any => {

@@ -77,6 +77,12 @@ export const calcularIdade = (dataNascimento: string) => {
    return idade;
 }
 
-export const arredondarValores = (valor: number, casasDeciamais: number = 0) =>{
+export const arredondarValores = (valor: number, casasDeciamais: number = 0) => {
    return parseFloat(valor.toFixed(casasDeciamais));
-} 
+}
+
+
+export const criarStrData = (dias: number = 0, meses: number = 0, anos: number = 0, data: Date = new Date()) => {
+   return new Date(data.getFullYear() + anos, data.getMonth() + meses, data.getDate() + dias).toISOString().split('T')[0];
+}
+

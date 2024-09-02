@@ -6,6 +6,7 @@ import LogoIcon from '../components/LogoIcon';
 import globalStyles from '../styles/globalStyles';
 import theme from '../styles/theme';
 
+
 const Stack = createNativeStackNavigator();
 
 const AuthenticatedNavigator = () => {
@@ -16,7 +17,7 @@ const AuthenticatedNavigator = () => {
             component={TopTabNavigator}
             options={{
                headerStyle: {
-                  backgroundColor: theme.colors.color01,
+                  backgroundColor: theme.colors.backgroundColor,
                },
                headerTitle: () => (
                   <React.Fragment>

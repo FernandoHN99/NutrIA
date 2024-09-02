@@ -23,7 +23,7 @@ const App = () => {
    }
 
    return (
-      <MainStackNavigator/>
+      <MainStackNavigator />
    )
 }
 
