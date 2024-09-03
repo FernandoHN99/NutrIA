@@ -4,13 +4,11 @@ import DayScroll from '../components/DayScroll';
 import theme from '../styles/theme';
 import DaySummary from '../components/DaySummary';
 import MealList from '../components/MealList';
+import { criarStrData } from '../utils/utils';
+
 
 const HomeScreen = () => {
-   const [selectedDay, setSelectedDay] = useState(0);
-
-   // const handleDaySelect = (dayIndex) => {
-   //    setSelectedDay(dayIndex);
-   // };
+   const [diaSelecionado, setDiaSelecionado] = useState(criarStrData());
 
    // const handleAddFood = (mealName) => {
    //    console.log(`Adicionar comida em ${mealName}`);
@@ -18,7 +16,7 @@ const HomeScreen = () => {
 
    return (
       <View style={styles.container}>
-         <DayScroll/>
+         <DayScroll diaSelecionado={diaSelecionado} setDiaSelecionado={setDiaSelecionado}/>
          {/* <DaySummary calories="1.635" consumed="0" spent="24" /> */}
          {/* <MealList onAddFood={handleAddFood} /> */}
       </View>

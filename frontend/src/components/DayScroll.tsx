@@ -6,9 +6,8 @@ import { criarStrData } from '../utils/utils';
 
 const tamanhoLetras: number = getResponsiveSizeHeight(1.6);
 
-const DayScroll = () => {
+const DayScroll = ({ diaSelecionado, setDiaSelecionado } : {diaSelecionado: string, setDiaSelecionado: Function}) => {
 
-   const [diaSelecionado, setDiaSelecionado] = useState(criarStrData());
    const flatListRef = useRef<FlatList>(null);
 
    const gerarListaDatas = (dataBase: Date = new Date()) => {
@@ -23,6 +22,7 @@ const DayScroll = () => {
          const dataFormatada = data.toISOString().split('T')[0];
          const [ano, mes, dia] = dataFormatada.split('-');
 
+         console.log(listaDatas)
          listaDatas.push({ id: dataFormatada, data: `${dia}.${mes}`, diaSemana });
       }
       return listaDatas;
@@ -49,7 +49,7 @@ const DayScroll = () => {
    const renderItem = ({ item }: { item: {id: string, data: string, diaSemana: string}} ) => (
       <TouchableOpacity
          key={item.data}
-         style={styles.diaButton} // Define a largura de cada item dinamicamente
+         style={styles.diaButton}
          onPress={() => setDiaSelecionado(item.id)}
       >
          <View style={
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
       // borderColor: theme.colors.color03
    },
    diaButton: {
-      paddingTop: getResponsiveSizeHeight(1),
+      paddingTop: getResponsiveSizeHeight(1.5),
       paddingHorizontal: getResponsiveSizeWidth(4.5),
    },
    viewDiaSelecionado: {
