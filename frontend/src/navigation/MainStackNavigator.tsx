@@ -9,7 +9,6 @@ import TopTabNavigator from './TopTabNavigator';
 
 import {
    SafeAreaProvider,
-   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 
 
@@ -17,7 +16,7 @@ const Stack = createNativeStackNavigator();
 
 const MainStackNavigator = () => {
    const { token, removeToken } = useAuthToken()
-   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(true);
+   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!token);
 
 
    return (

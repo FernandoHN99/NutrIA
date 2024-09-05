@@ -1,28 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import theme from '../styles/theme';
 import { getResponsiveSizeWidth, getResponsiveSizeHeight } from '../utils/utils';
-import { criarStrData } from '../utils/utils';
+import { criarStrData, criarData } from '../utils/utils';
 
-const tamanhoLetras: number = getResponsiveSizeHeight(1.6);
-
-const gerarDatas = (dataBase: Date = new Date(), qtdeDiasPassados: number, qtdeDiasFuturos: number) => {
-   const datasControl: { [key: string]: any } = {};
-
-   for (let i= -qtdeDiasPassados; i <= qtdeDiasFuturos; i++) {
-      const data = new Date(dataBase);
-      data.setDate(dataBase.getDate() + i);
-
-      let diaSemana = data.toLocaleDateString('pt-BR', { weekday: 'short' });
-      diaSemana = diaSemana.substring(0, 3).toUpperCase();
-      const dataFormatada = data.toISOString().split('T')[0];
-      const [ano, mes, dia] = dataFormatada.split('-');
-
-      datasControl[dataFormatada] = { id: dataFormatada, data: `${dia}.${mes}`, diaSemana };
-   }
-   return datasControl;
-};
-
+const tamanhoLetras = getResponsiveSizeHeight(1.6);
+const ITEM_WIDTH = getResponsiveSizeWidth(20);
 
 interface Dia {
    id: string;
@@ -35,18 +18,37 @@ interface DiaScrollProps {
    setDiaSelecionado: Function;
 }
 
+
+const gerarDatas = (dataBase = new Date(), qtdeDiasPassados: number, qtdeDiasFuturos: number) => {
+   const datasControl: Array<Dia> = [];
+
+   for (let i = -qtdeDiasPassados; i <= qtdeDiasFuturos; i++) {
+      const data = new Date(dataBase);
+      data.setDate(dataBase.getDate() + i);
+
+      let diaSemana = data.toLocaleDateString('pt-BR', { weekday: 'short' });
+      diaSemana = diaSemana.substring(0, 3).toUpperCase();
+      const dataFormatada = data.toISOString().split('T')[0];
+      const [ano, mes, dia] = dataFormatada.split('-');
+
+      datasControl.push({ id: dataFormatada, data: `${dia}.${mes}`, diaSemana });
+   }
+   return datasControl;
+};
+
+
+
 const DiaScroll = ({ diaSelecionado, setDiaSelecionado }: DiaScrollProps) => {
-   const [dias, setDias] = useState<Array<Dia>>(Object.values(gerarDatas(new Date(), 30, 30)));
+   const [loadingLeft, setLoadingLeft] = useState(false);
+   const [datas, setDatas] = useState<Array<Dia>>(Object.values(gerarDatas(new Date(), 30, 30)));
    const flatListRef = useRef<FlatList>(null);
 
-   
    useEffect(() => {
       scrollDiaSelecionado(diaSelecionado);
    }, [diaSelecionado]);
-   
-   
+
    const scrollDiaSelecionado = (idDiaSelecionado: string) => {
-      const selectedItem = dias.find(dia => dia.id === idDiaSelecionado);
+      const selectedItem = datas.find(dia => dia.id === idDiaSelecionado);
       if (flatListRef.current && selectedItem) {
          flatListRef.current.scrollToItem({
             item: selectedItem,
@@ -56,15 +58,24 @@ const DiaScroll = ({ diaSelecionado, setDiaSelecionado }: DiaScrollProps) => {
       }
    };
 
+   const carregarDatasPassadas = useCallback(() => {
+      if (loadingLeft) return;
+      setLoadingLeft(true);
+      setTimeout(() => {
+         const primeiraData = criarData(-2, 0, 0, new Date(datas[0].id))
+         const novasDatas = gerarDatas(primeiraData, 30, 0);
 
-   //  const carregarMaisDias = () => {
-   //    const menorData = dias[0].id;
-   //    const maiorData = dias[dias.length - 1].id;
-   //    const novosDiasPassados = Object.values(gerarDatas(criarData(-2,0,0,new Date(menorData)), 30, 0));
-   //    const novosDiasFuturos = Object.values(gerarDatas(criarData(2,0,0,new Date(maiorData)), 0, 30));
-   //    setDias(prevDias => [...novosDiasPassados, ...prevDias, ...novosDiasFuturos]);
-   // };
+         setDatas(prevDates => [...novasDatas, ...prevDates]);
+         setLoadingLeft(false);
 
+         if (flatListRef.current) {
+            flatListRef.current.scrollToOffset({
+               offset: 30 * ITEM_WIDTH,
+               animated: false,
+            });
+         }
+      }, 1000);
+   }, [datas, loadingLeft]);
 
    const renderItem = ({ item }: { item: Dia }) => (
       <TouchableOpacity
@@ -72,52 +83,44 @@ const DiaScroll = ({ diaSelecionado, setDiaSelecionado }: DiaScrollProps) => {
          style={styles.diaButton}
          onPress={() => setDiaSelecionado(item.id)}
       >
-         <View style={
-            item.id !== diaSelecionado ?
-               null :
-               styles.viewDiaSelecionado
-         }>
-            <Text style={
-               item.id !== diaSelecionado ?
-                  styles.diaSemanaText :
-                  styles.diaSemanaSelecionadoText
-            }>{item.id === criarStrData() ? 'HOJE' : item.diaSemana}
+         <View style={item.id !== diaSelecionado ? null : styles.viewDiaSelecionado}>
+            <Text style={item.id !== diaSelecionado ? styles.diaSemanaText : styles.diaSemanaSelecionadoText}>
+               {item.id === criarStrData() ? 'HOJE' : item.diaSemana}
             </Text>
-            <Text style={
-               item.id !== diaSelecionado ?
-                  styles.dataText :
-                  styles.dataSelecionadoText
-            }>{item.data}</Text>
+            <Text style={item.id !== diaSelecionado ? styles.dataText : styles.dataSelecionadoText}>
+               {item.data}
+            </Text>
          </View>
-
       </TouchableOpacity>
    );
 
-
    return (
       <View style={styles.flatListContainer}>
-            <FlatList
-               horizontal
-               showsHorizontalScrollIndicator={false}
-               data={dias}
-               renderItem={renderItem}
-               keyExtractor={(dia) => dia.id}
-               ref={flatListRef}
-               // onStartReached={() => {carregarMaisDias(true)}}
-               // onEndReached={() => {carregarMaisDias(false)}}
-               // onEndReachedThreshold={0.0}
-               // onStartReachedThreshold={0.0}
-               onScrollToIndexFailed={(info) => {
-                  const wait = new Promise((resolve) => setTimeout(resolve, 1));
-                  wait.then(() => {
-                     flatListRef.current?.scrollToIndex({
-                        index: info.index,
-                        animated: true,
-                        viewPosition: 0.5,
-                     });
+         <FlatList
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            data={datas}
+            renderItem={renderItem}
+            keyExtractor={(dia) => dia.id}
+            ref={flatListRef}
+            onScrollBeginDrag={({ nativeEvent }) => {
+               if (nativeEvent.contentOffset.x <= 0) {
+                  carregarDatasPassadas();
+               }
+            }}
+            ListHeaderComponentStyle={{ justifyContent: 'center', paddingLeft: ITEM_WIDTH/4 }}
+            ListHeaderComponent={loadingLeft ? <ActivityIndicator size="small" color={theme.colors.black} /> : null}
+            onScrollToIndexFailed={(info) => {
+               const wait = new Promise((resolve) => setTimeout(resolve, 100));
+               wait.then(() => {
+                  flatListRef.current?.scrollToIndex({
+                     index: info.index,
+                     animated: true,
+                     viewPosition: 0.5,
                   });
-               }}
-            />
+               });
+            }}
+         />
       </View>
    );
 };
@@ -126,7 +129,7 @@ const styles = StyleSheet.create({
    flatListContainer: {
       borderBottomWidth: 1,
       borderTopWidth: 1,
-      borderColor: theme.colors.color04
+      borderColor: theme.colors.color04,
    },
    diaButton: {
       paddingTop: getResponsiveSizeHeight(1.5),
