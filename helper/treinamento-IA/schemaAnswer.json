@@ -1,0 +1,22 @@
+{
+  "name": "resposta_padrao",
+  "strict": false,
+  "schema": {
+    "type": "object",
+    "properties": {
+      "acao": {
+        "type": "string",
+        "description": "Se tiver uma function a ser chamada."
+      },
+      "resposta": {
+        "type": "string",
+        "description": "Resposta textual ou confirmação para o usuário."
+      },
+      "dados": {
+        "type": "object",
+        "description": "Resposta textual ou confirmação para o usuário."
+      }
+    },
+    "additionalProperties": false
+  }
+}

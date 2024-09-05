@@ -1,0 +1,76 @@
+{
+  "name": "add_alimentos",
+  "description": "Adiciona alimentos a uma refeição específica na base de dados nutricional.",
+  "strict": true,
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "numero_refeicao": {
+        "type": "integer",
+        "description": "Número da refeição (e.g., 1 para café da manhã, 2 para almoço)."
+      },
+      "id_alimento": {
+        "type": "integer",
+        "description": "ID do alimento a ser adicionado."
+      },
+      "id_prato": {
+        "type": ["integer", "null"],
+        "description": "ID do prato a ser adicionado ou null se não aplicável."
+      },
+      "dt_dia": {
+        "type": "string",
+        "description": "Data da refeição no formato YYYY-MM-DD."
+      },
+      "unidade_medida": {
+        "type": "string",
+        "enum": ["GRAMAS", "ML", "PORCOES"],
+        "description": "Unidade de medida da porção utilizada."
+      },
+      "porcao_padrao": {
+        "type": "integer",
+        "description": "Número de porções padrão utilizadas."
+      },
+      "qtde_utilizada": {
+        "type": "number",
+        "description": "Quantidade utilizada em gramas ou mililitros."
+      },
+      "qtde_proteina": {
+        "type": "number",
+        "description": "Quantidade de proteína em gramas."
+      },
+      "qtde_carboidrato": {
+        "type": "number",
+        "description": "Quantidade de carboidrato em gramas."
+      },
+      "qtde_gordura": {
+        "type": "number",
+        "description": "Quantidade de gordura em gramas."
+      },
+      "qtde_alcool": {
+        "type": "number",
+        "description": "Quantidade de álcool em gramas."
+      },
+      "kcal": {
+        "type": "number",
+        "description": "Quantidade de calorias."
+      }
+    },
+    "required": [
+      "numero_refeicao",
+      "id_alimento",
+      "id_prato",
+      "dt_dia",
+      "unidade_medida",
+      "porcao_padrao",
+      "qtde_utilizada",
+      "qtde_proteina",
+      "qtde_carboidrato",
+      "qtde_gordura",
+      "qtde_alcool",
+      "kcal"
+    ],
+    "additionalProperties": false
+  }
+}
+
+

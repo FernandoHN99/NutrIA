@@ -3,10 +3,10 @@ import { View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native
 import theme from '../styles/theme';
 import { getResponsiveSizeWidth, getResponsiveSizeHeight } from '../utils/utils';
 import { criarStrData } from '../utils/utils';
-
+import { hexToRgba } from '../utils/utils';
 const tamanhoLetras: number = getResponsiveSizeHeight(1.6);
 
-const DayScroll = ({ diaSelecionado, setDiaSelecionado } : {diaSelecionado: string, setDiaSelecionado: Function}) => {
+const DiaScroll = ({ diaSelecionado, setDiaSelecionado } : {diaSelecionado: string, setDiaSelecionado: Function}) => {
 
    const flatListRef = useRef<FlatList>(null);
 
@@ -22,7 +22,7 @@ const DayScroll = ({ diaSelecionado, setDiaSelecionado } : {diaSelecionado: stri
          const dataFormatada = data.toISOString().split('T')[0];
          const [ano, mes, dia] = dataFormatada.split('-');
 
-         console.log(listaDatas)
+         // console.log(listaDatas)
          listaDatas.push({ id: dataFormatada, data: `${dia}.${mes}`, diaSemana });
       }
       return listaDatas;
@@ -100,9 +100,11 @@ const DayScroll = ({ diaSelecionado, setDiaSelecionado } : {diaSelecionado: stri
 
 const styles = StyleSheet.create({
    flatListContainer: {
-      backgroundColor: theme.colors.backgroundColor,
-      // borderBottomWidth: 1,
-      // borderColor: theme.colors.color03
+      // backgroundColor: theme.colors.backgroundColor,
+
+      borderBottomWidth: 1,
+      borderTopWidth: 1,
+      borderColor: theme.colors.color04
    },
    diaButton: {
       paddingTop: getResponsiveSizeHeight(1.5),
@@ -111,7 +113,7 @@ const styles = StyleSheet.create({
    viewDiaSelecionado: {
       borderColor: theme.colors.color03,
       borderBottomWidth: 5,
-      borderRadius: 10,
+      borderRadius: 7,
       paddingBottom: 3,
    },
    diaSemanaText: {
@@ -136,10 +138,10 @@ const styles = StyleSheet.create({
       color: theme.colors.color03,
       fontSize: tamanhoLetras,
       textAlign: 'center',
-      fontFamily: 'NotoSans-Regular',
+      fontFamily: 'NotoSans-Bold',
       borderColor: theme.colors.black,
       // paddingBottom: 5
    },
 });
 
-export default DayScroll;
+export default DiaScroll;

@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import DayScroll from '../components/DayScroll';
+import DiaScroll from '../components/DiaScroll';
 import theme from '../styles/theme';
-import DaySummary from '../components/DaySummary';
+import DiaSumario from '../components/DiaSumario';
 import MealList from '../components/MealList';
 import { criarStrData } from '../utils/utils';
-
 
 const HomeScreen = () => {
    const [diaSelecionado, setDiaSelecionado] = useState(criarStrData());
@@ -16,8 +15,8 @@ const HomeScreen = () => {
 
    return (
       <View style={styles.container}>
-         <DayScroll diaSelecionado={diaSelecionado} setDiaSelecionado={setDiaSelecionado}/>
-         {/* <DaySummary calories="1.635" consumed="0" spent="24" /> */}
+         <DiaScroll diaSelecionado={diaSelecionado} setDiaSelecionado={setDiaSelecionado}/>
+         <DiaSumario calories="1.635" consumed="0" spent="24" />
          {/* <MealList onAddFood={handleAddFood} /> */}
       </View>
    );
@@ -25,8 +24,9 @@ const HomeScreen = () => {
 
 const styles = StyleSheet.create({
    container: {
-      // flex: 1,
+      flex: 1,
       backgroundColor: theme.colors.backgroundColor,
+
    },
 });
 
