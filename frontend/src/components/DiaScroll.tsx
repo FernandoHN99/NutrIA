@@ -6,6 +6,7 @@ import { criarStrData, criarData } from '../utils/utils';
 
 const tamanhoLetras = getResponsiveSizeHeight(1.6);
 const ITEM_WIDTH = getResponsiveSizeWidth(20);
+const INTERVALO_DIAS = 10;
 
 interface Dia {
    id: string;
@@ -40,7 +41,7 @@ const gerarDatas = (dataBase = new Date(), qtdeDiasPassados: number, qtdeDiasFut
 
 const DiaScroll = ({ diaSelecionado, setDiaSelecionado }: DiaScrollProps) => {
    const [loadingLeft, setLoadingLeft] = useState(false);
-   const [datas, setDatas] = useState<Array<Dia>>(Object.values(gerarDatas(new Date(), 30, 30)));
+   const [datas, setDatas] = useState<Array<Dia>>(Object.values(gerarDatas(new Date(), INTERVALO_DIAS, INTERVALO_DIAS)));
    const flatListRef = useRef<FlatList>(null);
 
    useEffect(() => {
@@ -62,19 +63,19 @@ const DiaScroll = ({ diaSelecionado, setDiaSelecionado }: DiaScrollProps) => {
       if (loadingLeft) return;
       setLoadingLeft(true);
       setTimeout(() => {
-         const primeiraData = criarData(-2, 0, 0, new Date(datas[0].id))
-         const novasDatas = gerarDatas(primeiraData, 30, 0);
+         const primeiraData = criarData(0, 0, 0, new Date(datas[0].id))
+         const novasDatas = gerarDatas(primeiraData, INTERVALO_DIAS, 0);
 
          setDatas(prevDates => [...novasDatas, ...prevDates]);
          setLoadingLeft(false);
 
          if (flatListRef.current) {
             flatListRef.current.scrollToOffset({
-               offset: 30 * ITEM_WIDTH,
+               offset: INTERVALO_DIAS * ITEM_WIDTH,
                animated: false,
             });
          }
-      }, 1000);
+      }, 500);
    }, [datas, loadingLeft]);
 
    const renderItem = ({ item }: { item: Dia }) => (
