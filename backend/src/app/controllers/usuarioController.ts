@@ -63,7 +63,7 @@ export default class UsuarioController {
    }
    
    public async obterNovoTokenAcesso(req: Request, res: Response): Promise<JsonReponseSucesso> {
-      const resultadoParse: any = obterNovoTokenAcessoSchema.safeParse(req.body);
+      const resultadoParse: any = obterNovoTokenAcessoSchema.safeParse(req.headers);
       if (!resultadoParse.success){
          JsonReponseErro.lancar(400, 'Token inválido');
       }
