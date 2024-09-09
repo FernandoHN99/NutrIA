@@ -11,6 +11,7 @@ export const obterConsumoUsuarioService = async (paramsConsumo: obterConsumoUsua
       });
       return response.data.data;
    } catch (error) {
-      throw error?.response?.data;
+      console.log(error);
+      // throw (error as any)?.response?.data;
    }
 };

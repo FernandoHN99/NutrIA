@@ -9,7 +9,7 @@ const useSignUp = () => {
    const [data, setData] = useState<{  } | null>(null);
    const [error, setError] = useState<string | null>(null);
    const [loading, setLoading] = useState<boolean>(false);
-   const { saveToken } = useAuthToken()
+   const { saveTokens } = useAuthToken()
 
    const fazerSignUp = async (input: any) => {
       setLoading(true);
@@ -22,7 +22,8 @@ const useSignUp = () => {
          const criarUsuarioResponse = await criarUsuarioService(dataUsuario);
 
          const accessToken = criarUsuarioResponse?.data?.data?.access_token;
-         saveToken(accessToken);
+         const refreshToken = criarUsuarioResponse?.data?.data?.refresh_token;
+         saveTokens(accessToken, refreshToken);
 
          const dataPerfil = criaPerfilJSON({ ...input, ...dataUsuario });
          const criarPerfilResponse = await criarPerfilService(dataPerfil);

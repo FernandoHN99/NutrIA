@@ -37,8 +37,6 @@ const gerarDatas = (dataBase = new Date(), qtdeDiasPassados: number, qtdeDiasFut
    return datasControl;
 };
 
-
-
 const DiaScroll = ({ diaSelecionado, setDiaSelecionado }: DiaScrollProps) => {
    const [loadingLeft, setLoadingLeft] = useState(false);
    const [datas, setDatas] = useState<Array<Dia>>(gerarDatas(new Date(), INTERVALO_DIAS, INTERVALO_DIAS));

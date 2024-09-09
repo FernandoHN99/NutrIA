@@ -4,7 +4,7 @@ import { fazerLoginService } from '../../services/usuarioService';
 import { useAuthToken } from '../../../utils/useAuthToken';
 
 const useFazerLogin = () => {
-   const { saveToken } = useAuthToken()
+   const { saveTokens } = useAuthToken()
 
    const [data, setData] = useState(null);
    const [loading, setLoading] = useState(false);
@@ -15,7 +15,7 @@ const useFazerLogin = () => {
       setError(null);
       try {
          const response = await fazerLoginService(credenciais);
-         saveToken(response?.data?.data?.access_token)
+         saveTokens(response?.data?.data?.access_token, response?.data?.data?.refresh_token);
          setData(response.data.data);
       } catch (err) {
          setError(JSON.stringify((err as any)?.response?.data));

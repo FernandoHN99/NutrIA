@@ -10,15 +10,14 @@ import { queryClient } from '../lib/react-query';
 import AuthenticatedNavigator from './AuthenticatedNavigator';
 
 const MainStackNavigator = () => {
-   const { token, removeToken } = useAuthToken()
-   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!token);
-
+   const { token, removeTokens } = useAuthToken()
+   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
 
    return (
       <QueryClientProvider client={queryClient}>
          <SafeAreaProvider>
             <NavigationContainer>
-               {token ? (
+               {isAuthenticated ? (
                   <AuthenticatedNavigator />
                ) : (
                   <UnauthenticatedNavigator setIsAuthenticated={setIsAuthenticated} />

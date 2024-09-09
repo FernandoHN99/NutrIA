@@ -5,8 +5,6 @@ import theme from '../styles/theme';
 import useFazerLogin from '../api/hooks/usuario/useFazerLogin';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-
-
 const LoginScreen = ({ navigation, route }: { navigation: any, route: any }) => {
 
    const { setIsAuthenticated } = route.params;
@@ -26,6 +24,8 @@ const LoginScreen = ({ navigation, route }: { navigation: any, route: any }) => 
          setIsAuthenticated(true)
       }
    }, [data]);
+
+   
 
    return (
       <View style={styles.container}>

@@ -3,15 +3,13 @@ import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import DiaScroll from '../components/DiaScroll';
 import theme from '../styles/theme';
 import DiaSumario from '../components/DiaSumario';
-import MealList from '../components/MealList';
+// import MealList from '../components/MealList';
 import { criarStrData } from '../utils/utils';
 import LoadingScreen from '../components/LoadingScreen';
 import { useQuery } from '@tanstack/react-query';
 import { obterConsumoUsuarioService } from '../api/services/alimentoConsumoService';
-import { totalizarQuantidades } from '../utils/utils';
 import CustomAlert from '../components/CustomAlert';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-
 
 const jsonDiaVazio = {
    totalKcal: 0,
@@ -20,9 +18,24 @@ const jsonDiaVazio = {
    totalProteina: 0
 }
 
+export const totalizarQuantidades = (alimentos: Array<any>) => {
+   const resultado: { [key: string]: any } = { };
+   for (let d = new Date(alimentos[alimentos.length - 1].dt_dia); d <= new Date(alimentos[0].dt_dia); d.setDate(d.getDate() + 1)) {
+      const dt_dia = d.toISOString().split('T')[0];
+      resultado[dt_dia] = { ...jsonDiaVazio };
+   }
+   return alimentos.reduce((acc, { dt_dia, kcal, qtde_gordura, qtde_carboidrato, qtde_proteina }) => {
+      acc[dt_dia].totalKcal += kcal;
+      acc[dt_dia].totalGordura += qtde_gordura;
+      acc[dt_dia].totalCarboidrato += qtde_carboidrato;
+      acc[dt_dia].totalProteina += qtde_proteina;
+      return acc;
+   }, resultado);
+};
+
+
 const HomeScreen = ({ navigation }: { navigation: any }) => {
    const [diaSelecionado, setDiaSelecionado] = useState(criarStrData());
-   const [consumoUsuario, setConsumoUsuario] = useState(null);
    const queryClient = useQueryClient()
 
    const { data, error, isLoading } = useQuery({
@@ -30,13 +43,8 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
       queryFn: () => obterConsumoUsuarioService({ dataInicio: criarStrData(-30), dataFim: criarStrData(30) })
    })
 
-   useEffect(() => {
-      if (error) {
-         CustomAlert('Erro', 'Erro ao obter seu dados.')
-      }
-   }, [error]);
-
-
+   const consumosUsuarioSum = data ? totalizarQuantidades(data) : null;
+   
    const { mutateAsync: obterConsumoUsuarioServiceFn, isPending } = useMutation({
       mutationFn: obterConsumoUsuarioService,
       onSuccess(data) {
@@ -53,24 +61,22 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
       })
    }
 
-   useEffect(() => {
-      if (data) {
-         const retornoCosumoTratado = totalizarQuantidades(data);
-         setConsumoUsuario(retornoCosumoTratado)
-      }
-   }, [data]);
 
    useEffect(() => {
-      if (consumoUsuario && !consumoUsuario[diaSelecionado]) {
+      if (consumosUsuarioSum && !consumosUsuarioSum[diaSelecionado]) {
          handlerObterNovoConsumo(diaSelecionado)
       }
    }, [diaSelecionado]);
 
-
-   if (isLoading || error) {
+   if (isLoading) {
       return <LoadingScreen loadingMessage='Carregando...' />;
    }
-   
+
+   if (error) {
+      CustomAlert('Tente Novamente', 'Erro ao recuperar seus dados', () => navigation.replace('MainTab'), 'Tentar novamente');
+      return <LoadingScreen loadingMessage='Carregando...' />;
+   }
+
    if (isPending) {
       return (
          <View style={styles.container}>
@@ -78,9 +84,10 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
          </View>
       );
    }
-   
-   const infoDia = consumoUsuario && consumoUsuario[diaSelecionado] ? consumoUsuario[diaSelecionado] : jsonDiaVazio;
-   
+
+   const infoDia = consumosUsuarioSum[diaSelecionado]
+   console.log(consumosUsuarioSum);
+
    return (
       <View style={styles.container}>
          <DiaScroll diaSelecionado={diaSelecionado} setDiaSelecionado={setDiaSelecionado} />
