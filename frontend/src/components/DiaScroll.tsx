@@ -41,7 +41,7 @@ const gerarDatas = (dataBase = new Date(), qtdeDiasPassados: number, qtdeDiasFut
 
 const DiaScroll = ({ diaSelecionado, setDiaSelecionado }: DiaScrollProps) => {
    const [loadingLeft, setLoadingLeft] = useState(false);
-   const [datas, setDatas] = useState<Array<Dia>>(Object.values(gerarDatas(new Date(), INTERVALO_DIAS, INTERVALO_DIAS)));
+   const [datas, setDatas] = useState<Array<Dia>>(gerarDatas(new Date(), INTERVALO_DIAS, INTERVALO_DIAS));
    const flatListRef = useRef<FlatList>(null);
 
    useEffect(() => {
@@ -112,7 +112,7 @@ const DiaScroll = ({ diaSelecionado, setDiaSelecionado }: DiaScrollProps) => {
             ListHeaderComponentStyle={{ justifyContent: 'center', paddingLeft: ITEM_WIDTH/4 }}
             ListHeaderComponent={loadingLeft ? <ActivityIndicator size="small" color={theme.colors.black} /> : null}
             onScrollToIndexFailed={(info) => {
-               const wait = new Promise((resolve) => setTimeout(resolve, 100));
+               const wait = new Promise((resolve) => setTimeout(resolve, 1000));
                wait.then(() => {
                   flatListRef.current?.scrollToIndex({
                      index: info.index,

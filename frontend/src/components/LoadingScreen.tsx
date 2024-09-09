@@ -1,10 +1,6 @@
 import React, { useEffect } from 'react';
 import { View, Text, ActivityIndicator, StyleSheet, Alert } from 'react-native';
 import theme from '../styles/theme';
-import useCriarUsuario from '../api/hooks/usuario/useCriarUsuario';
-import { criarUsuarioSchema } from '../api/schemas/usuarioSchemas';
-import { useAuthToken } from '../utils/useAuthToken';
-import CustomAlert from './customAlert';
 
 const LoadingScreen = ({loadingMessage} :{loadingMessage: string}) => {
 

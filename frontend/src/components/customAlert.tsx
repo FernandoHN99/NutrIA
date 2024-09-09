@@ -7,13 +7,13 @@ interface CustomAlertProps {
    onOkPress?: () => void;
 }
 
-const CustomAlert = (title: string, message: string, onPress = () => {}) => {
+const CustomAlert = (title: string, message: string, onPress = () => {}, textButton: string = 'OK') => {
    Alert.alert(
      title,
      message,
      [
        {
-         text: 'OK',
+         text: textButton,
          onPress: onPress,
        },
      ]

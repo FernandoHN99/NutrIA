@@ -90,3 +90,27 @@ export const criarData = (dias: number = 0, meses: number = 0, anos: number = 0,
    return new Date(data.getFullYear() + anos, data.getMonth() + meses, data.getDate() + dias);
 }
 
+export const totalizarQuantidades = (alimentos: Array<any>) => {
+   return alimentos.reduce((acc, curr) => {
+     const { dt_dia, kcal, qtde_gordura, qtde_carboidrato, qtde_proteina } = curr;
+ 
+     if (!acc[dt_dia]) {
+       acc[dt_dia] = {
+         dt_dia,
+         totalKcal: 0,
+         totalGordura: 0,
+         totalCarboidrato: 0,
+         totalProteina: 0
+       };
+     }
+ 
+     acc[dt_dia].totalKcal += kcal;
+     acc[dt_dia].totalGordura += qtde_gordura;
+     acc[dt_dia].totalCarboidrato += qtde_carboidrato;
+     acc[dt_dia].totalProteina += qtde_proteina;
+ 
+     return acc;
+   }, {});
+ }
+ 
+

@@ -7,7 +7,30 @@ import { getResponsiveSizeWidth, getResponsiveSizeHeight } from '../utils/utils'
 import { hexToRgba } from '../utils/utils';
 import ProgressBar from './ChatBot/ProgressBar';
 
-const DiaSumario = ({ calories, consumed, spent }) => {
+interface DiaSumarioProps {
+   infoDia: {
+      totalKcal: number, 
+      totalGordura: number, 
+      totalCarboidrato: number, 
+      totalProteina: number
+   }
+}
+
+export const arredondarValoresJson = (jsonData: { [key: string]: number }, casasDecimais: number = 0) => {
+   const jsonArredondado: { [key: string]: number } = {};
+   Object.keys(jsonData).map(key => {
+      if(typeof jsonData[key] === 'number'){
+         jsonArredondado[key] =  parseFloat(jsonData[key].toFixed(casasDecimais));
+      }else{
+         jsonArredondado[key] = jsonData[key];
+      }
+   });
+   return jsonArredondado;
+}
+
+const DiaSumario = ({ infoDia } : DiaSumarioProps) => {
+   const infoDiaTratado = arredondarValoresJson(infoDia);
+
    return (
       <View style={styles.mainCotainer}>
          <View style={styles.headerSumarioContainer}>
@@ -24,14 +47,14 @@ const DiaSumario = ({ calories, consumed, spent }) => {
          <View style={styles.infoSumarioContainer}>
             <View style={styles.caloriasContainer}>
                <View style={styles.infoCaloriasContainer}>
-                  <Text style={styles.infoCaloriasNumber}>167</Text>
-                  <Text style={styles.infoText}>Calorias</Text>
-                  <Text style={styles.infoText}>Consumidas</Text>
-               </View>
-               <View style={styles.infoCaloriasMain}>
                   <Text style={styles.infoCaloriasNumber}>0</Text>
                   <Text style={styles.infoText}>Calorias</Text>
                   <Text style={styles.infoText}>Restantes</Text>
+               </View>
+               <View style={styles.infoCaloriasMain}>
+                  <Text style={styles.infoCaloriasNumber}>{infoDiaTratado.totalKcal}</Text>
+                  <Text style={styles.infoText}>Calorias</Text>
+                  <Text style={styles.infoText}>Consumidas</Text>
                </View>
                <View style={styles.infoCaloriasContainer}>
                   <Text style={styles.infoCaloriasNumber}>0</Text>
@@ -43,7 +66,7 @@ const DiaSumario = ({ calories, consumed, spent }) => {
                <View style={styles.infoMacrosContainer}>
                   <Text style={styles.infoText}>Carboidratos</Text>
                   <ProgressBar 
-                     current={10} 
+                     current={infoDia.totalCarboidrato} 
                      total={100} 
                      bgColor={hexToRgba(theme.colors.color05, '0.3') }
                      progressColor={theme.colors.color05}
@@ -51,12 +74,12 @@ const DiaSumario = ({ calories, consumed, spent }) => {
                      height={getResponsiveSizeWidth(2)}
                      paddingValue={3}
                      />
-                     <Text style={styles.infoText}>10 / 100 g</Text>
+                     <Text style={styles.infoText}>{`${infoDia.totalCarboidrato} / 100 g`}</Text>
                </View>
                <View style={styles.infoMacrosContainer}>
                   <Text style={styles.infoText}>Proteínas</Text>
                   <ProgressBar 
-                     current={10} 
+                     current={infoDia.totalProteina} 
                      total={100} 
                      bgColor={hexToRgba(theme.colors.color05, '0.3') }
                      progressColor={theme.colors.color05}
@@ -64,12 +87,13 @@ const DiaSumario = ({ calories, consumed, spent }) => {
                      height={getResponsiveSizeWidth(2)}
                      paddingValue={3}
                      />
-                     <Text style={styles.infoText}>10 / 100 g</Text>
+                     <Text style={styles.infoText}>{`${infoDia.totalProteina} / 100 g`}</Text>
+
                </View>
                <View style={styles.infoMacrosContainer}>
                   <Text style={styles.infoText}>Gorduras</Text>
                   <ProgressBar 
-                     current={10} 
+                     current={infoDia.totalGordura} 
                      total={100} 
                      bgColor={hexToRgba(theme.colors.color05, '0.3') }
                      progressColor={theme.colors.color05}
@@ -77,7 +101,8 @@ const DiaSumario = ({ calories, consumed, spent }) => {
                      height={getResponsiveSizeWidth(2)}
                      paddingValue={3}
                      />
-                     <Text style={styles.infoText}>10 / 100 g</Text>
+                     <Text style={styles.infoText}>{`${infoDia.totalGordura} / 100 g`}</Text>
+
                </View>
             </View>
          </View>

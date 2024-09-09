@@ -6,7 +6,7 @@ import MessagesChatbot from '../components/ChatBot/MessagesChatbot';
 import FlowSignUp from '../components/FlowSignUp';
 import useSignUp from '../api/hooks/usuario/useSignUp';
 import LoadingScreen from '../components/LoadingScreen';
-import CustomAlert from '../components/customAlert';
+import CustomAlert from '../components/CustomAlert';
 
 const SignUpScreen = ({ navigation, route }: { navigation: any, route: any }) => {
 

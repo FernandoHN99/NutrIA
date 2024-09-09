@@ -8,14 +8,14 @@ import { getResponsiveSizeHeight } from '../utils/utils';
 const Tab = createMaterialTopTabNavigator();
 
 const TopTabNavigator = () => {
-   const insets = useSafeAreaInsets();
+   // const insets = useSafeAreaInsets();
 
    return (
       <Tab.Navigator
          screenOptions={{
             tabBarStyle: { 
                backgroundColor: theme.colors.backgroundColor,
-               paddingTop: insets.top,
+               // paddingTop: insets.top,
             },
             tabBarIndicatorStyle: {
                backgroundColor: theme.colors.color05,
