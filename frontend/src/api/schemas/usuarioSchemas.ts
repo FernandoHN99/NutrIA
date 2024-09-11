@@ -14,4 +14,4 @@ export interface criarUsuarioSchema {
    sexo: string;
    sistema_metrico: string;
    perfil_alimentar: string;
- }
+}

@@ -1,8 +1,8 @@
 import 'dotenv/config';
 
 export const PORTA_BACKEND: number = 5001;
-export const DOMINIO_BACKEND: string = 'http://127.0.0.1';
-
+export const DOMINIO_BACKEND: string = 'http://192.168.15.168';
+// export const DOMINIO_BACKEND: string = 'http://127.0.0.1';
 export const USUARIO: string = process.env.DB_USUARIO ?? '';
 export const HOST: string = process.env.DB_HOST ?? '';
 export const DATABASE: string = process.env.DB_DATABASE ?? '';

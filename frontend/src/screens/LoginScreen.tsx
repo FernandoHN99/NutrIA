@@ -23,9 +23,9 @@ const LoginScreen = ({ navigation, route }: { navigation: any, route: any }) => 
       if (data) {
          setIsAuthenticated(true)
       }
+      login({ email: 'safado@gmail.com', password: '1234567890'} );
    }, [data]);
 
-   
 
    return (
       <View style={styles.container}>

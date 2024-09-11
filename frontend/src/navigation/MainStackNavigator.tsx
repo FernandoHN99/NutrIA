@@ -11,7 +11,7 @@ import AuthenticatedNavigator from './AuthenticatedNavigator';
 
 const MainStackNavigator = () => {
    const { token, removeTokens } = useAuthToken()
-   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
+   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!token);
 
    return (
       <QueryClientProvider client={queryClient}>

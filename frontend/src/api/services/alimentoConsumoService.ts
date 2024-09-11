@@ -1,6 +1,5 @@
 import api from '../../config/apiService';
 import { obterConsumoUsuarioSchema } from '../schemas/alimentoConsumidoSchema';
-import CustomAlert from '../../components/CustomAlert';
 
 export const obterConsumoUsuarioService = async (paramsConsumo: obterConsumoUsuarioSchema) => {
    try {

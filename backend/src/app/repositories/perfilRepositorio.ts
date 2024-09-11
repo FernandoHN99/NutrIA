@@ -15,7 +15,7 @@ export default class PerfilRepositorio {
             id_usuario: usuarioID 
          }, 
          order: { 
-            dt_criacao_perfil: 'DESC' 
+            dt_criacao_perfil: 'ASC' 
          } 
       });
    }

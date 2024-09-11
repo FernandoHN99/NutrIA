@@ -5,15 +5,29 @@ import TopTabNavigator from './TopTabNavigator';
 import LogoIcon from '../components/LogoIcon';
 import globalStyles from '../styles/globalStyles';
 import theme from '../styles/theme';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueries } from '@tanstack/react-query';
+import { obterUsuarioService } from '../api/services/usuarioService';
+import { obterPerfilService } from '../api/services/perfilService';
+
 const Stack = createNativeStackNavigator();
 
 const AuthenticatedNavigator = () => {
 
-   // const { data, error, isLoading } = useQuery({
-   //    queryKey: ['consumoAlimentos'],
-   //    queryFn: () => obterConsumoUsuarioService({ dataInicio: criarStrData(-30), dataFim: criarStrData(30) })
-   // })
+   const [
+      { data: usuarioInfo, error: errorUsuario, isLoading: isLoadingUsuario },
+      { data: perfisUsuario, error: errorPerfis, isLoading: isLoadingPerfis },
+   ] = useQueries({
+      queries: [
+         {
+            queryKey: ['usuarioInfo'],
+            queryFn: () => obterUsuarioService(),
+         },
+         {
+            queryKey: ['perfisUsuario'],
+            queryFn: () => obterPerfilService(),
+         },
+      ],
+   });
 
 
    return (

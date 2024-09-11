@@ -11,40 +11,19 @@ import { obterConsumoUsuarioService } from '../api/services/alimentoConsumoServi
 import CustomAlert from '../components/CustomAlert';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-const jsonDiaVazio = {
-   totalKcal: 0,
-   totalGordura: 0,
-   totalCarboidrato: 0,
-   totalProteina: 0
-}
-
-export const totalizarQuantidades = (alimentos: Array<any>) => {
-   const resultado: { [key: string]: any } = { };
-   for (let d = new Date(alimentos[alimentos.length - 1].dt_dia); d <= new Date(alimentos[0].dt_dia); d.setDate(d.getDate() + 1)) {
-      const dt_dia = d.toISOString().split('T')[0];
-      resultado[dt_dia] = { ...jsonDiaVazio };
-   }
-   return alimentos.reduce((acc, { dt_dia, kcal, qtde_gordura, qtde_carboidrato, qtde_proteina }) => {
-      acc[dt_dia].totalKcal += kcal;
-      acc[dt_dia].totalGordura += qtde_gordura;
-      acc[dt_dia].totalCarboidrato += qtde_carboidrato;
-      acc[dt_dia].totalProteina += qtde_proteina;
-      return acc;
-   }, resultado);
-};
-
 
 const HomeScreen = ({ navigation }: { navigation: any }) => {
+   const [dataInicio, setDataInicio] = useState(criarStrData(-30));
+   const [dataFim, setDataFim] = useState(criarStrData(30));
    const [diaSelecionado, setDiaSelecionado] = useState(criarStrData());
    const queryClient = useQueryClient()
 
    const { data, error, isLoading } = useQuery({
       queryKey: ['consumoAlimentos'],
-      queryFn: () => obterConsumoUsuarioService({ dataInicio: criarStrData(-30), dataFim: criarStrData(30) })
+      queryFn: () => obterConsumoUsuarioService({ dataInicio, dataFim }),
    })
 
-   const consumosUsuarioSum = data ? totalizarQuantidades(data) : null;
-   const infoDia = consumosUsuarioSum ? consumosUsuarioSum[diaSelecionado] : jsonDiaVazio;
+   const consumoUsuarioFiltrado = data?.filter((item: { dt_dia: string; }) => item.dt_dia === diaSelecionado)
 
    const { mutateAsync: obterConsumoUsuarioServiceFn, isPending } = useMutation({
       mutationFn: obterConsumoUsuarioService,
@@ -63,7 +42,11 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
    }
 
    useEffect(() => {
-      if (consumosUsuarioSum && !consumosUsuarioSum[diaSelecionado]) {
+      if (new Date(diaSelecionado) < new Date(dataInicio)) {
+         setDataInicio(diaSelecionado)
+         handlerObterNovoConsumo(diaSelecionado)
+      }else if(new Date (diaSelecionado) > new Date(dataFim)) {
+         setDataFim(diaSelecionado)
          handlerObterNovoConsumo(diaSelecionado)
       }
    }, [diaSelecionado]);
@@ -88,7 +71,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
    return (
       <View style={styles.container}>
          <DiaScroll diaSelecionado={diaSelecionado} setDiaSelecionado={setDiaSelecionado} />
-         <DiaSumario infoDia={infoDia} />
+         <DiaSumario diaSelecionado={diaSelecionado} infosDia={consumoUsuarioFiltrado}/>
       </View>
    );
 }

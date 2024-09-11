@@ -4,6 +4,8 @@ import HomeScreen from '../screens/HomeScreen';
 import EvolucaoScreen from '../screens/EvolucaoScreen';
 import PerfilScreen from '../screens/PerfilScreen';
 import theme from '../styles/theme';
+import { useQuery } from '@tanstack/react-query';
+import { obterPerfilService } from '../api/services/perfilService';
 
 const Tab = createBottomTabNavigator();
 

@@ -90,4 +90,16 @@ export const criarData = (dias: number = 0, meses: number = 0, anos: number = 0,
    return new Date(data.getFullYear() + anos, data.getMonth() + meses, data.getDate() + dias);
 }
 
+export const roundJsonValues = (jsonData: { [key: string]: any }, casasDecimais: number = 0) => {
+   const jsonArredondado: { [key: string]: number } = {};
+   Object.keys(jsonData).map(key => {
+      if(typeof jsonData[key] === 'number'){
+         jsonArredondado[key] =  parseFloat(jsonData[key].toFixed(casasDecimais));
+      }else{
+         jsonArredondado[key] = jsonData[key];
+      }
+   });
+   return jsonArredondado;
+}
+
 
