@@ -10,66 +10,19 @@ import { useQueryClient } from '@tanstack/react-query';
 import { roundJsonValues } from '../utils/utils';
 import LoadingScreen from './LoadingScreen';
 import ProgressCircle from './ChatBot/ProgressCircle';
-
+import { encontrarPerfilPorData, totalValues } from '../utils/formatters';
 
 interface DiaSumarioProps {
-   diaSelecionado: string;
    infosDia: any[]
+   perfilDia: { [key: string]: any }
 }
 
-const jsonDiaVazio = {
-   totalProteina: 0,
-   totalCarboidrato: 0,
-   totalGordura: 0,
-   totalAlcool: 0,
-   totalKcal: 0,
-}
-
-const totalValues = (consumoDoDia: any[]) => {
-   return consumoDoDia.reduce((acc, { kcal, qtde_gordura, qtde_carboidrato, qtde_proteina, qtde_alcool }) => {
-      return {
-         totalProteina: acc.totalProteina + qtde_proteina,
-         totalCarboidrato: acc.totalCarboidrato + qtde_carboidrato,
-         totalGordura: acc.totalGordura + qtde_gordura,
-         totalAlcool: acc.totalAlcool + qtde_alcool,
-         totalKcal: acc.totalKcal + kcal,
-      };
-   }, { ...jsonDiaVazio });
-};
-
-const encontrarPerfilPorData = (perfisData: any[], diaSelecionado: string) => {
-   const diaSelecionadoDt = new Date(diaSelecionado);
-   let perfilEncontrado = null;
-
-   if (diaSelecionadoDt <= new Date(perfisData[0].dt_criacao_perfil)) {
-      return perfisData[0];
-   }
-
-   for (let i = 0; i < perfisData.length; i++) {
-      const perfil = perfisData[i];
-      const dtCriacao = new Date(perfil.dt_criacao_perfil);
-
-      if (diaSelecionadoDt >= dtCriacao) {
-         perfilEncontrado = perfil;
-      } else if (perfilEncontrado) {
-         break;
-      }
-   }
-   return perfilEncontrado;
-};
-
-
-const DiaSumario = ({ diaSelecionado, infosDia }: DiaSumarioProps) => {
+const DiaSumario = ({infosDia, perfilDia }: DiaSumarioProps) => {
    const queryClient = useQueryClient();
 
    const macrosSum = infosDia ? roundJsonValues(totalValues(infosDia)) : null;
-   // console.log('macrosSum: ', macrosSum);
 
-   const cached: any[] | undefined = queryClient.getQueryData(['perfisUsuario']);
-   const perfil = cached ? roundJsonValues(encontrarPerfilPorData(cached, diaSelecionado)) : null;
-   // console.log('perfil: ', perfil);
-
-   if (!macrosSum || !perfil) {
+   if (!macrosSum) {
       return <LoadingScreen loadingMessage='Carregando...' />;
    }
 
@@ -93,15 +46,10 @@ const DiaSumario = ({ diaSelecionado, infosDia }: DiaSumarioProps) => {
                   <Text style={styles.infoText}>Calorias</Text>
                   <Text style={styles.infoText}>Consumidas</Text>
                </View>
-               {/* <View style={styles.infoCaloriasMain}>
-                  <Text style={styles.infoCaloriasNumber}>{perfil.tmf - macrosSum.totalKcal}</Text>
-                  <Text style={styles.infoText}>Calorias</Text>
-                  <Text style={styles.infoText}>Restantes</Text>
-               </View> */}
                <View style={styles.infoCaloriasMain}>
                   <ProgressCircle
                      current={macrosSum.totalKcal}
-                     total={perfil.tmf}
+                     total={perfilDia.tmf}
                      bgColor={hexToRgba(theme.colors.color05, '0.3')}
                      progressColor={theme.colors.color05}
                      size={getResponsiveSizeWidth(30)}
@@ -109,7 +57,7 @@ const DiaSumario = ({ diaSelecionado, infosDia }: DiaSumarioProps) => {
                   />
                </View>
                <View style={styles.infoCaloriasContainer}>
-                  <Text style={styles.infoCaloriasNumber}>{perfil.tmf}</Text>
+                  <Text style={styles.infoCaloriasNumber}>{perfilDia.tmf}</Text>
                   <Text style={styles.infoText}>Calorias</Text>
                   <Text style={styles.infoText}>Totais</Text>
                </View>
@@ -119,42 +67,41 @@ const DiaSumario = ({ diaSelecionado, infosDia }: DiaSumarioProps) => {
                   <Text style={styles.infoText}>Carboidratos</Text>
                   <ProgressBar
                      current={macrosSum.totalCarboidrato}
-                     total={perfil.meta_carboidrato}
+                     total={perfilDia.meta_carboidrato}
                      bgColor={hexToRgba(theme.colors.color05, '0.3')}
                      progressColor={theme.colors.color05}
                      width={getResponsiveSizeWidth(22)}
                      height={getResponsiveSizeWidth(2)}
                      paddingValue={3}
                   />
-                  <Text style={styles.infoText}>{`${macrosSum.totalCarboidrato} / ${perfil.meta_carboidrato} g`}</Text>
+                  <Text style={styles.infoText}>{`${macrosSum.totalCarboidrato} / ${perfilDia.meta_carboidrato} g`}</Text>
                </View>
                <View style={styles.infoMacrosContainer}>
                   <Text style={styles.infoText}>Proteínas</Text>
                   <ProgressBar
                      current={macrosSum.totalProteina}
-                     total={perfil.meta_proteina}
+                     total={perfilDia.meta_proteina}
                      bgColor={hexToRgba(theme.colors.color05, '0.3')}
                      progressColor={theme.colors.color05}
                      width={getResponsiveSizeWidth(22)}
                      height={getResponsiveSizeWidth(2)}
                      paddingValue={3}
                   />
-                  <Text style={styles.infoText}>{`${macrosSum.totalProteina} / ${perfil.meta_proteina} g`}</Text>
+                  <Text style={styles.infoText}>{`${macrosSum.totalProteina} / ${perfilDia.meta_proteina} g`}</Text>
 
                </View>
                <View style={styles.infoMacrosContainer}>
                   <Text style={styles.infoText}>Gorduras</Text>
                   <ProgressBar
                      current={macrosSum.totalGordura}
-                     total={perfil.meta_gordura}
+                     total={perfilDia.meta_gordura}
                      bgColor={hexToRgba(theme.colors.color05, '0.3')}
                      progressColor={theme.colors.color05}
                      width={getResponsiveSizeWidth(22)}
                      height={getResponsiveSizeWidth(2)}
                      paddingValue={3}
                   />
-                  <Text style={styles.infoText}>{`${macrosSum.totalGordura} / ${perfil.meta_gordura} g`}</Text>
-
+                  <Text style={styles.infoText}>{`${macrosSum.totalGordura} / ${perfilDia.meta_gordura} g`}</Text>
                </View>
             </View>
          </View>
@@ -210,9 +157,6 @@ const styles = StyleSheet.create({
    infoCaloriasMain: {
       alignItems: 'center',
       justifyContent: 'center',
-      // borderWidth: 5,
-      // borderColor: hexToRgba(theme.colors.color05, '0.3'),
-      // borderRadius: getResponsiveSizeWidth(50),
       width: getResponsiveSizeWidth(35),
       height: getResponsiveSizeWidth(35),
    },

@@ -8,6 +8,7 @@ import theme from '../styles/theme';
 import { useQuery, useQueries } from '@tanstack/react-query';
 import { obterUsuarioService } from '../api/services/usuarioService';
 import { obterPerfilService } from '../api/services/perfilService';
+import { obterRefeicaoService } from '../api/services/refeicaoService';
 
 const Stack = createNativeStackNavigator();
 
@@ -16,6 +17,7 @@ const AuthenticatedNavigator = () => {
    const [
       { data: usuarioInfo, error: errorUsuario, isLoading: isLoadingUsuario },
       { data: perfisUsuario, error: errorPerfis, isLoading: isLoadingPerfis },
+      { data: refeicoesUsuario, error: errorRefeicoes, isLoading: isLoadingRefeicoes },
    ] = useQueries({
       queries: [
          {
@@ -26,9 +28,12 @@ const AuthenticatedNavigator = () => {
             queryKey: ['perfisUsuario'],
             queryFn: () => obterPerfilService(),
          },
+         {
+            queryKey: ['refeicoesUsuario'],
+            queryFn: () => obterRefeicaoService(),
+         },
       ],
    });
-
 
    return (
       <Stack.Navigator>

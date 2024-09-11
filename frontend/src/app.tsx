@@ -9,7 +9,10 @@ const App = () => {
    const [loaded, error] = useFonts({
       'NotoSans-Regular': require('../assets/fonts/NotoSans-Regular.ttf'),
       'NotoSans-Bold': require('../assets/fonts/NotoSans-Bold.ttf'),
+      'NotoSans-SemiBold': require('../assets/fonts/NotoSans-SemiBold.ttf'),
       'NotoSans-Italic': require('../assets/fonts/NotoSans-Italic.ttf'),
+      'NotoSans-SemiBoldItalic': require('../assets/fonts/NotoSans-SemiBoldItalic.ttf'),
+
    });
 
    useEffect(() => {

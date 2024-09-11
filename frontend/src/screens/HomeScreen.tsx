@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import DiaScroll from '../components/DiaScroll';
 import theme from '../styles/theme';
 import DiaSumario from '../components/DiaSumario';
@@ -10,7 +10,9 @@ import { useQuery } from '@tanstack/react-query';
 import { obterConsumoUsuarioService } from '../api/services/alimentoConsumoService';
 import CustomAlert from '../components/CustomAlert';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-
+import DiaConsumo from '../components/DiaConsumo';
+import { roundJsonValues } from '../utils/utils';
+import { encontrarPerfilPorData } from '../utils/formatters';
 
 const HomeScreen = ({ navigation }: { navigation: any }) => {
    const [dataInicio, setDataInicio] = useState(criarStrData(-30));
@@ -23,7 +25,10 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
       queryFn: () => obterConsumoUsuarioService({ dataInicio, dataFim }),
    })
 
-   const consumoUsuarioFiltrado = data?.filter((item: { dt_dia: string; }) => item.dt_dia === diaSelecionado)
+   const consumoUsuarioDia = data?.filter((item: { dt_dia: string; }) => item.dt_dia === diaSelecionado)
+
+   const perfisCached: any[] | undefined = queryClient.getQueryData(['perfisUsuario']);
+   const perfilDia = perfisCached ? roundJsonValues(encontrarPerfilPorData(perfisCached, diaSelecionado)) : null;
 
    const { mutateAsync: obterConsumoUsuarioServiceFn, isPending } = useMutation({
       mutationFn: obterConsumoUsuarioService,
@@ -51,7 +56,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
       }
    }, [diaSelecionado]);
 
-   if (isLoading) {
+   if (isLoading || !perfilDia) {
       return <LoadingScreen loadingMessage='Carregando...' />;
    }
 
@@ -71,7 +76,10 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
    return (
       <View style={styles.container}>
          <DiaScroll diaSelecionado={diaSelecionado} setDiaSelecionado={setDiaSelecionado} />
-         <DiaSumario diaSelecionado={diaSelecionado} infosDia={consumoUsuarioFiltrado}/>
+         <ScrollView>
+            <DiaSumario perfilDia={perfilDia} infosDia={consumoUsuarioDia} />
+            <DiaConsumo perfilDia={perfilDia} infosDia={consumoUsuarioDia}/>
+         </ScrollView>
       </View>
    );
 }
@@ -80,7 +88,6 @@ const styles = StyleSheet.create({
    container: {
       flex: 1,
       backgroundColor: theme.colors.backgroundColor,
-
    },
 });
 
