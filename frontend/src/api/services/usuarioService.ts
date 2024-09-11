@@ -9,3 +9,5 @@ export const fazerLoginService = async (credenciais: fazerLoginSchema) => {
 export const criarUsuarioService = async (usuario: criarUsuarioSchema) => {
    return api.post(`/usuario/criar`, usuario);
 };
+
+

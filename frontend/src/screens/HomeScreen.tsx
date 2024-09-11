@@ -44,7 +44,8 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
    })
 
    const consumosUsuarioSum = data ? totalizarQuantidades(data) : null;
-   
+   const infoDia = consumosUsuarioSum ? consumosUsuarioSum[diaSelecionado] : jsonDiaVazio;
+
    const { mutateAsync: obterConsumoUsuarioServiceFn, isPending } = useMutation({
       mutationFn: obterConsumoUsuarioService,
       onSuccess(data) {
@@ -60,7 +61,6 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
          dataFim: diaSelecionado
       })
    }
-
 
    useEffect(() => {
       if (consumosUsuarioSum && !consumosUsuarioSum[diaSelecionado]) {
@@ -84,9 +84,6 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
          </View>
       );
    }
-
-   const infoDia = consumosUsuarioSum[diaSelecionado]
-   console.log(consumosUsuarioSum);
 
    return (
       <View style={styles.container}>

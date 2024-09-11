@@ -1,5 +1,6 @@
 import api from '../../config/apiService';
 import { obterConsumoUsuarioSchema } from '../schemas/alimentoConsumidoSchema';
+import CustomAlert from '../../components/CustomAlert';
 
 export const obterConsumoUsuarioService = async (paramsConsumo: obterConsumoUsuarioSchema) => {
    try {
@@ -11,7 +12,6 @@ export const obterConsumoUsuarioService = async (paramsConsumo: obterConsumoUsua
       });
       return response.data.data;
    } catch (error) {
-      console.log(error);
-      // throw (error as any)?.response?.data;
+      throw (error as any)?.response?.data;
    }
 };
