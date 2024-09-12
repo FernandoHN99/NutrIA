@@ -5,11 +5,9 @@ import Ionicons02 from '@expo//vector-icons/Feather';
 import Ionicons03 from '@expo//vector-icons/MaterialCommunityIcons';
 import { arredondarValores, getResponsiveSizeHeight, getResponsiveSizeWidth, hexToRgba } from '../utils/utils';
 import theme from '../styles/theme';
-import { useQueryClient } from '@tanstack/react-query';
-import { roundJsonValues } from '../utils/utils';
-import { totalValuesByRefeicao } from '../utils/formatters';
+import { somarMacrosDiaPorRefeicao } from '../utils/formatters';
 
-const ICON_SIZE = getResponsiveSizeHeight(4);
+const ICON_SIZE = getResponsiveSizeHeight(3.5);
 const ICON_COLOR = hexToRgba(theme.colors.black, '0.6');
 
 const iconsRefeicoes: { [key: number]: JSX.Element } = {
@@ -22,20 +20,23 @@ const iconsRefeicoes: { [key: number]: JSX.Element } = {
 
 interface DiaConsumoProps {
    infosDia: any[],
+   refeicoesDiaAtivas: any[]
    perfilDia: { [key: string]: any }
+   navigation: any
 }
 
- const DiaConsumo = ({ infosDia, perfilDia } : DiaConsumoProps) => {
-   const queryClient = useQueryClient();
-   const refeicoes: any[] | undefined = queryClient.getQueryData(['refeicoesUsuario']);
- 
-   const macrosPorRefeicao = roundJsonValues(totalValuesByRefeicao(infosDia));
+ const DiaConsumo = ({ navigation, infosDia, perfilDia, refeicoesDiaAtivas } : DiaConsumoProps) => {
+
+   const macrosRefeicoes = somarMacrosDiaPorRefeicao(infosDia, refeicoesDiaAtivas);
+   const refeicoes = Object.values(macrosRefeicoes);
  
    const renderRefeicao = (refeicao: any, index: number) => {
-     const isLastItem = index === refeicoes!.length - 1;
-     const totalKcal = macrosPorRefeicao[refeicao.numero_refeicao]?.totalKcal || 0;
+     const macrosRefeicao = macrosRefeicoes[refeicao.numero_refeicao];
+     const isLastItem = index === refeicoes.length - 1;
+     const totalKcal = macrosRefeicao?.totalKcal || 0;
      const porcentagemKcal = arredondarValores((totalKcal / perfilDia.tmf) * 100);
- 
+     const nomeRefeicao = refeicao.nome_refeicao;
+
      return (
        <View 
          key={refeicao.numero_refeicao} 
@@ -50,15 +51,17 @@ interface DiaConsumoProps {
                {iconsRefeicoes[refeicao.numero_refeicao]}
              </View>
              <View style={styles.refeicaoInfosContainer}>
-               <Text style={styles.refeicaoNome}> {refeicao.nome_refeicao} </Text>
+               <Text style={styles.refeicaoNome}>{nomeRefeicao}</Text>
                <Text style={styles.refeicaoKcal}>
                  {totalKcal} kcal - ({porcentagemKcal}%)
                </Text>
              </View>
            </View>
            <View style={styles.refeicaoRightContent}>
-             <TouchableOpacity onPress={() => {}}>
-               <Ionicons name="add-circle" size={24} color={theme.colors.color05} />
+               <TouchableOpacity
+                  onPress={() =>navigation.navigate('RefeicaoScreen', {nomeRefeicao, macrosRefeicao, perfilDia })}
+               >
+               <Ionicons name="add-circle" size={ICON_SIZE} color={theme.colors.color05} />
              </TouchableOpacity>
            </View>
          </View>
@@ -72,7 +75,7 @@ interface DiaConsumoProps {
          <Text style={styles.title}>Alimentação</Text>
        </View>
        <View style={styles.refeicoesContainer}>
-         {refeicoes?.map(renderRefeicao)}
+         {refeicoes.map(renderRefeicao)}
        </View>
      </View>
    );
@@ -105,7 +108,7 @@ const styles = StyleSheet.create({
    },
    refeicaoContainer: {
       marginHorizontal: 20,
-      height: getResponsiveSizeHeight(12),
+      height: getResponsiveSizeHeight(11),
       borderBottomWidth: 2,
       borderColor: hexToRgba(theme.colors.black, '0.6'),
       flexDirection: 'column',
@@ -114,7 +117,7 @@ const styles = StyleSheet.create({
    refeicaoUltimoContainer:{
       marginHorizontal: 20,
       borderBottomWidth: 0,
-      height: getResponsiveSizeHeight(12),
+      height: getResponsiveSizeHeight(11),
       borderColor: hexToRgba(theme.colors.black, '0.6'),
       flexDirection: 'column',
       justifyContent: 'center',
@@ -137,8 +140,8 @@ const styles = StyleSheet.create({
       marginRight: getResponsiveSizeWidth(2)
    },
    iconeRefeicaoCircle: {
-      width: getResponsiveSizeHeight(8),
-      height: getResponsiveSizeHeight(8),
+      width: getResponsiveSizeHeight(7),
+      height: getResponsiveSizeHeight(7),
       borderWidth: 5,
       borderColor: hexToRgba(theme.colors.color05, '0.3'),
       borderRadius: getResponsiveSizeWidth(50),

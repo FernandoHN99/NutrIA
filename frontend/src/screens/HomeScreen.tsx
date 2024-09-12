@@ -3,32 +3,30 @@ import { View, StyleSheet, ScrollView } from 'react-native';
 import DiaScroll from '../components/DiaScroll';
 import theme from '../styles/theme';
 import DiaSumario from '../components/DiaSumario';
-// import MealList from '../components/MealList';
 import { criarStrData } from '../utils/utils';
-import LoadingScreen from '../components/LoadingScreen';
-import { useQuery } from '@tanstack/react-query';
 import { obterConsumoUsuarioService } from '../api/services/alimentoConsumoService';
-import CustomAlert from '../components/CustomAlert';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import DiaConsumo from '../components/DiaConsumo';
-import { roundJsonValues } from '../utils/utils';
-import { encontrarPerfilPorData } from '../utils/formatters';
+import { encontrarPerfilPorData, filtrarConsumoDia, filtrarRefeicoesAtivas } from '../utils/formatters';
 
 const HomeScreen = ({ navigation }: { navigation: any }) => {
+   
    const [dataInicio, setDataInicio] = useState(criarStrData(-30));
    const [dataFim, setDataFim] = useState(criarStrData(30));
    const [diaSelecionado, setDiaSelecionado] = useState(criarStrData());
+
    const queryClient = useQueryClient()
 
-   const { data, error, isLoading } = useQuery({
-      queryKey: ['consumoAlimentos'],
-      queryFn: () => obterConsumoUsuarioService({ dataInicio, dataFim }),
-   })
-
-   const consumoUsuarioDia = data?.filter((item: { dt_dia: string; }) => item.dt_dia === diaSelecionado)
-
+   const consumoAlimentosCached: any[] | undefined = queryClient.getQueryData(['consumoAlimentos']);
+   const refeicoesCached: any[] | undefined = queryClient.getQueryData(['refeicoesUsuario']);
    const perfisCached: any[] | undefined = queryClient.getQueryData(['perfisUsuario']);
-   const perfilDia = perfisCached ? roundJsonValues(encontrarPerfilPorData(perfisCached, diaSelecionado)) : null;
+
+   const consumoUsuarioDia = filtrarConsumoDia(consumoAlimentosCached, diaSelecionado);
+   const perfilDia = encontrarPerfilPorData(perfisCached, diaSelecionado);
+   const refeicoesAtivas = filtrarRefeicoesAtivas(refeicoesCached);
+
+   console.log('refeicoesAtivas', refeicoesAtivas);
+
 
    const { mutateAsync: obterConsumoUsuarioServiceFn, isPending } = useMutation({
       mutationFn: obterConsumoUsuarioService,
@@ -56,13 +54,8 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
       }
    }, [diaSelecionado]);
 
-   if (isLoading || !perfilDia) {
-      return <LoadingScreen loadingMessage='Carregando...' />;
-   }
-
-   if (error) {
-      CustomAlert('Tente Novamente', 'Erro ao recuperar seus dados', () => navigation.replace('MainTab'), 'Tentar novamente');
-      return <LoadingScreen loadingMessage='Carregando...' />;
+   if(!consumoUsuarioDia || !perfilDia || !refeicoesAtivas) {
+      return null;
    }
 
    if (isPending) {
@@ -74,13 +67,14 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
    }
 
    return (
-      <View style={styles.container}>
-         <DiaScroll diaSelecionado={diaSelecionado} setDiaSelecionado={setDiaSelecionado} />
-         <ScrollView>
-            <DiaSumario perfilDia={perfilDia} infosDia={consumoUsuarioDia} />
-            <DiaConsumo perfilDia={perfilDia} infosDia={consumoUsuarioDia}/>
-         </ScrollView>
-      </View>
+         <View style={styles.container}>
+            <DiaScroll diaSelecionado={diaSelecionado} setDiaSelecionado={setDiaSelecionado} />
+            <ScrollView>
+               <DiaSumario perfilDia={perfilDia} infosDia={consumoUsuarioDia} />
+               <DiaConsumo navigation ={navigation} perfilDia={perfilDia} infosDia={consumoUsuarioDia} refeicoesDiaAtivas={refeicoesAtivas}/>
+            </ScrollView>
+         </View>
+
    );
 }
 

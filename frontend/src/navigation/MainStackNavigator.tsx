@@ -3,11 +3,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import UnauthenticatedNavigator from './UnauthenticatedNavigator';
 import { useAuthToken } from '../utils/useAuthToken';
-import TopTabNavigator from './TopTabNavigator';
+import AuthenticatedNavigator from './AuthenticatedNavigator';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '../lib/react-query';
-import AuthenticatedNavigator from './AuthenticatedNavigator';
 
 const MainStackNavigator = () => {
    const { token, removeTokens } = useAuthToken()

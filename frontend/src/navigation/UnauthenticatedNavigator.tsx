@@ -4,7 +4,6 @@ import BoasVindasScreen from '../screens/BoasVindasScreen';
 import LoginScreen from '../screens/LoginScreen';
 import theme from '../styles/theme';
 import SignUpScreen from '../screens/SignUpScreen';
-import { ScreenStackHeaderBackButtonImage } from 'react-native-screens';
 
 const Stack = createNativeStackNavigator();
 

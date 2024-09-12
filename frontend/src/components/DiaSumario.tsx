@@ -6,11 +6,8 @@ import Ionicons02 from '@expo/vector-icons/FontAwesome6';
 import { getResponsiveSizeWidth, getResponsiveSizeHeight } from '../utils/utils';
 import { hexToRgba } from '../utils/utils';
 import ProgressBar from './ChatBot/ProgressBar';
-import { useQueryClient } from '@tanstack/react-query';
-import { roundJsonValues } from '../utils/utils';
-import LoadingScreen from './LoadingScreen';
 import ProgressCircle from './ChatBot/ProgressCircle';
-import { encontrarPerfilPorData, totalValues } from '../utils/formatters';
+import { somarMacrosDia } from '../utils/formatters';
 
 interface DiaSumarioProps {
    infosDia: any[]
@@ -18,13 +15,8 @@ interface DiaSumarioProps {
 }
 
 const DiaSumario = ({infosDia, perfilDia }: DiaSumarioProps) => {
-   const queryClient = useQueryClient();
 
-   const macrosSum = infosDia ? roundJsonValues(totalValues(infosDia)) : null;
-
-   if (!macrosSum) {
-      return <LoadingScreen loadingMessage='Carregando...' />;
-   }
+   const macrosSum = somarMacrosDia(infosDia);
 
    return (
       <View style={styles.mainCotainer}>
@@ -54,7 +46,13 @@ const DiaSumario = ({infosDia, perfilDia }: DiaSumarioProps) => {
                      progressColor={theme.colors.color05}
                      size={getResponsiveSizeWidth(30)}
                      thickness={7}
-                  />
+                  >
+                     <View>
+                        <Text style={styles.infoCaloriasNumber}>{perfilDia.tmf - macrosSum.totalKcal}</Text>
+                        <Text style={styles.infoText}>Calorias</Text>
+                        <Text style={styles.infoText}>Restantes</Text>
+                     </View>
+                  </ProgressCircle>
                </View>
                <View style={styles.infoCaloriasContainer}>
                   <Text style={styles.infoCaloriasNumber}>{perfilDia.tmf}</Text>
@@ -161,11 +159,13 @@ const styles = StyleSheet.create({
       height: getResponsiveSizeWidth(35),
    },
    infoText: {
+      textAlign: 'center',
       fontFamily: 'NotoSans-Regular',
       fontSize: getResponsiveSizeHeight(1.2),
       color: hexToRgba(theme.colors.black, '0.8')
    },
    infoCaloriasNumber: {
+      textAlign: 'center',
       fontSize: getResponsiveSizeHeight(2.1),
       fontFamily: 'NotoSans-Bold',
       color: hexToRgba(theme.colors.black, '0.8')
@@ -178,8 +178,7 @@ const styles = StyleSheet.create({
    infoMacrosContainer: {
       flex: 1,
       alignItems: 'center',
-   },
-
+   }
 });
 
 export default DiaSumario;

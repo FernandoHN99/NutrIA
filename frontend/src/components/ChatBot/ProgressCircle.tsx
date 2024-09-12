@@ -4,7 +4,6 @@ import * as Progress from 'react-native-progress';
 import { getResponsiveSizeHeight, hexToRgba } from '../../utils/utils';
 import theme from '../../styles/theme';
 
-
 interface ProgressCircleProps {
    current: number;
    total: number;
@@ -12,6 +11,7 @@ interface ProgressCircleProps {
    progressColor: string;
    size: number;
    thickness: number;
+   children: React.ReactNode;
 }
 
 const ProgressCircle = ({
@@ -21,8 +21,10 @@ const ProgressCircle = ({
    progressColor,
    size,
    thickness,
+   children,
 }: ProgressCircleProps) => {
-   const progress = current / total; // Calcula o progresso com base nos valores fornecidos
+   const progress = current / total;
+
    return (
       <View style={styles.container}>
          <Progress.Circle
@@ -35,12 +37,9 @@ const ProgressCircle = ({
             showsText={false}
             style={styles.textContainer}
          />
+         {/* Render children inside a container */}
          <View style={styles.textContainer}>
-            <View>
-               <Text style={styles.infoCaloriasNumber}> {total - current}</Text>
-               <Text style={styles.infoText}>Calorias</Text>
-               <Text style={styles.infoText}>Restantes</Text>
-            </View>
+            {children}
          </View>
       </View>
    );

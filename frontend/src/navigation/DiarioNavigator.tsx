@@ -4,9 +4,7 @@ import HomeScreen from '../screens/HomeScreen';
 import EvolucaoScreen from '../screens/EvolucaoScreen';
 import PerfilScreen from '../screens/PerfilScreen';
 import theme from '../styles/theme';
-import { useQuery } from '@tanstack/react-query';
-import { obterPerfilService } from '../api/services/perfilService';
-
+import HomeNavigator from './HomeNavigator';
 const Tab = createBottomTabNavigator();
 
 const DiarioNavigator = () => {
@@ -18,10 +16,9 @@ const DiarioNavigator = () => {
             } 
          }}
       >
-         <Tab.Screen name="Home" component={HomeScreen} />
+         <Tab.Screen name="Home" component={HomeNavigator} />
          <Tab.Screen name="Evolução" component={EvolucaoScreen} />
          <Tab.Screen name="Perfil" component={PerfilScreen} />
-         {/* // Adicionar todas as telas restantes aqui */}
       </Tab.Navigator>
    );
 };
