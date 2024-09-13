@@ -2,38 +2,39 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import theme from '../styles/theme';
 import { getResponsiveSizeWidth, getResponsiveSizeHeight, hexToRgba } from '../utils/utils';
-import ProgressCircle from '../components/ChatBot/ProgressCircle';
-import { useNavigation } from '@react-navigation/native'; 
-import Ionicons from 'react-native-vector-icons/Ionicons'; // Example icon library
+import ProgressCircle from '../components/ProgressCircle';
+import { useNavigation } from '@react-navigation/native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import ProgressBar from '../components/ProgressBar';
 
 const RefeicaoScreen = ({ route }: { route: any }) => {
    const navigation = useNavigation();
    const { nomeRefeicao, macrosRefeicao, perfilDia } = route.params;
 
-  const handleGoBack = () => {
-   navigation.goBack();
- };
-
+   const handleGoBack = () => {
+      navigation.goBack();
+   };
 
    return (
       <View style={styles.mainPageContainer}>
          <View style={styles.headerContainer}>
-            <TouchableOpacity onPress={handleGoBack}>
-               <Ionicons name="arrow-back-outline" size={getResponsiveSizeHeight(4)} color={theme.colors.color05} />
+            <TouchableOpacity style={styles.button} onPress={handleGoBack}>
+               <Ionicons name="arrow-back-outline" size={getResponsiveSizeWidth(8)} color={theme.colors.color05} />
             </TouchableOpacity>
-            <View style={styles.containerTitle}>
+            <View style={styles.containerTitulo}>
                <Text style={styles.titulo}>{nomeRefeicao}</Text>
             </View>
          </View>
          <View style={styles.mainContentContainer}>
             <Text style={styles.subtitulo}>Resumo</Text>
             <View style={styles.resumoContainer}>
-            <ProgressCircle
+               <View style={styles.progressCircleContainer}>
+                  <ProgressCircle
                      current={macrosRefeicao.totalKcal}
                      total={perfilDia.tmf}
                      bgColor={hexToRgba(theme.colors.color05, '0.3')}
                      progressColor={theme.colors.color05}
-                     size={getResponsiveSizeWidth(30)}
+                     size={getResponsiveSizeHeight(17)}
                      thickness={7}
                   >
                      <View>
@@ -42,6 +43,48 @@ const RefeicaoScreen = ({ route }: { route: any }) => {
                         <Text style={styles.infoText}>Consumidas</Text>
                      </View>
                   </ProgressCircle>
+               </View>
+               <View style={styles.macrosContainer}>
+                  <View>
+                     <Text style={styles.infoText}>Carboidratos</Text>
+                     <ProgressBar
+                        current={macrosRefeicao.totalCarboidrato}
+                        total={perfilDia.meta_carboidrato}
+                        bgColor={hexToRgba(theme.colors.color05, '0.3')}
+                        progressColor={theme.colors.color05}
+                        width={getResponsiveSizeWidth(35)}
+                        height={getResponsiveSizeWidth(2)}
+                        paddingValue={0}
+                     />
+                     <Text style={styles.infoText}>{`${macrosRefeicao.totalCarboidrato} / ${perfilDia.meta_carboidrato} g`}</Text>
+                  </View>
+                  <View>
+                     <Text style={styles.infoText}>Proteínas</Text>
+                     <ProgressBar
+                        current={macrosRefeicao.totalProteina}
+                        total={perfilDia.meta_proteina}
+                        bgColor={hexToRgba(theme.colors.color05, '0.3')}
+                        progressColor={theme.colors.color05}
+                        width={getResponsiveSizeWidth(35)}
+                        height={getResponsiveSizeWidth(2)}
+                        paddingValue={0}
+                     />
+                     <Text style={styles.infoText}>{`${macrosRefeicao.totalProteina} / ${perfilDia.meta_proteina} g`}</Text>
+                  </View>
+                  <View>
+                     <Text style={styles.infoText}>Gorduras</Text>
+                     <ProgressBar
+                        current={macrosRefeicao.totalGordura}
+                        total={perfilDia.meta_gordura}
+                        bgColor={hexToRgba(theme.colors.color05, '0.3')}
+                        progressColor={theme.colors.color05}
+                        width={getResponsiveSizeWidth(35)}
+                        height={getResponsiveSizeWidth(2)}
+                        paddingValue={0}
+                     />
+                     <Text style={styles.infoText}>{`${macrosRefeicao.totalGordura} / ${perfilDia.meta_gordura} g`}</Text>
+                  </View>
+               </View>
             </View>
             <View style={styles.alimentosContainer}>
                <Text style={styles.subtitulo}>Alimentos</Text>
@@ -59,29 +102,31 @@ const styles = StyleSheet.create({
    },
    headerContainer: {
       flexDirection: 'row',
-      justifyContent: 'flex-start',
       alignItems: 'center',
-      width: '98%',
       marginTop: getResponsiveSizeHeight(1),
+      width: '95%',
    },
-   containerTitle: {
+   button: {
+      width: '10%',
+   },
+   containerTitulo: {
       width: '80%',
       justifyContent: 'center',
       alignItems: 'center',
+      alignSelf: 'center'
    },
    mainContentContainer: {
       flexDirection: 'column',
       width: '90%',
+      marginTop: getResponsiveSizeHeight(1),
    },
    resumoContainer: {
-      justifyContent: 'space-around',
+      justifyContent: 'space-evenly',
+      alignItems: 'center',
       flexDirection: 'row',
-      height: getResponsiveSizeWidth(50),
+      height: getResponsiveSizeHeight(23),
       backgroundColor: hexToRgba(theme.colors.color04, '0.5'),
       borderRadius: 20,
-   },
-   alimentosContainer: {
-
    },
    titulo: {
       fontFamily: 'NotoSans-Bold',
@@ -101,7 +146,7 @@ const styles = StyleSheet.create({
    infoText: {
       textAlign: 'center',
       fontFamily: 'NotoSans-Regular',
-      fontSize: getResponsiveSizeHeight(1.2),
+      fontSize: getResponsiveSizeHeight(1.4),
       color: hexToRgba(theme.colors.black, '0.8')
    },
    infoCaloriasNumber: {
@@ -109,6 +154,17 @@ const styles = StyleSheet.create({
       fontSize: getResponsiveSizeHeight(2.1),
       fontFamily: 'NotoSans-Bold',
       color: hexToRgba(theme.colors.black, '0.8')
+   },
+   progressCircleContainer: {
+
+   },
+   macrosContainer: {
+      height: '90%',
+      flexDirection: 'column',
+      justifyContent: 'space-evenly'
+   },
+   alimentosContainer: {
+
    },
 
 });

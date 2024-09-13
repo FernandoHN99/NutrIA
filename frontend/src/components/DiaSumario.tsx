@@ -5,8 +5,8 @@ import Ionicons from '@expo/vector-icons/MaterialCommunityIcons';
 import Ionicons02 from '@expo/vector-icons/FontAwesome6';
 import { getResponsiveSizeWidth, getResponsiveSizeHeight } from '../utils/utils';
 import { hexToRgba } from '../utils/utils';
-import ProgressBar from './ChatBot/ProgressBar';
-import ProgressCircle from './ChatBot/ProgressCircle';
+import ProgressBar from './ProgressBar';
+import ProgressCircle from './ProgressCircle';
 import { somarMacrosDia } from '../utils/formatters';
 
 interface DiaSumarioProps {

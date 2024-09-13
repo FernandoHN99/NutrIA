@@ -61,7 +61,7 @@ interface DiaConsumoProps {
                <TouchableOpacity
                   onPress={() =>navigation.navigate('RefeicaoScreen', {nomeRefeicao, macrosRefeicao, perfilDia })}
                >
-               <Ionicons name="add-circle" size={ICON_SIZE} color={theme.colors.color05} />
+               <Ionicons name="add-circle" size={getResponsiveSizeHeight(3)} color={theme.colors.color05} />
              </TouchableOpacity>
            </View>
          </View>

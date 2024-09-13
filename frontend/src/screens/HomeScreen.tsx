@@ -25,9 +25,6 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
    const perfilDia = encontrarPerfilPorData(perfisCached, diaSelecionado);
    const refeicoesAtivas = filtrarRefeicoesAtivas(refeicoesCached);
 
-   console.log('refeicoesAtivas', refeicoesAtivas);
-
-
    const { mutateAsync: obterConsumoUsuarioServiceFn, isPending } = useMutation({
       mutationFn: obterConsumoUsuarioService,
       onSuccess(data) {

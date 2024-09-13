@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import UnauthenticatedNavigator from './UnauthenticatedNavigator';
 import { useAuthToken } from '../utils/useAuthToken';
 import AuthenticatedNavigator from './AuthenticatedNavigator';
@@ -17,7 +16,7 @@ const MainStackNavigator = () => {
          <SafeAreaProvider>
             <NavigationContainer>
                {isAuthenticated ? (
-                  <AuthenticatedNavigator />
+                  <AuthenticatedNavigator/>
                ) : (
                   <UnauthenticatedNavigator setIsAuthenticated={setIsAuthenticated} />
                )}

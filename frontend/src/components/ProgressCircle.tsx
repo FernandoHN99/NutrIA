@@ -1,8 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import * as Progress from 'react-native-progress';
-import { getResponsiveSizeHeight, hexToRgba } from '../../utils/utils';
-import theme from '../../styles/theme';
 
 interface ProgressCircleProps {
    current: number;
@@ -35,9 +33,7 @@ const ProgressCircle = ({
             borderWidth={0}
             thickness={thickness}
             showsText={false}
-            style={styles.textContainer}
          />
-         {/* Render children inside a container */}
          <View style={styles.textContainer}>
             {children}
          </View>
@@ -55,23 +51,7 @@ const styles = StyleSheet.create({
       position: 'absolute',
       justifyContent: 'center',
       alignItems: 'center',
-   },
-   text: {
-      fontFamily: 'NotoSans-Regular',
-      fontSize: getResponsiveSizeHeight(1.2),
-      color: hexToRgba(theme.colors.black, '0.8'),
-   },
-   infoCaloriasNumber: {
-      fontSize: getResponsiveSizeHeight(2.1),
-      fontFamily: 'NotoSans-Bold',
-      color: hexToRgba(theme.colors.black, '0.8')
-   },
-   infoText: {
-      textAlign: 'center',
-      fontFamily: 'NotoSans-Regular',
-      fontSize: getResponsiveSizeHeight(1.2),
-      color: hexToRgba(theme.colors.black, '0.8')
-   },
+   }
 });
 
 export default ProgressCircle;
