@@ -11,6 +11,7 @@ const theme = {
       white: '#ffffff',
       black: '#000000',
       backgroundColor: '#CAD8CF', // hexToRgba('#297045', '0.2')
+      headerColor: '#79A48A' // hexToRgba(theme.colors.color04, '0.5'),
    },
    fonts: {
       sizes: {

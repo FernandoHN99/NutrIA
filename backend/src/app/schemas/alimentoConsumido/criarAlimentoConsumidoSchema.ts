@@ -44,6 +44,9 @@ const criarAlimentoConsumidoSchema = z.object({
 
    kcal: z.number()
       .min(0).max(9999.9).positive(),
+   
+   dtt_alimento_consumido: z.any()
+      .transform(() => new Date().toISOString()),
 })
 
 type criarAlimentoConsumidoObject = z.infer<typeof criarAlimentoConsumidoSchema>;

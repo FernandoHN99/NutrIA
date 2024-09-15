@@ -11,11 +11,11 @@ const ICON_SIZE = getResponsiveSizeHeight(3.5);
 const ICON_COLOR = hexToRgba(theme.colors.black, '0.6');
 
 const iconsRefeicoes: { [key: number]: JSX.Element } = {
-   1: <Ionicons02 name="sunrise" size={ICON_SIZE} color={ICON_COLOR}  />,
+   1: <Ionicons02 name="sunrise" size={ICON_SIZE} color={ICON_COLOR} />,
    2: <Ionicons02 name="sun" size={ICON_SIZE} color={ICON_COLOR} />,
    3: <Ionicons02 name="coffee" size={ICON_SIZE} color={ICON_COLOR} />,
    4: <Ionicons02 name="sunset" size={ICON_SIZE} color={ICON_COLOR} />,
-   5: <Ionicons03 name="weather-night" size={ICON_SIZE} color={ICON_COLOR}/>,
+   5: <Ionicons03 name="weather-night" size={ICON_SIZE} color={ICON_COLOR} />,
 };
 
 interface DiaConsumoProps {
@@ -25,66 +25,65 @@ interface DiaConsumoProps {
    navigation: any
 }
 
- const DiaConsumo = ({ navigation, infosDia, perfilDia, refeicoesDiaAtivas } : DiaConsumoProps) => {
+const DiaConsumo = ({ navigation, infosDia, perfilDia, refeicoesDiaAtivas }: DiaConsumoProps) => {
 
    const macrosRefeicoes = somarMacrosDiaPorRefeicao(infosDia, refeicoesDiaAtivas);
    const refeicoes = Object.values(macrosRefeicoes);
- 
-   const renderRefeicao = (refeicao: any, index: number) => {
-     const macrosRefeicao = macrosRefeicoes[refeicao.numero_refeicao];
-     const isLastItem = index === refeicoes.length - 1;
-     const totalKcal = macrosRefeicao?.totalKcal || 0;
-     const porcentagemKcal = arredondarValores((totalKcal / perfilDia.tmf) * 100);
-     const nomeRefeicao = refeicao.nome_refeicao;
 
-     return (
-       <View 
-         key={refeicao.numero_refeicao} 
-         style={[
-           styles.refeicaoContainer,
-           isLastItem && styles.refeicaoUltimoContainer,
-         ]}
-       >
-         <View style={styles.refeicaoMainContent}>
-           <View style={styles.refeicaoLeftContent}>
-             <View style={styles.iconeRefeicaoCircle}>
-               {iconsRefeicoes[refeicao.numero_refeicao]}
-             </View>
-             <View style={styles.refeicaoInfosContainer}>
-               <Text style={styles.refeicaoNome}>{nomeRefeicao}</Text>
-               <Text style={styles.refeicaoKcal}>
-                 {totalKcal} kcal - ({porcentagemKcal}%)
-               </Text>
-             </View>
-           </View>
-           <View style={styles.refeicaoRightContent}>
-               <TouchableOpacity
-                  onPress={() =>navigation.navigate('RefeicaoScreen', {nomeRefeicao, macrosRefeicao, perfilDia })}
-               >
-               <Ionicons name="add-circle" size={getResponsiveSizeHeight(3)} color={theme.colors.color05} />
-             </TouchableOpacity>
-           </View>
+   const renderRefeicao = (refeicao: any, index: number) => {
+      const macrosRefeicao = macrosRefeicoes[refeicao.numero_refeicao];
+      const isLastItem = index === refeicoes.length - 1;
+      const totalKcal = macrosRefeicao?.totalKcal || 0;
+      const porcentagemKcal = arredondarValores((totalKcal / perfilDia.tmf) * 100);
+
+      return (
+         <View
+            key={refeicao.numero_refeicao}
+            style={[
+               styles.refeicaoContainer,
+               isLastItem && styles.refeicaoUltimoContainer,
+            ]}
+         >
+            <View style={styles.refeicaoMainContent}>
+               <View style={styles.refeicaoLeftContent}>
+                  <View style={styles.iconeRefeicaoCircle}>
+                     {iconsRefeicoes[refeicao.numero_refeicao]}
+                  </View>
+                  <View style={styles.refeicaoInfosContainer}>
+                     <Text style={styles.refeicaoNome}>{refeicao.nome_refeicao}</Text>
+                     <Text style={styles.refeicaoKcal}>
+                        {totalKcal} kcal - {porcentagemKcal}%
+                     </Text>
+                  </View>
+               </View>
+               <View style={styles.refeicaoRightContent}>
+                  <TouchableOpacity
+                     onPress={() => navigation.navigate('RefeicaoScreen', { macrosRefeicao, perfilDia, infosDia })}
+                  >
+                     <Ionicons name="add-circle" size={getResponsiveSizeHeight(3)} color={theme.colors.color05} />
+                  </TouchableOpacity>
+               </View>
+            </View>
          </View>
-       </View>
-     );
+      );
    };
- 
+
    return (
-     <View style={styles.mainContainer}>
-       <View style={styles.headerConsumoContainer}>
-         <Text style={styles.title}>Alimentação</Text>
-       </View>
-       <View style={styles.refeicoesContainer}>
-         {refeicoes.map(renderRefeicao)}
-       </View>
-     </View>
+      <View style={styles.mainContainer}>
+         <View style={styles.headerConsumoContainer}>
+            <Text style={styles.title}>Alimentação</Text>
+         </View>
+         <View style={styles.refeicoesContainer}>
+            {refeicoes.map(renderRefeicao)}
+         </View>
+      </View>
    );
- };
+};
 
 const styles = StyleSheet.create({
 
-   mainContainer:{
-      marginTop: getResponsiveSizeHeight(1),
+   mainContainer: {
+      marginTop: getResponsiveSizeHeight(2),
       marginBottom: getResponsiveSizeHeight(4),
       flexDirection: 'column',
       alignItems: 'center',
@@ -97,27 +96,27 @@ const styles = StyleSheet.create({
       textAlign: 'left',
       color: theme.colors.color05,
       fontFamily: 'NotoSans-Bold',
-      fontSize: getResponsiveSizeWidth(5),
+      fontSize: getResponsiveSizeHeight(2),
       marginLeft: getResponsiveSizeWidth(10),
-      marginBottom: getResponsiveSizeHeight(0.5),
    },
    refeicoesContainer: {
       backgroundColor: hexToRgba(theme.colors.color04, '0.5'),
       borderRadius: 20,
       width: getResponsiveSizeWidth(90),
+      borderColor: theme.colors.color05,
+      borderWidth: 2,
    },
    refeicaoContainer: {
       marginHorizontal: 20,
-      height: getResponsiveSizeHeight(11),
+      paddingVertical: getResponsiveSizeHeight(1.3),
       borderBottomWidth: 2,
       borderColor: hexToRgba(theme.colors.black, '0.6'),
       flexDirection: 'column',
       justifyContent: 'center',
    },
-   refeicaoUltimoContainer:{
+   refeicaoUltimoContainer: {
       marginHorizontal: 20,
       borderBottomWidth: 0,
-      height: getResponsiveSizeHeight(11),
       borderColor: hexToRgba(theme.colors.black, '0.6'),
       flexDirection: 'column',
       justifyContent: 'center',
@@ -133,7 +132,7 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       alignItems: 'center',
    },
-   refeicaoRightContent:{
+   refeicaoRightContent: {
       flexDirection: 'row',
       flex: 0.3,
       justifyContent: 'flex-end',
@@ -148,15 +147,15 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
    },
-   refeicaoInfosContainer:{
+   refeicaoInfosContainer: {
       marginLeft: getResponsiveSizeWidth(4),
    },
-   refeicaoNome:{
+   refeicaoNome: {
       fontSize: getResponsiveSizeHeight(2),
       fontFamily: 'NotoSans-SemiBold',
       color: hexToRgba(theme.colors.black, '0.6'),
    },
-   refeicaoKcal:{
+   refeicaoKcal: {
       fontSize: getResponsiveSizeHeight(1.6),
       fontFamily: 'NotoSans-SemiBold',
       color: hexToRgba(theme.colors.black, '0.6'),

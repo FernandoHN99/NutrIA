@@ -1,95 +1,128 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import theme from '../styles/theme';
-import { getResponsiveSizeWidth, getResponsiveSizeHeight, hexToRgba } from '../utils/utils';
+import { getResponsiveSizeWidth, getResponsiveSizeHeight, hexToRgba, criarStrData, arredondarValores, capitalize } from '../utils/utils';
 import ProgressCircle from '../components/ProgressCircle';
 import { useNavigation } from '@react-navigation/native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Ionicons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ProgressBar from '../components/ProgressBar';
+import { filtrarConsumoRefeicao } from '../utils/formatters';
+import { color } from 'react-native-elements/dist/helpers';
 
 const RefeicaoScreen = ({ route }: { route: any }) => {
+
    const navigation = useNavigation();
-   const { nomeRefeicao, macrosRefeicao, perfilDia } = route.params;
+   const { macrosRefeicao, perfilDia, infosDia } = route.params;
+
+   const consumoRefeicao = filtrarConsumoRefeicao(infosDia, macrosRefeicao.numero_refeicao);
 
    const handleGoBack = () => {
       navigation.goBack();
    };
 
    return (
-      <View style={styles.mainPageContainer}>
-         <View style={styles.headerContainer}>
-            <TouchableOpacity style={styles.button} onPress={handleGoBack}>
-               <Ionicons name="arrow-back-outline" size={getResponsiveSizeWidth(8)} color={theme.colors.color05} />
-            </TouchableOpacity>
-            <View style={styles.containerTitulo}>
-               <Text style={styles.titulo}>{nomeRefeicao}</Text>
-            </View>
-         </View>
-         <View style={styles.mainContentContainer}>
-            <Text style={styles.subtitulo}>Resumo</Text>
-            <View style={styles.resumoContainer}>
-               <View style={styles.progressCircleContainer}>
-                  <ProgressCircle
-                     current={macrosRefeicao.totalKcal}
-                     total={perfilDia.tmf}
-                     bgColor={hexToRgba(theme.colors.color05, '0.3')}
-                     progressColor={theme.colors.color05}
-                     size={getResponsiveSizeHeight(17)}
-                     thickness={7}
-                  >
-                     <View>
-                        <Text style={styles.infoCaloriasNumber}>{macrosRefeicao.totalKcal}</Text>
-                        <Text style={styles.infoText}>Calorias</Text>
-                        <Text style={styles.infoText}>Consumidas</Text>
+      <View style={{ backgroundColor: theme.colors.backgroundColor, flex: 1 }}>
+         <ScrollView showsVerticalScrollIndicator={false}>
+            <View style={styles.mainPageContainer}>
+               <View style={styles.headerContainer}>
+                  <View style={styles.containerTitulo}>
+                     <Text style={styles.subtitulo}>Resumo - {macrosRefeicao.nome_refeicao}</Text>
+                  </View>
+                  <TouchableOpacity style={styles.button} onPress={handleGoBack}>
+                     <Ionicons name="close-circle" size={getResponsiveSizeHeight(3.5)} color={theme.colors.color05} />
+                  </TouchableOpacity>
+               </View>
+               <View style={styles.mainContentContainer}>
+                  <View style={styles.resumoContainer}>
+                     <ProgressCircle
+                        current={macrosRefeicao.totalKcal}
+                        total={perfilDia.tmf}
+                        bgColor={hexToRgba(theme.colors.color05, '0.3')}
+                        progressColor={theme.colors.color05}
+                        size={getResponsiveSizeHeight(20)}
+                        thickness={7}
+                     >
+                        <View>
+                           <Text style={styles.infoCaloriasNumber}>{macrosRefeicao.totalKcal}</Text>
+                           <Text style={styles.infoText}>Calorias</Text>
+                           <Text style={styles.infoText}>Consumidas</Text>
+                        </View>
+                     </ProgressCircle>
+                     <View style={styles.macrosContainer}>
+                        <View>
+                           <Text style={styles.infoText}>Carboidratos</Text>
+                           <ProgressBar
+                              current={macrosRefeicao.totalCarboidrato}
+                              total={perfilDia.meta_carboidrato}
+                              bgColor={hexToRgba(theme.colors.color05, '0.3')}
+                              progressColor={theme.colors.color05}
+                              width={getResponsiveSizeWidth(35)}
+                              height={getResponsiveSizeWidth(2)}
+                              paddingValue={0}
+                           />
+                           <Text style={styles.infoText}>{`${macrosRefeicao.totalCarboidrato} / ${perfilDia.meta_carboidrato} g`}</Text>
+                        </View>
+                        <View>
+                           <Text style={styles.infoText}>Proteínas</Text>
+                           <ProgressBar
+                              current={macrosRefeicao.totalProteina}
+                              total={perfilDia.meta_proteina}
+                              bgColor={hexToRgba(theme.colors.color05, '0.3')}
+                              progressColor={theme.colors.color05}
+                              width={getResponsiveSizeWidth(35)}
+                              height={getResponsiveSizeWidth(2)}
+                              paddingValue={0}
+                           />
+                           <Text style={styles.infoText}>{`${macrosRefeicao.totalProteina} / ${perfilDia.meta_proteina} g`}</Text>
+                        </View>
+                        <View>
+                           <Text style={styles.infoText}>Gorduras</Text>
+                           <ProgressBar
+                              current={macrosRefeicao.totalGordura}
+                              total={perfilDia.meta_gordura}
+                              bgColor={hexToRgba(theme.colors.color05, '0.3')}
+                              progressColor={theme.colors.color05}
+                              width={getResponsiveSizeWidth(35)}
+                              height={getResponsiveSizeWidth(2)}
+                              paddingValue={0}
+                           />
+                           <Text style={styles.infoText}>{`${macrosRefeicao.totalGordura} / ${perfilDia.meta_gordura} g`}</Text>
+                        </View>
                      </View>
-                  </ProgressCircle>
-               </View>
-               <View style={styles.macrosContainer}>
-                  <View>
-                     <Text style={styles.infoText}>Carboidratos</Text>
-                     <ProgressBar
-                        current={macrosRefeicao.totalCarboidrato}
-                        total={perfilDia.meta_carboidrato}
-                        bgColor={hexToRgba(theme.colors.color05, '0.3')}
-                        progressColor={theme.colors.color05}
-                        width={getResponsiveSizeWidth(35)}
-                        height={getResponsiveSizeWidth(2)}
-                        paddingValue={0}
-                     />
-                     <Text style={styles.infoText}>{`${macrosRefeicao.totalCarboidrato} / ${perfilDia.meta_carboidrato} g`}</Text>
                   </View>
-                  <View>
-                     <Text style={styles.infoText}>Proteínas</Text>
-                     <ProgressBar
-                        current={macrosRefeicao.totalProteina}
-                        total={perfilDia.meta_proteina}
-                        bgColor={hexToRgba(theme.colors.color05, '0.3')}
-                        progressColor={theme.colors.color05}
-                        width={getResponsiveSizeWidth(35)}
-                        height={getResponsiveSizeWidth(2)}
-                        paddingValue={0}
-                     />
-                     <Text style={styles.infoText}>{`${macrosRefeicao.totalProteina} / ${perfilDia.meta_proteina} g`}</Text>
-                  </View>
-                  <View>
-                     <Text style={styles.infoText}>Gorduras</Text>
-                     <ProgressBar
-                        current={macrosRefeicao.totalGordura}
-                        total={perfilDia.meta_gordura}
-                        bgColor={hexToRgba(theme.colors.color05, '0.3')}
-                        progressColor={theme.colors.color05}
-                        width={getResponsiveSizeWidth(35)}
-                        height={getResponsiveSizeWidth(2)}
-                        paddingValue={0}
-                     />
-                     <Text style={styles.infoText}>{`${macrosRefeicao.totalGordura} / ${perfilDia.meta_gordura} g`}</Text>
+                  <View style={styles.alimentoMainContainer}>
+                     {consumoRefeicao.length > 0 ? (
+                        <View style={styles.alimentosContainer}>
+                           <Text style={styles.subtitulo}>Alimentos Consumidos</Text>
+                           <View style={styles.alimentosContentContainer}>
+                              {consumoRefeicao.map((alimentoConsumido) => (
+                                 <View style={styles.alimentoContainer} key={alimentoConsumido.dtt_alimento_consumido}>
+                                    <View style={styles.alimentoContent}>
+                                       <Text style={[styles.textNomeAlimento]}>{alimentoConsumido.qtde_utilizada}g, {alimentoConsumido.alimento.nome_alimento}{alimentoConsumido.alimento.estado_alimento != 'PADRAO' ? ` (${capitalize(alimentoConsumido.alimento.estado_alimento)})` : ''}</Text>
+                                       <View style={{ flexDirection: 'row'}}>
+                                          <Text style={styles.textInfoAlimento}>C: {arredondarValores(alimentoConsumido.qtde_carboidrato)}g   </Text>
+                                          <Text style={styles.textInfoAlimento}>P: {arredondarValores(alimentoConsumido.qtde_proteina)}g   </Text>
+                                          <Text style={styles.textInfoAlimento}>G: {arredondarValores(alimentoConsumido.qtde_gordura)}g</Text>
+                                       </View>
+                                    </View>
+                                    <Text style={[styles.numberInfoAlimento]}>{arredondarValores(alimentoConsumido.kcal)} kcal</Text>
+                                 </View>
+                              ))}
+                           </View>
+                        </View>
+                     ) : (
+                        <View style={styles.semAlimentosContainer}>
+                           <Text style={styles.semAlimentosMsg}>Nenhum alimento registrado</Text>
+                           <TouchableOpacity style={styles.buttonAdicionar} onPress={() => console.log('Adicionar')}>
+                              <Text style={styles.semAlimentosMsgButton}>Adicionar alimento</Text>
+                           </TouchableOpacity>
+                        </View>
+                     )
+                     }
                   </View>
                </View>
             </View>
-            <View style={styles.alimentosContainer}>
-               <Text style={styles.subtitulo}>Alimentos</Text>
-            </View>
-         </View>
+         </ScrollView>
       </View>
    );
 };
@@ -99,49 +132,44 @@ const styles = StyleSheet.create({
       flex: 1,
       alignItems: 'center',
       backgroundColor: theme.colors.backgroundColor,
+      width: '95%',
+      marginHorizontal: 'auto',
    },
    headerContainer: {
+      marginTop: getResponsiveSizeHeight(1.5),
       flexDirection: 'row',
       alignItems: 'center',
-      marginTop: getResponsiveSizeHeight(1),
-      width: '95%',
+      height: getResponsiveSizeHeight(6),
+      justifyContent: 'space-between',
    },
    button: {
-      width: '10%',
+      alignItems: 'flex-end',
+      alignSelf: 'flex-start',
+      marginRight: getResponsiveSizeWidth(5),
    },
    containerTitulo: {
-      width: '80%',
-      justifyContent: 'center',
-      alignItems: 'center',
-      alignSelf: 'center'
+      flex: 1,
+      alignSelf: 'flex-end',
    },
    mainContentContainer: {
       flexDirection: 'column',
-      width: '90%',
-      marginTop: getResponsiveSizeHeight(1),
+      width: '100%',
    },
    resumoContainer: {
       justifyContent: 'space-evenly',
       alignItems: 'center',
       flexDirection: 'row',
-      height: getResponsiveSizeHeight(23),
+      height: getResponsiveSizeHeight(25),
       backgroundColor: hexToRgba(theme.colors.color04, '0.5'),
       borderRadius: 20,
-   },
-   titulo: {
-      fontFamily: 'NotoSans-Bold',
-      fontSize: getResponsiveSizeWidth(7),
-      color: theme.colors.color05,
-      marginLeft: getResponsiveSizeWidth(3),
-      marginVertical: getResponsiveSizeWidth(1),
-      textAlign: 'center',
+      borderColor: theme.colors.color05,
+      borderWidth: 2,
    },
    subtitulo: {
       fontFamily: 'NotoSans-Bold',
-      fontSize: getResponsiveSizeWidth(5),
+      fontSize: getResponsiveSizeHeight(2.5),
       color: theme.colors.color05,
-      marginLeft: getResponsiveSizeWidth(3),
-      marginVertical: getResponsiveSizeWidth(1),
+      marginLeft: getResponsiveSizeWidth(5),
    },
    infoText: {
       textAlign: 'center',
@@ -155,16 +183,82 @@ const styles = StyleSheet.create({
       fontFamily: 'NotoSans-Bold',
       color: hexToRgba(theme.colors.black, '0.8')
    },
-   progressCircleContainer: {
-
-   },
    macrosContainer: {
       height: '90%',
       flexDirection: 'column',
       justifyContent: 'space-evenly'
    },
+   alimentoMainContainer: {
+      marginTop: getResponsiveSizeHeight(1),
+   },
    alimentosContainer: {
-
+      marginTop: getResponsiveSizeHeight(1),
+   },
+   alimentosContentContainer: {
+      backgroundColor: hexToRgba(theme.colors.color04, '0.5'),
+      borderRadius: 20,
+      borderColor: theme.colors.color05,
+      borderWidth: 2,
+   },
+   alimentoContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingVertical: getResponsiveSizeWidth(3),
+      paddingHorizontal: getResponsiveSizeWidth(5),
+      borderColor: theme.colors.color05,
+      borderBottomWidth: 2,
+   },
+   alimentoContent: {
+      // backgroundColor: 'blue' 
+   },
+   alimentoContentMacros: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+   },
+   textNomeAlimento: {
+      fontFamily: 'NotoSans-Bold',
+      fontSize: getResponsiveSizeWidth(3.7),
+      color: hexToRgba(theme.colors.black, '0.8'),
+   },
+   textInfoAlimento: {
+      fontFamily: 'NotoSans-SemiBold',
+      fontSize: getResponsiveSizeWidth(3.2),
+      color: theme.colors.color05,
+   },
+   numberInfoAlimento: {
+      fontFamily: 'NotoSans-SemiBold',
+      fontSize: getResponsiveSizeWidth(4),
+      textAlign: 'right',
+      // alignSelf: 'flex-start',
+   },
+   semAlimentosContainer: {
+      padding: getResponsiveSizeWidth(3),
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: hexToRgba(theme.colors.color04, '0.5'),
+      borderRadius: 20,
+      borderColor: theme.colors.color05,
+      borderWidth: 2,
+   },
+   semAlimentosMsg: {
+      fontFamily: 'NotoSans-SemiBold',
+      fontSize: getResponsiveSizeWidth(4.5),
+      textAlign: 'center',
+      color: hexToRgba(theme.colors.black, '0.8'),
+   },
+   buttonAdicionar: {
+      marginTop: getResponsiveSizeHeight(2),
+      padding: getResponsiveSizeWidth(3),
+      backgroundColor: theme.colors.color05,
+      borderRadius: 20,
+   },
+   semAlimentosMsgButton: {
+      fontFamily: 'NotoSans-SemiBold',
+      fontSize: getResponsiveSizeWidth(4),
+      textAlign: 'center',
+      color: theme.colors.color01,
    },
 
 });

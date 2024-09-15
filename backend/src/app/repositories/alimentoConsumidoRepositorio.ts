@@ -24,6 +24,7 @@ export default class AlimentoConsumidoRepositorio {
          .select([
             'ac',
             'a.nome_alimento',
+            'a.estado_alimento',
             'r.nome_refeicao',
             'tb'
          ])

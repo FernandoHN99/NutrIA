@@ -41,6 +41,7 @@ const DiarioNavigator = () => {
             component={RefeicaoScreen}
             options={{
                headerShown: false,
+               animation: 'slide_from_bottom',
             }}
          />
       </Stack.Navigator>

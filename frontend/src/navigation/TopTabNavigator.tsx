@@ -25,6 +25,7 @@ const TopTabNavigator = () => {
                color: theme.colors.color05, 
                fontSize: getResponsiveSizeHeight(1.9),
              },
+             swipeEnabled: false,
          }}
       >
          <Tab.Screen name="Diário" component={DiarioNavigator} />

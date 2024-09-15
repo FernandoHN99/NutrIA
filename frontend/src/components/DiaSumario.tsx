@@ -23,7 +23,7 @@ const DiaSumario = ({infosDia, perfilDia }: DiaSumarioProps) => {
          <View style={styles.headerSumarioContainer}>
             <Text style={styles.title}>Resumo</Text>
             <View style={styles.headerButtons}>
-               <TouchableOpacity onPress={() => console.log('oi')}>
+               <TouchableOpacity onPress={() => console.log('oi')} >
                   <Ionicons name="chef-hat" size={getResponsiveSizeHeight(3.2)} color={theme.colors.color05} />
                </TouchableOpacity>
                <TouchableOpacity onPress={() => console.log('oi')}>
@@ -116,14 +116,14 @@ const styles = StyleSheet.create({
    headerSumarioContainer: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      alignItems: 'center',
+      alignItems: 'flex-start',
       width: getResponsiveSizeWidth(85),
-      height: getResponsiveSizeWidth(10),
+      paddingTop: getResponsiveSizeHeight(1),
    },
    title: {
       color: theme.colors.color05,
       fontFamily: 'NotoSans-Bold',
-      fontSize: getResponsiveSizeWidth(5),
+      fontSize: getResponsiveSizeHeight(2),
       marginLeft: getResponsiveSizeWidth(2)
    },
    headerButtons: {
@@ -131,13 +131,15 @@ const styles = StyleSheet.create({
       justifyContent: 'space-between',
       alignItems: 'center',
       flex: 0.4,
-      marginRight: getResponsiveSizeWidth(5)
+      marginRight: getResponsiveSizeWidth(5),
    },
    infoSumarioContainer: {
       backgroundColor: hexToRgba(theme.colors.color04, '0.5'),
       width: getResponsiveSizeWidth(90),
       height: getResponsiveSizeWidth(65),
       borderRadius: 20,
+      borderColor: theme.colors.color05,
+      borderWidth: 2,
       flexDirection: 'column',
       justifyContent: 'flex-start',
       alignItems: 'center'

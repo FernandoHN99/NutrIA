@@ -51,6 +51,9 @@ export default class AlimentoConsumido extends BaseEntity {
    @Column('numeric', { precision: 6, scale: 1, transformer: Util.transformerStringNumber })
    kcal: number;
 
+   @Column('timestamp')
+   dtt_alimento_consumido: string;
+
    @ManyToOne(() => Usuario, usuario => usuario.alimentosConsumidos)
    @JoinColumn({name: 'id_usuario'})
    usuario: Usuario;

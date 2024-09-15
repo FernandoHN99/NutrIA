@@ -64,14 +64,13 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
    }
 
    return (
-         <View style={styles.container}>
-            <DiaScroll diaSelecionado={diaSelecionado} setDiaSelecionado={setDiaSelecionado} />
-            <ScrollView>
-               <DiaSumario perfilDia={perfilDia} infosDia={consumoUsuarioDia} />
-               <DiaConsumo navigation ={navigation} perfilDia={perfilDia} infosDia={consumoUsuarioDia} refeicoesDiaAtivas={refeicoesAtivas}/>
-            </ScrollView>
-         </View>
-
+      <View style={styles.container}>
+         <DiaScroll diaSelecionado={diaSelecionado} setDiaSelecionado={setDiaSelecionado} />
+         <ScrollView showsVerticalScrollIndicator={false}>
+            <DiaSumario perfilDia={perfilDia} infosDia={consumoUsuarioDia} />
+            <DiaConsumo navigation ={navigation} perfilDia={perfilDia} infosDia={consumoUsuarioDia} refeicoesDiaAtivas={refeicoesAtivas}/>
+         </ScrollView>
+      </View>
    );
 }
 

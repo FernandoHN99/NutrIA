@@ -4,7 +4,7 @@ import { criarAlimentoConsumidoSchema } from './criarAlimentoConsumidoSchema';
 const atualizarAlimentoConsumidoSchema = criarAlimentoConsumidoSchema
    .partial()
    .required({ id_usuario: true })
-   .omit({ id_alimento: true, id_prato: true })
+   .omit({ id_alimento: true, id_prato: true, dtt_alimento_consumido: true})
    .extend({
          id_alimento_consumido: z.number()
             .int()

@@ -7,7 +7,7 @@ const Stack = createNativeStackNavigator();
 const HomeNavigator = () => {
 
    return (
-      <Stack.Navigator initialRouteName='TelaInicial'>
+      <Stack.Navigator>
          <Stack.Screen
             name="HomeScreen"
             component={HomeScreen}

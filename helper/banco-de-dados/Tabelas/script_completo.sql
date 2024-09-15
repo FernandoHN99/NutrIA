@@ -190,6 +190,7 @@ CREATE TABLE alimento_consumido (
 	qtde_gordura NUMERIC(6,1) NOT NULL,
 	qtde_alcool NUMERIC(6,1) NOT NULL,
    kcal NUMERIC(6,1) NOT NULL,
+   dtt_alimento_consumido TEXT NOT NULL,
 	CONSTRAINT alimento_consumido_check_valores_maiores_que_zero CHECK (
       porcao_padrao > 0 AND qtde_proteina >= 0 AND 
 	   qtde_carboidrato >= 0 AND qtde_gordura >= 0 AND qtde_alcool >= 0 AND kcal > 0 AND qtde_utilizada > 0 
