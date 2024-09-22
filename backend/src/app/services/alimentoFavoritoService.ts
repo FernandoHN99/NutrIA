@@ -1,7 +1,6 @@
 import AlimentoFavorito from "../entities/alimentoFavorito";
 import AlimentoFavoritoRepositorio from "../repositories/alimentoFavoritoRepositorio";
 import { salvarAlimentoFavoritoObject } from "../schemas/alimentoFavorito/salvarAlimentoFavoritoSchema";
-import { JsonReponseErro } from "../../utils/jsonReponses";
 
 export default class AlimentoFavoritoService{
    
@@ -20,12 +19,17 @@ export default class AlimentoFavoritoService{
          dadosSalvarAlimentoFavorito.id_usuario, 
          dadosSalvarAlimentoFavorito.id_alimento
       );
+      // const alimentoFavoritoBackup = alimentoFavorito;
       if(!alimentoFavorito){
          alimentoFavorito = new AlimentoFavorito(dadosSalvarAlimentoFavorito)
-         return await alimentoFavorito.save()
+         await alimentoFavorito.save();
+         alimentoFavorito = await this.alimentoFavoritoRepo.obterAlimentoFavoritoUsuario(
+            dadosSalvarAlimentoFavorito.id_usuario, 
+            dadosSalvarAlimentoFavorito.id_alimento
+         );
+         return alimentoFavorito!;
       }
       await alimentoFavorito.remove();
-      return {};
+      return {...alimentoFavorito, dtt_alimento_favoritado: null};
    }
-
 }

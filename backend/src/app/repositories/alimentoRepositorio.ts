@@ -27,6 +27,7 @@ export default class AlimentoRepositorio {
    }
 
    public async obterAlimentosPorNome(nome: string, pegar: number, pular: number): Promise<Alimento[]> {
+      nome = nome.trim();
       return await this.repositorio.find({
          where: {
              nome_alimento: ILike(`%${nome}%`),

@@ -10,23 +10,29 @@ export default class AlimentoFavoritoRepositorio {
    }
 
    public async obterAlimentoFavoritoUsuario(usuarioID: string, alimentoID: number): Promise<AlimentoFavorito | null> {
-      return await this.repositorio.findOne({ 
-         where: { 
-            id_usuario : usuarioID,
-            id_alimento: alimentoID 
-         } 
-      });
+      return await this.repositorio.createQueryBuilder('af')
+         .select([
+            'af',
+            'a',
+            'tb',
+         ])
+         .innerJoin('af.alimento', 'a')
+         .innerJoin('a.tabelasNutricionais', 'tb')
+         .where('af.id_usuario = :usuarioID', { usuarioID })
+         .andWhere('af.id_alimento = :alimentoID', { alimentoID })
+         .getOne();
    }
 
 
    public async obterAlimentosFavoritosUsuario(usuarioID: string): Promise<any[]> {
       return await this.repositorio.createQueryBuilder('af')
          .select([
-            'af.id_usuario',
             'af.dtt_alimento_favoritado',
             'a',
+            'tb'
          ])
          .innerJoin('af.alimento', 'a')
+         .innerJoin('a.tabelasNutricionais', 'tb')
          .where('af.id_usuario = :usuarioID', { usuarioID })
          .orderBy('af.dtt_alimento_favoritado', 'ASC')
          .orderBy('a.nome_alimento', 'ASC')
