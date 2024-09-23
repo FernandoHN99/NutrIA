@@ -5,21 +5,22 @@ import theme from '../styles/theme';
 import DiaSumario from '../components/DiaSumario';
 import { criarStrData } from '../utils/utils';
 import { obterConsumoUsuarioService } from '../api/services/alimentoConsumoService';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import DiaConsumo from '../components/DiaConsumo';
 import { encontrarPerfilPorData, filtrarConsumoDia, filtrarRefeicoesAtivas } from '../utils/formatters';
+import { useConsumoAlimentos, useRefeicoesUsuario, usePerfisUsuario } from '../api/hooks/httpState/usuarioData';
 
 const HomeScreen = ({ navigation }: { navigation: any }) => {
-   
+
    const [dataInicio, setDataInicio] = useState(criarStrData(-30));
    const [dataFim, setDataFim] = useState(criarStrData(30));
    const [diaSelecionado, setDiaSelecionado] = useState(criarStrData());
 
    const queryClient = useQueryClient()
 
-   const consumoAlimentosCached: any[] | undefined = queryClient.getQueryData(['consumoAlimentos']);
-   const refeicoesCached: any[] | undefined = queryClient.getQueryData(['refeicoesUsuario']);
-   const perfisCached: any[] | undefined = queryClient.getQueryData(['perfisUsuario']);
+   const { data: consumoAlimentosCached } = useConsumoAlimentos({enabled: false});
+   const { data: refeicoesCached } = useRefeicoesUsuario({enabled: false});
+   const { data: perfisCached } = usePerfisUsuario({enabled: false});
 
    const consumoUsuarioDia = filtrarConsumoDia(consumoAlimentosCached, diaSelecionado);
    const perfilDia = encontrarPerfilPorData(perfisCached, diaSelecionado);
@@ -45,13 +46,13 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
       if (new Date(diaSelecionado) < new Date(dataInicio)) {
          setDataInicio(diaSelecionado)
          handlerObterNovoConsumo(diaSelecionado)
-      }else if(new Date (diaSelecionado) > new Date(dataFim)) {
+      } else if (new Date(diaSelecionado) > new Date(dataFim)) {
          setDataFim(diaSelecionado)
          handlerObterNovoConsumo(diaSelecionado)
       }
    }, [diaSelecionado]);
 
-   if(!consumoUsuarioDia || !perfilDia || !refeicoesAtivas) {
+   if (!consumoUsuarioDia || !perfilDia || !refeicoesAtivas) {
       return null;
    }
 
@@ -68,7 +69,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
          <DiaScroll diaSelecionado={diaSelecionado} setDiaSelecionado={setDiaSelecionado} />
          <ScrollView showsVerticalScrollIndicator={false}>
             <DiaSumario perfilDia={perfilDia} infosDia={consumoUsuarioDia} />
-            <DiaConsumo navigation ={navigation} perfilDia={perfilDia} infosDia={consumoUsuarioDia} refeicoesDiaAtivas={refeicoesAtivas}/>
+            <DiaConsumo navigation={navigation} perfilDia={perfilDia} diaSelecionado={diaSelecionado} infosDia={consumoUsuarioDia} refeicoesDiaAtivas={refeicoesAtivas} />
          </ScrollView>
       </View>
    );

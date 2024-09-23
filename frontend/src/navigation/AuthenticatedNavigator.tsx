@@ -1,61 +1,35 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TopTabNavigator from './TopTabNavigator';
-import { useQuery, useQueries } from '@tanstack/react-query';
-import { obterUsuarioService } from '../api/services/usuarioService';
-import { obterPerfilService } from '../api/services/perfilService';
-import { obterRefeicaoService } from '../api/services/refeicaoService';
-import { obterConsumoUsuarioService } from '../api/services/alimentoConsumoService';
 import { criarStrData, getResponsiveSizeWidth } from '../utils/utils';
 import LoadingScreen from '../components/LoadingScreen';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import theme from '../styles/theme';
-
+import { useAlimentosFavoritos, useConsumoAlimentos, usePerfisUsuario, useRefeicoesUsuario, useUsuarioInfo } from '../api/hooks/httpState/usuarioData';
 const Stack = createNativeStackNavigator();
 
 const AuthenticatedNavigator = () => {
 
-   const [
-      { data: usuarioInfo, error: errorUsuario, isLoading: isLoadingUsuario, refetch: refetchUsuario },
-      { data: perfisUsuario, error: errorPerfis, isLoading: isLoadingPerfis, refetch: refetchPerfis },
-      { data: consumoUsuario, error: errorConsumo, isLoading: isLoadingConsumo, refetch: refetchConsumo },
-      { data: refeicoesUsuario, error: errorRefeicoes, isLoading: isLoadingRefeicoes, refetch: refetchRefeicoes },
-   ] = useQueries({
-      queries: [
-         {
-            queryKey: ['usuarioInfo'],
-            queryFn: () => obterUsuarioService(),
-         },
-         {
-            queryKey: ['perfisUsuario'],
-            queryFn: () => obterPerfilService(),
-         },
-         {
-            queryKey: ['consumoAlimentos'],
-            queryFn: () =>
-               obterConsumoUsuarioService({
-                  dataInicio: criarStrData(-30),
-                  dataFim: criarStrData(30),
-               }),
-         },
-         {
-            queryKey: ['refeicoesUsuario'],
-            queryFn: () => obterRefeicaoService(),
-         },
-      ],
-   });
 
-   if (isLoadingUsuario || isLoadingPerfis || isLoadingConsumo || isLoadingRefeicoes) {
+   const { data: usuarioInfo, error: errorUsuario, isLoading: isLoadingUsuario, refetch: refetchUsuario } = useUsuarioInfo();
+   const { data: perfisUsuario, error: errorPerfis, isLoading: isLoadingPerfis, refetch: refetchPerfis } = usePerfisUsuario();
+   const { data: consumoUsuario, error: errorConsumo, isLoading: isLoadingConsumo, refetch: refetchConsumo } = useConsumoAlimentos();
+   const { data: refeicoesUsuario, error: errorRefeicoes, isLoading: isLoadingRefeicoes, refetch: refetchRefeicoes } = useRefeicoesUsuario();
+   const { data: alimentosFavoritos, error: errorAlimentosFavoritos, isLoading: isLoadingAlimentosFavoritos, refetch: refetchAlimentosFavoritos } = useAlimentosFavoritos();
+
+
+   if (isLoadingUsuario || isLoadingPerfis || isLoadingConsumo || isLoadingRefeicoes || isLoadingAlimentosFavoritos) {
       return <LoadingScreen loadingMessage="Carregando..." />;
    }
 
-   if (errorUsuario || errorPerfis || errorConsumo || errorRefeicoes) {
+   if (errorUsuario || errorPerfis || errorConsumo || errorRefeicoes || errorAlimentosFavoritos) {
 
       const tentarNovamente = () => {
          if (errorUsuario) refetchUsuario();
          if (errorPerfis) refetchPerfis();
          if (errorConsumo) refetchConsumo();
          if (errorRefeicoes) refetchRefeicoes();
+         if (errorAlimentosFavoritos) refetchAlimentosFavoritos();
       };
 
       return (

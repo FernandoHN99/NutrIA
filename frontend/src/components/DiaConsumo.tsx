@@ -22,10 +22,11 @@ interface DiaConsumoProps {
    infosDia: any[],
    refeicoesDiaAtivas: any[]
    perfilDia: { [key: string]: any }
-   navigation: any
+   navigation: any,
+   diaSelecionado: string
 }
 
-const DiaConsumo = ({ navigation, infosDia, perfilDia, refeicoesDiaAtivas }: DiaConsumoProps) => {
+const DiaConsumo = ({ navigation, infosDia, perfilDia, refeicoesDiaAtivas, diaSelecionado }: DiaConsumoProps) => {
 
    const macrosRefeicoes = somarMacrosDiaPorRefeicao(infosDia, refeicoesDiaAtivas);
    const refeicoes = Object.values(macrosRefeicoes);
@@ -37,34 +38,38 @@ const DiaConsumo = ({ navigation, infosDia, perfilDia, refeicoesDiaAtivas }: Dia
       const porcentagemKcal = arredondarValores((totalKcal / perfilDia.tmf) * 100);
 
       return (
-         <View
+         <TouchableOpacity
             key={refeicao.numero_refeicao}
-            style={[
-               styles.refeicaoContainer,
-               isLastItem && styles.refeicaoUltimoContainer,
-            ]}
+            onPress={() =>totalKcal > 0 && navigation.navigate('RefeicaoScreen', { macrosRefeicao, perfilDia, infosDia })}
          >
-            <View style={styles.refeicaoMainContent}>
-               <View style={styles.refeicaoLeftContent}>
-                  <View style={styles.iconeRefeicaoCircle}>
-                     {iconsRefeicoes[refeicao.numero_refeicao]}
+            <View
+               style={[
+                  styles.refeicaoContainer,
+                  isLastItem && styles.refeicaoUltimoContainer,
+               ]}
+            >
+               <View style={styles.refeicaoMainContent}>
+                  <View style={styles.refeicaoLeftContent}>
+                     <View style={styles.iconeRefeicaoCircle}>
+                        {iconsRefeicoes[refeicao.numero_refeicao]}
+                     </View>
+                     <View style={styles.refeicaoInfosContainer}>
+                        <Text style={styles.refeicaoNome}>{refeicao.nome_refeicao}</Text>
+                        <Text style={styles.refeicaoKcal}>
+                           {totalKcal} kcal - {porcentagemKcal}%
+                        </Text>
+                     </View>
                   </View>
-                  <View style={styles.refeicaoInfosContainer}>
-                     <Text style={styles.refeicaoNome}>{refeicao.nome_refeicao}</Text>
-                     <Text style={styles.refeicaoKcal}>
-                        {totalKcal} kcal - {porcentagemKcal}%
-                     </Text>
+                  <View style={styles.refeicaoRightContent}>
+                     <TouchableOpacity
+                        onPress={() => navigation.navigate('AddAlimentoScreen', { macrosRefeicao, diaSelecionado })}
+                     >
+                        <Ionicons name="add-circle" size={getResponsiveSizeHeight(3)} color={theme.colors.color05} />
+                     </TouchableOpacity>
                   </View>
-               </View>
-               <View style={styles.refeicaoRightContent}>
-                  <TouchableOpacity
-                     onPress={() => navigation.navigate('RefeicaoScreen', { macrosRefeicao, perfilDia, infosDia })}
-                  >
-                     <Ionicons name="add-circle" size={getResponsiveSizeHeight(3)} color={theme.colors.color05} />
-                  </TouchableOpacity>
                </View>
             </View>
-         </View>
+         </TouchableOpacity>
       );
    };
 

@@ -1,95 +1,273 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, FlatList } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import theme from '../styles/theme';
-import { getResponsiveSizeWidth, getResponsiveSizeHeight, hexToRgba } from '../utils/utils';
-import ProgressCircle from '../components/ProgressCircle';
-import { useNavigation } from '@react-navigation/native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import ProgressBar from '../components/ProgressBar';
-
-const RefeicaoScreen = ({ route }: { route: any }) => {
-   const [text, setText] = useState<string>('');
-   const [results, setResults] = useState<string[]>([]);
-
-   const handleSearch = (query: string) => {
-      setText(query);
-      // Aqui você pode filtrar os resultados da busca
-      // Exemplo de resultados de teste:
-      const filteredResults = mockData.filter((item) =>
-         item.toLowerCase().includes(query.toLowerCase())
-      );
-      setResults(filteredResults);
-   };
-
-   const mockData = ['Banana', 'Maçã', 'Laranja', 'Pão', 'Arroz', 'Feijão'];
+import { getResponsiveSizeWidth, getResponsiveSizeHeight, hexToRgba, capitalize, criarStrData, calcularMacrosPorPorcao } from '../utils/utils';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { buscarAlimentosService } from '../api/services/alimentoService';
+import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icons02 from 'react-native-vector-icons/MaterialIcons';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { favoritarAlimentoService } from '../api/services/alimentoFavoritoService';
+import { addAlimentoConsumidoService } from '../api/services/alimentoConsumoService';
+import { AddAlimentoConsumidoSchema } from '../api/schemas/alimentoConsumidoSchema';
+import ToastNotification from '../components/ToastNotification';
 
 
+const AddConsumoScreen = ({ route}: { route: any }) => {
+   const [nomeAlimentoBusca, setNomeAlimentoBusca] = useState<string>('');
+   const [resultados, setResultados] = useState<string[]>([]);
+   const [selectedTab, setSelectedTab] = useState<string>('favoritos');
+   const [showToast, setShowToast] = useState(false);
    const navigation = useNavigation();
-   const { nomeRefeicao, macrosRefeicao, perfilDia } = route.params;
+
+   const { macrosRefeicao, diaSelecionado } = route.params;
+
+   const queryClient = useQueryClient()
+   let cachedAlimentosFavoritos: any[] = queryClient.getQueryData(['alimentosFavoritos']) || [];
+
+   useEffect(() => {
+      if (nomeAlimentoBusca) {
+         if(selectedTab === 'favoritos') {
+            setSelectedTab('resultados');
+         }
+         const timeoutId = setTimeout(() => handleSearch(nomeAlimentoBusca), 300);
+         return () => clearTimeout(timeoutId);
+      }
+
+   }, [nomeAlimentoBusca]);
+
+   const { mutateAsync: favoritarAlimentoServiceFn } = useMutation({
+      mutationFn: favoritarAlimentoService,
+      onSuccess(data, variables) {
+         const alimentoId: number = variables.id_alimento;
+         const index = cachedAlimentosFavoritos.findIndex(af => af.alimento.id_alimento === alimentoId);
+         if (index !== -1) {
+            cachedAlimentosFavoritos.splice(index, 1);
+        } else {
+            cachedAlimentosFavoritos.push(data);
+        }
+        queryClient.setQueryData(['alimentosFavoritos'], cachedAlimentosFavoritos);
+      },
+   });
+
+   const { mutateAsync: addAlimentoConsumidoServiceFn } = useMutation({
+      mutationFn: addAlimentoConsumidoService,
+      onSuccess(retorno) {
+         setShowToast(true);
+         queryClient.setQueryData(['consumoAlimentos'], (data: any[]) =>{
+            return [...data, retorno];
+         });
+      },
+      onError(error) {
+         console.log(error);
+      }
+   });
+
+
+   async function handleFavotitarAlimento(id_alimento: number) {
+      await favoritarAlimentoServiceFn({ id_alimento });
+   }
+   async function handleAddAlimentoConsumido(alimento: any) {
+      const porcaoBase = alimento.tabelasNutricionais[0].porcao_padrao;
+      const qtdePorcao = 1;
+      const qdteUtilizada = porcaoBase * qtdePorcao;
+      const macrosBase = {
+         carboidrato: alimento.tabelasNutricionais[0].qtde_carboidrato,
+         proteina: alimento.tabelasNutricionais[0].qtde_proteina,
+         gordura: alimento.tabelasNutricionais[0].qtde_gordura,
+         alcool: alimento.tabelasNutricionais[0].qtde_alcool,
+         kcal: alimento.tabelasNutricionais[0].kcal,
+      }
+      const calculoMacros = calcularMacrosPorPorcao(
+         porcaoBase, qdteUtilizada, macrosBase
+      )
+      const bodyRequest: AddAlimentoConsumidoSchema = {
+         id_alimento: alimento.id_alimento,
+         id_prato: null,
+         dt_dia: diaSelecionado,
+         numero_refeicao: macrosRefeicao.numero_refeicao,
+         unidade_medida: alimento.tabelasNutricionais[0].unidade_medida,
+         porcao_padrao: 1,
+         qtde_utilizada: qdteUtilizada,
+         qtde_carboidrato: calculoMacros.qtdeCarboidrato,
+         qtde_proteina: calculoMacros.qtdeProteina,
+         qtde_gordura: calculoMacros.qtdeGordura,
+         qtde_alcool: calculoMacros.qtdeAlcool,
+         kcal: calculoMacros.qtdeKcal,
+      }
+      await addAlimentoConsumidoServiceFn(bodyRequest);
+   }
+
+   const handleSearch = async (nomeAlimento: string) => {
+      const alimentosBusca = await buscarAlimentosService({ nome: nomeAlimento });
+      setResultados(alimentosBusca);
+   };
 
    const handleGoBack = () => {
       navigation.goBack();
    };
 
-   return (
-      <View style={styles.mainPageContainer}>
-         <View style={styles.alimentosContainer}>
-            <Text style={styles.subtitulo}>Alimentos</Text>
-            <TextInput
-               style={styles.searchBar}
-               value={text}
-               onChangeText={handleSearch}
-               placeholder="Adcionar alimentos..."
-               placeholderTextColor={theme.colors.color04}
-            />
-            <View style={styles.alimentosContentContainer}>
-               {text && results.length > 0 ? (
-                  <FlatList
-                     data={results}
-                     keyExtractor={(item, index) => index.toString()}
-                     renderItem={({ item }) => (
-                        <Text style={styles.resultItem}>{item}</Text>
-                     )}
-                  />
-               ) : (
-                  // <Text style={styles.noResults}>Nenhum alimento encontrado</Text>
-                  null
-               )}
+   const renderAlimentos = (alimento: any, index: number) => {
+      const nomeAlimento = alimento.nome_alimento;
+      const kcal = alimento.tabelasNutricionais[0].kcal
+      const estadoAlimento = alimento.estado_alimento == 'PADRAO' ? '' : `, ${capitalize(alimento.estado_alimento)}`
+      const tbPorcaoPadrao = alimento.tabelasNutricionais[0].porcao_padrao;
+      return (
+         <View style={[styles.alimentoContainer, (resultados.length - 1) === index && styles.alimentoLastContainer]} key={`${alimento.id_alimento}-${index}`}>
+            <View style={[{ flex: 0.8 }]}>
+               <Text style={styles.infoAlimento}>{nomeAlimento}{estadoAlimento}</Text>
+               <Text style={styles.infoAlimento}>{kcal} kcal, {tbPorcaoPadrao}g, 1 Porção</Text>
             </View>
-            <View style={styles.alimentosContentContainer}>
-            </View>
+            {
+               cachedAlimentosFavoritos.some(af => af.alimento.id_alimento === alimento.id_alimento) ?
+                  <Icons02 style={styles.iconeAdd} name="favorite" size={getResponsiveSizeHeight(3.5)} onPress={() => handleFavotitarAlimento(alimento.id_alimento)} />
+                  : <Icons02 style={styles.iconeAdd} name="favorite-border" size={getResponsiveSizeHeight(3.5)} onPress={() => handleFavotitarAlimento(alimento.id_alimento)} />
+            }
+            <Icons02 style={styles.iconeAdd} name="add-circle" size={getResponsiveSizeHeight(3.5)}  onPress={()=> handleAddAlimentoConsumido(alimento)}/>
          </View>
+      );
+   }
+
+
+   const renderAlimentosFavoritos = (alimentoFavorito: any, index: number) => {
+      const nomeAlimento = alimentoFavorito.alimento.nome_alimento;
+      const kcal = alimentoFavorito.alimento.tabelasNutricionais[0].kcal;
+      const estadoAlimento = alimentoFavorito.alimento.estado_alimento == 'PADRAO' ? '' : `, ${capitalize(alimentoFavorito.estado_alimento)}`
+      const porcaoPadrao = alimentoFavorito.alimento.tabelasNutricionais[0].porcao_padrao;
+      return (
+         <View style={[styles.alimentoContainer, (cachedAlimentosFavoritos.length - 1) === index && styles.alimentoLastContainer]} key={`${alimentoFavorito.id_alimento}-${index}`}>
+            <View style={[{ flex: 0.8 }]}>
+               <Text style={styles.infoAlimento}>{nomeAlimento}{estadoAlimento}</Text>
+               <Text style={styles.infoAlimento}>{kcal} kcal, {porcaoPadrao}g, 1 Porção</Text>
+            </View>
+               <Icons02 style={styles.iconeAdd} name="favorite" size={getResponsiveSizeHeight(3.5)} onPress={() => handleFavotitarAlimento(alimentoFavorito.alimento.id_alimento)} />
+            <Icons02 style={styles.iconeAdd} name="add-circle" size={getResponsiveSizeHeight(3.5)} onPress={()=> handleAddAlimentoConsumido(alimentoFavorito.alimento)} />
+         </View>
+      );
+   }
+
+   return (
+      <View style={styles.mainContainer}>
+         <View style={styles.headerContainer}>
+            <Text style={styles.titulo}>{macrosRefeicao.nome_refeicao}</Text>
+            <Icons onPress={handleGoBack} style={styles.iconeFechar} name="close-circle" size={getResponsiveSizeHeight(3.5)} />
+         </View>
+         <TextInput
+            style={styles.searchBar}
+            value={nomeAlimentoBusca}
+            onChangeText={setNomeAlimentoBusca}
+            placeholder="Adicionar alimentos..."
+            placeholderTextColor={theme.colors.color05}
+         />
+         <View style={{width: '100%'}}>
+            <View style={styles.buttonsContainer}>
+               <TouchableOpacity 
+                  style={[styles.buttonContainer, selectedTab === 'resultados' && styles.buttonSelectedContainer]} 
+                  onPress={() => setSelectedTab('resultados')}>
+                  <Text
+                     style={[
+                        styles.subtitulo,
+                        selectedTab === 'resultados' && styles.selectedSubtitulo,
+                     ]}
+                  >
+                     Resultados da Busca
+                  </Text>
+               </TouchableOpacity>
+               <TouchableOpacity 
+                  style={[styles.buttonContainer, selectedTab === 'favoritos' && styles.buttonSelectedContainer]} 
+                  onPress={() => setSelectedTab('favoritos')}>
+                  <Text
+                     style={[
+                        styles.subtitulo,
+                        selectedTab === 'favoritos' && styles.selectedSubtitulo,
+                     ]}
+                  >
+                     Alimentos Favoritos
+                  </Text>
+               </TouchableOpacity>
+            </View>
+            {nomeAlimentoBusca && resultados.length > 0 && selectedTab == 'resultados' ?
+               (
+                  <View>
+                     <View style={styles.alimentosMainContainer} >
+                        <ScrollView showsVerticalScrollIndicator={false} style={{ height: '100%' }}  bounces={false} >
+                           {resultados.map(renderAlimentos)}
+                        </ScrollView>
+                     </View>
+                  </View>
+               )
+               : (selectedTab == 'favoritos') ?
+               (
+                  <View>
+                     <View style={styles.alimentosMainContainer} >
+                        <ScrollView showsVerticalScrollIndicator={false} style={{ height: '100%' }}  bounces={false} >
+                           {cachedAlimentosFavoritos.map(renderAlimentosFavoritos)}
+                        </ScrollView>
+                     </View>
+                  </View>
+               )
+               : (nomeAlimentoBusca && resultados.length == 0) ?
+               (
+                     <Text style={[
+                        styles.subtitulo, 
+                        { marginTop: getResponsiveSizeHeight(1), textAlign: 'center'}
+                        ]}>
+                           Nenhum resultado encontrado
+                     </Text>
+               )
+               : null
+            }
+         </View>
+         {showToast && (
+        <ToastNotification
+          message="Alimento Adicionado com Sucesso!"
+          onHide={() => setShowToast(false)}
+        />
+      )}
+
       </View>
    );
 };
 
 const styles = StyleSheet.create({
-   mainPageContainer: {
+   mainContainer: {
       flex: 1,
       alignItems: 'center',
       backgroundColor: theme.colors.backgroundColor,
    },
+   headerContainer: {
+      flexDirection: 'row',
+      width: '95%',
+      marginTop: getResponsiveSizeHeight(1.5),
+      marginBottom: getResponsiveSizeHeight(0.5),
+   },
    titulo: {
       fontFamily: 'NotoSans-Bold',
-      fontSize: getResponsiveSizeWidth(7),
+      fontSize: getResponsiveSizeWidth(6),
       color: theme.colors.color05,
       marginLeft: getResponsiveSizeWidth(3),
       marginVertical: getResponsiveSizeWidth(1),
-      textAlign: 'center',
+   },
+   iconeFechar: {
+      alignSelf: 'flex-start',
+      marginLeft: 'auto',
+      color: theme.colors.color05,
+   },
+   iconeAdd: {
+      justifyContent: 'center',
+      alignSelf: 'center',
+      color: theme.colors.color05,
    },
    subtitulo: {
       fontFamily: 'NotoSans-Bold',
-      fontSize: getResponsiveSizeWidth(5),
       color: theme.colors.color05,
-      marginLeft: getResponsiveSizeWidth(3),
-      marginVertical: getResponsiveSizeWidth(1),
+      marginVertical: 'auto',
    },
-   alimentosContainer: {
-      marginTop: getResponsiveSizeHeight(1),
-   },
-   alimentosContentContainer: {
-   },
+   selectedSubtitulo: {
+      color: theme.colors.color01,
+    },
    searchBar: {
+      width: '95%',
       fontFamily: 'NotoSans-Regular',
       fontSize: getResponsiveSizeWidth(3.5),
       minHeight: getResponsiveSizeHeight(5),
@@ -100,12 +278,51 @@ const styles = StyleSheet.create({
       color: theme.colors.color05,
       paddingVertical: getResponsiveSizeHeight(1.5),
    },
-   resultItem: {
-      padding: 10,
-      borderBottomWidth: 1,
-      borderBottomColor: '#ccc',
+   alimentosMainContainer: {
+      marginTop: getResponsiveSizeHeight(1),
+      marginBottom: getResponsiveSizeHeight(30),
+      width: '99%',
+      flexDirection: 'column',
+      marginHorizontal: 'auto',
    },
-
+   alimentoContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      backgroundColor: theme.colors.backgroundColor,
+      padding: getResponsiveSizeWidth(3),
+      borderTopWidth: 2,
+      borderLeftWidth: 2,
+      borderRightWidth: 2,
+      borderColor: theme.colors.color05,
+   },
+   alimentoLastContainer: {
+      borderBottomWidth: 2,
+   },
+   infoAlimento: {
+      fontFamily: 'NotoSans-SemiBold',
+      fontSize: getResponsiveSizeWidth(4),
+      color: theme.colors.color05,
+   },
+   buttonsContainer: {
+      marginVertical: getResponsiveSizeHeight(1),
+      minHeight: getResponsiveSizeHeight(5),
+      flexDirection: 'row',
+      justifyContent: 'space-evenly',
+      width: '100%',
+      borderColor: theme.colors.color05,
+   },
+   buttonContainer: {
+      padding: getResponsiveSizeWidth(3),
+      borderWidth: 2,
+      borderRadius: getResponsiveSizeWidth(10),
+      borderColor: theme.colors.color05,
+   },
+   buttonSelectedContainer: {
+      borderWidth: 2,
+      borderRadius: 20,
+      borderColor: theme.colors.color05,
+      backgroundColor: theme.colors.color05,
+   }
 });
 
-export default RefeicaoScreen;
+export default AddConsumoScreen;

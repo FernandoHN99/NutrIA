@@ -92,20 +92,33 @@ export const criarData = (dias: number = 0, meses: number = 0, anos: number = 0,
 
 export const roundJsonValues = (jsonData: { [key: string]: any }, casasDecimais: number = 0): { [key: string]: any } => {
    const jsonArredondado: { [key: string]: any } = {};
- 
+
    Object.keys(jsonData).forEach(key => {
-     const value = jsonData[key];
- 
-     if (typeof value === 'number') {
-       jsonArredondado[key] = parseFloat(value.toFixed(casasDecimais));
-     } else if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-       jsonArredondado[key] = roundJsonValues(value, casasDecimais);
-     } else {
-       jsonArredondado[key] = value;
-     }
+      const value = jsonData[key];
+
+      if (typeof value === 'number') {
+         jsonArredondado[key] = parseFloat(value.toFixed(casasDecimais));
+      } else if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+         jsonArredondado[key] = roundJsonValues(value, casasDecimais);
+      } else {
+         jsonArredondado[key] = value;
+      }
    });
- 
+
    return jsonArredondado;
- };
+};
 
 
+export const calcularMacrosPorPorcao = (
+   porcaoBase: number, 
+   qtdeUtilizada: number, 
+   macrosBase: { [key: string]: number }) => {
+      const qtdeCarboidrato = (macrosBase.carboidrato * qtdeUtilizada) / porcaoBase;
+      const qtdeProteina = (macrosBase.proteina * qtdeUtilizada) / porcaoBase;
+      const qtdeGordura = (macrosBase.gordura * qtdeUtilizada) / porcaoBase;
+      const qtdeAlcool = (macrosBase.alcool * qtdeUtilizada) / porcaoBase;
+      const qtdeKcal = (macrosBase.kcal * qtdeUtilizada) / porcaoBase;
+
+      return { qtdeCarboidrato, qtdeProteina, qtdeGordura, qtdeAlcool, qtdeKcal };
+      
+   };

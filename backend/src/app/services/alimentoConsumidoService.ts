@@ -31,7 +31,8 @@ export default class ControleCaloriasService{
 
    public async cadastrarAlimentoConsumido(cadastrarConsumoAlimentoJSON: criarAlimentoConsumidoObject): Promise<AlimentoConsumido>{
       let novoAlimentoConsumido = new AlimentoConsumido(cadastrarConsumoAlimentoJSON);
-      return await novoAlimentoConsumido.save();
+      await novoAlimentoConsumido.save();
+      return await this.controleCaloriasRepo.obterAlimentoConsumidoPorId(novoAlimentoConsumido.id_alimento_consumido);
    }
 
    public async atualizarAlimentoConsumido(atualizarAlimentoConsumidoJSON: atualizarAlimentoConsumidoObject): Promise<AlimentoConsumido>{
@@ -39,6 +40,9 @@ export default class ControleCaloriasService{
          atualizarAlimentoConsumidoJSON.id_alimento_consumido, 
          atualizarAlimentoConsumidoJSON.id_usuario
       );
+      if(!alimentoConsumido){
+         JsonReponseErro.lancar(400, 'Alimento consumido não encontrado');
+      }
       alimentoConsumido.atualizarDados(atualizarAlimentoConsumidoJSON);
       return await alimentoConsumido.save();
    }

@@ -1,5 +1,5 @@
 import api from '../../config/apiService';
-import { obterConsumoUsuarioSchema } from '../schemas/alimentoConsumidoSchema';
+import { AddAlimentoConsumidoSchema, obterConsumoUsuarioSchema } from '../schemas/alimentoConsumidoSchema';
 
 export const obterConsumoUsuarioService = async (paramsConsumo: obterConsumoUsuarioSchema) => {
    try {
@@ -9,6 +9,15 @@ export const obterConsumoUsuarioService = async (paramsConsumo: obterConsumoUsua
             dataFim: paramsConsumo.dataFim
          }
       });
+      return response.data.data;
+   } catch (error) {
+      throw (error as any)?.response?.data;
+   }
+};
+
+export const addAlimentoConsumidoService = async (bodyRequest: AddAlimentoConsumidoSchema) => {
+   try {
+      const response = await api.post(`/alimento-consumido/criar`, { ...bodyRequest });
       return response.data.data;
    } catch (error) {
       throw (error as any)?.response?.data;

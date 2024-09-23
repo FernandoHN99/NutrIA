@@ -7,18 +7,17 @@ import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ProgressBar from '../components/ProgressBar';
 import { filtrarConsumoRefeicao } from '../utils/formatters';
-import { color } from 'react-native-elements/dist/helpers';
 
 const RefeicaoScreen = ({ route }: { route: any }) => {
 
    const navigation = useNavigation();
    const { macrosRefeicao, perfilDia, infosDia } = route.params;
-
    const consumoRefeicao = filtrarConsumoRefeicao(infosDia, macrosRefeicao.numero_refeicao);
 
    const handleGoBack = () => {
       navigation.goBack();
    };
+
 
    return (
       <View style={{ backgroundColor: theme.colors.backgroundColor, flex: 1 }}>
@@ -95,10 +94,16 @@ const RefeicaoScreen = ({ route }: { route: any }) => {
                         <View style={styles.alimentosContainer}>
                            <Text style={styles.subtitulo}>Alimentos Consumidos</Text>
                            <View style={styles.alimentosContentContainer}>
-                              {consumoRefeicao.map((alimentoConsumido) => (
-                                 <View style={styles.alimentoContainer} key={alimentoConsumido.dtt_alimento_consumido}>
+                              {consumoRefeicao.map((alimentoConsumido, index) => (
+                                 <View style={[
+                                    styles.alimentoContainer,
+                                    (consumoRefeicao.length - 1) === index && styles.alimentoLastContainer,
+                                 ]} key={alimentoConsumido.dtt_alimento_consumido}>
                                     <View style={styles.alimentoContent}>
-                                       <Text style={[styles.textNomeAlimento]}>{alimentoConsumido.qtde_utilizada}g, {alimentoConsumido.alimento.nome_alimento}{alimentoConsumido.alimento.estado_alimento != 'PADRAO' ? ` (${capitalize(alimentoConsumido.alimento.estado_alimento)})` : ''}</Text>
+                                       <Text style={[styles.textNomeAlimento]}>
+                                          {alimentoConsumido.alimento.nome_alimento}
+                                          {alimentoConsumido.alimento.estado_alimento != 'PADRAO' ? ` (${capitalize(alimentoConsumido.alimento.estado_alimento)})` : ''}
+                                          ,{'\u00A0'}{alimentoConsumido.qtde_utilizada}g</Text>
                                        <View style={{ flexDirection: 'row'}}>
                                           <Text style={styles.textInfoAlimento}>C: {arredondarValores(alimentoConsumido.qtde_carboidrato)}g   </Text>
                                           <Text style={styles.textInfoAlimento}>P: {arredondarValores(alimentoConsumido.qtde_proteina)}g   </Text>
@@ -112,7 +117,7 @@ const RefeicaoScreen = ({ route }: { route: any }) => {
                         </View>
                      ) : (
                         <View style={styles.semAlimentosContainer}>
-                           <Text style={styles.semAlimentosMsg}>Nenhum alimento registrado</Text>
+                           <Text style={styles.semAlimentosMsg}>Nenhum alimento consumido </Text>
                            <TouchableOpacity style={styles.buttonAdicionar} onPress={() => console.log('Adicionar')}>
                               <Text style={styles.semAlimentosMsgButton}>Adicionar alimento</Text>
                            </TouchableOpacity>
@@ -190,6 +195,7 @@ const styles = StyleSheet.create({
    },
    alimentoMainContainer: {
       marginTop: getResponsiveSizeHeight(1),
+      marginBottom: getResponsiveSizeHeight(4),
    },
    alimentosContainer: {
       marginTop: getResponsiveSizeHeight(1),
@@ -208,6 +214,14 @@ const styles = StyleSheet.create({
       paddingHorizontal: getResponsiveSizeWidth(5),
       borderColor: theme.colors.color05,
       borderBottomWidth: 2,
+   },
+   alimentoLastContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingVertical: getResponsiveSizeWidth(3),
+      paddingHorizontal: getResponsiveSizeWidth(5),
+      borderBottomWidth: 0,
    },
    alimentoContent: {
       // backgroundColor: 'blue' 

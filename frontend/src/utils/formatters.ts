@@ -86,7 +86,7 @@ export const filtrarRefeicoesAtivas = (refeicoes: any[] | undefined) => {
    return refeicoes ? refeicoes.filter(refeicao => refeicao.ativa === true) : null;
 }
 
-export const filtrarConsumoDia = (consumoTotal: any[] | undefined, diaSelecionado: string) => {
+export const filtrarConsumoDia = (consumoTotal: any[] , diaSelecionado: string) => {
    return consumoTotal ? consumoTotal.filter(consumoDia => consumoDia.dt_dia == diaSelecionado) : null;
 }
 

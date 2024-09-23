@@ -10,6 +10,22 @@ export default class AlimentoConsumidoRepositorio {
       this.repositorio = AppDataSource.getRepository(AlimentoConsumido);
    }
 
+   public async obterAlimentoConsumidoPorId(idAlimentoConsumido: number): Promise<AlimentoConsumido> {
+      return await this.repositorio.createQueryBuilder('ac')
+         .select([
+            'ac',
+            'a.nome_alimento',
+            'a.estado_alimento',
+            'r.nome_refeicao',
+            'tb'
+         ])
+         .innerJoin('ac.alimento', 'a')
+         .innerJoin('ac.refeicao', 'r')
+         .innerJoin('a.tabelasNutricionais', 'tb')
+         .where('ac.id_alimento_consumido = :idAlimentoConsumido', { idAlimentoConsumido })
+         .getOne();
+   }
+
    public async obterAlimentoConsumido(idAlimentoConsumido: number, usuarioID: string): Promise<AlimentoConsumido> {
       return await this.repositorio.findOne({ 
          where: { 

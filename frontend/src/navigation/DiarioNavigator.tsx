@@ -6,6 +6,8 @@ import PerfilScreen from '../screens/PerfilScreen';
 import theme from '../styles/theme';
 import HomeNavigator from './HomeNavigator';
 import RefeicaoScreen from '../screens/RefeicaoScreen';
+import AddConsumoScreen from '../screens/AddConsumoScreen';
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -39,6 +41,14 @@ const DiarioNavigator = () => {
          <Stack.Screen
             name="RefeicaoScreen"
             component={RefeicaoScreen}
+            options={{
+               headerShown: false,
+               animation: 'slide_from_bottom',
+            }}
+         />
+         <Stack.Screen
+            name="AddAlimentoScreen"
+            component={AddConsumoScreen}
             options={{
                headerShown: false,
                animation: 'slide_from_bottom',
