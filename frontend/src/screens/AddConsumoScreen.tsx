@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
    },
    titulo: {
       fontFamily: 'NotoSans-Bold',
-      fontSize: getResponsiveSizeWidth(6),
+      fontSize: getResponsiveSizeWidth(5.5),
       color: theme.colors.color05,
       marginLeft: getResponsiveSizeWidth(3),
       marginVertical: getResponsiveSizeWidth(1),
@@ -262,6 +262,7 @@ const styles = StyleSheet.create({
       fontFamily: 'NotoSans-Bold',
       color: theme.colors.color05,
       marginVertical: 'auto',
+      fontSize: 12,
    },
    selectedSubtitulo: {
       color: theme.colors.color01,
@@ -269,7 +270,7 @@ const styles = StyleSheet.create({
    searchBar: {
       width: '95%',
       fontFamily: 'NotoSans-Regular',
-      fontSize: getResponsiveSizeWidth(3.5),
+      fontSize: 12,
       minHeight: getResponsiveSizeHeight(5),
       borderRadius: getResponsiveSizeWidth(10),
       borderColor: theme.colors.color05,
@@ -300,7 +301,7 @@ const styles = StyleSheet.create({
    },
    infoAlimento: {
       fontFamily: 'NotoSans-SemiBold',
-      fontSize: getResponsiveSizeWidth(4),
+      fontSize: 13,
       color: theme.colors.color05,
    },
    buttonsContainer: {
@@ -312,7 +313,8 @@ const styles = StyleSheet.create({
       borderColor: theme.colors.color05,
    },
    buttonContainer: {
-      padding: getResponsiveSizeWidth(3),
+      paddingVertical: getResponsiveSizeWidth(2),
+      paddingHorizontal: getResponsiveSizeWidth(1.5),
       borderWidth: 2,
       borderRadius: getResponsiveSizeWidth(10),
       borderColor: theme.colors.color05,

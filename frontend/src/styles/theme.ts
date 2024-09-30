@@ -10,7 +10,7 @@ const theme = {
       color05: '#204e4a',
       white: '#ffffff',
       black: '#000000',
-      backgroundColor: '#CAD8CF', // hexToRgba('#297045', '0.2')
+      backgroundColor: '#f5f4f4', // hexToRgba('#297045', '0.2') = '#CAD8CF'
       headerColor: '#79A48A' // hexToRgba(theme.colors.color04, '0.5'),
    },
    fonts: {

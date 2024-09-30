@@ -5,13 +5,13 @@ meta {
 }
 
 get {
-  url: {{backend_url}}:{{backend_port}}/nutria/alimento/buscar
+  url: {{backend_url}}:{{backend_port}}/nutria/alimento/buscar?nome=Arroz
   body: json
   auth: bearer
 }
 
 query {
-  ~nome: ei
+  nome: Arroz
   ~pegar: 1
   ~pular: 1
 }

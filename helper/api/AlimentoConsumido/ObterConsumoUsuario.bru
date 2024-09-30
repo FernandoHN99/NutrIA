@@ -5,14 +5,14 @@ meta {
 }
 
 get {
-  url: {{backend_url}}:{{backend_port}}/nutria/alimento-consumido/usuario?dataInicio=09/07/2021&dataFim=09/07/2025
+  url: {{backend_url}}:{{backend_port}}/nutria/alimento-consumido/usuario?dataInicio=2024-09-21&dataFim=2024-09-23
   body: json
   auth: bearer
 }
 
 query {
-  dataInicio: 09/07/2021
-  dataFim: 09/07/2025
+  dataInicio: 2024-09-21
+  dataFim: 2024-09-23
 }
 
 auth:bearer {

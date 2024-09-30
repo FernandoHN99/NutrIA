@@ -77,6 +77,7 @@ const styles = StyleSheet.create({
    text: {
       color: theme.colors.color01,
       fontSize: 16,
+      textAlign: 'center',
    },
 });
 
