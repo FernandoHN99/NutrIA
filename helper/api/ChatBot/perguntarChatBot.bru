@@ -1,0 +1,21 @@
+meta {
+  name: perguntarChatBot
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{backend_url}}:{{backend_port}}/nutria/chatbot/perguntar
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{tokenBearer}}
+}
+
+body:json {
+  {
+    "prompt_usuario": "ola como vai?"
+  }
+}

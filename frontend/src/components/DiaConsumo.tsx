@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Ionicons from '@expo/vector-icons/MaterialIcons';
 import Ionicons02 from '@expo//vector-icons/Feather';
 import Ionicons03 from '@expo//vector-icons/MaterialCommunityIcons';
+import Ionicons04 from '@expo//vector-icons/FontAwesome6';
 import { arredondarValores, getResponsiveSizeHeight, getResponsiveSizeWidth, hexToRgba } from '../utils/utils';
 import theme from '../styles/theme';
 import { somarMacrosDiaPorRefeicao } from '../utils/formatters';
@@ -16,6 +17,7 @@ const iconsRefeicoes: { [key: number]: JSX.Element } = {
    3: <Ionicons02 name="coffee" size={ICON_SIZE} color={ICON_COLOR} />,
    4: <Ionicons02 name="sunset" size={ICON_SIZE} color={ICON_COLOR} />,
    5: <Ionicons03 name="weather-night" size={ICON_SIZE} color={ICON_COLOR} />,
+   6: <Ionicons03 name="food-apple-outline" size={ICON_SIZE} color={ICON_COLOR} />,
 };
 
 interface DiaConsumoProps {
@@ -51,7 +53,7 @@ const DiaConsumo = ({ navigation, infosDia, perfilDia, refeicoesDiaAtivas, diaSe
                <View style={styles.refeicaoMainContent}>
                   <View style={styles.refeicaoLeftContent}>
                      <View style={styles.iconeRefeicaoCircle}>
-                        {iconsRefeicoes[refeicao.numero_refeicao]}
+                        {refeicao.numero_refeicao < 6 ? iconsRefeicoes[refeicao.numero_refeicao] : iconsRefeicoes[6] }
                      </View>
                      <View style={styles.refeicaoInfosContainer}>
                         <Text style={styles.refeicaoNome}>{refeicao.nome_refeicao}</Text>

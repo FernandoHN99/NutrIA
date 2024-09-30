@@ -21,8 +21,8 @@ const BottomTabs = () => {
         headerShown: false,
         tabBarStyle: {
           backgroundColor: theme.colors.backgroundColor,
-          paddingBottom: 10, // Aumenta o padding na parte inferior
-          height: 70, // Aumenta a altura da barra de navegação
+          paddingBottom: 25,
+          height: 70,
         },
         tabBarIcon: ({ focused, color, size }) => {
           let iconName: 

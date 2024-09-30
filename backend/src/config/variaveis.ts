@@ -13,6 +13,8 @@ export const SERVICE_KEY: string = process.env.SERVICE_KEY ?? '';
 export const API_EXTERNAL_URL: string = process.env.API_EXTERNAL_URL ?? '';
 export const JWT_SECRET: string = process.env.JWT_SECRET ?? '';
 
+export const OPEN_AI_API_KEY: string = process.env.OPEN_AI_API_KEY ?? '';
+
 
 export const tiposDeCartao: Array<string> = ['MACROS', 'CALORIAS', 'DIETA FLEXIVEL'];
 export const listaRotasSemAuth: Array<string> = ['/nutria/usuario/criar', '/nutria/usuario/login', '/nutria/usuario/refresh-token'];

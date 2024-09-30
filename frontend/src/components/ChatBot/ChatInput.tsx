@@ -5,7 +5,7 @@ import { getResponsiveSizeHeight, getResponsiveSizeWidth, hexToRgba } from '../.
 import Icon from 'react-native-vector-icons/Ionicons';
 
 interface ChatInputProps {
-   onSubmit: (userAnswer: string) => void;
+   onSubmit: (userAnswer: string) => any;
 }
 
 const ChatInput: React.FC<ChatInputProps> = ({ onSubmit }) => {

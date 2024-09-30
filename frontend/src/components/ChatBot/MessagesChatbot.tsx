@@ -19,6 +19,8 @@ const styles = StyleSheet.create({
       marginVertical: getResponsiveSizeHeight(1),
       alignSelf: 'flex-start',
       maxWidth: '80%',
+      borderWidth: 1,
+      borderColor: theme.colors.color04,
    },
    userMessage: {
       backgroundColor: theme.colors.color02,
@@ -27,11 +29,14 @@ const styles = StyleSheet.create({
       marginVertical: getResponsiveSizeHeight(1),
       alignSelf: 'flex-end',
       maxWidth: '80%',
+      borderWidth: 1,
+      borderColor: theme.colors.color04,
    },
    textMessage: {
       color: theme.colors.black,
       fontFamily: 'NotoSans-Regular',
       fontSize: getResponsiveSizeWidth(3.7),
+      
    }
 });
 
