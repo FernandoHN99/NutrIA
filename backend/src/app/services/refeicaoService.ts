@@ -3,6 +3,8 @@ import Refeicao from "../entities/refeicao";
 import { criarRefeicaoObject } from "../schemas/refeicao/criarRefeicaoSchema";
 import { JsonReponseErro } from "../../utils/jsonReponses";
 import { atualizarRefeicaoObject } from "../schemas/refeicao/atualizarRefeicaoSchema";
+import { listaNomeRefeicoesBase } from "../../config/variaveis";
+import Util from "../../utils/util";
 
 export default class RefeicaoService{
    
@@ -34,6 +36,22 @@ export default class RefeicaoService{
       let refeicaoAtual = await this.obterRefeicao(atualizarRefeicaoDados.id_usuario, atualizarRefeicaoDados.numero_refeicao);
       refeicaoAtual.atualizar(atualizarRefeicaoDados);
       return await refeicaoAtual.save();
+   }
+
+   public async criarRefeicoesUsuario(usuarioID: string): Promise<Refeicao[]> {
+      const listaRefeicoes = this.criarListaRefeicoes(usuarioID);
+      await this.refeicaoRepo.criarRefeicoesUsuario(listaRefeicoes);
+      return listaRefeicoes;
+   }
+
+   private criarListaRefeicoes(usuarioID: string): Refeicao[] {
+      const listaRefeicoesBase: Refeicao[] = [];
+      let refeicaoObj: criarRefeicaoObject;
+      listaNomeRefeicoesBase.forEach((nomeRefeicao, index) => {
+         refeicaoObj = { id_usuario: usuarioID, nome_refeicao: nomeRefeicao, ativa: true, numero_refeicao: (index+1), dt_criacao: Util.criarStrData() };
+         listaRefeicoesBase.push(new Refeicao(refeicaoObj));
+      });
+      return listaRefeicoesBase;
    }
 
 }

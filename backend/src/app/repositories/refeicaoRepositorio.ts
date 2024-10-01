@@ -21,4 +21,8 @@ export default class RefeicaoRepositorio {
       return await this.repositorio.findOne({ where: { id_usuario, numero_refeicao }});
    }
 
+   public async criarRefeicoesUsuario(listaRefeicoes: Refeicao[]): Promise<Refeicao> {
+      return await this.repositorio.insert(listaRefeicoes);
+   }
+
 }
