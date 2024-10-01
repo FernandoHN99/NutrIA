@@ -13,7 +13,8 @@ const MessagesChatbot = ({ text, user }: { text: string, user: string }) => (
 
 const styles = StyleSheet.create({
    botMessage: {
-      backgroundColor: hexToRgba(theme.colors.color04, '0.5'),
+      // backgroundColor: hexToRgba(theme.colors.color04, '0.5'),
+      backgroundColor: '#8FB29D',
       padding: getResponsiveSizeWidth(4),
       borderRadius: getResponsiveSizeWidth(10),
       marginVertical: getResponsiveSizeHeight(1),

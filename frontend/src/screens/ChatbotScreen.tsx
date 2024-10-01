@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, ScrollView, StyleSheet, KeyboardAvoidingView, Platform, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { ImageBackground, Dimensions, View, ScrollView, StyleSheet, KeyboardAvoidingView, Platform, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import theme from '../styles/theme';
 import { getResponsiveSizeWidth, getResponsiveSizeHeight, hexToRgba } from '../utils/utils';
 import MessagesChatbot from '../components/ChatBot/MessagesChatbot';
@@ -16,7 +16,7 @@ const ChatbotScreen = () => {
 
    const scrollViewRef = useRef<ScrollView>(null);
    const [text, setText] = useState<string>('');
-   const { data, loading, error, fazerPergunta} = useFazerPergunta(); // Usando o hook
+   const { data, loading, error, fazerPergunta } = useFazerPergunta();
    const [messages, setMessages] = useState<message[]>(
       [
          {
@@ -28,7 +28,7 @@ const ChatbotScreen = () => {
    );
 
    const handleSendMessage = (userMessage: string) => {
-      if(userMessage.trim() === '') return;
+      if (userMessage.trim() === '') return;
       setMessages([...messages, {
          _id: Math.random(),
          text: userMessage,
@@ -38,19 +38,19 @@ const ChatbotScreen = () => {
       fazerPergunta(userMessage);
    };
 
-      useEffect(() => {
-         if (data) {
-            setMessages(prevMessages => [
-               ...prevMessages,
-               { _id: Math.random(), text: data, user: "NutrIA" }
-            ]);
-         } else if (error) {
-            setMessages(prevMessages => [
-               ...prevMessages,
-               { _id: Math.random(), text: "Desculpe, ocorreu um erro ao processar sua solicitação.", user: "NutrIA" }
-            ]);
-         }
-      }, [data, error]);
+   useEffect(() => {
+      if (data) {
+         setMessages(prevMessages => [
+            ...prevMessages,
+            { _id: Math.random(), text: data, user: "NutrIA" }
+         ]);
+      } else if (error) {
+         setMessages(prevMessages => [
+            ...prevMessages,
+            { _id: Math.random(), text: "Desculpe, ocorreu um erro ao processar sua solicitação.", user: "NutrIA" }
+         ]);
+      }
+   }, [data, error]);
 
    return (
       <KeyboardAvoidingView
@@ -62,34 +62,39 @@ const ChatbotScreen = () => {
             ref={scrollViewRef}
             contentContainerStyle={styles.chatContainer}
             onContentSizeChange={() => scrollViewRef.current?.scrollToEnd({ animated: true })}
+            // style={styles.scrollview}
          >
             {messages.map(message => (
                <MessagesChatbot key={message._id} text={message.text} user={message.user} />
             ))}
          </ScrollView>
+         {/* <ImageBackground
+            style={[styles.fixed, styles.backgroundImage]} 
+            source={require('../../assets/IconNutri.png')}
+            resizeMode="cover"
+         /> */}
          <View style={styles.inputContainer}>
-         {
-            loading ? 
-               <ActivityIndicator size={'large'} color={theme.colors.color05} />
-            : (
-            <>
-               <TextInput
-                  style={styles.textInput}
-                  value={text}
-                  onChangeText={setText}
-                  placeholder="Digite aqui..."
-                  placeholderTextColor={theme.colors.color04}
-                  multiline
-                  scrollEnabled={false}
-                  
-                  />
-               <TouchableOpacity onPress={() => handleSendMessage(text)} style={styles.sendButton}>
-                  <Icon name="send-outline" size={24} color={theme.colors.color01} />
-               </TouchableOpacity>
-            </>
-            )
-         }
-      </View>
+            {
+               loading ?
+                  <ActivityIndicator size={'large'} color={theme.colors.color05} />
+                  : (
+                     <>
+                        <TextInput
+                           style={styles.textInput}
+                           value={text}
+                           onChangeText={setText}
+                           placeholder="Digite aqui..."
+                           placeholderTextColor={theme.colors.color04}
+                           multiline
+                           scrollEnabled={false}
+                        />
+                        <TouchableOpacity onPress={() => handleSendMessage(text)} style={styles.sendButton}>
+                           <Icon name="send-outline" size={24} color={theme.colors.color01} />
+                        </TouchableOpacity>
+                     </>
+                  )
+            }
+         </View>
       </KeyboardAvoidingView>
    );
 };
@@ -132,6 +137,26 @@ const styles = StyleSheet.create({
       color: theme.colors.color05,
       paddingVertical: getResponsiveSizeHeight(1.5),
    },
+   // backgroundImage: {
+   //    width: Dimensions.get('window').width,
+   //    height: Dimensions.get('window').height,
+   //    opacity: 0.4, // Diminuindo a opacidade para evitar que a imagem atrapalhe o conteúdo
+   //    zIndex: -1
+   // },
+   // fixed: {
+   //    position: "absolute", // Ainda mantemos o position absolute
+   //    top: '42%', // Centraliza verticalmente
+   //    left: '50%', // Centraliza horizontalmente
+   //    transform: [
+   //       { translateX: -Dimensions.get('window').width/2 }, // Metade da largura da imagem (150 / 2)
+   //       { translateY: -Dimensions.get('window').height/2 }  // Metade da altura da imagem (150 / 2)
+   //    ], //
+   // },
+   // scrollview: {
+   //    backgroundColor: 'transparent'
+   // }
 });
+
+
 
 export default ChatbotScreen;

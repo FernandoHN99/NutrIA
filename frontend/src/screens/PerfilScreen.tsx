@@ -3,17 +3,17 @@ import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-nati
 import Icon from 'react-native-vector-icons/Ionicons';
 import theme from '../styles/theme';
 
-const PerfilScreen = () => {
+const PerfilScreen = ({navigation}: {navigation: any}) => {
    const menuItems = [
       { title: 'Meus dados e metas', action: () => console.log('Meus dados e metas') },
       { title: 'Comidas favoritas' },
       { title: 'Personalizar refeições' },
-      { title: 'Sobre nós' },
+      { title: 'Sobre nós', action: () => navigation.push('AboutUsScreen') },
       { title: 'Política de privacidade' },
    ];
 
    return (
-      <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.container}>
          <Text style={styles.header}>Informações gerais</Text>
          {menuItems.map((item, index) => (
             <TouchableOpacity key={index} style={styles.menuItem} onPress={item.action}>
@@ -21,7 +21,7 @@ const PerfilScreen = () => {
                <Icon name="chevron-forward-outline" size={20} color={theme.colors.color05} />
             </TouchableOpacity>
          ))}
-      </ScrollView>
+      </View>
    );
 };
 
