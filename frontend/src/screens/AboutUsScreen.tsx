@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
    },
    title: {
       flex: 0.95,
-      fontSize: 22,
+      fontSize: 20,
       fontWeight: 'bold',
       color: theme.colors.color05,
       textAlign: 'center',

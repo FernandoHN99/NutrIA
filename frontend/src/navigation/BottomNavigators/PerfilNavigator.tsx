@@ -1,9 +1,9 @@
 import React from 'react';
-import HomeScreen from '../screens/HomeScreen';
+import HomeScreen from '../../screens/HomeScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import AboutUsScreen from '../screens/AboutUsScreen';
-import PerfilScreen from '../screens/PerfilScreen';
-import theme from '../styles/theme';
+import AboutUsScreen from '../../screens/AboutUsScreen';
+import PerfilScreen from '../../screens/PerfilScreen';
+import PoliticaPrivacidadeScreen from '../../screens/PoliticaPrivacidadeScreen';
 const Stack = createNativeStackNavigator();
 
 const PerfilNavigator = () => {
@@ -18,6 +18,14 @@ const PerfilNavigator = () => {
          <Stack.Screen
             name="AboutUsScreen"
             component={AboutUsScreen}
+            options={{ 
+               headerShown: false,
+               animation: 'slide_from_right',
+            }}
+         />
+         <Stack.Screen
+            name="PoliticaPrivacidadeScreen"
+            component={PoliticaPrivacidadeScreen}
             options={{ 
                headerShown: false,
                animation: 'slide_from_right',

@@ -1,19 +1,15 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import EvolucaoScreen from '../screens/EvolucaoScreen';
-import PerfilNavigator from './PerfilNavigator';
-import theme from '../styles/theme';
-import HomeNavigator from './HomeNavigator';
-import RefeicaoScreen from '../screens/RefeicaoScreen';
-import AddConsumoScreen from '../screens/AddConsumoScreen';
+import EvolucaoScreen from '../../screens/EvolucaoScreen';
+import PerfilNavigator from '../BottomNavigators/PerfilNavigator';
+import theme from '../../styles/theme';
+import HomeNavigator from '../BottomNavigators/HomeNavigator';
 import Icon from '@expo/vector-icons/Ionicons';
 
 
 const Tab = createBottomTabNavigator();
-const Stack = createNativeStackNavigator();
 
-const BottomTabs = () => {
+const BottomTabNavigator = () => {
    return (
       <Tab.Navigator
          initialRouteName='Home'
@@ -21,7 +17,8 @@ const BottomTabs = () => {
             headerShown: false,
             tabBarStyle: {
                backgroundColor: theme.colors.backgroundColor,
-               paddingBottom: 25,
+               paddingTop: 10,
+               paddingBottom: 13,
                height: 70,
             },
             tabBarIcon: ({ focused, color, size }) => {
@@ -54,32 +51,4 @@ const BottomTabs = () => {
    );
 };
 
-const DiarioNavigator = () => {
-   return (
-      <Stack.Navigator>
-         <Stack.Screen
-            name="BottomTabs"
-            component={BottomTabs}
-            options={{ headerShown: false }}
-         />
-         <Stack.Screen
-            name="RefeicaoScreen"
-            component={RefeicaoScreen}
-            options={{
-               headerShown: false,
-               animation: 'slide_from_bottom',
-            }}
-         />
-         <Stack.Screen
-            name="AddAlimentoScreen"
-            component={AddConsumoScreen}
-            options={{
-               headerShown: false,
-               animation: 'slide_from_bottom',
-            }}
-         />
-      </Stack.Navigator>
-   );
-};
-
-export default DiarioNavigator;
+export default BottomTabNavigator;

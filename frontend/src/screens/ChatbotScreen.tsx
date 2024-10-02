@@ -84,7 +84,7 @@ const ChatbotScreen = () => {
                            value={text}
                            onChangeText={setText}
                            placeholder="Digite aqui..."
-                           placeholderTextColor={theme.colors.color04}
+                           placeholderTextColor={theme.colors.color05}
                            multiline
                            scrollEnabled={false}
                         />
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
       borderWidth: 1.5,
       backgroundColor: hexToRgba(theme.colors.color01, '0.3'),
       paddingHorizontal: getResponsiveSizeWidth(5),
-      color: theme.colors.color05,
+      color: theme.colors.black,
       paddingVertical: getResponsiveSizeHeight(1.5),
    },
    // backgroundImage: {

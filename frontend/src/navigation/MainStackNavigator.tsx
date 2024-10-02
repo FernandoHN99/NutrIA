@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import UnauthenticatedNavigator from './UnauthenticatedNavigator';
+import UnauthenticatedNavigator from './AuthenticationNavigators/UnauthenticatedNavigator';
 import { useAuthToken } from '../utils/useAuthToken';
-import AuthenticatedNavigator from './AuthenticatedNavigator';
+import AuthenticatedNavigator from './AuthenticationNavigators/AuthenticatedNavigator';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '../lib/react-query';

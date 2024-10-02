@@ -9,7 +9,7 @@ const PerfilScreen = ({navigation}: {navigation: any}) => {
       { title: 'Comidas favoritas' },
       { title: 'Personalizar refeições' },
       { title: 'Sobre nós', action: () => navigation.push('AboutUsScreen') },
-      { title: 'Política de privacidade' },
+      { title: 'Política de privacidade', action: () => navigation.push('PoliticaPrivacidadeScreen') },
    ];
 
    return (

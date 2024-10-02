@@ -1,8 +1,8 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { getResponsiveSizeHeight } from '../utils/utils';
-import theme from '../styles/theme';
-import DiarioNavigator from './DiarioNavigator';
-import ChatbotScreen from '../screens/ChatbotScreen';
+import { getResponsiveSizeHeight } from '../../utils/utils';
+import theme from '../../styles/theme';
+import DiarioNavigator from '../MainNavigators/DiarioNavigator';
+import ChatbotScreen from '../../screens/ChatbotScreen';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Text } from 'react-native';
 const Tab = createMaterialTopTabNavigator();

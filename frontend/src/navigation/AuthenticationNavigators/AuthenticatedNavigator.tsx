@@ -1,11 +1,11 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import TopTabNavigator from './TopTabNavigator';
-import { criarStrData, getResponsiveSizeWidth } from '../utils/utils';
-import LoadingScreen from '../components/LoadingScreen';
+import TopTabNavigator from '../TabNavigators/TopTabNavigator';
+import { criarStrData, getResponsiveSizeWidth } from '../../utils/utils';
+import LoadingScreen from '../../components/LoadingScreen';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import theme from '../styles/theme';
-import { useAlimentosFavoritos, useConsumoAlimentos, usePerfisUsuario, useRefeicoesUsuario, useUsuarioInfo } from '../api/hooks/httpState/usuarioData';
+import theme from '../../styles/theme';
+import { useAlimentosFavoritos, useConsumoAlimentos, usePerfisUsuario, useRefeicoesUsuario, useUsuarioInfo } from '../../api/hooks/httpState/usuarioData';
 const Stack = createNativeStackNavigator();
 
 const AuthenticatedNavigator = () => {
