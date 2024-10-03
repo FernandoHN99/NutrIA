@@ -38,7 +38,7 @@ const modalNomeRefeicao = (
                   onChangeText={setValoRefeicao}
                   maxLength={25}
                />
-               <View style={{ flexDirection: 'row', justifyContent: 'center', width: '100%' }}>
+               <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
                   <TouchableOpacity style={styles.buttonModal} onPress={() => onPressFunction()}>
                      <Text style={styles.buttonModalText}>Salvar</Text>
                   </TouchableOpacity>
@@ -283,13 +283,15 @@ const styles = StyleSheet.create({
       alignItems: 'center',
    },
    modalTitle: {
-      fontSize: getResponsiveSizeWidth(5),
+      fontSize: getResponsiveSizeWidth(4.5),
       fontWeight: 'bold',
       marginBottom: 10,
       color: theme.colors.color05,
    },
    textInput: {
-      width: '85%',
+      fontSize: 13,
+      height: 45,
+      width: '80%',
       borderColor: theme.colors.color05,
       borderWidth: 1,
       borderRadius: 5,
@@ -299,24 +301,28 @@ const styles = StyleSheet.create({
    },
    buttonModal: {
       backgroundColor: theme.colors.color05,
-      padding: 10,
+      paddingVertical: 7,
+      paddingHorizontal: 13,
       borderRadius: 5,
       marginRight: 20,
+      borderWidth: 2,
+      borderColor: theme.colors.color05,
    },
    buttonModalClose: {
-      padding: 10,
+      paddingVertical: 7,
+      paddingHorizontal: 13,
       borderRadius: 5,
       borderWidth: 2,
       borderColor: theme.colors.color05,
    },
    buttonModalText: {
       fontFamily: 'NotoSans-Bold',
-      fontSize: getResponsiveSizeWidth(4),
+      fontSize: getResponsiveSizeWidth(3),
       color: theme.colors.color01,
    },
    buttonModalCloseText: {
       fontFamily: 'NotoSans-Bold',
-      fontSize: getResponsiveSizeWidth(4),
+      fontSize: getResponsiveSizeWidth(3),
       color: theme.colors.color05,
    },
 });
