@@ -158,14 +158,14 @@ const UserRefeicoesScreen = () => {
          <View style={styles.refeicaoInfoLeft}>
             <Text style={styles.textRefeicaoNumero}>Refeição {item.numero_refeicao}</Text>
             <View style={{ marginLeft: 15, backgroundColor: theme.colors.color05, borderRadius: 100, padding: 4 }}>
-               <Icon2 name="pencil" size={15} color={theme.colors.color01} onPress={() => {
+               <Icon2 name="pencil" size={17} color={theme.colors.color01} onPress={() => {
                   setTextEditaRefeicao(item.nome_refeicao);
                   setNumeroRefeicaoEditada(item.numero_refeicao);
                }} />
             </View>
             {refeicoesAtivas.length != 1 && refeicoesAtivas.length == (indice + 1) ?
                <TouchableOpacity onPress={() => handlerRemoverRefeicao(item.numero_refeicao)} style={{ marginLeft: 15, backgroundColor: theme.colors.color05, borderRadius: 100, padding: 5 }}>
-                  <Icon name="trash" size={15} color={theme.colors.color01} />
+                  <Icon name="trash" size={17} color={theme.colors.color01} />
                </TouchableOpacity>
                :
                null
@@ -183,7 +183,7 @@ const UserRefeicoesScreen = () => {
             <TouchableOpacity onPress={() => navigation.goBack()}>
                <Icon name="arrow-back" size={30} color={theme.colors.color05} />
             </TouchableOpacity>
-            <Text style={styles.title}>Minhas Refeições Ativas</Text>
+            <Text style={styles.title}>Refeições Ativas</Text>
          </View>
          <ScrollView showsVerticalScrollIndicator={false} bounces={false} >
             {
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       width: '95%',
       marginTop: 15,
-      marginBottom: 15,
+      marginBottom: 30,
    },
    title: {
       flex: 0.95,
@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
       justifyContent: 'space-between',
       alignItems: 'center',
       width: '100%',
-      borderBottomWidth: 1,
+      borderBottomWidth: 2,
       borderColor: theme.colors.color05,
       padding: getResponsiveSizeWidth(4),
    },
