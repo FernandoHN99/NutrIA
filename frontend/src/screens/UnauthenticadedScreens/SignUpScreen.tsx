@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, ScrollView, StyleSheet, KeyboardAvoidingView, Platform, ActivityIndicator, Alert } from 'react-native';
-import theme from '../styles/theme';
-import { getResponsiveSizeWidth, getResponsiveSizeHeight } from '../utils/utils';
-import MessagesChatbot from '../components/ChatBot/MessagesChatbot';
-import FlowSignUp from '../components/FlowSignUp';
-import useSignUp from '../api/hooks/usuario/useSignUp';
-import LoadingScreen from '../components/LoadingScreen';
-import CustomAlert from '../components/CustomAlert';
+import theme from '../../styles/theme';
+import { getResponsiveSizeWidth, getResponsiveSizeHeight } from '../../utils/utils';
+import MessagesChatbot from '../../components/ChatBot/MessagesChatbot';
+import FlowSignUp from '../../components/FlowSignUp';
+import useSignUp from '../../api/hooks/usuario/useSignUp';
+import LoadingScreen from '../../components/LoadingScreen';
+import CustomAlert from '../../components/CustomAlert';
 
 const SignUpScreen = ({ navigation, route }: { navigation: any, route: any }) => {
 

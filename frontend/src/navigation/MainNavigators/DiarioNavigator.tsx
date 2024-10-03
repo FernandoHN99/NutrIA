@@ -1,8 +1,8 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import RefeicaoScreen from '../../screens/RefeicaoScreen';
-import AddConsumoScreen from '../../screens/AddConsumoScreen';
+import RefeicaoScreen from '../../screens/AuthenticadedScreens/HomeScreens/RefeicaoScreen';
+import AddConsumoScreen from '../../screens/AuthenticadedScreens/HomeScreens/AddConsumoScreen';
 import BottomTabNavigator from '../TabNavigators/BottomTabNavigator';
 
 const Stack = createNativeStackNavigator();

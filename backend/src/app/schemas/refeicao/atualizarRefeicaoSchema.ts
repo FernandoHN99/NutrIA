@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import Util from '../../../utils/util';
 
 const atualizarRefeicaoSchema = z.object({
    id_usuario: z.string()
@@ -7,9 +8,12 @@ const atualizarRefeicaoSchema = z.object({
    numero_refeicao: z.number().int()
          .positive('Formato Inválido: Número da Refeição'),
 
-   nome_refeicao: z.string().min(1).max(25,
+   nome_refeicao: z.string()
+   .min(1)
+   .max(25,
       {message: 'Formato Inválido: Nome da Refeição'})
-      .optional(),
+   .transform((nome) => Util.capitalize(nome))
+   .optional(),
 
    ativa: z.boolean()
       .optional()

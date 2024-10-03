@@ -1,9 +1,9 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import BoasVindasScreen from '../../screens/BoasVindasScreen';
-import LoginScreen from '../../screens/LoginScreen';
+import BoasVindasScreen from '../../screens/UnauthenticadedScreens/BoasVindasScreen';
+import LoginScreen from '../../screens/UnauthenticadedScreens/LoginScreen';
 import theme from '../../styles/theme';
-import SignUpScreen from '../../screens/SignUpScreen';
+import SignUpScreen from '../../screens/UnauthenticadedScreens/SignUpScreen';
 
 const Stack = createNativeStackNavigator();
 

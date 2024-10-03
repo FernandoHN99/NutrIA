@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import theme from '../styles/theme';
-import { getResponsiveSizeWidth, getResponsiveSizeHeight, hexToRgba, criarStrData, arredondarValores, capitalize } from '../utils/utils';
-import ProgressCircle from '../components/ProgressCircle';
+import theme from '../../../styles/theme';
+import { getResponsiveSizeWidth, getResponsiveSizeHeight, hexToRgba, criarStrData, arredondarValores, capitalize } from '../../../utils/utils';
+import ProgressCircle from '../../../components/ProgressCircle';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/MaterialCommunityIcons';
-import ProgressBar from '../components/ProgressBar';
-import { filtrarConsumoRefeicao } from '../utils/formatters';
+import ProgressBar from '../../../components/ProgressBar';
+import { filtrarConsumoRefeicao } from '../../../utils/formatters';
 
 const RefeicaoScreen = ({ route }: { route: any }) => {
 

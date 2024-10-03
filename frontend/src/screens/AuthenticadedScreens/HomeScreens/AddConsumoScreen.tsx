@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
-import theme from '../styles/theme';
-import { getResponsiveSizeWidth, getResponsiveSizeHeight, hexToRgba, capitalize, criarStrData, calcularMacrosPorPorcao } from '../utils/utils';
+import theme from '../../../styles/theme';
+import { getResponsiveSizeWidth, getResponsiveSizeHeight, hexToRgba, capitalize, criarStrData, calcularMacrosPorPorcao } from '../../../utils/utils';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
-import { buscarAlimentosService } from '../api/services/alimentoService';
+import { buscarAlimentosService } from '../../../api/services/alimentoService';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icons02 from 'react-native-vector-icons/MaterialIcons';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { favoritarAlimentoService } from '../api/services/alimentoFavoritoService';
-import { addAlimentoConsumidoService } from '../api/services/alimentoConsumoService';
-import { AddAlimentoConsumidoSchema } from '../api/schemas/alimentoConsumidoSchema';
-import ToastNotification from '../components/ToastNotification';
+import { favoritarAlimentoService } from '../../../api/services/alimentoFavoritoService';
+import { addAlimentoConsumidoService } from '../../../api/services/alimentoConsumoService';
+import { AddAlimentoConsumidoSchema } from '../../../api/schemas/alimentoConsumidoSchema';
+import ToastNotification from '../../../components/ToastNotification';
 
 
 const AddConsumoScreen = ({ route}: { route: any }) => {

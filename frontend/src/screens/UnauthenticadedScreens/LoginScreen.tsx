@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { getResponsiveSizeHeight, getResponsiveSizeWidth } from '../utils/utils';
-import theme from '../styles/theme';
-import useFazerLogin from '../api/hooks/usuario/useFazerLogin';
+import { getResponsiveSizeHeight, getResponsiveSizeWidth } from '../../utils/utils';
+import theme from '../../styles/theme';
+import useFazerLogin from '../../api/hooks/usuario/useFazerLogin';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const LoginScreen = ({ navigation, route }: { navigation: any, route: any }) => {

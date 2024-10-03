@@ -47,46 +47,49 @@ export const somarMacrosDia = (consumoDoDia: any[]) => {
 
 };
 
-export const somarMacrosDiaPorRefeicao = ( consumoDoDia: any[], refeicoesAtivas: any[] ) => {
-   const acc = refeicoesAtivas.reduce((acc, { numero_refeicao, nome_refeicao }) => {
-      acc[numero_refeicao] = { numero_refeicao, nome_refeicao, ...jsonMacrosDiaVazio };
-      return acc;
+export const somarMacrosDiaPorRefeicao = (
+   consumoDoDia: any[],
+   refeicoesAtivas: any[]
+) => {
+   const refeicoesMap = refeicoesAtivas.reduce((map, { numero_refeicao, nome_refeicao }) => {
+      map[numero_refeicao] = { numero_refeicao, nome_refeicao, ...jsonMacrosDiaVazio };
+      return map;
    }, {} as Record<string, typeof jsonMacrosDiaVazio>);
 
-   consumoDoDia.forEach(
-      ({
+   consumoDoDia.forEach((consumo) => {
+      const {
          numero_refeicao,
          refeicao,
          kcal,
          qtde_gordura,
          qtde_carboidrato,
          qtde_proteina,
-         qtde_alcool,
-      }) => {
-         if (!acc[numero_refeicao]) {
-            acc[numero_refeicao] = {...jsonMacrosDiaVazio };
-         }
+         qtde_alcool
+      } = consumo;
 
-         acc[numero_refeicao] = {
-            ...acc[numero_refeicao],
-            totalProteina: acc[numero_refeicao].totalProteina + qtde_proteina,
-            totalCarboidrato: acc[numero_refeicao].totalCarboidrato + qtde_carboidrato,
-            totalGordura: acc[numero_refeicao].totalGordura + qtde_gordura,
-            totalAlcool: acc[numero_refeicao].totalAlcool + qtde_alcool,
-            totalKcal: acc[numero_refeicao].totalKcal + kcal,
-         };
-         acc[numero_refeicao] = { ...acc[numero_refeicao], numero_refeicao, nome_refeicao: refeicao.nome_refeicao };
-      }
-   );
+      const macrosRefeicao = refeicoesMap[numero_refeicao] || { ...jsonMacrosDiaVazio };
 
-   return roundJsonValues(acc);
+      refeicoesMap[numero_refeicao] = {
+         ...macrosRefeicao,
+         totalProteina: macrosRefeicao.totalProteina + qtde_proteina,
+         totalCarboidrato: macrosRefeicao.totalCarboidrato + qtde_carboidrato,
+         totalGordura: macrosRefeicao.totalGordura + qtde_gordura,
+         totalAlcool: macrosRefeicao.totalAlcool + qtde_alcool,
+         totalKcal: macrosRefeicao.totalKcal + kcal,
+         numero_refeicao,
+         nome_refeicao: refeicoesAtivas.find(r => r.numero_refeicao === numero_refeicao)?.nome_refeicao || refeicao.nome_refeicao
+      };
+   });
+
+   return roundJsonValues(refeicoesMap);
 };
+
 
 export const filtrarRefeicoesAtivas = (refeicoes: any[] | undefined) => {
    return refeicoes ? refeicoes.filter(refeicao => refeicao.ativa === true) : null;
 }
 
-export const filtrarConsumoDia = (consumoTotal: any[] , diaSelecionado: string) => {
+export const filtrarConsumoDia = (consumoTotal: any[], diaSelecionado: string) => {
    return consumoTotal ? consumoTotal.filter(consumoDia => consumoDia.dt_dia == diaSelecionado) : null;
 }
 

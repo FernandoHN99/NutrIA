@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
-import DiaScroll from '../components/DiaScroll';
-import theme from '../styles/theme';
-import DiaSumario from '../components/DiaSumario';
-import { criarStrData } from '../utils/utils';
-import { obterConsumoUsuarioService } from '../api/services/alimentoConsumoService';
+import DiaScroll from '../../../components/DiaScroll';
+import theme from '../../../styles/theme';
+import DiaSumario from '../../../components/DiaSumario';
+import { criarStrData } from '../../../utils/utils';
+import { obterConsumoUsuarioService } from '../../../api/services/alimentoConsumoService';
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
-import DiaConsumo from '../components/DiaConsumo';
-import { encontrarPerfilPorData, filtrarConsumoDia, filtrarRefeicoesAtivas } from '../utils/formatters';
-import { useConsumoAlimentos, useRefeicoesUsuario, usePerfisUsuario } from '../api/hooks/httpState/usuarioData';
+import DiaConsumo from '../../../components/DiaConsumo';
+import { encontrarPerfilPorData, filtrarConsumoDia, filtrarRefeicoesAtivas } from '../../../utils/formatters';
+import { useConsumoAlimentos, useRefeicoesUsuario, usePerfisUsuario } from '../../../api/hooks/httpState/usuarioData';
 
 const HomeScreen = ({ navigation }: { navigation: any }) => {
 

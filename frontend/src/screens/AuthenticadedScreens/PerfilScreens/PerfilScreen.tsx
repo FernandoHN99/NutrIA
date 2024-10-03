@@ -1,15 +1,15 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import theme from '../styles/theme';
+import theme from '../../../styles/theme';
 
 const PerfilScreen = ({navigation}: {navigation: any}) => {
    const menuItems = [
-      { title: 'Meus dados e metas', action: () => console.log('Meus dados e metas') },
-      { title: 'Comidas favoritas' },
-      { title: 'Personalizar refeições' },
-      { title: 'Sobre nós', action: () => navigation.push('AboutUsScreen') },
-      { title: 'Política de privacidade', action: () => navigation.push('PoliticaPrivacidadeScreen') },
+      { title: 'Meus Dados e Metas', action: () => console.log('Meus dados e metas') },
+      { title: 'Comidas Favoritas' },
+      { title: 'Personalizar Refeições', action: () => navigation.push('UserRefeicoesScreen') },
+      { title: 'Sobre Nós', action: () => navigation.push('AboutUsScreen') },
+      { title: 'Política de Privacidade', action: () => navigation.push('PoliticaPrivacidadeScreen') },
    ];
 
    return (

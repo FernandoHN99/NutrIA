@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ImageBackground, Dimensions, View, ScrollView, StyleSheet, KeyboardAvoidingView, Platform, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
-import theme from '../styles/theme';
-import { getResponsiveSizeWidth, getResponsiveSizeHeight, hexToRgba } from '../utils/utils';
-import MessagesChatbot from '../components/ChatBot/MessagesChatbot';
+import theme from '../../../styles/theme';
+import { getResponsiveSizeWidth, getResponsiveSizeHeight, hexToRgba } from '../../../utils/utils';
+import MessagesChatbot from '../../../components/ChatBot/MessagesChatbot';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { useFazerPergunta } from '../api/hooks/chatBot/useFazerPergunta';
+import { useFazerPergunta } from '../../../api/hooks/chatBot/useFazerPergunta';
 
 interface message {
    _id: number;

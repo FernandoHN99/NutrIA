@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Pressable } from 'react-native';
-import { getResponsiveSizeHeight, getResponsiveSizeWidth } from '../utils/utils';
-import theme from '../styles/theme';
-import LogoIcon from '../components/LogoIcon';
+import { getResponsiveSizeHeight, getResponsiveSizeWidth } from '../../utils/utils';
+import theme from '../../styles/theme';
+import LogoIcon from '../../components/LogoIcon';
 
 
 const BoasVindasScreen = ({ navigation }: { navigation: any }) => {

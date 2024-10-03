@@ -1,6 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import EvolucaoScreen from '../../screens/EvolucaoScreen';
+import EvolucaoScreen from '../../screens/AuthenticadedScreens/EvolucaoScreens/EvolucaoScreen';
 import PerfilNavigator from '../BottomNavigators/PerfilNavigator';
 import theme from '../../styles/theme';
 import HomeNavigator from '../BottomNavigators/HomeNavigator';

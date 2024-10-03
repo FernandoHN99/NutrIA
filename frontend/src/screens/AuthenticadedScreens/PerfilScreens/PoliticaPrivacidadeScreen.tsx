@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import theme from '../styles/theme';
+import theme from '../../../styles/theme';
 import { useNavigation } from '@react-navigation/native'; // Hook para navegação
-import { getResponsiveSizeHeight, getResponsiveSizeWidth } from '../utils/utils';
+import { getResponsiveSizeHeight, getResponsiveSizeWidth } from '../../../utils/utils';
 
 const PoliticaPrivacidadeScreen = () => {
    const navigation = useNavigation();
