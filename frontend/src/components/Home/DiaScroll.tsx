@@ -1,8 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
-import theme from '../styles/theme';
-import { getResponsiveSizeWidth, getResponsiveSizeHeight } from '../utils/utils';
-import { criarStrData, criarData } from '../utils/utils';
+import theme from '../../styles/theme';
+import { getResponsiveSizeWidth, getResponsiveSizeHeight, criarStrData, criarData } from '../../utils/utils';
 
 const tamanhoLetras = getResponsiveSizeHeight(1.6);
 const ITEM_WIDTH = getResponsiveSizeWidth(20);

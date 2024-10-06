@@ -1,11 +1,12 @@
 import React from 'react';
-import ChatInput from './ChatBot/ChatInput';
-import GenderSelection from './ChatBot/GenderSelection';
-import DateSelector from './ChatBot/DateSelector';
-import PicklistSelector from './ChatBot/PicklistSelector';
-import NumberInput from './ChatBot/NumberInput';
-import EmailInput from './ChatBot/EmailInput';
-import PasswordInput from './ChatBot/PasswordInput';
+import ChatInput from './ChatInput';
+import GenderSelection from './GenderSelection';
+import DateSelector from './DateSelector';
+import PicklistSelectorSignUp from './PicklistSelectorSignUp';
+import NumberInput from './NumberInput';
+import EmailInput from './EmailInput';
+import PasswordInput from './PasswordInput';
+import { mapNiveisDeAtividade, mapObjetivos, mapPerfisAlimentares } from '../../config/variaveis';
 
 type FlowSignUpProps = {
    [key: number]: {
@@ -40,9 +41,9 @@ const FlowSignUp = (nextQuestion: (userAnswer: any) => void, password: string): 
       4: {
          chave: 'perfil_alimentar',
          question: "Sua alimentação se enquadra em qual categoria?",
-         component: <PicklistSelector 
+         component: <PicklistSelectorSignUp 
             onSelect={nextQuestion} 
-            picklistOptions={['Onívora', 'Vegetariana', 'Vegana']} 
+            picklistOptions={Object.keys(mapPerfisAlimentares)} 
          />,
       },
       5: {
@@ -59,20 +60,20 @@ const FlowSignUp = (nextQuestion: (userAnswer: any) => void, password: string): 
          chave: 'nivel_atividade',
          question: "Qual é seu nível de atividade?",
          component:
-         <PicklistSelector
+         <PicklistSelectorSignUp
          onSelect={nextQuestion}
          helperTitle='Sobre nível de atividade física'
          helperText={`Sedentário: Exercício mínimo \n Leve: 1-3 dias por semana \n Moderado: 3-5 dias por semana \n Intenso: 6-7 dias por semana \n Muito Intenso: Atleta, 2x por dia`}
-         picklistOptions={['Sedentário', 'Leve', 'Moderado', 'Intenso', 'Muito Intenso']}
+         picklistOptions={Object.keys(mapNiveisDeAtividade)}
          />,
       },
       8: {
          chave: 'objetivo',
          question: "Qual é seu objetivo?",
          component:
-         <PicklistSelector
+         <PicklistSelectorSignUp
          onSelect={nextQuestion}
-         picklistOptions={['Perda de Peso', 'Manutenção', 'Ganho de Peso']}
+         picklistOptions={Object.keys(mapObjetivos)}
          />,
       },
       9: {

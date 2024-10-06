@@ -13,7 +13,7 @@ interface PicklistSelectorProps {
    helperTitle?: string;
 }
 
-const PicklistSelector: React.FC<PicklistSelectorProps> = ({ onSelect, picklistOptions, helperTitle, helperText }) => {
+const PicklistSelectorSignUp: React.FC<PicklistSelectorProps> = ({ onSelect, picklistOptions, helperTitle, helperText }) => {
    const [selectedOption, setSelectedOption] = useState<string | undefined>(undefined);
    const [showModal, setShowModal] = useState(false);
    const [showHelper, setShowHelper] = useState(false);
@@ -145,4 +145,4 @@ const styles = StyleSheet.create({
    },
 });
 
-export default PicklistSelector;
+export default PicklistSelectorSignUp;

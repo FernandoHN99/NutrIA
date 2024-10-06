@@ -4,9 +4,9 @@ import Ionicons from '@expo/vector-icons/MaterialIcons';
 import Ionicons02 from '@expo//vector-icons/Feather';
 import Ionicons03 from '@expo//vector-icons/MaterialCommunityIcons';
 import Ionicons04 from '@expo//vector-icons/FontAwesome6';
-import { arredondarValores, getResponsiveSizeHeight, getResponsiveSizeWidth, hexToRgba } from '../utils/utils';
-import theme from '../styles/theme';
-import { somarMacrosDiaPorRefeicao } from '../utils/formatters';
+import { arredondarValores, getResponsiveSizeHeight, getResponsiveSizeWidth, hexToRgba } from '../../utils/utils';
+import theme from '../../styles/theme';
+import { somarMacrosDiaPorRefeicao } from '../../utils/formatters';
 
 const ICON_SIZE = getResponsiveSizeHeight(3.5);
 const ICON_COLOR = hexToRgba(theme.colors.black, '0.6');

@@ -5,6 +5,7 @@ import AboutUsScreen from '../../screens/AuthenticadedScreens/PerfilScreens/Abou
 import PerfilScreen from '../../screens/AuthenticadedScreens/PerfilScreens/PerfilScreen';
 import PoliticaPrivacidadeScreen from '../../screens/AuthenticadedScreens/PerfilScreens/PoliticaPrivacidadeScreen';
 import UserRefeicoesScreen from '../../screens/AuthenticadedScreens/PerfilScreens/UserRefeicoesScreen';
+import DadosMetasScreen from '../../screens/AuthenticadedScreens/PerfilScreens/DadosMetasScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -36,6 +37,14 @@ const PerfilNavigator = () => {
           <Stack.Screen
             name="UserRefeicoesScreen"
             component={UserRefeicoesScreen}
+            options={{ 
+               headerShown: false,
+               animation: 'slide_from_right',
+            }}
+         />
+         <Stack.Screen
+            name="DadosMetasScreen"
+            component={DadosMetasScreen}
             options={{ 
                headerShown: false,
                animation: 'slide_from_right',

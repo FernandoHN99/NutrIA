@@ -1,13 +1,12 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import theme from '../styles/theme';
+import theme from '../../styles/theme';
 import Ionicons from '@expo/vector-icons/MaterialCommunityIcons';
 import Ionicons02 from '@expo/vector-icons/FontAwesome6';
-import { getResponsiveSizeWidth, getResponsiveSizeHeight } from '../utils/utils';
-import { hexToRgba } from '../utils/utils';
-import ProgressBar from './ProgressBar';
-import ProgressCircle from './ProgressCircle';
-import { somarMacrosDia } from '../utils/formatters';
+import { getResponsiveSizeWidth, getResponsiveSizeHeight, hexToRgba } from '../../utils/utils';
+import ProgressBar from '../ProgressBar';
+import ProgressCircle from '../ProgressCircle';
+import { somarMacrosDia } from '../../utils/formatters';
 
 interface DiaSumarioProps {
    infosDia: any[]

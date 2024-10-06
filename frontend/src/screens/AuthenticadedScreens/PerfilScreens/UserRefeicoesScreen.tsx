@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Modal, TextInput,
 import Icon from 'react-native-vector-icons/Ionicons';
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
 import theme from '../../../styles/theme';
-import { useNavigation } from '@react-navigation/native'; // Hook para navegação
+import { useNavigation } from '@react-navigation/native';
 import { getResponsiveSizeWidth } from '../../../utils/utils';
 import { useRefeicoesUsuario } from '../../../api/hooks/httpState/usuarioData';
 import { adicionarRefeicaoService, removerRefeicaoService, reativarRefeicaoService, atualizarRefeicaoService } from '../../../api/services/refeicaoService';
@@ -72,7 +72,6 @@ const UserRefeicoesScreen = () => {
       },
       onError(error) {
          Alert.alert('Erro', 'Não foi possível adicionar a refeição');
-
       }
    });
 
@@ -223,7 +222,7 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       width: '95%',
       marginTop: 15,
-      marginBottom: 30,
+      marginBottom: 15,
    },
    title: {
       flex: 0.95,

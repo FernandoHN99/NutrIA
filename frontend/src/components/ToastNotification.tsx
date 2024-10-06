@@ -11,7 +11,7 @@ interface ToastNotificationProps {
 const ToastNotification = ({ message, duration = 1500, onHide }: ToastNotificationProps) => {
    const opacity = useRef(new Animated.Value(0)).current;
    // const translateY = useRef(new Animated.Value(100)).current;
-   const translateX = useRef(new Animated.Value(-300)).current; // Mudando para X
+   const translateX = useRef(new Animated.Value(-300)).current;
 
    useEffect(() => {
       Animated.parallel([

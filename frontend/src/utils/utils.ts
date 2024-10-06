@@ -110,15 +110,24 @@ export const roundJsonValues = (jsonData: { [key: string]: any }, casasDecimais:
 
 
 export const calcularMacrosPorPorcao = (
-   porcaoBase: number, 
-   qtdeUtilizada: number, 
+   porcaoBase: number,
+   qtdeUtilizada: number,
    macrosBase: { [key: string]: number }) => {
-      const qtdeCarboidrato = (macrosBase.carboidrato * qtdeUtilizada) / porcaoBase;
-      const qtdeProteina = (macrosBase.proteina * qtdeUtilizada) / porcaoBase;
-      const qtdeGordura = (macrosBase.gordura * qtdeUtilizada) / porcaoBase;
-      const qtdeAlcool = (macrosBase.alcool * qtdeUtilizada) / porcaoBase;
-      const qtdeKcal = (macrosBase.kcal * qtdeUtilizada) / porcaoBase;
+   const qtdeCarboidrato = (macrosBase.carboidrato * qtdeUtilizada) / porcaoBase;
+   const qtdeProteina = (macrosBase.proteina * qtdeUtilizada) / porcaoBase;
+   const qtdeGordura = (macrosBase.gordura * qtdeUtilizada) / porcaoBase;
+   const qtdeAlcool = (macrosBase.alcool * qtdeUtilizada) / porcaoBase;
+   const qtdeKcal = (macrosBase.kcal * qtdeUtilizada) / porcaoBase;
 
-      return { qtdeCarboidrato, qtdeProteina, qtdeGordura, qtdeAlcool, qtdeKcal };
-      
-   };
+   return { qtdeCarboidrato, qtdeProteina, qtdeGordura, qtdeAlcool, qtdeKcal };
+
+};
+
+
+export const encontrarChavePeloValorJSON = (obj: { [key: string]: any }, valorProcurado: any) => {
+   return Object.keys(obj).find(key => obj[key] === valorProcurado);
+};
+
+export const validadeString = (str: string) => {
+   return str !== undefined && str !== null && str.trim() !== '';
+};

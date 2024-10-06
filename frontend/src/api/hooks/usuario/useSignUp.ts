@@ -15,9 +15,7 @@ const useSignUp = () => {
       setLoading(true);
       setError(null);
       setData(null);
-
       try {
-
          const dataUsuario = criaUsuarioJSON(input);
          const criarUsuarioResponse = await criarUsuarioService(dataUsuario);
 

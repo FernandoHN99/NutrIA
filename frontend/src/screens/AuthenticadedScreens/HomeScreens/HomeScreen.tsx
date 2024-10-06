@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
-import DiaScroll from '../../../components/DiaScroll';
+import DiaScroll from '../../../components/Home/DiaScroll';
 import theme from '../../../styles/theme';
-import DiaSumario from '../../../components/DiaSumario';
+import DiaSumario from '../../../components/Home/DiaSumario';
 import { criarStrData } from '../../../utils/utils';
 import { obterConsumoUsuarioService } from '../../../api/services/alimentoConsumoService';
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
-import DiaConsumo from '../../../components/DiaConsumo';
+import DiaConsumo from '../../../components/Home/DiaConsumo';
 import { encontrarPerfilPorData, filtrarConsumoDia, filtrarRefeicoesAtivas } from '../../../utils/formatters';
 import { useConsumoAlimentos, useRefeicoesUsuario, usePerfisUsuario } from '../../../api/hooks/httpState/usuarioData';
 
