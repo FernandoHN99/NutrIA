@@ -1,21 +1,21 @@
 import React from 'react';
 import HomeScreen from '../../screens/AuthenticadedScreens/HomeScreens/HomeScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import AboutUsScreen from '../../screens/AuthenticadedScreens/PerfilScreens/AboutUsScreen';
-import PerfilScreen from '../../screens/AuthenticadedScreens/PerfilScreens/PerfilScreen';
-import PoliticaPrivacidadeScreen from '../../screens/AuthenticadedScreens/PerfilScreens/PoliticaPrivacidadeScreen';
-import UserRefeicoesScreen from '../../screens/AuthenticadedScreens/PerfilScreens/UserRefeicoesScreen';
-import DadosPerfilScreen from '../../screens/AuthenticadedScreens/PerfilScreens/DadosPerfilScreen';
+import AboutUsScreen from '../../screens/AuthenticadedScreens/SettingsScreens/AboutUsScreen';
+import SettingsScreen from '../../screens/AuthenticadedScreens/SettingsScreens/SettingsScreen';
+import PoliticaPrivacidadeScreen from '../../screens/AuthenticadedScreens/SettingsScreens/PoliticaPrivacidadeScreen';
+import RefeicoesScreen from '../../screens/AuthenticadedScreens/SettingsScreens/RefeicoesScreen';
+import DadosPerfilScreen from '../../screens/AuthenticadedScreens/SettingsScreens/DadosPerfilScreen';
 
 const Stack = createNativeStackNavigator();
 
-const PerfilNavigator = () => {
+const SettingsNavigator = () => {
 
    return (
-      <Stack.Navigator initialRouteName='PerfilScreen'>
+      <Stack.Navigator initialRouteName='SettingsScreen'>
          <Stack.Screen
-            name="PerfilScreen"
-            component={PerfilScreen}
+            name="SettingsScreen"
+            component={SettingsScreen}
             options={{ headerShown: false }}
          />
          <Stack.Screen
@@ -35,8 +35,8 @@ const PerfilNavigator = () => {
             }}
          />
           <Stack.Screen
-            name="UserRefeicoesScreen"
-            component={UserRefeicoesScreen}
+            name="RefeicoesScreen"
+            component={RefeicoesScreen}
             options={{ 
                headerShown: false,
                animation: 'slide_from_right',
@@ -54,4 +54,4 @@ const PerfilNavigator = () => {
    );
 };
 
-export default PerfilNavigator;
+export default SettingsNavigator;

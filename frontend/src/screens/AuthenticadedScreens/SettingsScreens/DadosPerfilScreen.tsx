@@ -186,7 +186,7 @@ const DadosPerfilScreen = () => {
             <TouchableOpacity onPress={() => navigation.goBack()}>
                <Icon name="arrow-back" size={30} color={theme.colors.color05} />
             </TouchableOpacity>
-            <Text style={styles.title}>Dados do Perfil</Text>
+            <Text style={styles.title}>Configurações de Perfil</Text>
          </View>
          <ScrollView bounces={false} showsVerticalScrollIndicator={false}>
             {modalInfo ?  modalhelper() : null}
@@ -203,6 +203,7 @@ const DadosPerfilScreen = () => {
                   </View>
                ))}
             </View>
+            
             <TouchableOpacity
                style={[styles.saveButtonNotAllowed, allowButtonSalvar && styles.saveButton]}
                onPress={allowButtonSalvar ? handleCriarNovoPerfl : undefined}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import EvolucaoScreen from '../../screens/AuthenticadedScreens/EvolucaoScreens/EvolucaoScreen';
-import PerfilNavigator from '../BottomNavigators/PerfilNavigator';
+import SettingsNavigator from '../BottomNavigators/SettingsNavigator';
 import theme from '../../styles/theme';
 import HomeNavigator from '../BottomNavigators/HomeNavigator';
 import Icon from '@expo/vector-icons/Ionicons';
@@ -27,15 +27,15 @@ const BottomTabNavigator = () => {
                   'home-outline' |
                   'stats-chart' |
                   'stats-chart-outline' |
-                  'person' |
-                  'person-outline' = 'home';
+                  'settings' |
+                  'settings-outline' = 'home';
 
                if (route.name === 'Home') {
                   iconName = focused ? 'home' : 'home-outline';
                } else if (route.name === 'Evolução') {
                   iconName = focused ? 'stats-chart' : 'stats-chart-outline';
-               } else if (route.name === 'Perfil') {
-                  iconName = focused ? 'person' : 'person-outline';
+               } else if (route.name === 'Coniguração') {
+                  iconName = focused ? 'settings' : 'settings-outline';
                }
 
                return <Icon name={iconName} size={size} color={color} />;
@@ -46,7 +46,7 @@ const BottomTabNavigator = () => {
       >
          <Tab.Screen name="Home" component={HomeNavigator} />
          <Tab.Screen name="Evolução" component={EvolucaoScreen} />
-         <Tab.Screen name="Perfil" component={PerfilNavigator} />
+         <Tab.Screen name="Coniguração" component={SettingsNavigator} />
       </Tab.Navigator>
    );
 };

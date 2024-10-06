@@ -53,7 +53,7 @@ const modalNomeRefeicao = (
 }
 
 
-const UserRefeicoesScreen = () => {
+const RefeicoesScreen = () => {
    const navigation = useNavigation();
    const queryClient = useQueryClient()
    const { data: refeicoesCached } = useRefeicoesUsuario({ enabled: false });
@@ -182,7 +182,7 @@ const UserRefeicoesScreen = () => {
             <TouchableOpacity onPress={() => navigation.goBack()}>
                <Icon name="arrow-back" size={30} color={theme.colors.color05} />
             </TouchableOpacity>
-            <Text style={styles.title}>Refeições Ativas</Text>
+            <Text style={styles.title}>Configuração de Refeições</Text>
          </View>
          <ScrollView showsVerticalScrollIndicator={false} bounces={false} >
             {
@@ -326,4 +326,4 @@ const styles = StyleSheet.create({
    },
 });
 
-export default UserRefeicoesScreen;
+export default RefeicoesScreen;

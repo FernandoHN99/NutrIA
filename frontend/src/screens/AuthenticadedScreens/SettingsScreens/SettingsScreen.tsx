@@ -3,18 +3,18 @@ import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-nati
 import Icon from 'react-native-vector-icons/Ionicons';
 import theme from '../../../styles/theme';
 
-const PerfilScreen = ({navigation}: {navigation: any}) => {
+const SettingsScreen = ({navigation}: {navigation: any}) => {
    const menuItems = [
-      { title: 'Meus Dados e Metas', action: () => navigation.push('DadosPerfilScreen') },
+      { title: 'Configuração de Perfil', action: () => navigation.push('DadosPerfilScreen') },
       { title: 'Comidas Favoritas' },
-      { title: 'Personalizar Refeições', action: () => navigation.push('UserRefeicoesScreen') },
+      { title: 'Configuração de Refeições', action: () => navigation.push('RefeicoesScreen') },
       { title: 'Sobre Nós', action: () => navigation.push('AboutUsScreen') },
       { title: 'Política de Privacidade', action: () => navigation.push('PoliticaPrivacidadeScreen') },
    ];
 
    return (
       <View style={styles.container}>
-         <Text style={styles.header}>Informações gerais</Text>
+         <Text style={styles.header}>Configurações Gerais</Text>
          {menuItems.map((item, index) => (
             <TouchableOpacity key={index} style={styles.menuItem} onPress={item.action}>
                <Text style={styles.menuText}>{item.title}</Text>
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
       backgroundColor: theme.colors.backgroundColor,
    },
    header: {
-      fontSize: 18,
+      fontSize: 20,
       fontWeight: 'bold',
       marginBottom: 16,
       color: theme.colors.color05,
@@ -55,4 +55,4 @@ const styles = StyleSheet.create({
    },
 });
 
-export default PerfilScreen;
+export default SettingsScreen;
