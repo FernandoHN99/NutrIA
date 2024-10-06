@@ -5,7 +5,7 @@ import theme from '../../../styles/theme';
 
 const PerfilScreen = ({navigation}: {navigation: any}) => {
    const menuItems = [
-      { title: 'Meus Dados e Metas', action: () => navigation.push('DadosMetasScreen') },
+      { title: 'Meus Dados e Metas', action: () => navigation.push('DadosPerfilScreen') },
       { title: 'Comidas Favoritas' },
       { title: 'Personalizar Refeições', action: () => navigation.push('UserRefeicoesScreen') },
       { title: 'Sobre Nós', action: () => navigation.push('AboutUsScreen') },

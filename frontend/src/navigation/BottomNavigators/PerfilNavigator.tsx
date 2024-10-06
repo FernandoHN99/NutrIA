@@ -5,7 +5,7 @@ import AboutUsScreen from '../../screens/AuthenticadedScreens/PerfilScreens/Abou
 import PerfilScreen from '../../screens/AuthenticadedScreens/PerfilScreens/PerfilScreen';
 import PoliticaPrivacidadeScreen from '../../screens/AuthenticadedScreens/PerfilScreens/PoliticaPrivacidadeScreen';
 import UserRefeicoesScreen from '../../screens/AuthenticadedScreens/PerfilScreens/UserRefeicoesScreen';
-import DadosMetasScreen from '../../screens/AuthenticadedScreens/PerfilScreens/DadosMetasScreen';
+import DadosPerfilScreen from '../../screens/AuthenticadedScreens/PerfilScreens/DadosPerfilScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -43,8 +43,8 @@ const PerfilNavigator = () => {
             }}
          />
          <Stack.Screen
-            name="DadosMetasScreen"
-            component={DadosMetasScreen}
+            name="DadosPerfilScreen"
+            component={DadosPerfilScreen}
             options={{ 
                headerShown: false,
                animation: 'slide_from_right',

@@ -4,7 +4,7 @@ import theme from '../../../styles/theme';
 import { usePerfisUsuario } from '../../../api/hooks/httpState/usuarioData';
 import { criarPerfilSchema, Perfil } from '../../../api/schemas/perfilSchemas';
 import PicklistSelector from '../../../components/Home/PicklistSelector';
-import { mapNiveisDeAtividade, mapObjetivos } from '../../../config/variaveis';
+import { mapNiveisDeAtividade, mapObjetivos, helperModalTexts } from '../../../config/variaveis';
 import { encontrarChavePeloValorJSON, getResponsiveSizeHeight, getResponsiveSizeWidth, hexToRgba, validadeString } from '../../../utils/utils';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
@@ -12,12 +12,12 @@ import InfoHelper from '../../../components/InfoHelper';
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import { criarPerfilService } from '../../../api/services/perfilService';
 
-const EditarPerfilScreen = () => {
+const DadosPerfilScreen = () => {
    const navigation = useNavigation();
    const queryClient = useQueryClient()
 
-   const [showHelper, setShowHelper] = useState(false);
    const { data: perfisUsuario } = usePerfisUsuario({ enabled: false });
+   const [modalInfo, setModalInfo] = useState<boolean | { title: string, message: string }  >(false);
    const perfilUsuario: Perfil = perfisUsuario[perfisUsuario.length - 1];
    const [isLoading, setIsLoading] = useState(false);
 
@@ -65,14 +65,14 @@ const EditarPerfilScreen = () => {
       await criarPerfilServiceFn(perfil);
    };
 
-   const Modalhelper = () => {
-      const helperTitle = 'Sobre nível de atividade física'
-      const helperText = 'Sedentário: Exercício mínimo \n Leve: 1-3 dias por semana \n Moderado: 3-5 dias por semana \n Intenso: 6-7 dias por semana \n Muito Intenso: Atleta, 2x por dia'
+   const modalhelper = () => {
+      const helperTitle = typeof modalInfo === 'object' ? modalInfo.title : '';
+      const helperText = typeof modalInfo === 'object' ? modalInfo.message : '';
       return (
-         <Modal transparent={true} animationType="fade" visible={showHelper}>
+         <Modal transparent={true} animationType="fade">
             <View style={styles.modalHelperContainer}>
                <View style={styles.helperComponentContainer}>
-                  <InfoHelper onClose={() => setShowHelper(false)} titleText={helperTitle} contentText={helperText} />
+                  <InfoHelper onClose={() => setModalInfo(false)} titleText={helperTitle} contentText={helperText} />
                </View>
             </View>
          </Modal>
@@ -96,23 +96,23 @@ const EditarPerfilScreen = () => {
 
 
    const perfilConfig: any = {
-      peso_inicial: { label: 'Peso Atual (kg)', type: 'numeric', unidadeMedida: 'kg', maxValue: 300, maxLength: 3, allowDecimal: true, minValue: 0 },
-      peso_final: { label: 'Meta de Peso (kg)', type: 'numeric', unidadeMedida: 'kg', maxValue: 300, maxLength: 3, allowDecimal: true, minValue: 0 },
-      altura: { label: 'Altura (cm)', type: 'numeric', unidadeMedida: 'cm', maxValue: 300, maxLength: 3, allowDecimal: true, minValue: 0 },
-      nivel_atividade: { label: 'Nível de Atividade', type: 'select', options: mapNiveisDeAtividade },
-      objetivo: { label: 'Objetivo', type: 'select', options: mapObjetivos },
-      tmb: { label: 'Taxa Metabólica Basal', type: 'numeric', unidadeMedida: 'kcal', maxValue: null, maxLength: 5, allowDecimal: false, minValue: 0 },
-      tmt: { label: 'Taxa Metabólica Total', type: 'numeric', unidadeMedida: 'kcal', maxValue: null, maxLength: 5, allowDecimal: false, minValue: 0 },
-      tmf: { label: 'Taxa Metabólica Final', type: 'numeric', unidadeMedida: 'kcal', maxValue: null, maxLength: 5, allowDecimal: false, minValue: 0 },
-      meta_proteina: { label: 'Meta de Proteína (g)', type: 'numeric', unidadeMedida: 'Gramas', maxValue: null, maxLength: 4, allowDecimal: false, minValue: 0 },
-      meta_carboidrato: { label: 'Meta de Carboidrato (g)', type: 'numeric', unidadeMedida: 'Gramas', maxValue: null, maxLength: 4, allowDecimal: false, minValue: 0 },
-      meta_gordura: { label: 'Meta de Gordura (g)', type: 'numeric', unidadeMedida: 'Gramas', maxValue: null, maxLength: 4, allowDecimal: false, minValue: 0 },
+      peso_inicial: { label: 'Peso Atual (kg)', type: 'numeric', unidadeMedida: 'kg', maxValue: 300, maxLength: 3, allowDecimal: true, minValue: 1 },
+      peso_final: { label: 'Meta de Peso (kg)', type: 'numeric', unidadeMedida: 'kg', maxValue: 300, maxLength: 3, allowDecimal: true, minValue: 1 },
+      altura: { label: 'Altura (cm)', type: 'numeric', unidadeMedida: 'cm', maxValue: 300, maxLength: 3, allowDecimal: true, minValue: 1 },
+      nivel_atividade: { label: 'Nível de Atividade', type: 'select', options: mapNiveisDeAtividade, modalText: helperModalTexts.nivelAtividade },
+      objetivo: { label: 'Objetivo', type: 'select', options: mapObjetivos, modalText: helperModalTexts.objetivo },
+      tmb: { label: 'TMB', type: 'numeric', unidadeMedida: 'kcal', maxValue: null, maxLength: 5, allowDecimal: false, minValue: 1, modalText: helperModalTexts.tmb },
+      tmt: { label: 'TMT', type: 'numeric', unidadeMedida: 'kcal', maxValue: null, maxLength: 5, allowDecimal: false, minValue: 1, modalText: helperModalTexts.tmt },
+      tmf: { label: 'TMF', type: 'numeric', unidadeMedida: 'kcal', maxValue: null, maxLength: 5, allowDecimal: false, minValue: 1, modalText: helperModalTexts.tmf },
+      meta_proteina: { label: 'Meta de Proteína (g)', type: 'numeric', unidadeMedida: 'Gramas', maxValue: null, maxLength: 4, allowDecimal: false, minValue: 1 },
+      meta_carboidrato: { label: 'Meta de Carboidrato (g)', type: 'numeric', unidadeMedida: 'Gramas', maxValue: null, maxLength: 4, allowDecimal: false, minValue: 1 },
+      meta_gordura: { label: 'Meta de Gordura (g)', type: 'numeric', unidadeMedida: 'Gramas', maxValue: null, maxLength: 4, allowDecimal: false, minValue: 1 },
       proteina_peso: { label: 'Proteína / Peso', type: 'numeric', unidadeMedida: 'Gramas / kg', maxValue: 10, maxLength: 4, allowDecimal: true, minValue: 0 },
       carboidrato_peso: { label: 'Carboidrato / Peso', type: 'numeric', unidadeMedida: 'Gramas / kg', maxValue: 10, maxLength: 4, allowDecimal: true, minValue: 0 },
       gordura_peso: { label: 'Gordura / Peso', type: 'numeric', unidadeMedida: 'Gramas / kg', maxValue: 10, maxLength: 4, allowDecimal: true, minValue: 0 }
    };
 
-   const handleNumberInput = (input: string, perfilCampo: string, allowDecimal: boolean, maxValue: number) => {
+   const handleNumberInput = (input: string, perfilCampo: string, allowDecimal: boolean, maxValue: number, minValue?: number) => {
       if (input === '') {
          setPerfil({ ...perfil, [perfilCampo]: ''});
          return;
@@ -138,6 +138,12 @@ const EditarPerfilScreen = () => {
          }
       }
 
+      if(minValue){
+         const numericValue = parseFloat(numericText);
+         if (!isNaN(numericValue) && numericValue < minValue) {
+            numericText = minValue.toString();
+         }
+      }
       setPerfil({ ...perfil, [perfilCampo]: Number(numericText) });
 
    };
@@ -158,7 +164,7 @@ const EditarPerfilScreen = () => {
                   value={(perfil[key as keyof criarPerfilSchema]).toString()}
                   placeholder={configCampo['minValue'] >= 0 && configCampo['maxValue'] ? `${configCampo['minValue']} - ${configCampo['maxValue']}` : configCampo['unidadeMedida']}
                   maxLength={configCampo['maxLength']}
-                  onChangeText={(valorTexto) => handleNumberInput(valorTexto, key, configCampo['allowDecimal'], configCampo['maxValue'])}
+                  onChangeText={(valorTexto) => handleNumberInput(valorTexto, key, configCampo['allowDecimal'], configCampo['maxValue'], configCampo['minValue'])}
                />
             );
          case 'select':
@@ -183,13 +189,13 @@ const EditarPerfilScreen = () => {
             <Text style={styles.title}>Dados do Perfil</Text>
          </View>
          <ScrollView bounces={false} showsVerticalScrollIndicator={false}>
-            {Modalhelper()}
+            {modalInfo ?  modalhelper() : null}
             <View style={styles.row}>
                {Object.keys(perfilConfig).map((chave, index) => (
                   <View key={index} style={styles.inputContainer}>
                      <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap' }}>
-                        {chave === 'nivel_atividade' &&
-                           <Icon onPress={()=>(setShowHelper(true))} name="information-circle" style={{ marginRight: 5 }} size={getResponsiveSizeHeight(2.7)} color={theme.colors.color05} />
+                        {perfilConfig[chave]?.modalText &&
+                           <Icon onPress={()=>(setModalInfo(perfilConfig[chave]?.modalText ))} name="information-circle" style={{ marginRight: 5 }} size={getResponsiveSizeHeight(2.7)} color={theme.colors.color05} />
                         }
                         <Text style={styles.label}>{perfilConfig[chave].label}</Text>
                      </View>
@@ -244,7 +250,7 @@ const styles = StyleSheet.create({
    label: {
       fontSize: getResponsiveSizeWidth(3.5),
       fontWeight: 'bold',
-      marginBottom: 4,
+      marginBottom: 10,
       color: theme.colors.color05,
       textAlign: 'center',
    },
@@ -287,4 +293,4 @@ const styles = StyleSheet.create({
    },
 });
 
-export default EditarPerfilScreen;
+export default DadosPerfilScreen;

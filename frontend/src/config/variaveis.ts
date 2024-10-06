@@ -40,3 +40,26 @@ export const mapObjetivos: { [key: string]: string } = {
    'Ganho de Peso': 'GANHO'
 }
 
+export const helperModalTexts: { [key: string]: {title: string, message: string} } = {
+   nivelAtividade: {
+      title: 'Nível de Atividade',
+      message: 'Sedentário: Exercício mínimo \n Leve: 1-3 dias por semana \n Moderado: 3-5 dias por semana \n Intenso: 6-7 dias por semana \n Muito Intenso: Atleta, 2x por dia'
+   },
+   objetivo: {
+      title: 'Objetivo',
+      message: 'O objetivo é um fator importante para calcular o gasto calórico diário.'
+   },
+   tmb: {
+      title: 'Taxa Metabólica Basal - TMB',
+      message: 'É a quantidade necessária de kcal que seu corpo gasta em um dia para manter as funções vitais em repouso.'
+   },
+   tmt: {
+      title: 'Taxa Metabólica Total - TMT',
+      message: 'É a quantidade de kcal que seu corpo gasta em um dia considerando seu nível de atividade.\n\n TMT = TMB + Nível de Atividade'
+   },
+   tmf: {
+      title: 'Taxa Metabólica Final - TMF',
+      message: 'É a quantidade de kcal ideal que você deve ingerir por dia para atingir seu objetivo. \n\n TMF = TMB + Nível de Atividade + Objetivo'
+   },
+}
+
