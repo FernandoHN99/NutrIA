@@ -73,14 +73,12 @@ export const calcularIdade = (dataNascimento: string) => {
    if (mesAtual < dataNasc.getMonth() || (mesAtual === dataNasc.getMonth() && diaAtual < dataNasc.getDate())) {
       idade--;
    }
-
    return idade;
 }
 
 export const arredondarValores = (valor: number, casasDeciamais: number = 0) => {
    return parseFloat(valor.toFixed(casasDeciamais));
 }
-
 
 export const criarStrData = (dias: number = 0, meses: number = 0, anos: number = 0, data: Date = new Date()) => {
    return new Date(data.getFullYear() + anos, data.getMonth() + meses, data.getDate() + dias).toISOString().split('T')[0];
@@ -104,10 +102,8 @@ export const roundJsonValues = (jsonData: { [key: string]: any }, casasDecimais:
          jsonArredondado[key] = value;
       }
    });
-
    return jsonArredondado;
 };
-
 
 export const calcularMacrosPorPorcao = (
    porcaoBase: number,
@@ -118,11 +114,8 @@ export const calcularMacrosPorPorcao = (
    const qtdeGordura = (macrosBase.gordura * qtdeUtilizada) / porcaoBase;
    const qtdeAlcool = (macrosBase.alcool * qtdeUtilizada) / porcaoBase;
    const qtdeKcal = (macrosBase.kcal * qtdeUtilizada) / porcaoBase;
-
    return { qtdeCarboidrato, qtdeProteina, qtdeGordura, qtdeAlcool, qtdeKcal };
-
 };
-
 
 export const encontrarChavePeloValorJSON = (obj: { [key: string]: any }, valorProcurado: any) => {
    return Object.keys(obj).find(key => obj[key] === valorProcurado);

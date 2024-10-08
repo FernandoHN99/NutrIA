@@ -107,11 +107,11 @@ const styles = StyleSheet.create({
       marginLeft: getResponsiveSizeWidth(10),
    },
    refeicoesContainer: {
-      backgroundColor: hexToRgba(theme.colors.color04, '0.5'),
+      backgroundColor: hexToRgba(theme.colors.color04, '0.2'),
       borderRadius: 20,
       width: getResponsiveSizeWidth(90),
       borderColor: theme.colors.color05,
-      borderWidth: 2,
+      // borderWidth: 2,
    },
    refeicaoContainer: {
       marginHorizontal: 20,

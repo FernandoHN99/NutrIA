@@ -1,6 +1,6 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { URL_BACKEND } from './variaveis';
+import { URL_BACKEND, listaRotasSemAuth} from './variaveis';
 
 const api = axios.create({
    baseURL: URL_BACKEND,
@@ -52,15 +52,18 @@ api.interceptors.response.use(
    (response) => response,
    async (error) => {
       const originalRequest = error.config;
-      if (error.response && error.response.status === 401 && !originalRequest._retry) {
-         originalRequest._retry = true;
-         try {
-            const { token } = await refreshAuthTokens();
-            api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-            originalRequest.headers['Authorization'] = `Bearer ${token}`;
-            return api(originalRequest);
-         } catch (error) {
-            return Promise.reject(error);
+      if(!listaRotasSemAuth.includes(originalRequest.url)){
+         if (error.response && error.response.status === 401 && !originalRequest._retry) {
+            originalRequest._retry = true;
+            try {
+               console.log('api.interceptors: ', originalRequest);
+               const { token } = await refreshAuthTokens();
+               api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+               originalRequest.headers['Authorization'] = `Bearer ${token}`;
+               return api(originalRequest);
+            } catch (error) {
+               return Promise.reject(error);
+            }
          }
       }
       return Promise.reject(error);

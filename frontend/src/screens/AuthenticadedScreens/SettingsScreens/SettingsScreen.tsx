@@ -2,15 +2,30 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import theme from '../../../styles/theme';
+import { setTokensStorage } from '../../../api/hooks/httpState/usuarioAuth';
+import { useQueryClient, useMutation } from '@tanstack/react-query';
 
 const SettingsScreen = ({navigation}: {navigation: any}) => {
+   const queryClient = useQueryClient();
    const menuItems = [
+      // { title: 'Configuração da Conta', action: () => console.log('Configuração da Conta') },
       { title: 'Configuração de Perfil', action: () => navigation.push('DadosPerfilScreen') },
-      { title: 'Comidas Favoritas' },
+      // { title: 'Comidas Favoritas' },
       { title: 'Configuração de Refeições', action: () => navigation.push('RefeicoesScreen') },
-      { title: 'Sobre Nós', action: () => navigation.push('AboutUsScreen') },
       { title: 'Política de Privacidade', action: () => navigation.push('PoliticaPrivacidadeScreen') },
+      { title: 'Sobre Nós', action: () => navigation.push('AboutUsScreen') },
+      { title: 'Sair', action: () => fazerLogoutFn() },
    ];
+
+   const { mutateAsync: fazerLogoutFn } = useMutation({
+      mutationFn: () => Promise.resolve(),
+      onSuccess() {
+         setTokensStorage('', '');
+         queryClient.setQueryData(['usuarioTokens'], () => {
+            return {token: '', refreshToken: ''};
+         });
+      },
+   });
 
    return (
       <View style={styles.container}>
@@ -18,7 +33,9 @@ const SettingsScreen = ({navigation}: {navigation: any}) => {
          {menuItems.map((item, index) => (
             <TouchableOpacity key={index} style={styles.menuItem} onPress={item.action}>
                <Text style={styles.menuText}>{item.title}</Text>
-               <Icon name="chevron-forward-outline" size={20} color={theme.colors.color05} />
+               { index !== (menuItems.length - 1) &&
+                  <Icon name="chevron-forward-outline" size={20} color={theme.colors.color05} />
+               }
             </TouchableOpacity>
          ))}
       </View>

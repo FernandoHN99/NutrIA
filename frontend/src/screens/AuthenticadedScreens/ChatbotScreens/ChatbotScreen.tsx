@@ -31,7 +31,7 @@ const ChatbotScreen = () => {
       if (userMessage.trim() === '') return;
       setMessages([...messages, {
          _id: Math.random(),
-         text: userMessage,
+         text: userMessage.trim(),
          user: "Você",
       }]);
       setText('');

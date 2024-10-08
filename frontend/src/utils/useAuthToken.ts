@@ -38,8 +38,9 @@ export const useAuthToken = () => {
 
    const removeTokens = async () => {
       try {
-         await AsyncStorage.removeItem(TOKEN_KEY);
-         await AsyncStorage.removeItem(REFRESH_KEY);
+         await AsyncStorage.setItem(TOKEN_KEY, '');
+         await AsyncStorage.setItem(REFRESH_KEY, '');
+         console.log('Tokens removidos.');
          setToken(null);
          setRefreshToken(null);
       } catch (error) {

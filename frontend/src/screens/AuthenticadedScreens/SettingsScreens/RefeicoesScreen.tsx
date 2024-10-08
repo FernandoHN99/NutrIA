@@ -66,8 +66,8 @@ const RefeicoesScreen = () => {
    const { mutateAsync: adicionarRefeicaoServiceFn } = useMutation({
       mutationFn: adicionarRefeicaoService,
       onSuccess(retorno) {
-         queryClient.setQueryData(['refeicoesUsuario'], (data: any[]) => {
-            return [...data, retorno];
+         queryClient.setQueryData(['authUserToken'], (data: any[]) => {
+            return {token: 'eyJhbGciOiJIUzI1NiIsImtpZCI6ImNWMEZYOU1HOWVOV0VLemwiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2t2dW9sc2FmZ2VtZGVzb3NxYWppLnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiJkZjk0M2NkNi05OWRhLTQzMmItYWQyNi02Y2M2YmFmMTAyZWYiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzI4MzQ1Nzc1LCJpYXQiOjE3MjgzNDM5NzUsImVtYWlsIjoic2FmYWRvQGdtYWlsLmNvbSIsInBob25lIjoiIiwiYXBwX21ldGFkYXRhIjp7InByb3ZpZGVyIjoiZW1haWwiLCJwcm92aWRlcnMiOlsiZW1haWwiXX0sInVzZXJfbWV0YWRhdGEiOnt9LCJyb2xlIjoiYXV0aGVudGljYXRlZCIsImFhbCI6ImFhbDEiLCJhbXIiOlt7Im1ldGhvZCI6InBhc3N3b3JkIiwidGltZXN0YW1wIjoxNzI4MzQzOTc1fV0sInNlc3Npb25faWQiOiJjNWZmZDRjMy05ODliLTQ4ZWMtOTY1OS0wMTIyNTZmMDc5YjUiLCJpc19hbm9ueW1vdXMiOmZhbHNlfQ.9wY2tmSluxnQOIMvup7TqBPmcMLuqP0lBKpfaB5Kr5A', refreshToken: 'XOCxBq7f-YXjmthTDPy5Zw'};
          });
       },
       onError(error) {

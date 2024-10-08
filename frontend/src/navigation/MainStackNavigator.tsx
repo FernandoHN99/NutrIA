@@ -1,28 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import UnauthenticatedNavigator from './AuthenticationNavigators/UnauthenticatedNavigator';
-import { useAuthToken } from '../utils/useAuthToken';
 import AuthenticatedNavigator from './AuthenticationNavigators/AuthenticatedNavigator';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { QueryClientProvider } from '@tanstack/react-query';
-import { queryClient } from '../lib/react-query';
+import { getUserTokens } from '../api/hooks/httpState/usuarioAuth';
 
 const MainStackNavigator = () => {
-   const { token, removeTokens } = useAuthToken()
-   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!token);
-
+   const isAuthenticated = getUserTokens()?.token ? true : false;
+   
    return (
-      <QueryClientProvider client={queryClient}>
          <SafeAreaProvider>
             <NavigationContainer>
                {isAuthenticated ? (
-                  <AuthenticatedNavigator/>
+                  <AuthenticatedNavigator  />
                ) : (
-                  <UnauthenticatedNavigator setIsAuthenticated={setIsAuthenticated} />
+                  <UnauthenticatedNavigator  />
                )}
             </NavigationContainer>
          </SafeAreaProvider>
-      </QueryClientProvider>
    );
 };
 

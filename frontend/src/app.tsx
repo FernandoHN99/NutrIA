@@ -2,6 +2,8 @@ import MainStackNavigator from './navigation/MainStackNavigator';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import React, { useEffect } from 'react';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { queryClient } from './lib/react-query';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -26,7 +28,10 @@ const App = () => {
    }
 
    return (
-      <MainStackNavigator />
+      <QueryClientProvider client={queryClient}>
+         <MainStackNavigator />
+      </QueryClientProvider>
+
    )
 }
 

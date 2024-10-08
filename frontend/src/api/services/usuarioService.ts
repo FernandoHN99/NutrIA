@@ -3,7 +3,13 @@ import { fazerLoginSchema } from '../schemas/usuarioSchemas';
 import { criarUsuarioSchema } from '../schemas/usuarioSchemas';
 
 export const fazerLoginService = async (credenciais: fazerLoginSchema) => {
-   return api.post(`/usuario/login`, credenciais);
+   try{
+      const response = await api.post(`/usuario/login`, credenciais);
+      return response.data.data;
+   }
+   catch(error){
+      throw (error as any)?.response?.data;
+   }
 };
 
 export const criarUsuarioService = async (usuario: criarUsuarioSchema) => {

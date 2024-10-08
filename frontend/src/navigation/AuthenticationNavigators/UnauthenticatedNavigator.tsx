@@ -7,7 +7,7 @@ import SignUpScreen from '../../screens/UnauthenticadedScreens/SignUpScreen';
 
 const Stack = createNativeStackNavigator();
 
-const UnauthenticatedNavigator = ({ setIsAuthenticated }: { setIsAuthenticated: any }) => {
+const UnauthenticatedNavigator = () => {
 
 
    return (
@@ -21,13 +21,13 @@ const UnauthenticatedNavigator = ({ setIsAuthenticated }: { setIsAuthenticated: 
             name="Login"
             component={LoginScreen}
             options={styles.screenOptionLogin}
-            initialParams={{ setIsAuthenticated }}
+            // initialParams={{ setIsAuthenticated }}
          />
          <Stack.Screen
             name="SignUp"
             component={SignUpScreen}
             options={styles.screenOptionSignUp}
-            initialParams={{ setIsAuthenticated }}
+            // initialParams={{ setIsAuthenticated }}
          />
       </Stack.Navigator>
    );

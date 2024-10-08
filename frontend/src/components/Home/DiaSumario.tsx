@@ -133,12 +133,13 @@ const styles = StyleSheet.create({
       marginRight: getResponsiveSizeWidth(5),
    },
    infoSumarioContainer: {
-      backgroundColor: hexToRgba(theme.colors.color04, '0.5'),
+      // backgroundColor: hexToRgba(theme.colors.color04, '0.5'),
+      backgroundColor: hexToRgba(theme.colors.color04, '0.2'),
       width: getResponsiveSizeWidth(90),
       height: getResponsiveSizeWidth(65),
       borderRadius: 20,
       borderColor: theme.colors.color05,
-      borderWidth: 2,
+      // borderWidth: 2,
       flexDirection: 'column',
       justifyContent: 'flex-start',
       alignItems: 'center'

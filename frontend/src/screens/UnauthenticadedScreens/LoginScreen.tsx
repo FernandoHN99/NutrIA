@@ -1,30 +1,43 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { getResponsiveSizeHeight, getResponsiveSizeWidth } from '../../utils/utils';
 import theme from '../../styles/theme';
-import useFazerLogin from '../../api/hooks/usuario/useFazerLogin';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { fazerLoginService } from '../../api/services/usuarioService';
+import { setTokensStorage } from '../../api/hooks/httpState/usuarioAuth';
+import { useQueryClient, useMutation } from '@tanstack/react-query';
 
-const LoginScreen = ({ navigation, route }: { navigation: any, route: any }) => {
-
-   const { setIsAuthenticated } = route.params;
-
-   const [email, setEmail] = useState('');
-   const [password, setPassword] = useState('');
+const LoginScreen = () => {
+   const [email, setEmail] = useState('safado@gmail.com');
+   const [password, setPassword] = useState('1234567890');
    const [isSecure, setIsSecure] = useState(true);
-   const { data, loading, error, login } = useFazerLogin();
+   const [loading, setLoading] = useState(false);
+   const [error, setError] = useState(false);
+   const queryClient = useQueryClient();
+
+   const { mutateAsync: fazerLoginServiceFn } = useMutation({
+      mutationFn: fazerLoginService,
+      onMutate() {
+         setError(false);
+         setLoading(true);
+      },
+      onSuccess(retorno) {
+         setLoading(false);
+         setTokensStorage(retorno.access_token, retorno.refresh_token);
+         queryClient.setQueryData(['usuarioTokens'], () => {
+            return {token: retorno.access_token, refreshToken: retorno.refresh_token};
+         });
+      },
+      onError() {
+         setLoading(false);
+         setError(true);
+      }
+   });
 
    const handleLogin = async () => {
       if (!email || !password) return;
-      await login({ email, password });
+      await fazerLoginServiceFn({ email, password });
    };
-
-   useEffect(() => {
-      if (data) {
-         setIsAuthenticated(true)
-      }
-      login({ email: 'safado@gmail.com', password: '1234567890'} );
-   }, [data]);
 
 
    return (
@@ -49,7 +62,7 @@ const LoginScreen = ({ navigation, route }: { navigation: any, route: any }) => 
                   value={password}
                   autoCapitalize='none'
                   secureTextEntry={isSecure}
-                  />
+               />
                <TouchableOpacity onPress={() => setIsSecure(!isSecure)} style={styles.eyeButton}>
                   <Icon name={isSecure ? "eye-off-outline" : "eye-outline"} size={30} color={theme.colors.color05} />
                </TouchableOpacity>

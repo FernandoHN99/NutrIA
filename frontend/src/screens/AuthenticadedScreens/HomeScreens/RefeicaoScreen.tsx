@@ -165,16 +165,18 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       flexDirection: 'row',
       height: getResponsiveSizeHeight(25),
-      backgroundColor: hexToRgba(theme.colors.color04, '0.5'),
+      // backgroundColor: hexToRgba(theme.colors.color04, '0.5'),
+      backgroundColor: hexToRgba(theme.colors.color04, '0.2'),
       borderRadius: 20,
       borderColor: theme.colors.color05,
-      borderWidth: 2,
+      // borderWidth: 2,
    },
    subtitulo: {
       fontFamily: 'NotoSans-Bold',
       fontSize: getResponsiveSizeHeight(2.5),
       color: theme.colors.color05,
       marginLeft: getResponsiveSizeWidth(5),
+      marginBottom: getResponsiveSizeHeight(0.5),
    },
    infoText: {
       textAlign: 'center',
@@ -201,10 +203,11 @@ const styles = StyleSheet.create({
       marginTop: getResponsiveSizeHeight(1),
    },
    alimentosContentContainer: {
-      backgroundColor: hexToRgba(theme.colors.color04, '0.5'),
+      // backgroundColor: hexToRgba(theme.colors.color04, '0.5'),
+      backgroundColor: hexToRgba(theme.colors.color04, '0.2'),
       borderRadius: 20,
       borderColor: theme.colors.color05,
-      borderWidth: 2,
+      // borderWidth: 2,
    },
    alimentoContainer: {
       flexDirection: 'row',
@@ -212,7 +215,7 @@ const styles = StyleSheet.create({
       justifyContent: 'space-between',
       paddingVertical: getResponsiveSizeWidth(3),
       paddingHorizontal: getResponsiveSizeWidth(5),
-      borderColor: theme.colors.color05,
+      borderColor: hexToRgba(theme.colors.color05, '0.5'),
       borderBottomWidth: 2,
    },
    alimentoLastContainer: {
@@ -273,7 +276,7 @@ const styles = StyleSheet.create({
       fontSize: getResponsiveSizeWidth(4),
       textAlign: 'center',
       color: theme.colors.color01,
-   },
+   }
 
 });
 
