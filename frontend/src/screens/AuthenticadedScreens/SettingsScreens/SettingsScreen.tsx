@@ -2,8 +2,8 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import theme from '../../../styles/theme';
-import { setTokensStorage } from '../../../api/hooks/httpState/usuarioAuth';
-import { useQueryClient, useMutation } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
+import { fazerLogoutService } from '../../../api/services/usuarioService';
 
 const SettingsScreen = ({navigation}: {navigation: any}) => {
    const queryClient = useQueryClient();
@@ -14,18 +14,8 @@ const SettingsScreen = ({navigation}: {navigation: any}) => {
       { title: 'Configuração de Refeições', action: () => navigation.push('RefeicoesScreen') },
       { title: 'Política de Privacidade', action: () => navigation.push('PoliticaPrivacidadeScreen') },
       { title: 'Sobre Nós', action: () => navigation.push('AboutUsScreen') },
-      { title: 'Sair', action: () => fazerLogoutFn() },
+      { title: 'Sair', action: () => fazerLogoutService(queryClient) },
    ];
-
-   const { mutateAsync: fazerLogoutFn } = useMutation({
-      mutationFn: () => Promise.resolve(),
-      onSuccess() {
-         setTokensStorage('', '');
-         queryClient.setQueryData(['usuarioTokens'], () => {
-            return {token: '', refreshToken: ''};
-         });
-      },
-   });
 
    return (
       <View style={styles.container}>

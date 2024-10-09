@@ -4,7 +4,7 @@ import { getResponsiveSizeHeight, getResponsiveSizeWidth } from '../../utils/uti
 import theme from '../../styles/theme';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { fazerLoginService } from '../../api/services/usuarioService';
-import { setTokensStorage } from '../../api/hooks/httpState/usuarioAuth';
+import { setTokensStorage } from '../../api/httpState/usuarioAuth';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 
 const LoginScreen = () => {

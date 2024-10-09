@@ -5,7 +5,7 @@ import { criarStrData, getResponsiveSizeWidth } from '../../utils/utils';
 import LoadingScreen from '../../components/LoadingScreen';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import theme from '../../styles/theme';
-import { useAlimentosFavoritos, useConsumoAlimentos, usePerfisUsuario, useRefeicoesUsuario, useUsuarioInfo } from '../../api/hooks/httpState/usuarioData';
+import { useAlimentosFavoritos, useConsumoAlimentos, usePerfisUsuario, useRefeicoesUsuario, useUsuarioInfo } from '../../api/httpState/usuarioData';
 const Stack = createNativeStackNavigator();
 
 const AuthenticatedNavigator = () => {

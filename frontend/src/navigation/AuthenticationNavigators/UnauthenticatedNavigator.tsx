@@ -21,13 +21,11 @@ const UnauthenticatedNavigator = () => {
             name="Login"
             component={LoginScreen}
             options={styles.screenOptionLogin}
-            // initialParams={{ setIsAuthenticated }}
          />
          <Stack.Screen
             name="SignUp"
             component={SignUpScreen}
             options={styles.screenOptionSignUp}
-            // initialParams={{ setIsAuthenticated }}
          />
       </Stack.Navigator>
    );

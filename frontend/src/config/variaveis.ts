@@ -5,8 +5,10 @@ export const DOMINIO_BACKEND: string = 'http://192.168.15.247';
 export const PORTA_BACKEND: number = 5001;
 export const ENDPOINT: string = '/nutria'
 export const URL_BACKEND: string = `${DOMINIO_BACKEND}:${PORTA_BACKEND}${ENDPOINT}`
+export const TOKEN_KEY = 'authToken';
+export const REFRESH_KEY = 'refreshToken';
 
-export const listaRotasSemAuth: Array<string> = ['/usuario/criar', '/usuario/login', '/usuario/refresh-token'];
+export const listaRotasSemAuth: Array<string> = ['/usuario/criar', '/usuario/login'];
 export const tiposDeCartao: Array<string> = ['MACROS', 'CALORIAS', 'DIETA FLEXIVEL'];
 export const listaEstadosAlimentos: Array<string> = ['CRU', 'COZIDO', 'ASSADO', 'FRITO', 'GRELHADO', 'PADRAO'];
 export const listaUnidadesMedida: Array<string> = ['GRAMA', 'MILILITRO', 'COLHER SOPA', 'COLHER CHA', 'XICARA PADRAO', 'XICARA CHA', 'XICARA CAFE', 'UNIDADE'];

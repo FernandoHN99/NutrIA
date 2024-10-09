@@ -6,7 +6,7 @@ import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
 import theme from '../../../styles/theme';
 import { useNavigation } from '@react-navigation/native';
 import { getResponsiveSizeWidth } from '../../../utils/utils';
-import { useRefeicoesUsuario } from '../../../api/hooks/httpState/usuarioData';
+import { useRefeicoesUsuario } from '../../../api/httpState/usuarioData';
 import { adicionarRefeicaoService, removerRefeicaoService, reativarRefeicaoService, atualizarRefeicaoService } from '../../../api/services/refeicaoService';
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 

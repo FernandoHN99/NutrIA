@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Modal, Alert, ActivityIndicator } from 'react-native';
 import theme from '../../../styles/theme';
-import { usePerfisUsuario, useUsuarioInfo } from '../../../api/hooks/httpState/usuarioData';
+import { usePerfisUsuario, useUsuarioInfo } from '../../../api/httpState/usuarioData';
 import { criarPerfilSchema, Perfil } from '../../../api/schemas/perfilSchemas';
 import PicklistSelector from '../../../components/Home/PicklistSelector';
 import { mapNiveisDeAtividade, mapObjetivos, helperModalTexts, mapMultNiveisDeAtividade } from '../../../config/variaveis';

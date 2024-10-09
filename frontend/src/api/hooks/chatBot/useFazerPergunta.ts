@@ -12,9 +12,9 @@ export const useFazerPergunta = () => {
       setError(null);
       try {
          const response = await fazerPerguntaService({ prompt_usuario: userMessage } as perguntarChatBotSchema);
-         setData(response.data.data.resposta);
+         setData(response.resposta);
       } catch (err) {
-         setError((err as any)?.response?.data.mensagem);
+         setError((err as any)?.mensagem);
       } finally {
          setLoading(false);
       }

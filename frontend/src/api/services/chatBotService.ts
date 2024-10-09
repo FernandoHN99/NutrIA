@@ -2,5 +2,10 @@ import api from '../../config/apiService';
 import { perguntarChatBotSchema } from '../schemas/chatBotSchema';
 
 export const fazerPerguntaService = async (bodyRequest: perguntarChatBotSchema) => {
-   return api.post(`/chatbot/perguntar`, { ...bodyRequest });
+   try{
+      const response = await api.post(`/chatbot/perguntar`, { ...bodyRequest });
+      return response.data.data;
+   }catch(error){
+      throw (error as any)?.response?.data;
+   }
 };

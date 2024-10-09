@@ -4,21 +4,18 @@ import theme from '../../styles/theme';
 import { getResponsiveSizeWidth, getResponsiveSizeHeight } from '../../utils/utils';
 import MessagesChatbot from '../../components/ChatBotSignUp/MessagesChatbot';
 import FlowSignUp from '../../components/ChatBotSignUp/FlowSignUp';
-import useSignUp from '../../api/hooks/usuario/useSignUp';
 import LoadingScreen from '../../components/LoadingScreen';
-import CustomAlert from '../../components/CustomAlert';
+import { useQueryClient, useMutation } from '@tanstack/react-query';
+import { fazerSignUpService } from '../../api/services/usuarioService';
 
-const SignUpScreen = ({ navigation, route }: { navigation: any, route: any }) => {
-
-   const { setIsAuthenticated } = route.params;
-
+const SignUpScreen = ({ navigation }: { navigation: any}) => {
    const scrollViewRef = useRef<ScrollView>(null);
    const [loadingChatbot, setLoadingChatbot] = useState(false);
    const [step, setStep] = useState(0);
    const [answers, setAnswers] = useState<any>({});
-
-   const { data, error, loading, fazerSignUp  } = useSignUp()
-
+   const [loading, setLoading] = useState(false);
+   const [error, setError] = useState(false);
+   const queryClient = useQueryClient();
 
    const [messages, setMessages] = useState<{ _id: number, text: string; user: string; }[]>([
       {
@@ -28,22 +25,29 @@ const SignUpScreen = ({ navigation, route }: { navigation: any, route: any }) =>
       }
    ]);
 
+   const { mutateAsync: fazerSignUpServiceFn } = useMutation({
+      mutationFn: fazerSignUpService,
+      onMutate() {
+         setError(false);
+         setLoading(true);
+      },
+      onSuccess(retorno) {
+         setLoading(false);
+         const token: string = retorno.criarUsuarioResponse?.access_token
+         const refreshToken: string = retorno.criarUsuarioResponse?.refresh_token
+         queryClient.setQueryData(['usuarioTokens'], () => {
+            return {token, refreshToken};
+         });
+      },
+      onError(error) {
+         setLoading(false);
+         setError(true);
+      }
+   });
+
    const handleSignUp = async () => {
-
-      await fazerSignUp(answers);
-
+      await fazerSignUpServiceFn(answers);
    }
-
-   useEffect(() => {
-      if (data) {
-         setIsAuthenticated(true);
-      }
-      
-      if (error) {
-         CustomAlert(error, "Tente novamente.", () => navigation.replace('Boas-Vindas'))
-      }
-   }, [data, error]);
-
 
    useEffect(() => {
       const botResponse = {

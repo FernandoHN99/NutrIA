@@ -8,7 +8,7 @@ import { obterConsumoUsuarioService } from '../../../api/services/alimentoConsum
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import DiaConsumo from '../../../components/Home/DiaConsumo';
 import { encontrarPerfilPorData, filtrarConsumoDia, filtrarRefeicoesAtivas } from '../../../utils/formatters';
-import { useConsumoAlimentos, useRefeicoesUsuario, usePerfisUsuario } from '../../../api/hooks/httpState/usuarioData';
+import { useConsumoAlimentos, useRefeicoesUsuario, usePerfisUsuario } from '../../../api/httpState/usuarioData';
 
 const HomeScreen = ({ navigation }: { navigation: any }) => {
 

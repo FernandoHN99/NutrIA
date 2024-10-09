@@ -1,10 +1,10 @@
 import { useQuery, useQueries } from '@tanstack/react-query';
-import { obterUsuarioService } from '../../services/usuarioService';
-import { obterPerfilService } from '../../services/perfilService';
-import { obterConsumoUsuarioService } from '../../services/alimentoConsumoService';
-import { criarStrData } from '../../../utils/utils';
-import { obterRefeicaoService } from '../../services/refeicaoService';
-import { obterAlimentosFavoritosService } from '../../services/alimentoFavoritoService';
+import { obterUsuarioService } from '../services/usuarioService';
+import { obterPerfilService } from '../services/perfilService';
+import { obterConsumoUsuarioService } from '../services/alimentoConsumoService';
+import { criarStrData } from '../../utils/utils';
+import { obterRefeicaoService } from '../services/refeicaoService';
+import { obterAlimentosFavoritosService } from '../services/alimentoFavoritoService';
 
 export function useUsuarioInfo(options = {}) {
    return useQuery({
