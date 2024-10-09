@@ -53,7 +53,7 @@ export const helperModalTexts: { [key: string]: {title: string, message: string}
    },
    tmb: {
       title: 'Taxa Metabólica Basal - TMB',
-      message: 'É a quantidade necessária de kcal que seu corpo gasta em um dia para manter as funções vitais em repouso.'
+      message: 'É a quantidade necessária de kcal que seu corpo gasta em um dia para se manter em repouso.'
    },
    tmt: {
       title: 'Taxa Metabólica Total - TMT',

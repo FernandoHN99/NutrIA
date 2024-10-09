@@ -52,11 +52,11 @@ const DadosPerfilScreen = () => {
             return [...data, retorno];
          });
          setIsLoading(false);
-         Alert.alert('Sucesso', 'Seu perfil foi atualizado com sucesso');
+         Alert.alert('Sucesso', 'Seu perfil foi atualizado.');
       },
       onError() {
          setIsLoading(false);
-         Alert.alert('Erro', 'Não foi atualizar seu novo perfil',);
+         Alert.alert('Erro', 'Não foi possível atualizar seu perfil.',);
       },
       onMutate() {
          setIsLoading(true);
@@ -159,9 +159,9 @@ const DadosPerfilScreen = () => {
       newPerfil.carboidrato_peso = arredondarValores(
          calcularPesoCarboidrato(newPerfil.tmf, newPerfil.peso_inicial, newPerfil.proteina_peso, newPerfil.gordura_peso), 1
       );
-      newPerfil.meta_carboidrato = arredondarValores(newPerfil.carboidrato_peso * newPerfil.peso_inicial);
       newPerfil.meta_proteina = arredondarValores(newPerfil.proteina_peso * newPerfil.peso_inicial);
-      newPerfil.meta_gordura = arredondarValores((newPerfil.tmf - (newPerfil.meta_carboidrato * 4 + newPerfil.meta_proteina * 4)) / 9);
+      newPerfil.meta_gordura = arredondarValores(newPerfil.gordura_peso * newPerfil.peso_inicial);
+      newPerfil.meta_carboidrato = arredondarValores((newPerfil.tmf - (newPerfil.meta_proteina * 4 + newPerfil.meta_gordura * 9)) / 4);
 
       return newPerfil;
    }
@@ -178,7 +178,7 @@ const DadosPerfilScreen = () => {
       });
       if (anyDifferent && allValidStrings) {
          const diffMacrosTMF = Math.abs(perfil.tmf - (perfil.meta_carboidrato * 4 + perfil.meta_proteina * 4 + perfil.meta_gordura * 9))
-         return diffMacrosTMF < 9;
+         return diffMacrosTMF < 4;
       }
       return false;;
    };
@@ -282,7 +282,7 @@ const DadosPerfilScreen = () => {
             <TouchableOpacity
                style={[{ marginBottom: getResponsiveSizeHeight(7) }, styles.buttonNotAllowed, allowButtonSalvar && styles.button]}
                onPress={handleCriarNovoPerfl}
-               disabled={!allowButtonSalvar}
+               disabled={!allowButtonSalvar || isLoading}
             >
                {isLoading ?
                   <ActivityIndicator size="small" color={theme.colors.color01} />
