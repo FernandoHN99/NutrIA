@@ -42,7 +42,7 @@ const DiaConsumo = ({ navigation, infosDia, perfilDia, refeicoesDiaAtivas, diaSe
       return (
          <TouchableOpacity
             key={refeicao.numero_refeicao}
-            onPress={() =>totalKcal > 0 && navigation.navigate('RefeicaoScreen', { macrosRefeicao, perfilDia, infosDia })}
+            onPress={() => totalKcal > 0 && navigation.navigate('RefeicaoScreen', { macrosRefeicao, perfilDia, infosDia })}
          >
             <View
                style={[
@@ -53,13 +53,20 @@ const DiaConsumo = ({ navigation, infosDia, perfilDia, refeicoesDiaAtivas, diaSe
                <View style={styles.refeicaoMainContent}>
                   <View style={styles.refeicaoLeftContent}>
                      <View style={styles.iconeRefeicaoCircle}>
-                        {refeicao.numero_refeicao < 6 ? iconsRefeicoes[refeicao.numero_refeicao] : iconsRefeicoes[6] }
+                        {refeicao.numero_refeicao < 6 ? iconsRefeicoes[refeicao.numero_refeicao] : iconsRefeicoes[6]}
                      </View>
                      <View style={styles.refeicaoInfosContainer}>
                         <Text style={styles.refeicaoNome}>{refeicao.nome_refeicao}</Text>
-                        <Text style={styles.refeicaoKcal}>
-                           {totalKcal} kcal - {porcentagemKcal}%
-                        </Text>
+                        {
+                           totalKcal > 0 ?
+                              <Text style={styles.refeicaoKcal}>
+                                 {totalKcal} kcal - {porcentagemKcal}%
+                              </Text> :
+                              <Text style={styles.refeicaoKcal}>
+                                 {totalKcal} kcal
+                              </Text>
+
+                        }
                      </View>
                   </View>
                   <View style={styles.refeicaoRightContent}>
@@ -105,6 +112,7 @@ const styles = StyleSheet.create({
       fontFamily: 'NotoSans-Bold',
       fontSize: getResponsiveSizeHeight(2),
       marginLeft: getResponsiveSizeWidth(10),
+      marginBottom: getResponsiveSizeHeight(0.5),
    },
    refeicoesContainer: {
       backgroundColor: hexToRgba(theme.colors.color04, '0.2'),

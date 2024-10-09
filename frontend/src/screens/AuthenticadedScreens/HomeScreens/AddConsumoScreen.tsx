@@ -113,9 +113,9 @@ const AddConsumoScreen = ({ route}: { route: any }) => {
       const estadoAlimento = alimento.estado_alimento == 'PADRAO' ? '' : `, ${capitalize(alimento.estado_alimento)}`
       const tbPorcaoPadrao = alimento.tabelasNutricionais[0].porcao_padrao;
       return (
-         <View style={[styles.alimentoContainer, (resultados.length - 1) === index && styles.alimentoLastContainer]} key={`${alimento.id_alimento}-${index}`}>
+         <View style={[styles.alimentoContainer, 0 === index && styles.alimentoFirstContainer]} key={`${alimento.id_alimento}-${index}`}>
             <View style={[{ flex: 0.8 }]}>
-               <Text style={styles.infoAlimento}>{nomeAlimento}{estadoAlimento}</Text>
+               <Text style={[styles.infoAlimento, {fontFamily: 'NotoSans-Bold'}]}>{nomeAlimento}{estadoAlimento}</Text>
                <Text style={styles.infoAlimento}>{kcal} kcal, {tbPorcaoPadrao}g, 1 Porção</Text>
             </View>
             {
@@ -135,7 +135,7 @@ const AddConsumoScreen = ({ route}: { route: any }) => {
       const estadoAlimento = alimentoFavorito.alimento.estado_alimento == 'PADRAO' ? '' : `, ${capitalize(alimentoFavorito.estado_alimento)}`
       const porcaoPadrao = alimentoFavorito.alimento.tabelasNutricionais[0].porcao_padrao;
       return (
-         <View style={[styles.alimentoContainer, (cachedAlimentosFavoritos.length - 1) === index && styles.alimentoLastContainer]} key={`${alimentoFavorito.id_alimento}-${index}`}>
+         <View style={[styles.alimentoContainer, 0 === index && styles.alimentoFirstContainer]} key={`${alimentoFavorito.id_alimento}-${index}`}>
             <View style={[{ flex: 0.8 }]}>
                <Text style={styles.infoAlimento}>{nomeAlimento}{estadoAlimento}</Text>
                <Text style={styles.infoAlimento}>{kcal} kcal, {porcaoPadrao}g, 1 Porção</Text>
@@ -282,22 +282,22 @@ const styles = StyleSheet.create({
    alimentosMainContainer: {
       marginTop: getResponsiveSizeHeight(1),
       marginBottom: getResponsiveSizeHeight(30),
-      width: '99%',
+      width: '95%',
       flexDirection: 'column',
       marginHorizontal: 'auto',
    },
    alimentoContainer: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      backgroundColor: theme.colors.backgroundColor,
       padding: getResponsiveSizeWidth(3),
-      borderTopWidth: 2,
-      borderLeftWidth: 2,
-      borderRightWidth: 2,
-      borderColor: theme.colors.color05,
+      // borderTopWidth: 2,
+      // borderLeftWidth: 2,
+      // borderRightWidth: 2,
+      borderBottomWidth: 1,
+      borderColor: hexToRgba(theme.colors.color05, '0.5'),
    },
-   alimentoLastContainer: {
-      borderBottomWidth: 2,
+   alimentoFirstContainer: {
+      borderTopWidth: 0,
    },
    infoAlimento: {
       fontFamily: 'NotoSans-SemiBold',
