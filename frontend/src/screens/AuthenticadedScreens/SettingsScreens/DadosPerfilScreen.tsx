@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Modal, Alert, ActivityIndicator } from 'react-native';
 import theme from '../../../styles/theme';
 import { usePerfisUsuario, useUsuarioInfo } from '../../../api/httpState/usuarioData';
@@ -9,7 +9,7 @@ import { arredondarValores, calcularIdade, calcularPesoCarboidrato, calcularTMB,
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import InfoHelper from '../../../components/InfoHelper';
-import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { criarPerfilService } from '../../../api/services/perfilService';
 
 
@@ -41,7 +41,6 @@ const DadosPerfilScreen = () => {
       gordura_peso: perfilUsuario.gordura_peso,
    });
 
-
    const { mutateAsync: criarPerfilServiceFn } = useMutation({
       mutationFn: criarPerfilService,
       onSuccess(retorno: Perfil) {
@@ -55,7 +54,7 @@ const DadosPerfilScreen = () => {
          setIsLoading(false);
          Alert.alert('Sucesso', 'Seu perfil foi atualizado com sucesso');
       },
-      onError(error) {
+      onError() {
          setIsLoading(false);
          Alert.alert('Erro', 'Não foi atualizar seu novo perfil',);
       },
@@ -82,21 +81,13 @@ const DadosPerfilScreen = () => {
       )
    }
 
-   const allowSaveChanges = (): boolean => {
-      const anyDifferent = Object.keys(perfil).some((key) => {
-         const currentValue = perfil[key as keyof criarPerfilSchema];
-         const originalValue = perfilUsuario[key as keyof criarPerfilSchema];
-         return currentValue != originalValue;
-      });
-      const allValidStrings = Object.keys(perfil).every((key) => {
-         const currentValue = perfil[key as keyof criarPerfilSchema];
-         return validadeString(currentValue.toString());
-      });
-      return anyDifferent && allValidStrings;
+   const calcularMaxMacros = () => {
+      const maxCarboidrato = arredondarValores((perfil.tmf - (perfil.meta_proteina * 4 + perfil.meta_gordura * 9)) / 4);
+      const maxProteina = arredondarValores((perfil.tmf - (perfil.meta_carboidrato * 4 + perfil.meta_gordura * 9)) / 4);
+      const maxGordura = arredondarValores((perfil.tmf - (perfil.meta_carboidrato * 4 + perfil.meta_proteina * 4)) / 9);
+      return { maxCarboidrato, maxProteina, maxGordura };
    };
-
-   const allowButtonSalvar = allowSaveChanges()
-
+   const maxMacros = calcularMaxMacros();
 
    const perfilConfig: any = {
       peso_inicial: { label: 'Peso Atual (kg)', type: 'numeric', unidadeMedida: 'kg', maxValue: 300, maxLength: 3, allowDecimal: true, minValue: 1, editable: true },
@@ -107,9 +98,9 @@ const DadosPerfilScreen = () => {
       tmb: { label: 'TMB', type: 'numeric', unidadeMedida: 'kcal', maxValue: null, maxLength: 5, allowDecimal: false, minValue: 1, modalText: helperModalTexts.tmb, editable: true },
       // tmt: { label: 'TMT', type: 'numeric', unidadeMedida: 'kcal', maxValue: null, maxLength: 5, allowDecimal: false, minValue: 1, modalText: helperModalTexts.tmt, editable: true },
       tmf: { label: 'TMF', type: 'numeric', unidadeMedida: 'kcal', maxValue: null, maxLength: 5, allowDecimal: false, minValue: 1, modalText: helperModalTexts.tmf, editable: true },
-      meta_carboidrato: { label: 'Meta de Carboidrato (g)', type: 'numeric', unidadeMedida: 'Gramas', maxValue: null, maxLength: 4, allowDecimal: false, minValue: 0, editable: true }, //arredondarValores(perfil.tmf/4)
-      meta_proteina: { label: 'Meta de Proteína (g)', type: 'numeric', unidadeMedida: 'Gramas', maxValue: null, maxLength: 4, allowDecimal: false, minValue: 0, editable: true }, //arredondarValores((perfil.tmf/4)-(perfil.meta_carboidrato))
-      meta_gordura: { label: 'Meta de Gordura (g)', type: 'numeric', unidadeMedida: 'Gramas', maxValue: null, maxLength: 4, allowDecimal: false, minValue: 0, editable: true }, //(perfil.tmf-((perfil.meta_carboidrato*4)+(perfil.meta_proteina*4)))/9
+      meta_carboidrato: { label: 'Meta de Carboidrato (g)', type: 'numeric', unidadeMedida: 'Gramas', maxValue: maxMacros.maxCarboidrato, maxLength: 4, allowDecimal: false, minValue: 0, editable: true }, //arredondarValores(perfil.tmf/4)
+      meta_proteina: { label: 'Meta de Proteína (g)', type: 'numeric', unidadeMedida: 'Gramas', maxValue: maxMacros.maxProteina, maxLength: 4, allowDecimal: false, minValue: 0, editable: true }, //arredondarValores((perfil.tmf/4)-(perfil.meta_carboidrato))
+      meta_gordura: { label: 'Meta de Gordura (g)', type: 'numeric', unidadeMedida: 'Gramas', maxValue: maxMacros.maxGordura, maxLength: 4, allowDecimal: false, minValue: 0, editable: true }, //(perfil.tmf-((perfil.meta_carboidrato*4)+(perfil.meta_proteina*4)))/9
       carboidrato_peso: { label: 'Carboidrato / Peso', type: 'numeric', unidadeMedida: 'Gramas / kg', maxLength: 4, allowDecimal: true, minValue: 0, editable: false, valor: arredondarValores(perfil.meta_carboidrato / perfil.peso_inicial, 1) },
       proteina_peso: { label: 'Proteína / Peso', type: 'numeric', unidadeMedida: 'Gramas / kg', maxLength: 4, allowDecimal: true, minValue: 0, editable: false, valor: arredondarValores(perfil.meta_proteina / perfil.peso_inicial, 1) },
       gordura_peso: { label: 'Gordura / Peso', type: 'numeric', unidadeMedida: 'Gramas / kg', maxLength: 4, allowDecimal: true, minValue: 0, editable: false, valor: arredondarValores(perfil.meta_gordura / perfil.peso_inicial, 1) },
@@ -170,15 +161,51 @@ const DadosPerfilScreen = () => {
       );
       newPerfil.meta_carboidrato = arredondarValores(newPerfil.carboidrato_peso * newPerfil.peso_inicial);
       newPerfil.meta_proteina = arredondarValores(newPerfil.proteina_peso * newPerfil.peso_inicial);
-      newPerfil.meta_gordura = arredondarValores(newPerfil.gordura_peso * newPerfil.peso_inicial);
+      newPerfil.meta_gordura = arredondarValores((newPerfil.tmf - (newPerfil.meta_carboidrato * 4 + newPerfil.meta_proteina * 4)) / 9);
 
-      setPerfil(newPerfil);
-      console.log(newPerfil);
-
+      return newPerfil;
    }
 
+   const allowSaveChanges = (): boolean => {
+      const anyDifferent = Object.keys(perfil).some((key) => {
+         const currentValue = perfil[key as keyof criarPerfilSchema];
+         const originalValue = perfilUsuario[key as keyof criarPerfilSchema];
+         return currentValue != originalValue;
+      });
+      const allValidStrings = Object.keys(perfil).every((key) => {
+         const currentValue = perfil[key as keyof criarPerfilSchema];
+         return validadeString(currentValue.toString());
+      });
+      if (anyDifferent && allValidStrings) {
+         const diffMacrosTMF = Math.abs(perfil.tmf - (perfil.meta_carboidrato * 4 + perfil.meta_proteina * 4 + perfil.meta_gordura * 9))
+         return diffMacrosTMF < 9;
+      }
+      return false;;
+   };
+
+   const allowCalcularMetas = () => {
+      const calculoPerfilFormula = calcularMetas()
+      return JSON.stringify(calculoPerfilFormula) === JSON.stringify(perfil);
+   }
+
+   const allowButtonSalvar = allowSaveChanges()
+   const allowButtonCalcular = allowCalcularMetas()
+
+   useEffect(() => {
+      if (!allowButtonCalcular) {
+         const newPerfil = { ...perfil };
+         // @ts-ignore
+         newPerfil.meta_carboidrato = '';
+         // @ts-ignore
+         newPerfil.meta_proteina = '';
+         // @ts-ignore
+         newPerfil.meta_gordura = '';
+         setPerfil(newPerfil);
+      }
+   }, [perfil.tmf]);
+
    const determinarFlexBasis = (index: number, chave: string) => {
-      const flexBasisMedio = [3, 4,5,6];
+      const flexBasisMedio = [3, 4, 5, 6];
       if (flexBasisMedio.includes(index)) {
          return '48%';
       } else {
@@ -193,7 +220,7 @@ const DadosPerfilScreen = () => {
          case 'numeric':
             return (
                <TextInput
-                  style={[styles.input, !configCampo['editable'] && {color: hexToRgba(theme.colors.black, '0.6')}]}
+                  style={[styles.input, !configCampo['editable'] && { color: hexToRgba(theme.colors.black, '0.6') }]}
                   keyboardType="numeric"
                   value={configCampo['editable'] ? valorCampo.toString() : configCampo['valor'].toString()}
                   placeholder={configCampo['minValue'] >= 0 && configCampo['maxValue'] ? `${configCampo['minValue']} - ${configCampo['maxValue']}` : configCampo['unidadeMedida']}
@@ -246,15 +273,15 @@ const DadosPerfilScreen = () => {
             </View>
 
             <TouchableOpacity
-               style={[{ marginBottom: getResponsiveSizeHeight(2) }, styles.buttonNotAllowed, styles.button]}
-               onPress={calcularMetas}
-            // disabled={!allowButtonSalvar}
+               style={[{ marginBottom: getResponsiveSizeHeight(2) }, styles.buttonNotAllowed, !allowButtonCalcular && styles.button]}
+               onPress={() => setPerfil(calcularMetas())}
+               disabled={allowButtonCalcular}
             >
                <Text style={styles.buttonText}>Calcular Metas</Text>
             </TouchableOpacity>
             <TouchableOpacity
                style={[{ marginBottom: getResponsiveSizeHeight(7) }, styles.buttonNotAllowed, allowButtonSalvar && styles.button]}
-               onPress={allowButtonSalvar ? handleCriarNovoPerfl : undefined}
+               onPress={handleCriarNovoPerfl}
                disabled={!allowButtonSalvar}
             >
                {isLoading ?
@@ -286,28 +313,12 @@ const styles = StyleSheet.create({
       color: theme.colors.color05,
       textAlign: 'center',
    },
-   // containerSubtitle: {
-   //    borderBottomWidth: 1,
-   //    width: getResponsiveSizeWidth(100),
-   //    borderColor: hexToRgba(theme.colors.color05, '0.5'),
-   //    marginBottom: 5,
-   // },
-   // subtitle: {
-   //    width: getResponsiveSizeWidth(50),
-   //    fontSize: getResponsiveSizeWidth(4.5),
-   //    fontFamily: 'NotoSans-SemiBold',
-   //    color: hexToRgba(theme.colors.color05, '0.7'),
-   //    textAlign: 'center',
-   // },
    row: {
       flexDirection: 'row',
       alignItems: 'flex-end',
       flexWrap: 'wrap',
       justifyContent: 'space-between',
       marginBottom: 12,
-   },
-   inputContainer: {
-      // flexBasis: '40%',
    },
    label: {
       fontSize: getResponsiveSizeWidth(3.5),
