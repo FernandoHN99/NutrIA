@@ -1,3 +1,8 @@
+export interface chatBotMessagesSchema {
+   role: string
+   content: string
+}
+
 export interface perguntarChatBotSchema {
-   prompt_usuario: string;
+   mensagensChat: Array<chatBotMessagesSchema>
 }

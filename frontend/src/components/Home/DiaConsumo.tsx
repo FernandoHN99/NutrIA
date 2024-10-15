@@ -71,7 +71,7 @@ const DiaConsumo = ({ navigation, infosDia, perfilDia, refeicoesDiaAtivas, diaSe
                   </View>
                   <View style={styles.refeicaoRightContent}>
                      <TouchableOpacity
-                        onPress={() => navigation.navigate('AddAlimentoScreen', { macrosRefeicao, diaSelecionado })}
+                        onPress={() => navigation.navigate('SearchFoodScreen', { macrosRefeicao, diaSelecionado })}
                      >
                         <Ionicons name="add-circle" size={getResponsiveSizeHeight(3)} color={theme.colors.color05} />
                      </TouchableOpacity>

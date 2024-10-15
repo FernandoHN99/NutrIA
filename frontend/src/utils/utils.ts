@@ -124,3 +124,40 @@ export const encontrarChavePeloValorJSON = (obj: { [key: string]: any }, valorPr
 export const validadeString = (str: string) => {
    return str !== undefined && str !== null && str.trim() !== '';
 };
+
+
+export const handleNumberInput = (input: string, allowDecimal: boolean, maxValue?: number, minValue?: number) : string => {
+   if (!input.trim()) {
+      return ''
+   }
+
+   let numericText = '';
+
+   if (allowDecimal) {
+      numericText = input.replace(/[^0-9.]/g, '');
+
+      const parts = numericText.split('.');
+      if (parts.length > 2) {
+         numericText = parts.shift() + '.' + parts.join('');
+      }
+      numericText = numericText.replace(/(\..*)\./g, '$1');
+   } else {
+      numericText = input.replace(/[^0-9]/g, '');
+   }
+
+   if (maxValue) {
+      const numericValue = parseFloat(numericText);
+      if (!isNaN(numericValue) && numericValue > maxValue) {
+         numericText = maxValue.toString();
+      }
+   }
+
+   if (minValue) {
+      const numericValue = parseFloat(numericText);
+      if (!isNaN(numericValue) && numericValue < minValue) {
+         numericText = minValue.toString();
+      }
+   }
+   return numericText;
+
+};

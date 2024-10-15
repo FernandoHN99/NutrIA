@@ -42,6 +42,28 @@ export const mapObjetivos: { [key: string]: string } = {
    'Ganho de Peso': 'GANHO'
 }
 
+export const mapUnidadesDeMedida: { [key: string]: string } = {
+   'Gramas': 'GRAMA', 
+   'Mililitros': 'MILILITRO', 
+   'Colher de Sopa': 'COLHER SOPA', 
+   'Xícara de Chá': 'XICARA CHA',
+   'Cícara de Café ': 'XICARA CAFE',
+   'Colher de Chá': 'COLHER CHA',
+   'Xícara Padrão': 'XICARA PADRAO',
+   'Unidade': 'UNIDADE'
+};
+
+export const mapTamanhoDaPorcao: { [key: string]: Array<string> } = {
+   'GRAMA': ['1', '100', '200', '300', '400', '500'],
+   'MILILITRO': ['100', '200', '300', '400', '500'],
+   'COLHER SOPA': ['1', '2', '3', '4', '5'],
+   'COLHER CHA': ['1', '2', '3', '4', '5'],
+   'XICARA PADRAO': ['1', '2', '3', '4', '5'],
+   'XICARA CHA': ['1', '2', '3', '4', '5'],
+   'XICARA CAFE': ['1', '2', '3', '4', '5'],
+   'UNIDADE': ['1', '2', '3', '4', '5']
+};
+
 export const helperModalTexts: { [key: string]: {title: string, message: string} } = {
    nivelAtividade: {
       title: 'Nível de Atividade',

@@ -16,6 +16,19 @@ auth:bearer {
 
 body:json {
   {
-    "prompt_usuario": "ola como vai?"
+    "mensagensChat": [
+      {
+        "role": "user",
+        "text": "Essas são as minhas informações pessoais e metabólicas, me ajude com o que eu te pedir: {\"dt_nascimento\":\"1999-11-09\",\"nome\":\"Fe\",\"sobrenome\":\"Heri\",\"pais\":\"BRASIL\",\"sexo\":\"Masculino\",\"sistema_metrico\":\"METRICO\",\"perfil_alimentar\":\"ONIVORO\"}"
+      },
+      {
+        "role": "assistant",
+        "text": "Olá, como posso te ajudar?"
+      },
+      {
+        "role": "user",
+        "text": "Oq sao macronutrientes?"
+      }
+    ]
   }
 }

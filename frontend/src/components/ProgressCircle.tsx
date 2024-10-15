@@ -9,7 +9,7 @@ interface ProgressCircleProps {
    progressColor: string;
    size: number;
    thickness: number;
-   children: React.ReactNode;
+   children?: React.ReactNode;
 }
 
 const ProgressCircle = ({

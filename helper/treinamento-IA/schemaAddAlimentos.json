@@ -1,76 +1,89 @@
 {
-  "name": "add_alimentos",
-  "description": "Adiciona alimentos a uma refeição específica na base de dados nutricional.",
-  "strict": true,
-  "parameters": {
-    "type": "object",
-    "properties": {
-      "numero_refeicao": {
-        "type": "integer",
-        "description": "Número da refeição (e.g., 1 para café da manhã, 2 para almoço)."
+   "type": "function",
+   "function": {
+      "name": "add_consumo_alimento",
+      "description": "Adiciona um alimento consumido por um usuário em uma refeição e uma data específica",
+      "parameters": {
+         "type": "object",
+         "required": [
+            "numero_refeicao",
+            "id_alimento",
+            "id_prato",
+            "dt_dia",
+            "unidade_medida",
+            "porcao_padrao",
+            "qtde_utilizada",
+            "qtde_proteina",
+            "qtde_carboidrato",
+            "qtde_gordura",
+            "qtde_alcool",
+            "kcal"
+         ],
+         "properties": {
+            "numero_refeicao": {
+               "type": "number",
+               "description": "Numero da refeição, deve ser obrigatoriamente ser informado pelo usuário"
+            },
+            "id_alimento": {
+               "type": "null",
+               "description": "Neste caso referencia de forma nula o alimento base"
+            },
+            "id_prato": {
+               "type": [
+                  "number",
+                  "null"
+               ],
+               "description": "Id do prato, se o alimento for parte de um prato"
+            },
+            "dt_dia": {
+               "type": "string",
+               "description": "Data do consumo no formato YYYY-MM-DD, se não for informafo assumir data de hoje"
+            },
+            "unidade_medida": {
+               "type": "string",
+               "description": "Unidade de medida do alimento consumido",
+               "enum": [
+                  "GRAMA",
+                  "MILILITRO",
+                  "COLHER SOPA",
+                  "COLHER CHA",
+                  "XICARA PADRAO",
+                  "XICARA CHA",
+                  "ICARA CAFE",
+                  "UNIDADE"
+               ]
+            },
+            "porcao_padrao": {
+               "type": "number",
+               "description": "Porcao padrao do alimento consumido de acordo com a unidade de medida"
+            },
+            "qtde_utilizada": {
+               "type": "number",
+               "description": "Quantidade de porcoes consumidas"
+            },
+            "qtde_proteina": {
+               "type": "number",
+               "description": "Quantidade de proteínas em gramas consumidas no total"
+            },
+            "qtde_carboidrato": {
+               "type": "number",
+               "description": "Quantidade de carboidratos em gramas consumidas no total"
+            },
+            "qtde_gordura": {
+               "type": "number",
+               "description": "Quantidade de gorduras em gramas consumidas no total"
+            },
+            "qtde_alcool": {
+               "type": "number",
+               "description": "Quantidade de alcool em gramas consumidas no total"
+            },
+            "kcal": {
+               "type": "number",
+               "description": "Quantidade de calorias consumidas no total"
+            }
+         },
+         "additionalProperties": false
       },
-      "id_alimento": {
-        "type": "integer",
-        "description": "ID do alimento a ser adicionado."
-      },
-      "id_prato": {
-        "type": ["integer", "null"],
-        "description": "ID do prato a ser adicionado ou null se não aplicável."
-      },
-      "dt_dia": {
-        "type": "string",
-        "description": "Data da refeição no formato YYYY-MM-DD."
-      },
-      "unidade_medida": {
-        "type": "string",
-        "enum": ["GRAMAS", "ML", "PORCOES"],
-        "description": "Unidade de medida da porção utilizada."
-      },
-      "porcao_padrao": {
-        "type": "integer",
-        "description": "Número de porções padrão utilizadas."
-      },
-      "qtde_utilizada": {
-        "type": "number",
-        "description": "Quantidade utilizada em gramas ou mililitros."
-      },
-      "qtde_proteina": {
-        "type": "number",
-        "description": "Quantidade de proteína em gramas."
-      },
-      "qtde_carboidrato": {
-        "type": "number",
-        "description": "Quantidade de carboidrato em gramas."
-      },
-      "qtde_gordura": {
-        "type": "number",
-        "description": "Quantidade de gordura em gramas."
-      },
-      "qtde_alcool": {
-        "type": "number",
-        "description": "Quantidade de álcool em gramas."
-      },
-      "kcal": {
-        "type": "number",
-        "description": "Quantidade de calorias."
-      }
-    },
-    "required": [
-      "numero_refeicao",
-      "id_alimento",
-      "id_prato",
-      "dt_dia",
-      "unidade_medida",
-      "porcao_padrao",
-      "qtde_utilizada",
-      "qtde_proteina",
-      "qtde_carboidrato",
-      "qtde_gordura",
-      "qtde_alcool",
-      "kcal"
-    ],
-    "additionalProperties": false
-  }
+      "strict": true
+   }
 }
-
-

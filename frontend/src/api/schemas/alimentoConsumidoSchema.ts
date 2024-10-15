@@ -16,4 +16,8 @@ export interface AddAlimentoConsumidoSchema {
    qtde_gordura: number;
    qtde_alcool: number;
    kcal: number;
- }
+}
+
+export interface AtualizarConsumoUsuarioSchema extends AddAlimentoConsumidoSchema {
+   id_alimento_consumido?: number;
+}

@@ -5,6 +5,8 @@ import { getResponsiveSizeWidth, getResponsiveSizeHeight, hexToRgba } from '../.
 import MessagesChatbot from '../../../components/ChatBotSignUp/MessagesChatbot';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useFazerPergunta } from '../../../api/hooks/chatBot/useFazerPergunta';
+import { usePerfisUsuario, useUsuarioInfo } from '../../../api/httpState/usuarioData';
+import { chatBotMessagesSchema } from '../../../api/schemas/chatBotSchema';
 
 interface message {
    _id: number;
@@ -12,30 +14,54 @@ interface message {
    user: string;
 }
 
+const TEXT_USER_INIT = 'Essas são as minhas informações pessoais e metabólicas, me ajude com o que eu te pedir'
+const TEXT_ASSISTENT_INIT = 'Olá, como posso te ajudar?'
+
 const ChatbotScreen = () => {
 
    const scrollViewRef = useRef<ScrollView>(null);
    const [text, setText] = useState<string>('');
-   const { data, loading, error, fazerPergunta } = useFazerPergunta();
    const [messages, setMessages] = useState<message[]>(
       [
          {
             _id: Math.random(),
-            text: "Olá como posso te ajudar?",
+            text: TEXT_ASSISTENT_INIT,
             user: "NutrIA",
          }
       ]
    );
+   const { data, loading, error, fazerPergunta } = useFazerPergunta();
+   const { data: usuarioInfo } = useUsuarioInfo({ enabled: false });
+   const { data: perfisUsuario } = usePerfisUsuario({ enabled: false });
+
+   const montarUserIntro = () =>{
+      const { id_usuario: userId = '', email = '', ...infoUser } = usuarioInfo || {};
+      const { id_usuario: perfilId = '', ...perfilUsuario } = perfisUsuario?.[perfisUsuario.length - 1] || {};
+      infoUser.sexo = usuarioInfo?.sexo === 'M' ? 'Masculino' : 'Feminino';
+      const userIntroText = `${TEXT_USER_INIT}: ${JSON.stringify(infoUser) + JSON.stringify(perfilUsuario)}`;
+      return [{ role: 'user', content: userIntroText }];
+   }
+
+   const montarChatMessageService = (userLastMessage: string) => {
+      const userIntro = montarUserIntro()
+      const msgChatFormatadas = messages.map(message => ({
+        role: message.user === 'Você' ? 'user' : 'assistant',
+        content: message.text
+      }));
+      return [...userIntro, ...msgChatFormatadas, { role: 'user', content: userLastMessage }];
+    }
+    
 
    const handleSendMessage = (userMessage: string) => {
       if (userMessage.trim() === '') return;
+      const chatMessages: chatBotMessagesSchema[] = montarChatMessageService(userMessage)
+      fazerPergunta(chatMessages);
       setMessages([...messages, {
          _id: Math.random(),
          text: userMessage.trim(),
          user: "Você",
       }]);
       setText('');
-      fazerPergunta(userMessage);
    };
 
    useEffect(() => {

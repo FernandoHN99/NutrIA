@@ -1,0 +1,31 @@
+{
+   "role": "assistant",
+   "content": None,
+   "tool_calls": [
+      {
+         "id": "call_V80O8ygGntZ7zyzexd2G7Jfd",
+         "type": "function",
+         "function": {
+            "name": "add_consumo_alimento",
+            "arguments": "{"numero_refeicao":1,"id_alimento":1,"id_prato":None,"dt_dia":"2023-10-13","unidade_medida":"g","porcao_padrao":100,"qtde_utilizada":100,"qtde_proteina":2.7,"qtde_carboidrato":28.2,"qtde_gordura":0.3,"qtde_alcool":0,"kcal":130}"
+         }
+      }
+   ],
+   "refusal": None
+},
+
+{
+   "role": "assistant",
+   "content": null,
+   "tool_calls": [
+      {
+         "id": "call_V80O8ygGntZ7zyzexd2G7Jfd",
+         "type": "function",
+         "function": {
+            "name": "add_consumo_alimento",
+            "arguments": "{\"numero_refeicao\": 5, \"id_alimento\": null, \"id_prato\": null, \"dt_dia\": \"2024-10-12\", \"unidade_medida\": \"GRAMAS\", \"porcao_padrao\": 100, \"qtde_utilizada\": 5.0, \"qtde_proteina\": 12.5, \"qtde_carboidrato\": 139.0, \"qtde_gordura\": 6.0, \"qtde_alcool\": 0.0, \"kcal\": 678.0}"
+         }
+      }
+   ],
+   "refusal": null
+}

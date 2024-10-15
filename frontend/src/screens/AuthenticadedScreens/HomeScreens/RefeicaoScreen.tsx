@@ -8,6 +8,9 @@ import Ionicons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ProgressBar from '../../../components/ProgressBar';
 import { filtrarConsumoRefeicao } from '../../../utils/formatters';
 
+const WIDTH_PROGRESS_BAR = getResponsiveSizeWidth(35);
+const HEIGHT_PROGRESS_BAR = getResponsiveSizeWidth(2);
+
 const RefeicaoScreen = ({ route }: { route: any }) => {
 
    const navigation = useNavigation();
@@ -17,7 +20,6 @@ const RefeicaoScreen = ({ route }: { route: any }) => {
    const handleGoBack = () => {
       navigation.goBack();
    };
-
 
    return (
       <View style={{ backgroundColor: theme.colors.backgroundColor, flex: 1 }}>
@@ -38,13 +40,12 @@ const RefeicaoScreen = ({ route }: { route: any }) => {
                         total={perfilDia.tmf}
                         bgColor={hexToRgba(theme.colors.color05, '0.3')}
                         progressColor={theme.colors.color05}
-                        size={getResponsiveSizeHeight(20)}
-                        thickness={7}
+                        size={getResponsiveSizeHeight(15)}
+                        thickness={13}
                      >
                         <View>
-                           <Text style={styles.infoCaloriasNumber}>{macrosRefeicao.totalKcal}</Text>
-                           <Text style={styles.infoText}>Calorias</Text>
-                           <Text style={styles.infoText}>Consumidas</Text>
+                           <Text style={[styles.infoCaloriasNumber, {fontSize: getResponsiveSizeWidth(5)}]}>{macrosRefeicao.totalKcal}</Text>
+                           <Text style={[styles.infoText, {fontSize: getResponsiveSizeWidth(5)}]}>Kcal</Text>
                         </View>
                      </ProgressCircle>
                      <View style={styles.macrosContainer}>
@@ -55,8 +56,8 @@ const RefeicaoScreen = ({ route }: { route: any }) => {
                               total={perfilDia.meta_carboidrato}
                               bgColor={hexToRgba(theme.colors.color05, '0.3')}
                               progressColor={theme.colors.color05}
-                              width={getResponsiveSizeWidth(35)}
-                              height={getResponsiveSizeWidth(2)}
+                              width={WIDTH_PROGRESS_BAR}
+                              height={HEIGHT_PROGRESS_BAR}
                               paddingValue={0}
                            />
                            <Text style={styles.infoText}>{`${macrosRefeicao.totalCarboidrato} / ${perfilDia.meta_carboidrato} g`}</Text>
@@ -68,8 +69,8 @@ const RefeicaoScreen = ({ route }: { route: any }) => {
                               total={perfilDia.meta_proteina}
                               bgColor={hexToRgba(theme.colors.color05, '0.3')}
                               progressColor={theme.colors.color05}
-                              width={getResponsiveSizeWidth(35)}
-                              height={getResponsiveSizeWidth(2)}
+                              width={WIDTH_PROGRESS_BAR}
+                              height={HEIGHT_PROGRESS_BAR}
                               paddingValue={0}
                            />
                            <Text style={styles.infoText}>{`${macrosRefeicao.totalProteina} / ${perfilDia.meta_proteina} g`}</Text>
@@ -81,8 +82,8 @@ const RefeicaoScreen = ({ route }: { route: any }) => {
                               total={perfilDia.meta_gordura}
                               bgColor={hexToRgba(theme.colors.color05, '0.3')}
                               progressColor={theme.colors.color05}
-                              width={getResponsiveSizeWidth(35)}
-                              height={getResponsiveSizeWidth(2)}
+                              width={WIDTH_PROGRESS_BAR}
+                              height={HEIGHT_PROGRESS_BAR}
                               paddingValue={0}
                            />
                            <Text style={styles.infoText}>{`${macrosRefeicao.totalGordura} / ${perfilDia.meta_gordura} g`}</Text>
@@ -95,10 +96,11 @@ const RefeicaoScreen = ({ route }: { route: any }) => {
                            <Text style={styles.subtitulo}>Alimentos Consumidos</Text>
                            <View style={styles.alimentosContentContainer}>
                               {consumoRefeicao.map((alimentoConsumido, index) => (
-                                 <View style={[
+                                 <TouchableOpacity style={[
                                     styles.alimentoContainer,
                                     (consumoRefeicao.length - 1) === index && styles.alimentoLastContainer,
-                                 ]} key={alimentoConsumido.dtt_alimento_consumido}>
+                                    // @ts-ignore
+                                 ]} key={alimentoConsumido.dtt_alimento_consumido} onPress={() => navigation.push('AddConsumoScreen', {consumoAlimento: alimentoConsumido, refeicao: macrosRefeicao})}>
                                     <View style={styles.alimentoContent}>
                                        <Text style={[styles.textNomeAlimento]}>
                                           {alimentoConsumido.alimento.nome_alimento}
@@ -111,7 +113,7 @@ const RefeicaoScreen = ({ route }: { route: any }) => {
                                        </View>
                                     </View>
                                     <Text style={[styles.numberInfoAlimento]}>{arredondarValores(alimentoConsumido.kcal)} kcal</Text>
-                                 </View>
+                                 </TouchableOpacity>
                               ))}
                            </View>
                         </View>
@@ -164,8 +166,7 @@ const styles = StyleSheet.create({
       justifyContent: 'space-evenly',
       alignItems: 'center',
       flexDirection: 'row',
-      height: getResponsiveSizeHeight(25),
-      // backgroundColor: hexToRgba(theme.colors.color04, '0.5'),
+      height: getResponsiveSizeHeight(20),
       backgroundColor: hexToRgba(theme.colors.color04, '0.2'),
       borderRadius: 20,
       borderColor: theme.colors.color05,
@@ -181,7 +182,7 @@ const styles = StyleSheet.create({
    infoText: {
       textAlign: 'center',
       fontFamily: 'NotoSans-Regular',
-      fontSize: getResponsiveSizeHeight(1.4),
+      fontSize: getResponsiveSizeHeight(1.6),
       color: hexToRgba(theme.colors.black, '0.8')
    },
    infoCaloriasNumber: {
@@ -191,9 +192,9 @@ const styles = StyleSheet.create({
       color: hexToRgba(theme.colors.black, '0.8')
    },
    macrosContainer: {
-      height: '90%',
+      height: '85%',
       flexDirection: 'column',
-      justifyContent: 'space-evenly'
+      justifyContent: 'space-between',
    },
    alimentoMainContainer: {
       marginTop: getResponsiveSizeHeight(1),
