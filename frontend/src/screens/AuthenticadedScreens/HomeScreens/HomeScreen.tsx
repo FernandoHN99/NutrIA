@@ -67,7 +67,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
    return (
       <View style={styles.container}>
          <DiaScroll diaSelecionado={diaSelecionado} setDiaSelecionado={setDiaSelecionado} />
-         <ScrollView showsVerticalScrollIndicator={false}>
+         <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
             <DiaSumario perfilDia={perfilDia} infosDia={consumoUsuarioDia} />
             <DiaConsumo navigation={navigation} perfilDia={perfilDia} diaSelecionado={diaSelecionado} infosDia={consumoUsuarioDia} refeicoesDiaAtivas={refeicoesAtivas} />
          </ScrollView>

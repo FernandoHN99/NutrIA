@@ -23,7 +23,6 @@ const RefeicaoScreen = ({ route }: { route: any }) => {
 
    return (
       <View style={{ backgroundColor: theme.colors.backgroundColor, flex: 1 }}>
-         <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.mainPageContainer}>
                <View style={styles.headerContainer}>
                   <View style={styles.containerTitulo}>
@@ -41,7 +40,7 @@ const RefeicaoScreen = ({ route }: { route: any }) => {
                         bgColor={hexToRgba(theme.colors.color05, '0.3')}
                         progressColor={theme.colors.color05}
                         size={getResponsiveSizeHeight(15)}
-                        thickness={13}
+                        thickness={12}
                      >
                         <View>
                            <Text style={[styles.infoCaloriasNumber, {fontSize: getResponsiveSizeWidth(5)}]}>{macrosRefeicao.totalKcal}</Text>
@@ -94,11 +93,11 @@ const RefeicaoScreen = ({ route }: { route: any }) => {
                      {consumoRefeicao.length > 0 ? (
                         <View style={styles.alimentosContainer}>
                            <Text style={styles.subtitulo}>Alimentos Consumidos</Text>
-                           <View style={styles.alimentosContentContainer}>
+                           <ScrollView style={styles.alimentosContentContainer} showsVerticalScrollIndicator={false} bounces={false}>
                               {consumoRefeicao.map((alimentoConsumido, index) => (
                                  <TouchableOpacity style={[
                                     styles.alimentoContainer,
-                                    (consumoRefeicao.length - 1) === index && styles.alimentoLastContainer,
+                                    // 0 === index && styles.alimentoLastContainer,
                                     // @ts-ignore
                                  ]} key={alimentoConsumido.dtt_alimento_consumido} onPress={() => navigation.push('AddConsumoScreen', {consumoAlimento: alimentoConsumido, refeicao: macrosRefeicao})}>
                                     <View style={styles.alimentoContent}>
@@ -115,7 +114,7 @@ const RefeicaoScreen = ({ route }: { route: any }) => {
                                     <Text style={[styles.numberInfoAlimento]}>{arredondarValores(alimentoConsumido.kcal)} kcal</Text>
                                  </TouchableOpacity>
                               ))}
-                           </View>
+                           </ScrollView>
                         </View>
                      ) : (
                         <View style={styles.semAlimentosContainer}>
@@ -129,7 +128,6 @@ const RefeicaoScreen = ({ route }: { route: any }) => {
                   </View>
                </View>
             </View>
-         </ScrollView>
       </View>
    );
 };
@@ -205,10 +203,9 @@ const styles = StyleSheet.create({
    },
    alimentosContentContainer: {
       // backgroundColor: hexToRgba(theme.colors.color04, '0.5'),
-      backgroundColor: hexToRgba(theme.colors.color04, '0.2'),
-      borderRadius: 20,
       borderColor: theme.colors.color05,
       // borderWidth: 2,
+      marginBottom: getResponsiveSizeHeight(60),
    },
    alimentoContainer: {
       flexDirection: 'row',
@@ -217,15 +214,15 @@ const styles = StyleSheet.create({
       paddingVertical: getResponsiveSizeWidth(3),
       paddingHorizontal: getResponsiveSizeWidth(5),
       borderColor: hexToRgba(theme.colors.color05, '0.5'),
-      borderBottomWidth: 2,
+      borderWidth: 2,
+      backgroundColor: hexToRgba(theme.colors.color04, '0.2'),
+      borderRadius: 10,
+      marginBottom: getResponsiveSizeHeight(0.5),
    },
    alimentoLastContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      paddingVertical: getResponsiveSizeWidth(3),
-      paddingHorizontal: getResponsiveSizeWidth(5),
-      borderBottomWidth: 0,
+      borderTopLeftRadius: 20,
+      borderTopRightRadius: 20,
+      borderTopWidth: 2,
    },
    alimentoContent: {
       // backgroundColor: 'blue' 
