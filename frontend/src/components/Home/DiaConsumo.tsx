@@ -42,7 +42,9 @@ const DiaConsumo = ({ navigation, infosDia, perfilDia, refeicoesDiaAtivas, diaSe
       return (
          <TouchableOpacity
             key={refeicao.numero_refeicao}
-            onPress={() => totalKcal > 0 && navigation.navigate('RefeicaoScreen', { macrosRefeicao, perfilDia, infosDia })}
+            onPress={() => 
+               // totalKcal > 0 && 
+               navigation.navigate('RefeicaoScreen', { macrosRefeicao, perfilDia, infosDia, diaSelecionado })}
          >
             <View
                style={[
@@ -65,7 +67,6 @@ const DiaConsumo = ({ navigation, infosDia, perfilDia, refeicoesDiaAtivas, diaSe
                               <Text style={styles.refeicaoKcal}>
                                  {totalKcal} kcal
                               </Text>
-
                         }
                      </View>
                   </View>
