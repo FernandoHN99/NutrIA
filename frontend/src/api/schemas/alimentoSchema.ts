@@ -4,7 +4,7 @@ export interface buscarAlimentosSchema {
    pular?: string;
 }
 
-interface TabelaNutricional {
+export interface TabelaNutricional {
    id_tabela_nutricional: number;
    id_alimento: number;
    unidade_medida: string;

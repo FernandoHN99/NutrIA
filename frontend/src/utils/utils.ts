@@ -1,4 +1,5 @@
 import { Dimensions } from 'react-native';
+import { IMacronutrientes } from './interfaces';
 
 export const getScreenDimensions = () => {
    const { width, height } = Dimensions.get('window');
@@ -126,7 +127,7 @@ export const validadeString = (str: string) => {
 };
 
 
-export const handleNumberInput = (input: string, allowDecimal: boolean, maxValue?: number, minValue?: number) : string => {
+export const handleNumberInput = (input: string, allowDecimal: boolean, maxValue?: number, minValue?: number): string => {
    if (!input.trim()) {
       return ''
    }
@@ -161,3 +162,24 @@ export const handleNumberInput = (input: string, allowDecimal: boolean, maxValue
    return numericText;
 
 };
+
+export const calcularMacronutrientes = (
+   qtdePadrao: number, 
+   qtdeDesejada: number,
+   macronutrientesPadrao: IMacronutrientes
+): IMacronutrientes => {
+   const fatorConversao = qtdeDesejada / qtdePadrao;
+
+   return {
+      carboidratos: arredondarValores(macronutrientesPadrao.carboidratos * fatorConversao,1),
+      proteinas: arredondarValores(macronutrientesPadrao.proteinas * fatorConversao,1),
+      gorduras: arredondarValores(macronutrientesPadrao.gorduras * fatorConversao,1),
+      alcool: arredondarValores(macronutrientesPadrao.alcool * fatorConversao,1),
+      kcal: arredondarValores(macronutrientesPadrao.kcal * fatorConversao),
+   };
+}
+
+export const limitarValor = (valor: number, minimo: number, maximo: number) => {
+   return Math.min(Math.max(valor, minimo), maximo);
+ }
+ 

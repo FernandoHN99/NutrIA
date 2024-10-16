@@ -9,7 +9,7 @@ import ProgressBar from '../../../components/ProgressBar';
 import { filtrarConsumoRefeicao } from '../../../utils/formatters';
 
 const WIDTH_PROGRESS_BAR = getResponsiveSizeWidth(35);
-const HEIGHT_PROGRESS_BAR = getResponsiveSizeWidth(2);
+const HEIGHT_PROGRESS_BAR = getResponsiveSizeWidth(1.5);
 
 const RefeicaoScreen = ({ route }: { route: any }) => {
 
@@ -40,7 +40,7 @@ const RefeicaoScreen = ({ route }: { route: any }) => {
                         bgColor={hexToRgba(theme.colors.color05, '0.3')}
                         progressColor={theme.colors.color05}
                         size={getResponsiveSizeHeight(15)}
-                        thickness={12}
+                        thickness={7}
                      >
                         <View>
                            <Text style={[styles.infoCaloriasNumber, {fontSize: getResponsiveSizeWidth(5)}]}>{macrosRefeicao.totalKcal}</Text>

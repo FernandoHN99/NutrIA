@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
-import { AlimentoSchema } from '../../../api/schemas/alimentoSchema';
+import { AlimentoSchema, TabelaNutricional } from '../../../api/schemas/alimentoSchema';
 import { AtualizarConsumoUsuarioSchema } from '../../../api/schemas/alimentoConsumidoSchema';
-import { arredondarValores, criarStrData, getResponsiveSizeWidth, hexToRgba } from '../../../utils/utils';
+import { arredondarValores, calcularMacronutrientes, criarStrData, getResponsiveSizeWidth, hexToRgba, limitarValor } from '../../../utils/utils';
 import { useNavigation } from '@react-navigation/native';
 import theme from '../../../styles/theme';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -11,6 +11,7 @@ import { handleNumberInput } from '../../../utils/utils';
 import PicklistSelector02 from '../../../components/Home/PicklistSelector02';
 import { mapTamanhoDaPorcao, mapUnidadesDeMedida } from '../../../config/variaveis';
 import PieChartOutline from '../../../components/Home/PieChartOutline';
+import { IMacronutrientes } from '../../../utils/interfaces';
 
 interface Refeicao {
    numero_refeicao: number,
@@ -46,16 +47,10 @@ const inicializarConsumoUsuario = (alimento: AlimentoSchema, refeicao: Refeicao)
 }
 
 const MAX_VALUES = {
-   porcao_padrao: 1000,
    qtde_utilizada: 9999,
-   qtde_proteina: 9999,
-   qtde_carboidrato: 9999,
-   qtde_gordura: 9999,
-   qtde_alcool: 9999,
-   kcal: 9999,
 }
 
-const COLORS_CHART = [theme.colors.color03, theme.colors.color04, theme.colors.color05];
+const COLORS_CHART = [theme.colors.color03, theme.colors.color04, theme.colors.color05, theme.colors.black];
 const SIZE_CHART = getResponsiveSizeWidth(30);
 
 const AddConsumoScreen = ({ route }: { route: any }) => {
@@ -63,7 +58,8 @@ const AddConsumoScreen = ({ route }: { route: any }) => {
    const { alimento: inicialAlimento, consumoAlimento: inicialConsumoAlimento, refeicao }: AddConsumoScreenProps = route.params;
    const [consumoAlimento, setConsumoAlimento] = useState(inicialConsumoAlimento || inicializarConsumoUsuario(inicialAlimento!, refeicao));
    const [unidadesMedidaAlimento, setUnidadesMedidaAlimento] = useState<{ [key: string]: string } | null>(null);
-
+   const [tabelaPorcaoBase, setTabelaPorcaoBase] = useState<TabelaNutricional>(consumoAlimento.alimento.tabelasNutricionais.find(tabela => tabela.unidade_medida === consumoAlimento.unidade_medida)!);
+   const [porcentagemMacros, setPorcentagemMacros] = useState<{ [key: string]: number } | null>(null);
 
    useEffect(() => {
       const unidadesValoresPermitidos = consumoAlimento.alimento.tabelasNutricionais.map(tabela => tabela.unidade_medida)
@@ -72,15 +68,48 @@ const AddConsumoScreen = ({ route }: { route: any }) => {
             unidadesValoresPermitidos.includes(valor)
          )
       );
+      const porcentagemMacrosValues = {
+         porcentCarboidrato: limitarValor((arredondarValores(((tabelaPorcaoBase.qtde_carboidrato * 4) / tabelaPorcaoBase.kcal) * 100)),0,100),
+         porcentProteina:  limitarValor((arredondarValores(((tabelaPorcaoBase.qtde_proteina * 4) / tabelaPorcaoBase.kcal) * 100)),0,100),
+         porcentAlcool: limitarValor((arredondarValores(((tabelaPorcaoBase.qtde_alcool * 7) / tabelaPorcaoBase.kcal) * 100)),0,100),
+         porcentGordura: 0,
+      }
+      porcentagemMacrosValues.porcentGordura = limitarValor(
+            100 - (porcentagemMacrosValues.porcentCarboidrato +
+                  porcentagemMacrosValues.porcentProteina + 
+                  porcentagemMacrosValues.porcentAlcool
+            ),0, 100
+         );
+      setPorcentagemMacros(porcentagemMacrosValues);
       setUnidadesMedidaAlimento(mapUnidadesMedidaPermitidas);
    }, []);
 
    useEffect(() => {
       const novoConsumoAliemnto = { ...consumoAlimento };
-      novoConsumoAliemnto.porcao_padrao = 0;
-      novoConsumoAliemnto.qtde_utilizada = 0;
+      novoConsumoAliemnto.qtde_utilizada = '';
       setConsumoAlimento(novoConsumoAliemnto);
+      setTabelaPorcaoBase(consumoAlimento.alimento.tabelasNutricionais.find(tabela => tabela.unidade_medida === consumoAlimento.unidade_medida)!);
    }, [consumoAlimento.unidade_medida]);
+
+   useEffect(() => {
+      const qtdeUtilizadaFinal = (consumoAlimento.qtde_utilizada ? consumoAlimento.qtde_utilizada : 1) * consumoAlimento.porcao_padrao;
+      const macrosPorcaoBase: IMacronutrientes = {
+         carboidratos: tabelaPorcaoBase!.qtde_carboidrato,
+         proteinas: tabelaPorcaoBase!.qtde_proteina,
+         gorduras: tabelaPorcaoBase!.qtde_gordura,
+         alcool: tabelaPorcaoBase!.qtde_alcool,
+         kcal: tabelaPorcaoBase!.kcal
+      };
+      const macrosPorPorcao = calcularMacronutrientes((tabelaPorcaoBase!.porcao_padrao), qtdeUtilizadaFinal, macrosPorcaoBase);
+      const novoConsumoAliemnto = { ...consumoAlimento };
+      novoConsumoAliemnto.qtde_carboidrato = macrosPorPorcao.carboidratos;
+      novoConsumoAliemnto.qtde_proteina = macrosPorPorcao.proteinas;
+      novoConsumoAliemnto.qtde_gordura = macrosPorPorcao.gorduras;
+      novoConsumoAliemnto.qtde_alcool = macrosPorPorcao.alcool;
+      novoConsumoAliemnto.kcal = macrosPorPorcao.kcal;
+      setConsumoAlimento(novoConsumoAliemnto);
+   }, [consumoAlimento.qtde_utilizada, consumoAlimento.porcao_padrao]);
+
 
    const handlerSetConsumoInputNumber = (valor: string, keyChange: keyof ConsumoAlimentoSchema) => {
       setConsumoAlimento(prevConsumo => ({
@@ -89,7 +118,8 @@ const AddConsumoScreen = ({ route }: { route: any }) => {
       }));
    };
 
-   if (!unidadesMedidaAlimento) return null;
+   if (!unidadesMedidaAlimento || !porcentagemMacros) return null;
+
 
    return (
       <View style={styles.container}>
@@ -101,11 +131,11 @@ const AddConsumoScreen = ({ route }: { route: any }) => {
          </View>
          <View style={[styles.inputContainer, { borderWidth: 2 }]}>
             <Text style={styles.textInfo}>Nome do Alimento</Text>
-            <Text style={[styles.textValue, {fontFamily: 'NotoSans-SemiBold'}]}>{consumoAlimento.alimento.nome_alimento}</Text>
+            <Text style={[styles.textValue, { fontFamily: 'NotoSans-SemiBold' }]}>{consumoAlimento.alimento.nome_alimento}</Text>
          </View>
          <View style={styles.inputContainer}>
             <Text style={styles.textInfo}>Refeição</Text>
-            <Text style={[styles.textValue, {fontFamily: 'NotoSans-SemiBold'}]}>{refeicao.nome_refeicao}</Text>
+            <Text style={[styles.textValue, { fontFamily: 'NotoSans-SemiBold' }]}>{refeicao.nome_refeicao}</Text>
          </View>
          <View style={styles.inputContainer}>
             <Text style={styles.textInfo}>Unidade de Medida</Text>
@@ -142,7 +172,7 @@ const AddConsumoScreen = ({ route }: { route: any }) => {
             <View style={styles.sumaryContainer}>
                <PieChartOutline
                   listColors={COLORS_CHART}
-                  listValues={[consumoAlimento.qtde_carboidrato, consumoAlimento.qtde_proteina, consumoAlimento.qtde_gordura]}
+                  listValues={[porcentagemMacros.porcentCarboidrato, porcentagemMacros.porcentProteina, porcentagemMacros.porcentGordura, porcentagemMacros.porcentAlcool]}
                   sizeChart={SIZE_CHART}
                   thickness={0.75}>
                   <View>
@@ -153,27 +183,33 @@ const AddConsumoScreen = ({ route }: { route: any }) => {
                <View>
                   <View style={styles.macrosContainer}>
                      <Text style={[styles.textInfoMacros, { color: COLORS_CHART[0] }]}>Carboidratos</Text>
-                     <Text style={styles.textValue}>{consumoAlimento.qtde_carboidrato}g 
-                        -  {arredondarValores(((consumoAlimento.qtde_carboidrato*4)/consumoAlimento.kcal)*100)}%
+                     <Text style={styles.textValue}>{consumoAlimento.qtde_carboidrato}g
+                        { porcentagemMacros.porcentCarboidrato >0 &&` -  ${porcentagemMacros.porcentCarboidrato}%`}
                      </Text>
                   </View>
                   <View style={styles.macrosContainer}>
                      <Text style={[styles.textInfoMacros, { color: COLORS_CHART[1] }]}>Proteínas</Text>
-                     <Text style={styles.textValue}>{consumoAlimento.qtde_proteina}g 
-                        -  {arredondarValores(((consumoAlimento.qtde_proteina*4)/consumoAlimento.kcal)*100)}%
+                     <Text style={styles.textValue}>{consumoAlimento.qtde_proteina}g
+                        { porcentagemMacros.porcentProteina > 0 &&` -  ${porcentagemMacros.porcentProteina}%`}
                      </Text>
                   </View>
                   <View style={styles.macrosContainer}>
                      <Text style={[styles.textInfoMacros, { color: COLORS_CHART[2] }]}>Gorduras</Text>
-                     <Text style={styles.textValue}>{consumoAlimento.qtde_gordura}g 
-                        -  {arredondarValores(((consumoAlimento.qtde_gordura*9)/consumoAlimento.kcal)*100)}%
+                     <Text style={styles.textValue}>{consumoAlimento.qtde_gordura}g
+                       { porcentagemMacros.porcentGordura >0 &&` -  ${porcentagemMacros.porcentGordura}%`}
                      </Text>
                   </View>
+                  {consumoAlimento.qtde_alcool > 0 &&
+                     <View style={styles.macrosContainer}>
+                        <Text style={[styles.textInfoMacros, { color: COLORS_CHART[3] }]}>Alcool</Text>
+                        <Text style={styles.textValue}>{consumoAlimento.qtde_alcool}g
+                           -  {porcentagemMacros.porcentAlcool}%
+                        </Text>
+                     </View>}
                </View>
             </View>
          </View>
       </View>
-
    )
 
 };
@@ -248,8 +284,8 @@ const styles = StyleSheet.create({
       color: theme.colors.black,
       marginRight: 20,
    },
-   chartText: { 
-      color: theme.colors.black, 
+   chartText: {
+      color: theme.colors.black,
       textAlign: 'center',
       fontSize: getResponsiveSizeWidth(4.3),
       fontFamily: 'NotoSans-SemiBold',

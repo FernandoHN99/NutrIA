@@ -42,14 +42,14 @@ export const mapObjetivos: { [key: string]: string } = {
    'Ganho de Peso': 'GANHO'
 }
 
-export const mapUnidadesDeMedida: { [key: string]: string } = {
+export const mapUnidadesDeMedida = {
    'Gramas': 'GRAMA', 
    'Mililitros': 'MILILITRO', 
    'Colher de Sopa': 'COLHER SOPA', 
    'Xícara de Chá': 'XICARA CHA',
-   'Cícara de Café ': 'XICARA CAFE',
+   'Xícara de Café ': 'XICARA CAFE',
    'Colher de Chá': 'COLHER CHA',
-   'Xícara Padrão': 'XICARA PADRAO',
+   'Xícara': 'XICARA PADRAO',
    'Unidade': 'UNIDADE'
 };
 

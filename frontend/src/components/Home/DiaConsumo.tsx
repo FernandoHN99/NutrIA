@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
       marginHorizontal: 20,
       paddingVertical: getResponsiveSizeHeight(1.3),
       borderBottomWidth: 2,
-      borderColor: hexToRgba(theme.colors.black, '0.6'),
+      borderColor: hexToRgba(theme.colors.black, '0.3'),
       flexDirection: 'column',
       justifyContent: 'center',
    },
