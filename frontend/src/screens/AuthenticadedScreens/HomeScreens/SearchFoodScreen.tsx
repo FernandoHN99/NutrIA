@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import theme from '../../../styles/theme';
-import { getResponsiveSizeWidth, getResponsiveSizeHeight, hexToRgba, capitalize, criarStrData, calcularMacrosPorPorcao } from '../../../utils/utils';
+import { getResponsiveSizeWidth, getResponsiveSizeHeight, hexToRgba, capitalize, criarStrData, calcularMacrosPorPorcao, validadeString } from '../../../utils/utils';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { buscarAlimentosService } from '../../../api/services/alimentoService';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -34,6 +34,8 @@ const SearchFoodScreen = ({ route}: { route: any }) => {
          }
          const timeoutId = setTimeout(() => handleSearch(nomeAlimentoBusca), 300);
          return () => clearTimeout(timeoutId);
+      }{
+         setSelectedTab('favoritos');
       }
 
    }, [nomeAlimentoBusca]);
@@ -168,7 +170,8 @@ const SearchFoodScreen = ({ route}: { route: any }) => {
             <View style={styles.buttonsContainer}>
                <TouchableOpacity 
                   style={[styles.buttonContainer, selectedTab === 'resultados' && styles.buttonSelectedContainer]} 
-                  onPress={() => setSelectedTab('resultados')}>
+                  onPress={() => setSelectedTab('resultados')}
+                  disabled={!validadeString(nomeAlimentoBusca)}>
                   <Text
                      style={[
                         styles.subtitulo,
@@ -318,8 +321,7 @@ const styles = StyleSheet.create({
       borderColor: theme.colors.color05,
    },
    buttonContainer: {
-      paddingVertical: getResponsiveSizeWidth(2),
-      paddingHorizontal: getResponsiveSizeWidth(1.5),
+      padding: getResponsiveSizeWidth(2),
       borderWidth: 2,
       borderRadius: getResponsiveSizeWidth(10),
       borderColor: theme.colors.color05,

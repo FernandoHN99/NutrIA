@@ -21,3 +21,7 @@ export interface AddAlimentoConsumidoSchema {
 export interface AtualizarConsumoUsuarioSchema extends AddAlimentoConsumidoSchema {
    id_alimento_consumido?: number;
 }
+
+export interface DeletarConsumoUsuarioSchema {
+   id_alimento_consumido: number;
+}

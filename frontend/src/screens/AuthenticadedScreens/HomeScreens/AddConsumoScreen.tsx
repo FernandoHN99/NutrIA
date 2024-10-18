@@ -221,7 +221,7 @@ const AddConsumoScreen = ({ route }: { route: any }) => {
             <Text style={styles.textInfo}>Tamanho da Porção</Text>
             <PicklistSelector02
                initialOption={consumoAlimento.porcao_padrao.toString()}
-               onSelect={(valor: number) => setConsumoAlimento(prevConsumo => ({ ...prevConsumo, porcao_padrao: valor }))}
+               onSelect={(valor: number) => setConsumoAlimento(prevConsumo => ({ ...prevConsumo, porcao_padrao: Number(valor) }))}
                picklistOptions={(mapTamanhoDaPorcao[consumoAlimento.unidade_medida])}
             />
          </View>

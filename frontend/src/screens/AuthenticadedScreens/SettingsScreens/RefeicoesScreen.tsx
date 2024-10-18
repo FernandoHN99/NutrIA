@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Modal, TextInput, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Modal, TextInput, Alert, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
 import theme from '../../../styles/theme';
@@ -62,15 +62,16 @@ const RefeicoesScreen = () => {
    const [showModalNovaRefeicao, setShowModalNovaRefeicao] = useState(false);
    const [textEditaRefeicao, setTextEditaRefeicao] = useState('');
    const [numeroRefeicaoEditada, setNumeroRefeicaoEditada] = useState<number | null>(null);
+   const [isLoading, setIsLoading] = useState(false);
 
    const { mutateAsync: adicionarRefeicaoServiceFn } = useMutation({
       mutationFn: adicionarRefeicaoService,
       onSuccess(retorno) {
-         queryClient.setQueryData(['authUserToken'], (data: any[]) => {
-            return {token: 'eyJhbGciOiJIUzI1NiIsImtpZCI6ImNWMEZYOU1HOWVOV0VLemwiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2t2dW9sc2FmZ2VtZGVzb3NxYWppLnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiJkZjk0M2NkNi05OWRhLTQzMmItYWQyNi02Y2M2YmFmMTAyZWYiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzI4MzQ1Nzc1LCJpYXQiOjE3MjgzNDM5NzUsImVtYWlsIjoic2FmYWRvQGdtYWlsLmNvbSIsInBob25lIjoiIiwiYXBwX21ldGFkYXRhIjp7InByb3ZpZGVyIjoiZW1haWwiLCJwcm92aWRlcnMiOlsiZW1haWwiXX0sInVzZXJfbWV0YWRhdGEiOnt9LCJyb2xlIjoiYXV0aGVudGljYXRlZCIsImFhbCI6ImFhbDEiLCJhbXIiOlt7Im1ldGhvZCI6InBhc3N3b3JkIiwidGltZXN0YW1wIjoxNzI4MzQzOTc1fV0sInNlc3Npb25faWQiOiJjNWZmZDRjMy05ODliLTQ4ZWMtOTY1OS0wMTIyNTZmMDc5YjUiLCJpc19hbm9ueW1vdXMiOmZhbHNlfQ.9wY2tmSluxnQOIMvup7TqBPmcMLuqP0lBKpfaB5Kr5A', refreshToken: 'XOCxBq7f-YXjmthTDPy5Zw'};
+         queryClient.setQueryData(['refeicoesUsuario'], (data: any[]) => {
+            return [...data, retorno];
          });
       },
-      onError(error) {
+      onError() {
          Alert.alert('Erro', 'Não foi possível adicionar a refeição');
       }
    });
@@ -112,6 +113,12 @@ const RefeicoesScreen = () => {
       },
       onError(error) {
          Alert.alert('Erro', 'Não foi possível remover a refeição');
+      },
+      onMutate(){
+         setIsLoading(true)
+      },
+      onSettled(){
+         setIsLoading(false)
       }
    });
 
@@ -162,10 +169,16 @@ const RefeicoesScreen = () => {
                   setNumeroRefeicaoEditada(item.numero_refeicao);
                }} />
             </View>
-            {refeicoesAtivas.length != 1 && refeicoesAtivas.length == (indice + 1) ?
-               <TouchableOpacity onPress={() => handlerRemoverRefeicao(item.numero_refeicao)} style={{ marginLeft: 15, backgroundColor: theme.colors.color05, borderRadius: 100, padding: 5 }}>
-                  <Icon name="trash" size={17} color={theme.colors.color01} />
+            {refeicoesAtivas.length != 1 && refeicoesAtivas.length == (indice + 1) ?(
+               isLoading ?
+               <TouchableOpacity style={{ marginLeft: 15, borderRadius: 100, padding: 5 }}>
+                  <ActivityIndicator/> 
                </TouchableOpacity>
+               :
+                  <TouchableOpacity onPress={() => handlerRemoverRefeicao(item.numero_refeicao)} style={{ marginLeft: 15, backgroundColor: theme.colors.color05, borderRadius: 100, padding: 5 }}>
+                     <Icon name="trash" size={17} color={theme.colors.color01} />
+                  </TouchableOpacity>
+               )
                :
                null
             }

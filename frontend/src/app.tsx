@@ -12,6 +12,7 @@ const App = () => {
       'NotoSans-Regular': require('../assets/fonts/NotoSans-Regular.ttf'),
       'NotoSans-Bold': require('../assets/fonts/NotoSans-Bold.ttf'),
       'NotoSans-SemiBold': require('../assets/fonts/NotoSans-SemiBold.ttf'),
+      'NotoSans-BoldItalic': require('../assets/fonts/NotoSans-BoldItalic.ttf'),
       'NotoSans-Italic': require('../assets/fonts/NotoSans-Italic.ttf'),
       'NotoSans-SemiBoldItalic': require('../assets/fonts/NotoSans-SemiBoldItalic.ttf'),
 
