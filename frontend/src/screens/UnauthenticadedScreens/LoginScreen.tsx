@@ -8,7 +8,7 @@ import { setTokensStorage } from '../../api/httpState/usuarioAuth';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 
 const LoginScreen = () => {
-   const [email, setEmail] = useState('safado@gmail.com');
+   const [email, setEmail] = useState('teste@gmail.com');
    const [password, setPassword] = useState('1234567890');
    const [isSecure, setIsSecure] = useState(true);
    const [loading, setLoading] = useState(false);
