@@ -1,5 +1,5 @@
 import api from '../../config/apiService';
-import { AddAlimentoConsumidoSchema, obterConsumoUsuarioSchema } from '../schemas/alimentoConsumidoSchema';
+import { AddAlimentoConsumidoSchema, AtualizarConsumoUsuarioSchema, obterConsumoUsuarioSchema } from '../schemas/alimentoConsumidoSchema';
 
 export const obterConsumoUsuarioService = async (paramsConsumo: obterConsumoUsuarioSchema) => {
    try {
@@ -17,7 +17,16 @@ export const obterConsumoUsuarioService = async (paramsConsumo: obterConsumoUsua
 
 export const addAlimentoConsumidoService = async (bodyRequest: AddAlimentoConsumidoSchema) => {
    try {
-      const response = await api.post(`/alimento-consumido/criar`, { ...bodyRequest });
+      const response = await api.post(`/alimento-consumido/criar`, bodyRequest );
+      return response.data.data;
+   } catch (error) {
+      throw (error as any)?.response?.data;
+   }
+};
+
+export const atualizarAlimentoConsumidoService = async (bodyRequest: AtualizarConsumoUsuarioSchema): Promise<AtualizarConsumoUsuarioSchema> => {
+   try {
+      const response = await api.patch(`/alimento-consumido/atualizar`, bodyRequest);
       return response.data.data;
    } catch (error) {
       throw (error as any)?.response?.data;

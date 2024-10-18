@@ -283,7 +283,7 @@ const styles = StyleSheet.create({
    },
    modalTitle: {
       fontSize: getResponsiveSizeWidth(4.5),
-      fontWeight: 'bold',
+      fontFamily: 'NotoSans-Bold',
       marginBottom: 10,
       color: theme.colors.color05,
    },

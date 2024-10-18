@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Modal, Alert, ActivityIndicator } from 'react-native';
 import theme from '../../../styles/theme';
 import { usePerfisUsuario, useUsuarioInfo } from '../../../api/httpState/usuarioData';
@@ -23,6 +23,7 @@ const DadosPerfilScreen = () => {
    const [modalInfo, setModalInfo] = useState<boolean | { title: string, message: string }>(false);
    const perfilUsuario: Perfil = perfisUsuario[perfisUsuario.length - 1];
    const [isLoading, setIsLoading] = useState(false);
+   const isFirstRender = useRef(true);
 
    const [perfil, setPerfil] = useState<criarPerfilSchema>({
       peso_inicial: perfilUsuario.peso_inicial,
@@ -89,6 +90,7 @@ const DadosPerfilScreen = () => {
    };
    const maxMacros = calcularMaxMacros();
 
+
    const perfilConfig: any = {
       peso_inicial: { label: 'Peso Atual (kg)', type: 'numeric', unidadeMedida: 'kg', maxValue: 300, maxLength: 3, allowDecimal: true, minValue: 1, editable: true },
       peso_final: { label: 'Peso Ideal (kg)', type: 'numeric', unidadeMedida: 'kg', maxValue: 300, maxLength: 3, allowDecimal: true, minValue: 1, editable: true },
@@ -139,7 +141,6 @@ const DadosPerfilScreen = () => {
          }
       }
       setPerfil({ ...perfil, [perfilCampo]: Number(numericText) });
-
    };
 
    const handlePicklistInput = (perfilCampo: string, valor: string) => {
@@ -192,6 +193,10 @@ const DadosPerfilScreen = () => {
    const allowButtonCalcular = allowCalcularMetas()
 
    useEffect(() => {
+      if (isFirstRender.current) {
+         isFirstRender.current = false;
+         return;
+       }
       if (!allowButtonCalcular) {
          const newPerfil = { ...perfil };
          // @ts-ignore

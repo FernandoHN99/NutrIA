@@ -44,7 +44,7 @@ const DiaConsumo = ({ navigation, infosDia, perfilDia, refeicoesDiaAtivas, diaSe
             key={refeicao.numero_refeicao}
             onPress={() => 
                // totalKcal > 0 && 
-               navigation.navigate('RefeicaoScreen', { macrosRefeicao, perfilDia, infosDia, diaSelecionado })}
+               navigation.navigate('RefeicaoScreen', { macrosRefeicao, perfilDia, diaSelecionado })}
          >
             <View
                style={[

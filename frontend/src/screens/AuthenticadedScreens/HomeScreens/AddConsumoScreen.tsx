@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, ActivityIndicator, Alert } from 'react-native';
 import { AlimentoSchema, TabelaNutricional } from '../../../api/schemas/alimentoSchema';
 import { AtualizarConsumoUsuarioSchema } from '../../../api/schemas/alimentoConsumidoSchema';
-import { arredondarValores, calcularMacronutrientes, criarStrData, getResponsiveSizeWidth, hexToRgba, limitarValor } from '../../../utils/utils';
+import { arredondarValores, calcularMacronutrientes, criarStrData, getResponsiveSizeHeight, getResponsiveSizeWidth, hexToRgba, limitarValor, validadeString } from '../../../utils/utils';
 import { useNavigation } from '@react-navigation/native';
 import theme from '../../../styles/theme';
 import Icon from 'react-native-vector-icons/Ionicons';
-import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
 import { handleNumberInput } from '../../../utils/utils';
 import PicklistSelector02 from '../../../components/Home/PicklistSelector02';
 import { mapTamanhoDaPorcao, mapUnidadesDeMedida } from '../../../config/variaveis';
 import PieChartOutline from '../../../components/Home/PieChartOutline';
 import { IMacronutrientes } from '../../../utils/interfaces';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { addAlimentoConsumidoService, atualizarAlimentoConsumidoService } from '../../../api/services/alimentoConsumoService';
 
 interface Refeicao {
    numero_refeicao: number,
@@ -48,18 +49,65 @@ const inicializarConsumoUsuario = (alimento: AlimentoSchema, refeicao: Refeicao)
 
 const MAX_VALUES = {
    qtde_utilizada: 9999,
+   kcal: 99999,
 }
 
 const COLORS_CHART = [theme.colors.color03, theme.colors.color04, theme.colors.color05, theme.colors.black];
 const SIZE_CHART = getResponsiveSizeWidth(30);
 
 const AddConsumoScreen = ({ route }: { route: any }) => {
+   const queryClient = useQueryClient()
    const navigation = useNavigation();
+
    const { alimento: inicialAlimento, consumoAlimento: inicialConsumoAlimento, refeicao }: AddConsumoScreenProps = route.params;
    const [consumoAlimento, setConsumoAlimento] = useState(inicialConsumoAlimento || inicializarConsumoUsuario(inicialAlimento!, refeicao));
    const [unidadesMedidaAlimento, setUnidadesMedidaAlimento] = useState<{ [key: string]: string } | null>(null);
    const [tabelaPorcaoBase, setTabelaPorcaoBase] = useState<TabelaNutricional>(consumoAlimento.alimento.tabelasNutricionais.find(tabela => tabela.unidade_medida === consumoAlimento.unidade_medida)!);
    const [porcentagemMacros, setPorcentagemMacros] = useState<{ [key: string]: number } | null>(null);
+   const [isLoading, setIsLoading] = useState(false);
+
+   const { mutateAsync: addAlimentoConsumidoServiceFn } = useMutation({
+      mutationFn: addAlimentoConsumidoService,
+      onSuccess(retorno) {
+         queryClient.setQueryData(['consumoAlimentos'], (data: any[]) =>{
+            return [...data, retorno];
+         });
+         // navigation.goBack();
+      },
+      onError() {
+         Alert.alert('Erro', 'Não foi possível salvar a alteração.',);
+      },
+      onMutate() {
+         setIsLoading(true);
+      },
+      onSettled() {
+         setIsLoading(false)
+      },
+   });
+
+   const { mutateAsync: atualizarAlimentoConsumidoServiceFn } = useMutation({
+      mutationFn: atualizarAlimentoConsumidoService,
+      onSuccess(retorno) {
+         const cachedConsumoAlimentos: any[] = queryClient.getQueryData(['consumoAlimentos'])!;
+         const updatedConsumoAlimentos = cachedConsumoAlimentos.map(consumo => {
+            if (consumo.id_alimento_consumido === retorno.id_alimento_consumido) {
+               return { ...consumo, ...retorno };
+            }
+            return consumo;
+         });
+         queryClient.setQueryData(['consumoAlimentos'], updatedConsumoAlimentos);
+         navigation.goBack();
+      },
+      onError() {
+         Alert.alert('Erro', 'Não foi possível salvar a alteração.',);
+      },
+      onMutate() {
+         setIsLoading(true);
+      },
+      onSettled() {
+         setIsLoading(false)
+      },
+   });
 
    useEffect(() => {
       const unidadesValoresPermitidos = consumoAlimento.alimento.tabelasNutricionais.map(tabela => tabela.unidade_medida)
@@ -69,23 +117,24 @@ const AddConsumoScreen = ({ route }: { route: any }) => {
          )
       );
       const porcentagemMacrosValues = {
-         porcentCarboidrato: limitarValor((arredondarValores(((tabelaPorcaoBase.qtde_carboidrato * 4) / tabelaPorcaoBase.kcal) * 100)),0,100),
-         porcentProteina:  limitarValor((arredondarValores(((tabelaPorcaoBase.qtde_proteina * 4) / tabelaPorcaoBase.kcal) * 100)),0,100),
-         porcentAlcool: limitarValor((arredondarValores(((tabelaPorcaoBase.qtde_alcool * 7) / tabelaPorcaoBase.kcal) * 100)),0,100),
+         porcentCarboidrato: limitarValor((arredondarValores(((tabelaPorcaoBase.qtde_carboidrato * 4) / tabelaPorcaoBase.kcal) * 100)), 0, 100),
+         porcentProteina: limitarValor((arredondarValores(((tabelaPorcaoBase.qtde_proteina * 4) / tabelaPorcaoBase.kcal) * 100)), 0, 100),
+         porcentAlcool: limitarValor((arredondarValores(((tabelaPorcaoBase.qtde_alcool * 7) / tabelaPorcaoBase.kcal) * 100)), 0, 100),
          porcentGordura: 0,
       }
       porcentagemMacrosValues.porcentGordura = limitarValor(
-            100 - (porcentagemMacrosValues.porcentCarboidrato +
-                  porcentagemMacrosValues.porcentProteina + 
-                  porcentagemMacrosValues.porcentAlcool
-            ),0, 100
-         );
+         100 - (porcentagemMacrosValues.porcentCarboidrato +
+            porcentagemMacrosValues.porcentProteina +
+            porcentagemMacrosValues.porcentAlcool
+         ), 0, 100
+      );
       setPorcentagemMacros(porcentagemMacrosValues);
       setUnidadesMedidaAlimento(mapUnidadesMedidaPermitidas);
    }, []);
 
    useEffect(() => {
       const novoConsumoAliemnto = { ...consumoAlimento };
+      // @ts-ignore
       novoConsumoAliemnto.qtde_utilizada = '';
       setConsumoAlimento(novoConsumoAliemnto);
       setTabelaPorcaoBase(consumoAlimento.alimento.tabelasNutricionais.find(tabela => tabela.unidade_medida === consumoAlimento.unidade_medida)!);
@@ -114,12 +163,35 @@ const AddConsumoScreen = ({ route }: { route: any }) => {
    const handlerSetConsumoInputNumber = (valor: string, keyChange: keyof ConsumoAlimentoSchema) => {
       setConsumoAlimento(prevConsumo => ({
          ...prevConsumo,
-         [keyChange]: valor.trim() !== '' ? valor : ''
+         [keyChange]: valor.trim() !== '' ? Number(valor) : ''
       }));
    };
 
-   if (!unidadesMedidaAlimento || !porcentagemMacros) return null;
+   const handleSalvarSolicitacao = async () => {
+      if(consumoAlimento.id_alimento_consumido){
+         atualizarAlimentoConsumidoServiceFn(consumoAlimento);
+         return;
+      }
+      await addAlimentoConsumidoServiceFn(consumoAlimento);
+   };
 
+
+   const allowButtonSalvar = () =>{
+      let anyDifferent = true;
+      if(inicialConsumoAlimento){
+         anyDifferent = Object.keys(consumoAlimento).some((key) => {
+            const currentValue = consumoAlimento[key as keyof ConsumoAlimentoSchema];
+            const originalValue = inicialConsumoAlimento[key as keyof ConsumoAlimentoSchema];
+            return currentValue != originalValue;
+         });
+      }
+      const valideStrings = consumoAlimento.kcal > 0 && consumoAlimento.kcal <= MAX_VALUES.kcal && consumoAlimento.qtde_utilizada > 0;
+      return anyDifferent && valideStrings;
+   }
+
+   const allowSalvar = allowButtonSalvar();
+
+   if (!unidadesMedidaAlimento || !porcentagemMacros) return null;
 
    return (
       <View style={styles.container}>
@@ -140,7 +212,7 @@ const AddConsumoScreen = ({ route }: { route: any }) => {
          <View style={styles.inputContainer}>
             <Text style={styles.textInfo}>Unidade de Medida</Text>
             <PicklistSelector02
-               initialOption={Object.keys(unidadesMedidaAlimento)[0]}
+               initialOption={Object.keys(unidadesMedidaAlimento).find(key => unidadesMedidaAlimento[key] === consumoAlimento.unidade_medida)!}
                onSelect={(valor: string) => setConsumoAlimento(prevConsumo => ({ ...prevConsumo, unidade_medida: unidadesMedidaAlimento[valor] }))}
                picklistOptions={Object.keys(unidadesMedidaAlimento)}
             />
@@ -148,7 +220,7 @@ const AddConsumoScreen = ({ route }: { route: any }) => {
          <View style={styles.inputContainer}>
             <Text style={styles.textInfo}>Tamanho da Porção</Text>
             <PicklistSelector02
-               initialOption={(mapTamanhoDaPorcao[consumoAlimento.unidade_medida])[0]}
+               initialOption={consumoAlimento.porcao_padrao.toString()}
                onSelect={(valor: number) => setConsumoAlimento(prevConsumo => ({ ...prevConsumo, porcao_padrao: valor }))}
                picklistOptions={(mapTamanhoDaPorcao[consumoAlimento.unidade_medida])}
             />
@@ -163,7 +235,7 @@ const AddConsumoScreen = ({ route }: { route: any }) => {
                maxLength={10}
                onChangeText={(valorTexto) =>
                   handlerSetConsumoInputNumber(
-                     handleNumberInput(valorTexto, true, MAX_VALUES.qtde_utilizada, 1), 'qtde_utilizada')
+                     handleNumberInput(valorTexto, true, MAX_VALUES.qtde_utilizada, 0), 'qtde_utilizada')
                }
             />
          </View>
@@ -184,19 +256,19 @@ const AddConsumoScreen = ({ route }: { route: any }) => {
                   <View style={styles.macrosContainer}>
                      <Text style={[styles.textInfoMacros, { color: COLORS_CHART[0] }]}>Carboidratos</Text>
                      <Text style={styles.textValue}>{consumoAlimento.qtde_carboidrato}g
-                        { porcentagemMacros.porcentCarboidrato >0 &&` -  ${porcentagemMacros.porcentCarboidrato}%`}
+                        {porcentagemMacros.porcentCarboidrato > 0 && ` -  ${porcentagemMacros.porcentCarboidrato}%`}
                      </Text>
                   </View>
                   <View style={styles.macrosContainer}>
                      <Text style={[styles.textInfoMacros, { color: COLORS_CHART[1] }]}>Proteínas</Text>
                      <Text style={styles.textValue}>{consumoAlimento.qtde_proteina}g
-                        { porcentagemMacros.porcentProteina > 0 &&` -  ${porcentagemMacros.porcentProteina}%`}
+                        {porcentagemMacros.porcentProteina > 0 && ` -  ${porcentagemMacros.porcentProteina}%`}
                      </Text>
                   </View>
                   <View style={styles.macrosContainer}>
                      <Text style={[styles.textInfoMacros, { color: COLORS_CHART[2] }]}>Gorduras</Text>
                      <Text style={styles.textValue}>{consumoAlimento.qtde_gordura}g
-                       { porcentagemMacros.porcentGordura >0 &&` -  ${porcentagemMacros.porcentGordura}%`}
+                        {porcentagemMacros.porcentGordura > 0 && ` -  ${porcentagemMacros.porcentGordura}%`}
                      </Text>
                   </View>
                   {consumoAlimento.qtde_alcool > 0 &&
@@ -209,6 +281,16 @@ const AddConsumoScreen = ({ route }: { route: any }) => {
                </View>
             </View>
          </View>
+         <TouchableOpacity
+            style={[styles.buttonNotAllowed, allowSalvar && styles.button]}
+            onPress={() => handleSalvarSolicitacao()}
+            disabled={!allowSalvar || isLoading}
+         >
+            {isLoading ?
+               <ActivityIndicator size="small" color={theme.colors.color01} />
+               :
+               <Text style={styles.buttonText}>Salvar</Text>}
+         </TouchableOpacity>
       </View>
    )
 
@@ -264,7 +346,9 @@ const styles = StyleSheet.create({
       marginHorizontal: 10,
       paddingTop: 10,
       paddingBottom: 25,
-      backgroundColor: hexToRgba(theme.colors.color04, '0.1'),
+      // backgroundColor: hexToRgba(theme.colors.color04, '0.1'),
+      borderWidth: 2,
+      borderColor: hexToRgba(theme.colors.color05, '0.3'),
       borderRadius: 20,
    },
    sumaryContainer: {
@@ -289,7 +373,23 @@ const styles = StyleSheet.create({
       textAlign: 'center',
       fontSize: getResponsiveSizeWidth(4.3),
       fontFamily: 'NotoSans-SemiBold',
-   }
+   },
+   buttonNotAllowed: {
+      padding: 16,
+      backgroundColor: hexToRgba(theme.colors.color05, '0.5'),
+      borderRadius: 25,
+      alignItems: 'center',
+      width: '95%',
+      alignSelf: 'center',
+   },
+   buttonText: {
+      color: theme.colors.color01,
+      fontWeight: 'bold',
+      fontSize: 16,
+   },
+   button: {
+      backgroundColor: theme.colors.color05,
+   },
 });
 
 export default AddConsumoScreen;

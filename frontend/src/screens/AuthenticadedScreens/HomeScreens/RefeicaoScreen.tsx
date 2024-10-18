@@ -6,17 +6,22 @@ import ProgressCircle from '../../../components/ProgressCircle';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ProgressBar from '../../../components/ProgressBar';
-import { filtrarConsumoRefeicao } from '../../../utils/formatters';
+import { filtrarConsumoDia, filtrarConsumoRefeicao } from '../../../utils/formatters';
+import { useConsumoAlimentos } from '../../../api/httpState/usuarioData';
 
 const WIDTH_PROGRESS_BAR = getResponsiveSizeWidth(35);
 const HEIGHT_PROGRESS_BAR = getResponsiveSizeWidth(2);
 
 
 const RefeicaoScreen = ({ route }: { route: any }) => {
+   const { macrosRefeicao, perfilDia, diaSelecionado } = route.params;
 
    const navigation = useNavigation();
-   const { macrosRefeicao, perfilDia, infosDia, diaSelecionado } = route.params;
+   const { data: consumoAlimentosCached } = useConsumoAlimentos({enabled: false});
+
+   const infosDia = filtrarConsumoDia(consumoAlimentosCached, diaSelecionado);
    const consumoRefeicao = filtrarConsumoRefeicao(infosDia, macrosRefeicao.numero_refeicao);
+   
 
    const handleGoBack = () => {
       navigation.goBack();
@@ -122,7 +127,7 @@ const RefeicaoScreen = ({ route }: { route: any }) => {
                   ) : (
                      <View>
                         { // @ts-ignore 
-                           <TouchableOpacity style={styles.buttonAdicionar} onPress={() => navigation.replace('SearchFoodScreen', { macrosRefeicao, diaSelecionado })}>
+                           <TouchableOpacity style={styles.buttonAdicionar} onPress={() => navigation.push('SearchFoodScreen', { macrosRefeicao, diaSelecionado })}>
                               <Text style={styles.semAlimentosMsgButton}>Adicionar alimento</Text>
                            </TouchableOpacity>
                         }
@@ -183,7 +188,7 @@ const styles = StyleSheet.create({
    },
    infoText: {
       textAlign: 'center',
-      fontFamily: 'NotoSans-SemiBold',
+      fontFamily: 'NotoSans-Regular',
       fontSize: getResponsiveSizeHeight(1.6),
       color: hexToRgba(theme.colors.black, '0.8')
    },

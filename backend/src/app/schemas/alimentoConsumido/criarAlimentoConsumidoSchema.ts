@@ -43,7 +43,7 @@ const criarAlimentoConsumidoSchema = z.object({
       .min(0).max(9999.9),
 
    kcal: z.number()
-      .min(0).max(9999.9).positive(),
+      .min(0).max(99999.9).positive(),
    
    dtt_alimento_consumido: z.any()
       .transform(() => new Date().toISOString()),

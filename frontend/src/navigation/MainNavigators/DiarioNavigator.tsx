@@ -16,30 +16,30 @@ const DiarioNavigator = () => {
             component={BottomTabNavigator}
             options={{ headerShown: false }}
          />
-         <Stack.Screen
+         {/* <Stack.Screen
             name="RefeicaoScreen"
             component={RefeicaoScreen}
             options={{
                headerShown: false,
                animation: 'slide_from_bottom',
             }}
-         />
-         <Stack.Screen
+         /> */}
+         {/* <Stack.Screen
             name="SearchFoodScreen"
             component={SearchFoodScreen}
             options={{
                headerShown: false,
                animation: 'slide_from_bottom',
             }}
-         />
-         <Stack.Screen
+         /> */}
+         {/* <Stack.Screen
             name="AddConsumoScreen"
             component={AddConsumoScreen}
             options={{
                headerShown: false,
                // animation: 'slide_from_bottom',
             }}
-         />
+         /> */}
       </Stack.Navigator>
    );
 };
