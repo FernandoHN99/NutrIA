@@ -346,9 +346,9 @@ const styles = StyleSheet.create({
       marginHorizontal: 10,
       paddingTop: 10,
       paddingBottom: 25,
-      // backgroundColor: hexToRgba(theme.colors.color04, '0.1'),
+      backgroundColor: hexToRgba(theme.colors.color04, '0.1'),
       borderWidth: 2,
-      borderColor: hexToRgba(theme.colors.color05, '0.3'),
+      borderColor: hexToRgba(theme.colors.color05, '0.2'),
       borderRadius: 20,
    },
    sumaryContainer: {
