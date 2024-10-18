@@ -119,8 +119,8 @@ const styles = StyleSheet.create({
       backgroundColor: hexToRgba(theme.colors.color04, '0.2'),
       borderRadius: 20,
       width: getResponsiveSizeWidth(90),
-      borderColor: theme.colors.color05,
-      // borderWidth: 2,
+      borderColor: hexToRgba(theme.colors.color05, '0.2'),
+      borderWidth: 2,
    },
    refeicaoContainer: {
       marginHorizontal: 20,

@@ -33,7 +33,6 @@ export const reativarRefeicaoService = async (bodyRequest: reativarRefeicaoSchem
    try {
       bodyRequest.ativa = true;
       const response = await api.patch(`/refeicao/atualizar`, bodyRequest);
-      console.log(response.data.data);
       return response.data.data;
    } catch (error) {
       throw (error as any)?.response?.data;
@@ -43,7 +42,6 @@ export const reativarRefeicaoService = async (bodyRequest: reativarRefeicaoSchem
 export const atualizarRefeicaoService = async (bodyRequest: atualizarRefeicaoSchema) => {
    try {
       const response = await api.patch(`/refeicao/atualizar`, bodyRequest);
-      console.log(response.data.data);
       return response.data.data;
    } catch (error) {
       throw (error as any)?.response?.data;

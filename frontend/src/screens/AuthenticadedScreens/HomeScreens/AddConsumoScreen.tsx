@@ -72,7 +72,7 @@ const AddConsumoScreen = ({ route }: { route: any }) => {
          queryClient.setQueryData(['consumoAlimentos'], (data: any[]) =>{
             return [...data, retorno];
          });
-         // navigation.goBack();
+         navigation.goBack();
       },
       onError() {
          Alert.alert('Erro', 'Não foi possível salvar a alteração.',);

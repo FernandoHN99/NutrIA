@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import theme from '../../../styles/theme';
 import { getResponsiveSizeWidth, getResponsiveSizeHeight, hexToRgba, capitalize, criarStrData, calcularMacrosPorPorcao } from '../../../utils/utils';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
@@ -14,19 +14,21 @@ import ToastNotification from '../../../components/ToastNotification';
 
 
 const SearchFoodScreen = ({ route}: { route: any }) => {
+   const navigation = useNavigation();
+   const { macrosRefeicao, diaSelecionado } = route.params;
+
    const [nomeAlimentoBusca, setNomeAlimentoBusca] = useState<string>('');
    const [resultados, setResultados] = useState<string[]>([]);
    const [selectedTab, setSelectedTab] = useState<string>('favoritos');
    const [showToast, setShowToast] = useState(false);
-   const navigation = useNavigation();
-
-   const { macrosRefeicao, diaSelecionado } = route.params;
+   const [isLoading, setIsLoading] = useState(false);
 
    const queryClient = useQueryClient()
    let cachedAlimentosFavoritos: any[] = queryClient.getQueryData(['alimentosFavoritos']) || [];
 
    useEffect(() => {
       if (nomeAlimentoBusca) {
+         setIsLoading(true);
          if(selectedTab === 'favoritos') {
             setSelectedTab('resultados');
          }
@@ -58,8 +60,8 @@ const SearchFoodScreen = ({ route}: { route: any }) => {
             return [...data, retorno];
          });
       },
-      onError(error) {
-         console.log(error);
+      onError() {
+         Alert.alert('Erro', 'Não foi possível adicionar o alimento.');
       }
    });
 
@@ -101,6 +103,7 @@ const SearchFoodScreen = ({ route}: { route: any }) => {
    const handleSearch = async (nomeAlimento: string) => {
       const alimentosBusca = await buscarAlimentosService({ nome: nomeAlimento });
       setResultados(alimentosBusca);
+      setIsLoading(false);
    };
 
    const handleGoBack = () => {
@@ -208,13 +211,13 @@ const SearchFoodScreen = ({ route}: { route: any }) => {
                      </View>
                   </View>
                )
-               : (nomeAlimentoBusca && resultados.length == 0) ?
+               : (nomeAlimentoBusca && resultados.length == 0 && !isLoading) ?
                (
                      <Text style={[
                         styles.subtitulo, 
-                        { marginTop: getResponsiveSizeHeight(1), textAlign: 'center'}
+                        { fontSize: 15, lineHeight:25, marginTop: getResponsiveSizeHeight(3), textAlign: 'center'}
                         ]}>
-                           Nenhum resultado encontrado
+                           Nenhum resultado encontrado para "{nomeAlimentoBusca}"
                      </Text>
                )
                : null

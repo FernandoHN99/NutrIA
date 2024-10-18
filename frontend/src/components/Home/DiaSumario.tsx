@@ -12,7 +12,7 @@ interface DiaSumarioProps {
    infosDia: any[]
    perfilDia: { [key: string]: any }
 }
-
+const ICON_SIZE = getResponsiveSizeHeight(2.8);
 const DiaSumario = ({infosDia, perfilDia }: DiaSumarioProps) => {
 
    const macrosSum = somarMacrosDia(infosDia);
@@ -23,10 +23,10 @@ const DiaSumario = ({infosDia, perfilDia }: DiaSumarioProps) => {
             <Text style={styles.title}>Resumo</Text>
             <View style={styles.headerButtons}>
                <TouchableOpacity onPress={() => console.log('oi')} >
-                  <Ionicons name="chef-hat" size={getResponsiveSizeHeight(3.2)} color={theme.colors.color05} />
+                  <Ionicons name="chef-hat" size={ICON_SIZE} color={theme.colors.color05} />
                </TouchableOpacity>
                <TouchableOpacity onPress={() => console.log('oi')}>
-                  <Ionicons02 name="sliders" size={getResponsiveSizeHeight(3.2)} color={theme.colors.color05} />
+                  <Ionicons02 name="sliders" size={ICON_SIZE} color={theme.colors.color05} />
                </TouchableOpacity>
             </View>
          </View>
@@ -115,9 +115,10 @@ const styles = StyleSheet.create({
    headerSumarioContainer: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      alignItems: 'flex-start',
+      alignItems: 'flex-end',
       width: getResponsiveSizeWidth(85),
       paddingTop: getResponsiveSizeHeight(1),
+      marginBottom: getResponsiveSizeHeight(0.5),
    },
    title: {
       color: theme.colors.color05,
@@ -129,20 +130,19 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      flex: 0.4,
+      flex: 0.35,
       marginRight: getResponsiveSizeWidth(5),
    },
    infoSumarioContainer: {
-      // backgroundColor: hexToRgba(theme.colors.color04, '0.5'),
       backgroundColor: hexToRgba(theme.colors.color04, '0.2'),
       width: getResponsiveSizeWidth(90),
       height: getResponsiveSizeWidth(65),
       borderRadius: 20,
-      borderColor: theme.colors.color05,
-      // borderWidth: 2,
+      borderColor: hexToRgba(theme.colors.color05, '0.2'),
+      borderWidth: 2,
       flexDirection: 'column',
       justifyContent: 'flex-start',
-      alignItems: 'center'
+      alignItems: 'center',
    },
    caloriasContainer: {
       flexDirection: 'row',
