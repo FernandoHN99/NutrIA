@@ -48,8 +48,9 @@ const inicializarConsumoUsuario = (alimento: AlimentoSchema, refeicao: Refeicao)
 }
 
 const MAX_VALUES = {
-   qtde_utilizada: 9999,
+   qtdeUtilizada: 9999,
    kcal: 99999,
+   macros: 99999
 }
 
 const COLORS_CHART = [theme.colors.color03, theme.colors.color04, theme.colors.color05, theme.colors.black];
@@ -185,8 +186,14 @@ const AddConsumoScreen = ({ route }: { route: any }) => {
             return currentValue != originalValue;
          });
       }
-      const valideStrings = consumoAlimento.kcal > 0 && consumoAlimento.kcal <= MAX_VALUES.kcal && consumoAlimento.qtde_utilizada > 0;
-      return anyDifferent && valideStrings;
+      const valideConsumoValues = 
+         (consumoAlimento.qtde_utilizada > 0 && consumoAlimento.qtde_utilizada <= MAX_VALUES.qtdeUtilizada) &&
+         (consumoAlimento.kcal > 0 && consumoAlimento.kcal <= MAX_VALUES.kcal) && 
+         (consumoAlimento.qtde_carboidrato > 0 && consumoAlimento.qtde_carboidrato <= MAX_VALUES.macros) &&
+         (consumoAlimento.qtde_proteina > 0 && consumoAlimento.qtde_proteina <= MAX_VALUES.macros) &&
+         (consumoAlimento.qtde_gordura > 0 && consumoAlimento.qtde_gordura <= MAX_VALUES.macros) &&
+         (consumoAlimento.qtde_alcool >= 0 && consumoAlimento.qtde_alcool <= MAX_VALUES.macros);
+      return anyDifferent && valideConsumoValues;
    }
 
    const allowSalvar = allowButtonSalvar();
@@ -235,7 +242,7 @@ const AddConsumoScreen = ({ route }: { route: any }) => {
                maxLength={10}
                onChangeText={(valorTexto) =>
                   handlerSetConsumoInputNumber(
-                     handleNumberInput(valorTexto, true, MAX_VALUES.qtde_utilizada, 0), 'qtde_utilizada')
+                     handleNumberInput(valorTexto, true, MAX_VALUES.qtdeUtilizada, 0), 'qtde_utilizada')
                }
             />
          </View>

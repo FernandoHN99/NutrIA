@@ -26,6 +26,7 @@ export const addAlimentoConsumidoService = async (bodyRequest: AddAlimentoConsum
 
 export const atualizarAlimentoConsumidoService = async (bodyRequest: AtualizarConsumoUsuarioSchema): Promise<AtualizarConsumoUsuarioSchema> => {
    try {
+      console.log(bodyRequest);
       const response = await api.patch(`/alimento-consumido/atualizar`, bodyRequest);
       return response.data.data;
    } catch (error) {

@@ -68,25 +68,26 @@ const RefeicaoScreen = ({ route }: { route: any }) => {
             key={alimentoConsumido.dtt_alimento_consumido}
             //@ts-ignore
             onPress={() => navigation.push('AddConsumoScreen', { consumoAlimento: alimentoConsumidoItem, refeicao: macrosRefeicao })}>
-            <View style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between' }}>
-               <View style={{ width: '68%' }}>
+            <View style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', flex: 1 }}>
+               <View style={{ flex: 0.9 }}>
                   <Text style={[styles.infoAlimento]}>{alimento.nome_alimento} {alimento.estado_alimento != 'PADRAO' ? ` (${capitalize(alimento.estado_alimento)})` : ''}</Text>
-                  <View style={{ flexDirection: 'row', alignItems: 'flex-end', marginTop: 1 }}>
+                  <View style={{ flexDirection: 'row', alignItems: 'flex-end', marginTop: 1, flexWrap: 'wrap' }}>
                      <Text style={[styles.textInfoAlimento, { fontFamily: 'NotoSans-Bold', color: 'black', fontSize: getResponsiveSizeWidth(4) }]}>{alimentoConsumido.qtde_utilizada}g -  </Text>
                      <Text style={styles.textInfoAlimento}>C: {arredondarValores(alimentoConsumido.qtde_carboidrato)}g   </Text>
                      <Text style={styles.textInfoAlimento}>P: {arredondarValores(alimentoConsumido.qtde_proteina)}g   </Text>
-                     <Text style={styles.textInfoAlimento}>G: {arredondarValores(alimentoConsumido.qtde_gordura)}g</Text>
+                     <Text style={styles.textInfoAlimento}>G: {arredondarValores(alimentoConsumido.qtde_gordura)}g    </Text>
+                     {alimentoConsumido.qtde_alcool > 0 && <Text style={styles.textInfoAlimento}>A: {arredondarValores(alimentoConsumido.qtde_alcool)}g   </Text>}
                   </View>
                </View>
                <View style={{ alignSelf: 'center' }}>
-                  <Text style={[styles.textInfoAlimento, { fontFamily: 'NotoSans-SemiBold', color: 'black', fontSize: getResponsiveSizeWidth(4.2) }]}>{arredondarValores(alimentoConsumido.kcal)} kcal</Text>
+                  <Text style={[styles.textInfoAlimento, { textAlign: 'right', fontFamily: 'NotoSans-SemiBold', color: 'black', fontSize: getResponsiveSizeWidth(4.2) }]}>{arredondarValores(alimentoConsumido.kcal)} kcal</Text>
                </View>
+               {loadingItemId === alimentoConsumido.id_alimento_consumido ?
+                  <ActivityIndicator style={styles.iconeAdd} />
+                  :
+                  <Icons02 style={styles.iconeAdd} name="remove-circle" size={getResponsiveSizeWidth(7)} onPress={() => hanldeDeletarConsumo(alimentoConsumido.id_alimento_consumido)} />
+               }
             </View>
-            {loadingItemId === alimentoConsumido.id_alimento_consumido ? 
-               <ActivityIndicator />
-               :
-               <Icons02 style={styles.iconeAdd} name="remove-circle" size={getResponsiveSizeWidth(7)} onPress={() => hanldeDeletarConsumo(alimentoConsumido.id_alimento_consumido)} />
-            }
          </TouchableOpacity>
       )
    }
@@ -158,14 +159,34 @@ const RefeicaoScreen = ({ route }: { route: any }) => {
                         />
                         <Text style={styles.infoText}>{`${macrosRefeicao.totalGordura} / ${perfilDia.meta_gordura} g`}</Text>
                      </View>
+                     {macrosRefeicao.totalAlcool > 0 &&
+                        <View>
+                           <Text style={styles.infoText}>Alcool</Text>
+                           <ProgressBar
+                              current={macrosRefeicao.totalAlcool}
+                              total={macrosRefeicao.totalAlcool}
+                              bgColor={hexToRgba(theme.colors.color05, '0.3')}
+                              progressColor={theme.colors.color05}
+                              width={WIDTH_PROGRESS_BAR}
+                              height={HEIGHT_PROGRESS_BAR}
+                              paddingValue={0}
+                           />
+                           <Text style={styles.infoText}>{`${macrosRefeicao.totalAlcool} g`}</Text>
+                        </View>
+                     }
                   </View>
                </View>
                <View style={styles.alimentoMainContainer}>
                   {consumoRefeicao.length > 0 ? (
                      <View style={styles.alimentosContainer}>
                         <Text style={styles.subtitulo}>Alimentos Consumidos</Text>
-                        <ScrollView showsVerticalScrollIndicator={false} style={{ height: '73%' }} bounces={true} >
+                        <ScrollView showsVerticalScrollIndicator={false} style={{ height: 'auto' }} bounces={false} >
                            {consumoRefeicao.map(renderConsumoAlimentos)}
+                           { // @ts-ignore 
+                              <TouchableOpacity style={[styles.buttonAdicionar, {marginTop: getResponsiveSizeHeight(2)}]} onPress={() => navigation.push('SearchFoodScreen', { macrosRefeicao, diaSelecionado })}>
+                                 <Text style={styles.semAlimentosMsgButton}>Adicionar alimento</Text>
+                              </TouchableOpacity>
+                           }
                         </ScrollView>
                      </View>
                   ) : (
@@ -215,10 +236,10 @@ const styles = StyleSheet.create({
       width: '100%',
    },
    resumoContainer: {
+      paddingVertical: getResponsiveSizeHeight(2),
       justifyContent: 'space-evenly',
       alignItems: 'center',
       flexDirection: 'row',
-      height: getResponsiveSizeHeight(20),
       backgroundColor: hexToRgba(theme.colors.color04, '0.1'),
       borderRadius: 20,
       borderWidth: 3,
@@ -244,7 +265,7 @@ const styles = StyleSheet.create({
       color: hexToRgba(theme.colors.black, '0.8')
    },
    macrosContainer: {
-      height: '85%',
+      // height: '85%',
       flexDirection: 'column',
       justifyContent: 'space-between',
    },

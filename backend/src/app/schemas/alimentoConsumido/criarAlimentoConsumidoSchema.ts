@@ -31,16 +31,16 @@ const criarAlimentoConsumidoSchema = z.object({
       .min(0).max(9999.9).positive(),
 
    qtde_proteina: z.number()
-      .min(0).max(9999.9),
+      .min(0).max(99999.9),
 
    qtde_carboidrato: z.number()
-      .min(0).max(9999.9),
+      .min(0).max(99999.9),
 
    qtde_gordura: z.number()
-      .min(0).max(9999.9),
+      .min(0).max(99999.9),
 
    qtde_alcool: z.number()
-      .min(0).max(9999.9),
+      .min(0).max(99999.9),
 
    kcal: z.number()
       .min(0).max(99999.9).positive(),
