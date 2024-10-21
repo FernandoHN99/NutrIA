@@ -1,12 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ImageBackground, Dimensions, View, ScrollView, StyleSheet, KeyboardAvoidingView, Platform, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { ImageBackground, Dimensions, View, ScrollView, StyleSheet, KeyboardAvoidingView, Platform, TextInput, TouchableOpacity, ActivityIndicator, Text } from 'react-native';
 import theme from '../../../styles/theme';
-import { getResponsiveSizeWidth, getResponsiveSizeHeight, hexToRgba } from '../../../utils/utils';
+import { getResponsiveSizeWidth, getResponsiveSizeHeight, hexToRgba, criarStrData } from '../../../utils/utils';
 import MessagesChatbot from '../../../components/ChatBotSignUp/MessagesChatbot';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useFazerPergunta } from '../../../api/hooks/chatBot/useFazerPergunta';
 import { usePerfisUsuario, useUsuarioInfo } from '../../../api/httpState/usuarioData';
 import { chatBotMessagesSchema } from '../../../api/schemas/chatBotSchema';
+import { useQueryClient } from '@tanstack/react-query';
+import { gerarTextoPerfil } from '../../../utils/formatters';
 
 interface message {
    _id: number;
@@ -14,43 +16,39 @@ interface message {
    user: string;
 }
 
-const TEXT_USER_INIT = 'Essas são as minhas informações pessoais e metabólicas, me ajude com o que eu te pedir'
-const TEXT_ASSISTENT_INIT = 'Olá, como posso te ajudar?'
+
+const initMessages: message[] = [
+   {
+      _id: Math.random(),
+      text: 'Olá, como posso te ajudar?',
+      user: "NutrIA",
+   }
+]
 
 const ChatbotScreen = () => {
 
+   const queryClient = useQueryClient()
    const scrollViewRef = useRef<ScrollView>(null);
    const [text, setText] = useState<string>('');
-   const [messages, setMessages] = useState<message[]>(
-      [
-         {
-            _id: Math.random(),
-            text: TEXT_ASSISTENT_INIT,
-            user: "NutrIA",
-         }
-      ]
-   );
-   const { data, loading, error, fazerPergunta } = useFazerPergunta();
+   const [messages, setMessages] = useState<message[]>(initMessages);
+   const { data, loading, error, fazerPergunta } = useFazerPergunta(queryClient);
    const { data: usuarioInfo } = useUsuarioInfo({ enabled: false });
    const { data: perfisUsuario } = usePerfisUsuario({ enabled: false });
 
-   const montarUserIntro = () =>{
-      const { id_usuario: userId = '', email = '', ...infoUser } = usuarioInfo || {};
-      const { id_usuario: perfilId = '', ...perfilUsuario } = perfisUsuario?.[perfisUsuario.length - 1] || {};
-      infoUser.sexo = usuarioInfo?.sexo === 'M' ? 'Masculino' : 'Feminino';
-      const userIntroText = `${TEXT_USER_INIT}: ${JSON.stringify(infoUser) + JSON.stringify(perfilUsuario)}`;
-      return [{ role: 'user', content: userIntroText }];
+   const montarUserIntro = () => {
+      const textoIntroUser = gerarTextoPerfil(usuarioInfo, perfisUsuario?.[perfisUsuario.length - 1]);
+      return [{ role: 'user', content: textoIntroUser }];
    }
 
    const montarChatMessageService = (userLastMessage: string) => {
       const userIntro = montarUserIntro()
-      const msgChatFormatadas = messages.map(message => ({
-        role: message.user === 'Você' ? 'user' : 'assistant',
-        content: message.text
+      const msgChatFormatadas = messages.slice(-8).map(message => ({
+         role: message.user === 'Você' ? 'user' : 'assistant',
+         content: message.text
       }));
       return [...userIntro, ...msgChatFormatadas, { role: 'user', content: userLastMessage }];
-    }
-    
+   }
+
 
    const handleSendMessage = (userMessage: string) => {
       if (userMessage.trim() === '') return;
@@ -68,7 +66,7 @@ const ChatbotScreen = () => {
       if (data) {
          setMessages(prevMessages => [
             ...prevMessages,
-            { _id: Math.random(), text: data, user: "NutrIA" }
+            { _id: Math.random(), text: data.resposta, user: "NutrIA" }
          ]);
       } else if (error) {
          setMessages(prevMessages => [
@@ -88,8 +86,11 @@ const ChatbotScreen = () => {
             ref={scrollViewRef}
             contentContainerStyle={styles.chatContainer}
             onContentSizeChange={() => scrollViewRef.current?.scrollToEnd({ animated: true })}
-            // style={styles.scrollview}
+         // style={styles.scrollview}
          >
+            <TouchableOpacity style={styles.btnLimparChat} onPress={() => setMessages(initMessages)}>
+               <Text style={styles.btnText}>Limpar Chat</Text>
+            </TouchableOpacity>
             {messages.map(message => (
                <MessagesChatbot key={message._id} text={message.text} user={message.user} />
             ))}
@@ -132,7 +133,7 @@ const styles = StyleSheet.create({
       backgroundColor: theme.colors.backgroundColor,
    },
    chatContainer: {
-      padding: getResponsiveSizeWidth(5),
+      padding: getResponsiveSizeWidth(2),
    },
    inputContainer: {
       flexDirection: 'row',
@@ -163,6 +164,21 @@ const styles = StyleSheet.create({
       color: theme.colors.black,
       paddingVertical: getResponsiveSizeHeight(1.5),
    },
+   btnLimparChat: {
+      backgroundColor: hexToRgba(theme.colors.color04, '0.1'),
+      borderColor: hexToRgba(theme.colors.color05, '0.2'),
+      marginBottom: getResponsiveSizeHeight(1),
+      marginTop: getResponsiveSizeHeight(0.5),
+      alignSelf: 'center',
+      borderWidth: 1,
+      paddingVertical: getResponsiveSizeWidth(1),
+      paddingHorizontal: getResponsiveSizeWidth(4),
+      borderRadius: getResponsiveSizeWidth(10),
+   },
+   btnText: {
+      color: theme.colors.black,
+      fontFamily: 'NotoSans-Regular',
+   }
    // backgroundImage: {
    //    width: Dimensions.get('window').width,
    //    height: Dimensions.get('window').height,

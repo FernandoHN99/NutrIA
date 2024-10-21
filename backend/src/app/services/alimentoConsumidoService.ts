@@ -6,7 +6,7 @@ import { atualizarAlimentoConsumidoObject } from "../schemas/alimentoConsumido/a
 import { deletarAlimentoConsumidoObject } from "../schemas/alimentoConsumido/deletarAlimentoConsumido";
 import { JsonReponseErro } from "../../utils/jsonReponses";
 
-export default class ControleCaloriasService{
+export default class AlimentoConsumidoService{
    
    private controleCaloriasRepo: ControleCaloriasRepositorio;
 

@@ -2,7 +2,6 @@ import { Entity, Column, PrimaryColumn, BaseEntity, ManyToOne, JoinColumn} from 
 import Usuario from "./usuario";
 import { salvarDiaObject } from "../schemas/dia/salvarDiaSchema";
 import Util from "../../utils/util";
-import { transformer } from "zod";
 
 @Entity('dia')
 export default class Dia extends BaseEntity {

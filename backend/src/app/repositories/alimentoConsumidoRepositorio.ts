@@ -19,9 +19,9 @@ export default class AlimentoConsumidoRepositorio {
             'r.nome_refeicao',
             'tb'
          ])
-         .innerJoin('ac.alimento', 'a')
-         .innerJoin('ac.refeicao', 'r')
-         .innerJoin('a.tabelasNutricionais', 'tb')
+         .leftJoin('ac.alimento', 'a')
+         .leftJoin('ac.refeicao', 'r')
+         .leftJoin('a.tabelasNutricionais', 'tb')
          .where('ac.id_alimento_consumido = :idAlimentoConsumido', { idAlimentoConsumido })
          .getOne();
    }
@@ -44,9 +44,9 @@ export default class AlimentoConsumidoRepositorio {
             'r.nome_refeicao',
             'tb'
          ])
-         .innerJoin('ac.alimento', 'a')
-         .innerJoin('ac.refeicao', 'r')
-         .innerJoin('a.tabelasNutricionais', 'tb')
+         .leftJoin('ac.alimento', 'a')
+         .leftJoin('ac.refeicao', 'r')
+         .leftJoin('a.tabelasNutricionais', 'tb')
          .where('ac.id_usuario = :usuarioID', { usuarioID })
          .andWhere('ac.dt_dia >= :dataInicio', { dataInicio })
          .andWhere('ac.dt_dia <= :dataFim', { dataFim })
@@ -54,7 +54,6 @@ export default class AlimentoConsumidoRepositorio {
          .orderBy('r.numero_refeicao', 'ASC')
          .orderBy('ac.dt_dia', 'DESC')
          .getMany();
-         // .getRawMany();
    }
 
 }

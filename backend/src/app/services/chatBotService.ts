@@ -3,53 +3,106 @@ import OpenAI from "openai";
 import { OPEN_AI_API_KEY } from "../../config/variaveis"
 import { chatMessagesObject } from "../schemas/chatBot/chatMessagesSchema";
 import { fazerPerguntaObject } from "../schemas/chatBot/fazerPerguntaSchema";
+import { addConsumoOpenAI } from "../../utils/modelosFuncoesOpenAI/addConsumoOpenAI";
+import AlimentoConsumidoService from "./alimentoConsumidoService";
+import { criarAlimentoConsumidoObject } from "../schemas/alimentoConsumido/criarAlimentoConsumidoSchema";
 
 interface IChatBotRetorno {
-   acao: string;
+   acao: string | null;
    resposta: string;
    dados: object;
 }
 
 export default class ChatBotService {
    private openai: any;
-   private nomeModelo: string;
-   private contextoSistema: string;;
 
    constructor() {
       this.openai = new OpenAI({ apiKey: OPEN_AI_API_KEY });
-      this.nomeModelo = "ft:gpt-4o-mini-2024-07-18:personal:nutria-basico-prod:AHxqcdqa";
-      this.contextoSistema = "Você é um assistente nutricional especializado e sua função é fornecer respostas claras e diretas sobre tópicos de nutrição, incluindo planejamento de refeições, controle de calorias e dicas para uma alimentação saudável baseados nos pilares de dietas flexível, contagem de macronutrientes e balanço energético. Você também deve retornar informação nutricional sobre alimentos baseado em nossa tabela de alimentos e ajuda os usuários a registrar seu consumo calórico durante o dia em refeições específicas quando solicitado. Você deve gerar em um formato JSON específico para que o sistema de backend possa processar e executar ações conforme necessário.";
    }
 
-   private montarPrompt(mensagensChat: chatMessagesObject[]): object {
+   private montarPromptPergunta(mensagensChat: chatMessagesObject[]): object {
+      const comandosDeFuncoes = ["adicionar", "add", "adicione"];
+      const lastMessage = mensagensChat[mensagensChat.length-1].content.toLocaleLowerCase();
+      const invocarFuncao = comandosDeFuncoes.some(palavra => lastMessage.includes(palavra));
+
+      const nomeModelo = "ft:gpt-4o-mini-2024-07-18:personal:nutria-add-consumo-prod:AI0lLD2M";
+      const contextoSistema = "Você é um assistente nutricional e sua função é fornecer respostas claras e diretas sobre tópicos de nutrição em portguês Brasil. Seja breve e use poucas palavras, ajude o usuario em  montar de refeições, controlar  calorias e dar dicas e feedbacks para ter uma alimentação  baseados nos pilares de dietas flexível, contagem de macronutrientes e balanço energético.";
+      const adicionarConsumoFn = addConsumoOpenAI;
+
       return (
          {
+            model: nomeModelo,
             messages: [
-               { "role": "system", "content": this.contextoSistema },
+               { "role": "system", "content": contextoSistema },
                ...mensagensChat
             ],
             temperature: 1,
-            max_tokens: 256,
+            max_tokens: 500,
             top_p: 1,
             frequency_penalty: 0,
             presence_penalty: 0,
-            // response_format: {
-            //    "type": "json_object"
-            // },
-            model: this.nomeModelo,
+            tools: invocarFuncao ? [{ ...adicionarConsumoFn }] : null
+         }
+      );
+   }
+
+   private montarPromptAnalisarFoto(mensagensChat: chatMessagesObject[]): object {
+      const nomeModelo = "gpt-4o-mini";
+      const contextoSistema = `Interprete SOMENTE fotos de pratos de comida e retorne com precisão os nomes dos alimentos, a quantidade total, o conteúdo de macronutrientes (carboidratos, proteínas, gorduras e álcool, se aplicável), bem como o total de calorias. Se não houver alimentos para ser analisado, retorne: "A imagem não possui alimentos.\n\nExemplo de Saida:\nAlimento:  Nome Alimento 01,\nQuantidade: Qtde Alimento 01,\nMacronutrientes:  Carboidratos 01, Proteínas 01,  Gorduras 01, Alcool 01\nCalorias: kcal 01\n\nAlimento:  Nome Alimento 02,\nQuantidade: Qtde Alimento 02,\nMacronutrientes:  Carboidratos 02, Proteínas 02,  Gorduras 02, Alcool 02\nCalorias: kcal 02`;
+
+      return (
+         {
+            model: nomeModelo,
+            messages: [
+               { "role": "system", "content": contextoSistema },
+               ...mensagensChat
+            ],
+            temperature: 1,
+            max_tokens: 2048,
+            top_p: 1,
+            frequency_penalty: 0,
+            presence_penalty: 0,
          }
       );
    }
 
    public async perguntar(fazerPerguntaJSON: fazerPerguntaObject): Promise<IChatBotRetorno> {
-      const promptChat = this.montarPrompt(fazerPerguntaJSON.mensagensChat);
+      const promptChat = this.montarPromptPergunta(fazerPerguntaJSON.mensagensChat);
+      console.log(promptChat);
       const chatBotRetorno = await this.openai.chat.completions.create(promptChat);
-      console.log(chatBotRetorno)
-      if(chatBotRetorno.choices[0]?.message === undefined){
-         JsonReponseErro.lancar(400, 'Erro ao processar a requisição');
+      const { tool_calls, content } = chatBotRetorno.choices[0]?.message
+      if(!tool_calls && !content){
+         JsonReponseErro.lancar(400, 'Erro ao completar a conversa com o chatbot');
       }
-      return chatBotRetorno.choices[0]?.message
+      if (tool_calls && tool_calls.length > 0) {
+         return this.chamarAcaoBackend(tool_calls[0].function, fazerPerguntaJSON.id_usuario)
+      }
+      return { acao: null, resposta: content, dados: {} };
    }
 
+   private async chamarAcaoBackend(requestFunctionCall: { name: string, arguments: any }, usuarioID: string): Promise<IChatBotRetorno> {
+      const responseAcao: IChatBotRetorno = { acao: requestFunctionCall.name, resposta: '', dados: [{}] };
+      try {
+         const requestJSON = {...JSON.parse(requestFunctionCall.arguments)};
+         switch (requestFunctionCall.name) {
+            case 'add_consumo_alimento': {
+               const alimentoConsumidoService = new AlimentoConsumidoService();
+               const { alimentos } = requestJSON;
+               // console.log({...alimentos[0], id_usuario: usuarioID, dtt_alimento_consumido: new Date().toISOString()});
+               responseAcao.dados = await alimentoConsumidoService.cadastrarAlimentoConsumido({...alimentos[0],id_usuario: usuarioID, dtt_alimento_consumido: new Date().toISOString()} as criarAlimentoConsumidoObject);
+               // responseAcao.dados = [];
+               // for (const alimento of requestJSON.alimentos) {
+               //   const result = await alimentoConsumidoService.cadastrarAlimentoConsumido(alimento as criarAlimentoConsumidoObject);
+               //   responseAcao.dados.push(result);
+               // }
+               responseAcao.resposta = 'Alimento consumido adicionado com sucesso';
+               break;
+            }
+         }
+      } catch (error) {
+         JsonReponseErro.lancar(400, 'Erro ao processar a chamar a função', error);
+      }
+      return responseAcao;
+   }
 
 }

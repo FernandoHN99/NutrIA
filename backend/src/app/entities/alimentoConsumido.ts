@@ -19,7 +19,10 @@ export default class AlimentoConsumido extends BaseEntity {
    numero_refeicao: number;
 
    @Column('int4')
-   id_alimento: number;
+   id_alimento: number | null;
+
+   @Column('text')
+   nome_consumo: string | null;
 
    @Column('int4')
    id_prato: number | null;

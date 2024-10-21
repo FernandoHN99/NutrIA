@@ -64,6 +64,17 @@ export const mapTamanhoDaPorcao: { [key: string]: Array<string> } = {
    'UNIDADE': ['1', '2', '3', '4', '5']
 };
 
+export const mapAbreviacaoMedidas = {
+   'GRAMA': 'g',
+   'MILILITRO': 'ml',
+   'COLHER SOPA': 'cs',
+   'COLHER CHA': 'cc',
+   'XICARA PADRAO': 'x',
+   'XICARA CHA': 'xc',
+   'XICARA CAFE': 'xcaf',
+   'UNIDADE': 'uni'
+};
+
 export const helperModalTexts: { [key: string]: {title: string, message: string} } = {
    nivelAtividade: {
       title: 'Nível de Atividade',

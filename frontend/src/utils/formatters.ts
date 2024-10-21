@@ -1,4 +1,7 @@
-import { roundJsonValues } from "./utils";
+import { AtualizarConsumoUsuarioSchema, ConsumoAlimentoSchema } from "../api/schemas/alimentoConsumidoSchema";
+import { AlimentoSchema, TabelaNutricional } from "../api/schemas/alimentoSchema";
+import { mapObjetivos } from "../config/variaveis";
+import { criarStrData, encontrarChavePeloValorJSON, roundJsonValues } from "./utils";
 
 export const encontrarPerfilPorData = (perfisData: any[] | undefined, diaSelecionado: string) => {
    if (!perfisData) {
@@ -95,4 +98,56 @@ export const filtrarConsumoDia = (consumoTotal: any[], diaSelecionado: string) =
 
 export const filtrarConsumoRefeicao = (consumoDia: any[], numeroRefeicao: number) => {
    return consumoDia.filter(consumoDia => consumoDia.numero_refeicao == numeroRefeicao);
+}
+
+export const formatarConsumoRapido = (consumoRapido: AtualizarConsumoUsuarioSchema): ConsumoAlimentoSchema => {
+   const tabelaNutricional : TabelaNutricional = 
+      {
+         id_tabela_nutricional: null!,
+         id_alimento: null!,
+         unidade_medida: consumoRapido.unidade_medida,
+         porcao_padrao: (consumoRapido.porcao_padrao * consumoRapido.qtde_utilizada),
+         kcal: consumoRapido.kcal,
+         qtde_proteina: consumoRapido.qtde_proteina,
+         qtde_carboidrato: consumoRapido.qtde_carboidrato,
+         qtde_gordura: consumoRapido.qtde_gordura,
+         qtde_alcool: consumoRapido.qtde_alcool,
+         qtde_acucar: null!,
+         qtde_fibra: null!,
+         qtde_saturada: null!,
+         qtde_monosaturada: null!,
+         qtde_polisaturada: null!,
+         qtde_trans: null!,
+         qtde_sodio: null!,
+         qtde_calcio: null!,
+         qtde_ferro: null!,
+         qtde_potassio: null!,
+         qtde_vitamina_a: null!,
+         qtde_vitamina_c: null!,
+         qtde_vitamina_d: null!,
+         qtde_vitamina_e: null!,
+      };
+
+   const alimento: any = {
+      nome_alimento: consumoRapido.nome_consumo,
+      estado_alimento: 'PADRAO',
+      tabelasNutricionais: [tabelaNutricional]
+   }
+   return {...consumoRapido, alimento};
+}
+
+
+export const gerarTextoPerfil = (usuarioInfo:any, perfilInfo:any) => {
+   const { nome, dt_nascimento, email, pais, perfil_alimentar, sexo } = usuarioInfo;
+   const { altura, peso_inicial, peso_final, objetivo, nivel_atividade, meta_proteina, meta_carboidrato, meta_gordura, tmb, tmf, kcal } = perfilInfo;
+   
+   const dataNascimento = new Date(dt_nascimento);
+   const idade = new Date().getFullYear() - dataNascimento.getFullYear();
+
+   const texto = `Meu nome é ${nome} tenho ${idade} anos, sou ${sexo === 'M' ? 'homem' : 'mulher'}, tenho ${altura} cm, e peso ${peso_inicial} kg, além de ser ${perfil_alimentar.toLocaleLowerCase()}. ` +
+                 `Meu objetivo é de ${objetivo.toLocaleLowerCase()} de peso e meu nível de atividade física é ${nivel_atividade.toLocaleLowerCase()}. ` +
+                 `Minha tmb (taxa metabólica basal) é ${tmb} kcal e minha tmf (meta de kcal diária) é ${tmf} kcal. `+
+                 `Minhas metas diárias de maronutrientes são ${meta_proteina}g de proteína, ${meta_carboidrato}g de carboidrato e ${meta_gordura}g de gordura. `+
+                 `Hoje é dia ${criarStrData()}.`
+   return texto;
 }

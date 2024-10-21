@@ -19,5 +19,14 @@ export default class ChatBotController{
       return new JsonReponseSucesso(200, 'Resposta retornada com sucesso', resposta);
    }
 
+   // public async analisarAlimentos(req: Request, res: Response): Promise<JsonReponseSucesso>{
+   //    const resultadoParse: any = fazerPerguntaSchema.safeParse(req.body); 
+   //    if (!resultadoParse.success){
+   //       JsonReponseErro.lancar(400, 'JSON inválido', resultadoParse.error);
+   //    };
+   //    const resposta = await this.chatBotService.perguntar(resultadoParse.data);
+   //    return new JsonReponseSucesso(200, 'Resposta retornada com sucesso', resposta);
+   // }
+
 
 }

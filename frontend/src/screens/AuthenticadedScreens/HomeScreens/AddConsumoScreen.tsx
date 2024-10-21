@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, ActivityIndicator, Alert } from 'react-native';
 import { AlimentoSchema, TabelaNutricional } from '../../../api/schemas/alimentoSchema';
-import { AtualizarConsumoUsuarioSchema } from '../../../api/schemas/alimentoConsumidoSchema';
+import { AtualizarConsumoUsuarioSchema, ConsumoAlimentoSchema } from '../../../api/schemas/alimentoConsumidoSchema';
 import { arredondarValores, calcularMacronutrientes, criarStrData, getResponsiveSizeHeight, getResponsiveSizeWidth, hexToRgba, limitarValor, validadeString } from '../../../utils/utils';
 import { useNavigation } from '@react-navigation/native';
 import theme from '../../../styles/theme';
@@ -18,9 +18,6 @@ interface Refeicao {
    numero_refeicao: number,
    nome_refeicao: string;
 }
-interface ConsumoAlimentoSchema extends AtualizarConsumoUsuarioSchema {
-   alimento: AlimentoSchema;
-}
 
 interface AddConsumoScreenProps {
    alimento?: AlimentoSchema;
@@ -32,6 +29,7 @@ const inicializarConsumoUsuario = (alimento: AlimentoSchema, refeicao: Refeicao)
    return {
       alimento: alimento,
       id_alimento: alimento.id_alimento,
+      nome_consumo: null,
       numero_refeicao: refeicao.numero_refeicao,
       id_prato: null,
       id_alimento_consumido: undefined,

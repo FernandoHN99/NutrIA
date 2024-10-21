@@ -179,9 +179,10 @@ CREATE TABLE alimento_consumido (
    id_alimento_consumido BIGSERIAL,
    id_usuario UUID NOT NULL,
 	numero_refeicao INTEGER NOT NULL, 
-	id_alimento INTEGER NOT NULL,
+	id_alimento INTEGER,
 	id_prato INTEGER,
 	dt_dia DATE NOT NULL,
+   nome_consumo TEXT,
 	unidade_medida TEXT NOT NULL,
 	porcao_padrao INTEGER NOT NULL,
 	qtde_utilizada NUMERIC(5,1) NOT NULL,
@@ -191,6 +192,9 @@ CREATE TABLE alimento_consumido (
 	qtde_alcool NUMERIC(6,1) NOT NULL,
    kcal NUMERIC(6,1) NOT NULL,
    dtt_alimento_consumido TEXT NOT NULL,
+   CONSTRAINT alimento_consumido_check_referencias CHECK (
+      id_alimento > 0 OR nome_consumo IS NOT NULL AND nome_consumo <> ''
+   ),
 	CONSTRAINT alimento_consumido_check_valores_maiores_que_zero CHECK (
       porcao_padrao > 0 AND qtde_proteina >= 0 AND 
 	   qtde_carboidrato >= 0 AND qtde_gordura >= 0 AND qtde_alcool >= 0 AND kcal > 0 AND qtde_utilizada > 0 

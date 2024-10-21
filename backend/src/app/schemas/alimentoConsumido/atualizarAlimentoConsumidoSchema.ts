@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { criarAlimentoConsumidoSchema } from './criarAlimentoConsumidoSchema';
 
-const atualizarAlimentoConsumidoSchema = criarAlimentoConsumidoSchema
+const atualizarAlimentoConsumidoSchema = criarAlimentoConsumidoSchema.innerType()
    .partial()
    .required({ id_usuario: true })
    .omit({ id_alimento: true, id_prato: true, dtt_alimento_consumido: true})
@@ -14,6 +14,7 @@ const atualizarAlimentoConsumidoSchema = criarAlimentoConsumidoSchema
 ).refine(data => Object.keys(data).length > 2, {
    message: 'Nenhum dado fornecido para atualização de alimento consumido',
 });
+
 
 
 type atualizarAlimentoConsumidoObject = z.infer<typeof atualizarAlimentoConsumidoSchema>;

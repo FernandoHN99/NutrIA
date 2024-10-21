@@ -92,7 +92,7 @@ const DadosPerfilScreen = () => {
 
 
    const perfilConfig: any = {
-      peso_inicial: { label: 'Peso Atual (kg)', type: 'numeric', unidadeMedida: 'kg', maxValue: 300, maxLength: 3, allowDecimal: true, minValue: 1, editable: true },
+      peso_inicial: { label: 'Peso Atual (kg)', type: 'numeric', unidadeMedida: 'kg', maxValue: 200, maxLength: 3, allowDecimal: true, minValue: 1, editable: true },
       peso_final: { label: 'Peso Ideal (kg)', type: 'numeric', unidadeMedida: 'kg', maxValue: 300, maxLength: 3, allowDecimal: true, minValue: 1, editable: true },
       altura: { label: 'Altura (cm)', type: 'numeric', unidadeMedida: 'cm', maxValue: 300, maxLength: 3, allowDecimal: true, minValue: 1, editable: true },
       nivel_atividade: { label: 'Nível de Atividade', type: 'select', options: mapNiveisDeAtividade, modalText: helperModalTexts.nivelAtividade, editable: true },
@@ -196,7 +196,7 @@ const DadosPerfilScreen = () => {
       if (isFirstRender.current) {
          isFirstRender.current = false;
          return;
-       }
+      }
       if (!allowButtonCalcular) {
          const newPerfil = { ...perfil };
          // @ts-ignore
@@ -217,6 +217,16 @@ const DadosPerfilScreen = () => {
          return '30%';
       }
    };
+
+   const handleCalcularMetas = () => {
+      const novoPerfil = calcularMetas();
+      if (novoPerfil.meta_carboidrato < 0 || novoPerfil.meta_proteina < 0 || novoPerfil.meta_gordura < 0) {
+         Alert.alert('Erro ao calcular suas metas', 'Verifique os valores informados.');
+         return;
+      }
+      setPerfil(novoPerfil);
+   }
+
 
    const renderField = (key: string) => {
       const configCampo = perfilConfig[key];
@@ -279,7 +289,7 @@ const DadosPerfilScreen = () => {
 
             <TouchableOpacity
                style={[{ marginBottom: getResponsiveSizeHeight(2) }, styles.buttonNotAllowed, !allowButtonCalcular && styles.button]}
-               onPress={() => setPerfil(calcularMetas())}
+               onPress={handleCalcularMetas}
                disabled={allowButtonCalcular}
             >
                <Text style={styles.buttonText}>Calcular Metas</Text>

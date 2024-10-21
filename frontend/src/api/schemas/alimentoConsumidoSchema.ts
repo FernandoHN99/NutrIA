@@ -1,3 +1,5 @@
+import { AlimentoSchema } from "./alimentoSchema";
+
 export interface obterConsumoUsuarioSchema {
    dataInicio: string;
    dataFim: string;
@@ -6,6 +8,7 @@ export interface obterConsumoUsuarioSchema {
 export interface AddAlimentoConsumidoSchema {
    numero_refeicao: number;
    id_alimento: number;
+   nome_consumo: string | null;
    id_prato: number | null;
    dt_dia: string;
    unidade_medida: string;
@@ -24,4 +27,8 @@ export interface AtualizarConsumoUsuarioSchema extends AddAlimentoConsumidoSchem
 
 export interface DeletarConsumoUsuarioSchema {
    id_alimento_consumido: number;
+}
+
+export interface ConsumoAlimentoSchema extends AtualizarConsumoUsuarioSchema {
+   alimento: AlimentoSchema;
 }
