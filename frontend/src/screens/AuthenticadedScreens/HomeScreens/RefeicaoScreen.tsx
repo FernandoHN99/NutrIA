@@ -18,10 +18,10 @@ const WIDTH_PROGRESS_BAR = getResponsiveSizeWidth(35);
 const HEIGHT_PROGRESS_BAR = getResponsiveSizeWidth(2);
 
 
-const RefeicaoScreen = ({ route }: { route: any }) => {
+const RefeicaoScreen = ({ route, navigation }: { route: any, navigation: any }) => {
    const { numeroRefeicao, perfilDia, diaSelecionado, refeicoesDiaAtivas } = route.params;
 
-   const navigation = useNavigation();
+   const navigator = useNavigation();
    const queryClient = useQueryClient()
    const { data: consumoAlimentosCached } = useConsumoAlimentos({ enabled: false });
 
@@ -55,7 +55,7 @@ const RefeicaoScreen = ({ route }: { route: any }) => {
    }
 
    const handleGoBack = () => {
-      navigation.goBack();
+      navigator.goBack();
    };
 
    const renderConsumoAlimentos = (alimentoConsumidoItem: any, index: number) => {
@@ -65,16 +65,17 @@ const RefeicaoScreen = ({ route }: { route: any }) => {
       return (
          <TouchableOpacity
             style={[styles.alimentoConsumoContainer, 0 === index && styles.alimentoFirstContainer]}
-            key={alimentoConsumido.dtt_alimento_consumido}
+            key={alimentoConsumido.id_alimento_consumido}
             //@ts-ignore
-            onPress={() => navigation.push('AddConsumoScreen', { consumoAlimento: alimentoConsumido, refeicao: macrosRefeicao })}>
+            onPress={() => navigation.navigate('AddConsumoScreen', { consumoAlimento: alimentoConsumido, refeicao: macrosRefeicao })}>
             <View style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', flex: 1 }}>
                <View style={{ flex: 0.9 }}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap' }}>
-                     <Text style={[styles.infoAlimento, {textDecorationLine: 'underline'}]}>{nomeAlimento} - {alimentoConsumido.qtde_utilizada * alimentoConsumido.porcao_padrao}{mapAbreviacaoMedidas[alimentoConsumido.unidade_medida as keyof typeof mapAbreviacaoMedidas]}</Text>
-                     <Text style={[styles.infoAlimento]}>  </Text>
-                     {isConsumoRapido && <LogoIcon widthPorcentageValue={5} />}
-                  </View>
+                  <Text>
+                     <Text style={[styles.infoAlimento, { textDecorationLine: 'underline' }]}>{nomeAlimento} - {alimentoConsumido.qtde_utilizada * alimentoConsumido.porcao_padrao}{mapAbreviacaoMedidas[alimentoConsumido.unidade_medida as keyof typeof mapAbreviacaoMedidas]}</Text>
+                     {isConsumoRapido &&
+                        <Text style={[styles.infoAlimento]}>{`  `}<LogoIcon widthPorcentageValue={5} /> </Text>
+                     }
+                  </Text>
                   <View style={{ flexDirection: 'row', alignItems: 'flex-end', marginTop: 1, flexWrap: 'wrap' }}>
                      {/* <Text style={[styles.textInfoAlimento, { fontFamily: 'NotoSans-Bold', color: 'black', fontSize: getResponsiveSizeWidth(4) }]}>g -  </Text> */}
                      <Text style={styles.textInfoAlimento}>C: {arredondarValores(alimentoConsumido.qtde_carboidrato)}g   </Text>
@@ -94,6 +95,11 @@ const RefeicaoScreen = ({ route }: { route: any }) => {
             </View>
          </TouchableOpacity>
       )
+   }
+
+   if (!macrosRefeicao) {
+      navigation.replace("HomeScreen");
+      return null;
    }
 
 
@@ -186,7 +192,7 @@ const RefeicaoScreen = ({ route }: { route: any }) => {
                      <ScrollView showsVerticalScrollIndicator={false} style={{}} bounces={false} >
                         {consumoRefeicao.map(renderConsumoAlimentos)}
                         { // @ts-ignore 
-                           <TouchableOpacity style={[styles.buttonAdicionar, { marginTop: getResponsiveSizeHeight(2) }]} onPress={() => navigation.push('SearchFoodScreen', { macrosRefeicao, diaSelecionado })}>
+                           <TouchableOpacity style={[styles.buttonAdicionar, { marginTop: getResponsiveSizeHeight(2) }]} onPress={() => navigation.navigate('SearchFoodScreen', { macrosRefeicao, diaSelecionado })}>
                               <Text style={styles.semAlimentosMsgButton}>Adicionar alimento</Text>
                            </TouchableOpacity>
                         }
@@ -195,7 +201,7 @@ const RefeicaoScreen = ({ route }: { route: any }) => {
                ) : (
                   <View>
                      { // @ts-ignore 
-                        <TouchableOpacity style={styles.buttonAdicionar} onPress={() => navigation.push('SearchFoodScreen', { macrosRefeicao, diaSelecionado })}>
+                        <TouchableOpacity style={styles.buttonAdicionar} onPress={() => navigation.navigate('SearchFoodScreen', { macrosRefeicao, diaSelecionado })}>
                            <Text style={styles.semAlimentosMsgButton}>Adicionar alimento</Text>
                         </TouchableOpacity>
                      }

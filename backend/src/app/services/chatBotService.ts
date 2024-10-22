@@ -6,6 +6,8 @@ import { fazerPerguntaObject } from "../schemas/chatBot/fazerPerguntaSchema";
 import { addConsumoOpenAI } from "../../utils/modelosFuncoesOpenAI/addConsumoOpenAI";
 import AlimentoConsumidoService from "./alimentoConsumidoService";
 import { criarAlimentoConsumidoObject } from "../schemas/alimentoConsumido/criarAlimentoConsumidoSchema";
+import { criarAlimentoConsumidoCompletoObject } from "../schemas/alimentoConsumido/criarAlimentoConsumidoCompletoSchema";
+import AlimentoConsumido from "../entities/alimentoConsumido";
 
 interface IChatBotRetorno {
    acao: string | null;
@@ -38,10 +40,13 @@ export default class ChatBotService {
             ],
             temperature: 1,
             max_tokens: 500,
-            top_p: 1,
+            top_p: 0.5,
             frequency_penalty: 0,
             presence_penalty: 0,
-            tools: invocarFuncao ? [{ ...adicionarConsumoFn }] : null
+            tools: invocarFuncao ? [{ ...adicionarConsumoFn }] : null,
+            response_format: {
+              "type": "text"
+            },
          }
       );
    }
@@ -68,9 +73,9 @@ export default class ChatBotService {
 
    public async perguntar(fazerPerguntaJSON: fazerPerguntaObject): Promise<IChatBotRetorno> {
       const promptChat = this.montarPromptPergunta(fazerPerguntaJSON.mensagensChat);
-      console.log(promptChat);
       const chatBotRetorno = await this.openai.chat.completions.create(promptChat);
       const { tool_calls, content } = chatBotRetorno.choices[0]?.message
+      console.log(JSON.stringify(chatBotRetorno.choices[0]?.message));
       if(!tool_calls && !content){
          JsonReponseErro.lancar(400, 'Erro ao completar a conversa com o chatbot');
       }
@@ -83,24 +88,25 @@ export default class ChatBotService {
    private async chamarAcaoBackend(requestFunctionCall: { name: string, arguments: any }, usuarioID: string): Promise<IChatBotRetorno> {
       const responseAcao: IChatBotRetorno = { acao: requestFunctionCall.name, resposta: '', dados: [{}] };
       try {
-         const requestJSON = {...JSON.parse(requestFunctionCall.arguments)};
+         const requestJSON = JSON.parse(requestFunctionCall.arguments);
+         console.log(requestFunctionCall.arguments);
          switch (requestFunctionCall.name) {
             case 'add_consumo_alimento': {
                const alimentoConsumidoService = new AlimentoConsumidoService();
-               const { alimentos } = requestJSON;
-               // console.log({...alimentos[0], id_usuario: usuarioID, dtt_alimento_consumido: new Date().toISOString()});
-               responseAcao.dados = await alimentoConsumidoService.cadastrarAlimentoConsumido({...alimentos[0],id_usuario: usuarioID, dtt_alimento_consumido: new Date().toISOString()} as criarAlimentoConsumidoObject);
-               // responseAcao.dados = [];
-               // for (const alimento of requestJSON.alimentos) {
-               //   const result = await alimentoConsumidoService.cadastrarAlimentoConsumido(alimento as criarAlimentoConsumidoObject);
-               //   responseAcao.dados.push(result);
-               // }
-               responseAcao.resposta = 'Alimento consumido adicionado com sucesso';
+               const requestAddConsumoAlimentos = requestJSON.alimentos.map(
+                  (alimento: any) => ({ ...alimento, dtt_alimento_consumido: new Date().toISOString() })
+               );
+               console.log('requestAddConsumoAlimentos ', requestAddConsumoAlimentos);
+               const responseAddConsumo: AlimentoConsumido[] = await alimentoConsumidoService.cadastrarAlimentosConsumidos(
+                  {alimentosConsumidos: requestAddConsumoAlimentos, id_usuario: usuarioID} as criarAlimentoConsumidoCompletoObject
+               );
+               responseAcao.dados = responseAddConsumo;
+               responseAcao.resposta = responseAddConsumo.length > 1 ? 'Alimentos adicionados com sucesso' : 'Alimento adicionado com sucesso';
                break;
             }
          }
       } catch (error) {
-         JsonReponseErro.lancar(400, 'Erro ao processar a chamar a função', error);
+         JsonReponseErro.lancar(400, 'Erro ao processar a chamada da função', error);
       }
       return responseAcao;
    }

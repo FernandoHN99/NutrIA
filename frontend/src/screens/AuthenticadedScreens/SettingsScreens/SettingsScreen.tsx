@@ -9,11 +9,11 @@ const SettingsScreen = ({navigation}: {navigation: any}) => {
    const queryClient = useQueryClient();
    const menuItems = [
       // { title: 'Configuração da Conta', action: () => console.log('Configuração da Conta') },
-      { title: 'Configuração de Perfil', action: () => navigation.push('DadosPerfilScreen') },
+      { title: 'Configuração de Perfil', action: () => navigation.navigate('DadosPerfilScreen') },
       // { title: 'Comidas Favoritas' },
-      { title: 'Configuração de Refeições', action: () => navigation.push('RefeicoesScreen') },
-      { title: 'Política de Privacidade', action: () => navigation.push('PoliticaPrivacidadeScreen') },
-      { title: 'Sobre Nós', action: () => navigation.push('AboutUsScreen') },
+      { title: 'Configuração de Refeições', action: () => navigation.navigate('RefeicoesScreen') },
+      { title: 'Política de Privacidade', action: () => navigation.navigate('PoliticaPrivacidadeScreen') },
+      { title: 'Sobre Nós', action: () => navigation.navigate('AboutUsScreen') },
       { title: 'Sair', action: () => fazerLogoutService(queryClient) },
    ];
 

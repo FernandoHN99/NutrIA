@@ -6,14 +6,14 @@ import { QueryClient } from '@tanstack/react-query';
 interface IChatBotRetorno {
    acao: string | null;
    resposta: string;
-   dados: object;
+   dados: any;
 }
 
 export const atualizarInfosCache = (queryClient: QueryClient, responseChatBot: IChatBotRetorno) => {
    switch (responseChatBot.acao) {
       case 'add_consumo_alimento': {
          queryClient.setQueryData(['consumoAlimentos'], (cached: any[]) => {
-            return [...cached, responseChatBot.dados];
+            return [...cached, ...responseChatBot.dados];
          });
          break;
       }
@@ -33,8 +33,7 @@ export const useFazerPergunta = (queryClient: QueryClient) => {
          atualizarInfosCache(queryClient, response);
          setData(response);
       } catch (err) {
-         console.log(err);
-         setError((err as any)?.mensagem);
+         setError((err as any));
       } finally {
          setLoading(false);
       }

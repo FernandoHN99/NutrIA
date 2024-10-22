@@ -17,7 +17,7 @@ export const obterConsumoUsuarioService = async (paramsConsumo: obterConsumoUsua
 
 export const addAlimentoConsumidoService = async (bodyRequest: AddAlimentoConsumidoSchema) => {
    try {
-      const response = await api.post(`/alimento-consumido/criar`, bodyRequest );
+      const response = await api.post(`/alimento-consumido/criar`, {alimentosConsumidos: [bodyRequest]} );
       return response.data.data;
    } catch (error) {
       throw (error as any)?.response?.data;
@@ -26,7 +26,6 @@ export const addAlimentoConsumidoService = async (bodyRequest: AddAlimentoConsum
 
 export const atualizarAlimentoConsumidoService = async (bodyRequest: AtualizarConsumoUsuarioSchema): Promise<AtualizarConsumoUsuarioSchema> => {
    try {
-      console.log(bodyRequest);
       const response = await api.patch(`/alimento-consumido/atualizar`, bodyRequest);
       return response.data.data;
    } catch (error) {

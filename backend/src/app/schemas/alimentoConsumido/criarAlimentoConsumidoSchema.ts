@@ -4,7 +4,7 @@ import { listaPerfisAlimentares, listaUnidadesMedida } from '../../../config/var
 
 const criarAlimentoConsumidoSchema = z.object({
    id_usuario: z.string()
-      .uuid('Formato Inválido: ID do Usuário'),
+      .default(''),
 
    id_alimento: z.number()
       .int().min(1)
@@ -45,7 +45,7 @@ const criarAlimentoConsumidoSchema = z.object({
       .min(0).max(99999.9),
 
    kcal: z.number()
-      .min(0).max(99999.9).positive(),
+      .min(0).max(99999.9),
    
    dtt_alimento_consumido: z.any()
       .transform(() => new Date().toISOString()),
@@ -58,6 +58,7 @@ const criarAlimentoConsumidoSchema = z.object({
 }).refine(data => data.id_alimento !== null || data.nome_consumo !== null, {
    message: 'É necessário informar o ID do Alimento ou Nome do Consumo',
 })
+
 
 type criarAlimentoConsumidoObject = z.infer<typeof criarAlimentoConsumidoSchema>;
 

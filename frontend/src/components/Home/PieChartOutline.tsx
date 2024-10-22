@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyleSheet, ScrollView, Text, View } from 'react-native';
 import PieChart from 'react-native-pie-chart';
+import theme from '../../styles/theme';
+import { hexToRgba, validarNumeroMaiorZero } from '../../utils/utils';
 
 interface PieChartOutlineProps{
    listValues: number[];
@@ -12,12 +14,13 @@ interface PieChartOutlineProps{
 }
 
 const PieChartOutline = ({listValues, listColors, sizeChart, thickness, backgroundColor, children}: PieChartOutlineProps) => {
+   const checkListZero = listValues.every((value) => !validarNumeroMaiorZero(value));
    return (
       <View style={styles.container}>
          <PieChart
             widthAndHeight={sizeChart}
-            series={listValues}
-            sliceColor={listColors}
+            series={checkListZero ? [1] : listValues}
+            sliceColor={checkListZero ? [hexToRgba(theme.colors.black, '0.2')] : listColors}
             coverRadius={thickness}
             coverFill={backgroundColor}
          />

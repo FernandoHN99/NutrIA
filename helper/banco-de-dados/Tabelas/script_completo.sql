@@ -196,8 +196,8 @@ CREATE TABLE alimento_consumido (
       id_alimento > 0 OR nome_consumo IS NOT NULL AND nome_consumo <> ''
    ),
 	CONSTRAINT alimento_consumido_check_valores_maiores_que_zero CHECK (
-      porcao_padrao > 0 AND qtde_proteina >= 0 AND 
-	   qtde_carboidrato >= 0 AND qtde_gordura >= 0 AND qtde_alcool >= 0 AND kcal > 0 AND qtde_utilizada > 0 
+      porcao_padrao > 0 AND qtde_utilizada > 0 AND qtde_proteina >= 0 AND 
+	   qtde_carboidrato >= 0 AND qtde_gordura >= 0 AND qtde_alcool >= 0 AND kcal >= 0
 	),
 	CONSTRAINT alimento_consumido_fk_id_usuario_numero_refeicao FOREIGN KEY (id_usuario, numero_refeicao) REFERENCES refeicao(id_usuario, numero_refeicao),
 	CONSTRAINT alimento_consumido_fk_id_alimento FOREIGN KEY (id_alimento) REFERENCES alimento(id_alimento),

@@ -5,6 +5,7 @@ import { criarAlimentoConsumidoObject } from "../schemas/alimentoConsumido/criar
 import { atualizarAlimentoConsumidoObject } from "../schemas/alimentoConsumido/atualizarAlimentoConsumidoSchema";
 import { deletarAlimentoConsumidoObject } from "../schemas/alimentoConsumido/deletarAlimentoConsumido";
 import { JsonReponseErro } from "../../utils/jsonReponses";
+import { criarAlimentoConsumidoCompletoObject } from "../schemas/alimentoConsumido/criarAlimentoConsumidoCompletoSchema";
 
 export default class AlimentoConsumidoService{
    
@@ -29,10 +30,10 @@ export default class AlimentoConsumidoService{
       return alimentoConsumido
    }
 
-   public async cadastrarAlimentoConsumido(cadastrarConsumoAlimentoJSON: criarAlimentoConsumidoObject): Promise<AlimentoConsumido>{
-      let novoAlimentoConsumido = new AlimentoConsumido(cadastrarConsumoAlimentoJSON);
-      await novoAlimentoConsumido.save();
-      return await this.controleCaloriasRepo.obterAlimentoConsumidoPorId(novoAlimentoConsumido.id_alimento_consumido);
+   public async cadastrarAlimentosConsumidos(criarAlimentoConsumidoCompletoJSON: criarAlimentoConsumidoCompletoObject): Promise<AlimentoConsumido[]>{
+      const listaAlimentoConsumidos = this.mapearAlimentosConsumidos(criarAlimentoConsumidoCompletoJSON.alimentosConsumidos, criarAlimentoConsumidoCompletoJSON.id_usuario);
+      const retornoAlimentosAdicionados = await this.controleCaloriasRepo.inserirAlimentosConsumidos(listaAlimentoConsumidos);
+      return await this.controleCaloriasRepo.obterAlimentosConsumidosPorId(retornoAlimentosAdicionados.map(alimento => alimento.id_alimento_consumido));
    }
 
    public async atualizarAlimentoConsumido(atualizarAlimentoConsumidoJSON: atualizarAlimentoConsumidoObject): Promise<AlimentoConsumido>{
@@ -51,4 +52,13 @@ export default class AlimentoConsumidoService{
       const alimentoConsumido = await this.obterAlimentoConsumido(deletarAlimentoConsumidoJSON.id_alimento_consumido, deletarAlimentoConsumidoJSON.id_usuario);
       return await alimentoConsumido.remove();
    }
+
+
+   private mapearAlimentosConsumidos(alimentosConsumidos: criarAlimentoConsumidoObject[], ususarioID: string): AlimentoConsumido[] {
+      return alimentosConsumidos.map(alimento => {
+         alimento.id_usuario = ususarioID;
+         return new AlimentoConsumido(alimento);
+      });
+   }
+
 }

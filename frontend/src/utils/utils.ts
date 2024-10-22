@@ -126,6 +126,13 @@ export const validadeString = (str: string) => {
    return str !== undefined && str !== null && str.trim() !== '';
 };
 
+export const validarNumero = (value: number) => {
+   return !isNaN(value) && value !== undefined && value !== null;
+};
+
+export const validarNumeroMaiorZero = (value: number) => {
+   return validarNumero(value) && value > 0;
+};
 
 export const handleNumberInput = (input: string, allowDecimal: boolean, maxValue?: number, minValue?: number): string => {
    if (!input.trim()) {

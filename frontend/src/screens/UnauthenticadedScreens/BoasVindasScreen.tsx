@@ -15,10 +15,10 @@ const BoasVindasScreen = ({ navigation }: { navigation: any }) => {
             <Text style={styles.heading}>NutrIA</Text>
             <Text style={styles.description}>Seu contador de calorias muito mais inteligente.</Text>
          </View>
-         <TouchableOpacity style={{ alignSelf: 'center' }} onPress={() => navigation.push('Login')}>
+         <TouchableOpacity style={{ alignSelf: 'center' }} onPress={() => navigation.navigate('Login')}>
             <Text style={[styles.textLogin, { fontStyle: 'italic' }]}>Já tenho uma conta!</Text>
          </TouchableOpacity>
-         <TouchableOpacity style={styles.buttonSignUp} onPress={() => navigation.push('SignUp')}>
+         <TouchableOpacity style={styles.buttonSignUp} onPress={() => navigation.navigate('SignUp')}>
             <Text style={styles.textSignUp}>Vamos Começar!</Text>
          </TouchableOpacity>
       </View>

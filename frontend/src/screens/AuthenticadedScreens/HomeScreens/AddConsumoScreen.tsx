@@ -69,7 +69,7 @@ const AddConsumoScreen = ({ route }: { route: any }) => {
       mutationFn: addAlimentoConsumidoService,
       onSuccess(retorno) {
          queryClient.setQueryData(['consumoAlimentos'], (data: any[]) =>{
-            return [...data, retorno];
+            return [...data, ...retorno ];
          });
          navigation.goBack();
       },
@@ -186,10 +186,10 @@ const AddConsumoScreen = ({ route }: { route: any }) => {
       }
       const valideConsumoValues = 
          (consumoAlimento.qtde_utilizada > 0 && consumoAlimento.qtde_utilizada <= MAX_VALUES.qtdeUtilizada) &&
-         (consumoAlimento.kcal > 0 && consumoAlimento.kcal <= MAX_VALUES.kcal) && 
-         (consumoAlimento.qtde_carboidrato > 0 && consumoAlimento.qtde_carboidrato <= MAX_VALUES.macros) &&
-         (consumoAlimento.qtde_proteina > 0 && consumoAlimento.qtde_proteina <= MAX_VALUES.macros) &&
-         (consumoAlimento.qtde_gordura > 0 && consumoAlimento.qtde_gordura <= MAX_VALUES.macros) &&
+         (consumoAlimento.kcal >= 0 && consumoAlimento.kcal <= MAX_VALUES.kcal) && 
+         (consumoAlimento.qtde_carboidrato >= 0 && consumoAlimento.qtde_carboidrato <= MAX_VALUES.macros) &&
+         (consumoAlimento.qtde_proteina >= 0 && consumoAlimento.qtde_proteina <= MAX_VALUES.macros) &&
+         (consumoAlimento.qtde_gordura >= 0 && consumoAlimento.qtde_gordura <= MAX_VALUES.macros) &&
          (consumoAlimento.qtde_alcool >= 0 && consumoAlimento.qtde_alcool <= MAX_VALUES.macros);
       return anyDifferent && valideConsumoValues;
    }

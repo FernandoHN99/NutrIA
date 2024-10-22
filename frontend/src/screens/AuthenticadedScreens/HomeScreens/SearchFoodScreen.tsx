@@ -59,7 +59,7 @@ const SearchFoodScreen = ({ route}: { route: any }) => {
       onSuccess(retorno) {
          setShowToast(true);
          queryClient.setQueryData(['consumoAlimentos'], (data: any[]) =>{
-            return [...data, retorno];
+            return [...data, ...retorno];
          });
       },
       onError() {
@@ -87,6 +87,7 @@ const SearchFoodScreen = ({ route}: { route: any }) => {
       )
       const bodyRequest: AddAlimentoConsumidoSchema = {
          id_alimento: alimento.id_alimento,
+         nome_consumo: null,
          id_prato: null,
          dt_dia: diaSelecionado,
          numero_refeicao: macrosRefeicao.numero_refeicao,
@@ -119,7 +120,7 @@ const SearchFoodScreen = ({ route}: { route: any }) => {
       const tbPorcaoPadrao = alimento.tabelasNutricionais[0].porcao_padrao;
       return (
          // @ts-ignore
-         <TouchableOpacity style={[styles.alimentoContainer, 0 === index && styles.alimentoFirstContainer]} key={`${alimento.id_alimento}-${index}`} onPress={() => navigation.push('AddConsumoScreen', {alimento, refeicao: macrosRefeicao}) }>
+         <TouchableOpacity style={[styles.alimentoContainer, 0 === index && styles.alimentoFirstContainer]} key={`${alimento.id_alimento}-${index}`} onPress={() => navigation.navigate('AddConsumoScreen', {alimento, refeicao: macrosRefeicao}) }>
             <View style={[{ flex: 0.8 }]}>
                <Text style={[styles.infoAlimento, {fontFamily: 'NotoSans-Bold'}]}>{nomeAlimento}{estadoAlimento}</Text>
                <Text style={styles.infoAlimento}>{kcal} kcal, {tbPorcaoPadrao}g, 1 Porção</Text>
@@ -142,7 +143,7 @@ const SearchFoodScreen = ({ route}: { route: any }) => {
       const porcaoPadrao = alimentoFavorito.alimento.tabelasNutricionais[0].porcao_padrao;
       return (
          // @ts-ignore
-         <TouchableOpacity style={[styles.alimentoContainer, 0 === index && styles.alimentoFirstContainer]} key={`${alimentoFavorito.id_alimento}-${index}`} onPress={() => navigation.push('AddConsumoScreen', {alimento: alimentoFavorito.alimento, refeicao: macrosRefeicao})} >
+         <TouchableOpacity style={[styles.alimentoContainer, 0 === index && styles.alimentoFirstContainer]} key={`${alimentoFavorito.id_alimento}-${index}`} onPress={() => navigation.navigate('AddConsumoScreen', {alimento: alimentoFavorito.alimento, refeicao: macrosRefeicao})} >
             <View style={[{ flex: 0.8 }]}>
                <Text style={styles.infoAlimento}>{nomeAlimento}{estadoAlimento}</Text>
                <Text style={styles.infoAlimento}>{kcal} kcal, {porcaoPadrao}g, 1 Porção</Text>
