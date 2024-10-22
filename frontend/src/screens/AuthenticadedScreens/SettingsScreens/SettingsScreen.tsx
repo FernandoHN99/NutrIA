@@ -10,7 +10,7 @@ const SettingsScreen = ({navigation}: {navigation: any}) => {
    const menuItems = [
       // { title: 'Configuração da Conta', action: () => console.log('Configuração da Conta') },
       { title: 'Configuração de Perfil', action: () => navigation.navigate('DadosPerfilScreen') },
-      // { title: 'Comidas Favoritas' },
+      // { title: 'Comidas voritas' },
       { title: 'Configuração de Refeições', action: () => navigation.navigate('RefeicoesScreen') },
       { title: 'Política de Privacidade', action: () => navigation.navigate('PoliticaPrivacidadeScreen') },
       { title: 'Sobre Nós', action: () => navigation.navigate('AboutUsScreen') },

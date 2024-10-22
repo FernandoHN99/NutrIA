@@ -1,10 +1,8 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import RefeicaoScreen from '../../screens/AuthenticadedScreens/HomeScreens/RefeicaoScreen';
-import SearchFoodScreen from '../../screens/AuthenticadedScreens/HomeScreens/SearchFoodScreen';
 import BottomTabNavigator from '../TabNavigators/BottomTabNavigator';
-import AddConsumoScreen from '../../screens/AuthenticadedScreens/HomeScreens/AddConsumoScreen';
+import AccessCamera from '../../components/AccessCamera';
 
 const Stack = createNativeStackNavigator();
 
@@ -17,11 +15,11 @@ const DiarioNavigator = () => {
             options={{ headerShown: false }}
          />
          {/* <Stack.Screen
-            name="RefeicaoScreen"
-            component={RefeicaoScreen}
+            name="CameraScreen"
+            component={AccessCamera}
             options={{
                headerShown: false,
-               animation: 'slide_from_bottom',
+               animation: 'flip',
             }}
          /> */}
          {/* <Stack.Screen

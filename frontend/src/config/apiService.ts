@@ -40,6 +40,7 @@ const refreshAuthTokens = async () => {
       await setTokensStorage(access_token, refresh_token);
       return { token: access_token, refreshToken: refresh_token };
    } catch (error) {
+      
       console.error('Erro ao atualizar o token:', (error as any)?.response?.data);
       throw error;
    }
