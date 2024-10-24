@@ -8,6 +8,13 @@ import LoadingScreen from '../../components/LoadingScreen';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { fazerSignUpService } from '../../api/services/usuarioService';
 
+interface message {
+   _id: number;
+   content: string;
+   role: 'assistant' | 'user';
+   type: 'text' | 'img' | 'data';
+}
+
 const SignUpScreen = ({ navigation }: { navigation: any}) => {
    const scrollViewRef = useRef<ScrollView>(null);
    const [loadingChatbot, setLoadingChatbot] = useState(false);
@@ -16,12 +23,13 @@ const SignUpScreen = ({ navigation }: { navigation: any}) => {
    const [loading, setLoading] = useState(false);
    const [error, setError] = useState(false);
    const queryClient = useQueryClient();
+   let msgBot: message;
 
-   const [messages, setMessages] = useState<{ _id: number, text: string; user: string; }[]>([
+   const [messages, setMessages] = useState<{ _id: number, text: string; role: string; }[]>([
       {
          _id: Math.random(),
          text: "Sua jornada está prestes a começar... \n\nPara isso, responda algumas perguntas para entendermos um pouco mais sobre você!",
-         user: "NutrIA",
+         role: "assistant",
       }
    ]);
 
@@ -53,7 +61,7 @@ const SignUpScreen = ({ navigation }: { navigation: any}) => {
       const botResponse = {
          _id: Math.random(),
          text: FlowSignUpInstance[step]?.question || "Fim do cadastro!",
-         user: "NutrIA",
+         role: "assistant",
       };
 
       setMessages([...messages, botResponse]);
@@ -78,7 +86,7 @@ const SignUpScreen = ({ navigation }: { navigation: any}) => {
             ? (userAnswer.toString()).trim()
             : userAnswer.replace(/./g, '*')
          ),
-         user: "Você",
+         role: "user",
       };
 
       setMessages([...messages, userMessage]);
@@ -106,7 +114,10 @@ const SignUpScreen = ({ navigation }: { navigation: any}) => {
             onContentSizeChange={() => scrollViewRef.current?.scrollToEnd({ animated: true })}
          >
             {messages.map(message => (
-               <MessagesChatbot key={message._id} text={message.text} user={message.user} />
+               msgBot = {_id: message._id, content: message.text, role: message.role as  'user' | 'assistant', type: 'text'},
+               <MessagesChatbot 
+                  key={msgBot._id} 
+                  messageObject={msgBot} />
             ))}
          </ScrollView>
          <View style={styles.inputContainer}>

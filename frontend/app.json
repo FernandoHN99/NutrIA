@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "frontend",
-    "slug": "frontend",
+    "slug": "nutria",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -26,6 +26,12 @@
     "entryPoint": "./src/App.tsx",
     "plugins": [
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "2a2c5de7-94ec-4bc6-a4de-1da7954f52e1"
+      }
+    },
+    "owner": "nutria2024"
   }
 }

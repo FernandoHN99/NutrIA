@@ -75,17 +75,14 @@ const ChatbotScreen = () => {
       handleOpenCamera();
    }
 
-
-   // console.log('messages', messages);
-
    const handleOpenCamera = () => {
-      // if (permission) {
-      //    if (permission.granted) {
-      setCameraView(true);
-      // } else {
-      //       setShowModal(true);
-      //    }
-      // }
+      if (permission) {
+         if (permission.granted) {
+            setCameraView(true);
+      } else {
+            setShowModal(true);
+         }
+      }
    }
 
    const handleDeleteImage = () => {

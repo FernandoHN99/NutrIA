@@ -38,7 +38,7 @@ const AccessCamera = ({ setFotoFile, setCameraView, setShowModalImage }: AccessC
 
    const takePicture = async () => {
       if (cameraRef.current) {
-         const options: CameraPictureOptions = { quality: 0.5, base64: true, skipProcessing: true };
+         const options: CameraPictureOptions = { quality: 0.1, base64: true, skipProcessing: true };
          const photoData = await cameraRef.current.takePictureAsync(options);
          if (!photoData) {
             return;
@@ -48,14 +48,14 @@ const AccessCamera = ({ setFotoFile, setCameraView, setShowModalImage }: AccessC
       }
    }
 
-   const takePictureMock = async () => {
-         if (!photoDataMock) {
-            return;
-         }
-         setFotoFile(photoDataMock);
-         setCameraView(false);
-         // setShowModalImage(true);
-   }
+   // const takePictureMock = async () => {
+   //       if (!photoDataMock) {
+   //          return;
+   //       }
+   //       setFotoFile(photoDataMock);
+   //       setCameraView(false);
+   //       // setShowModalImage(true);
+   // }
 
    const loadingCamera = () => {
       return (
@@ -77,23 +77,26 @@ const AccessCamera = ({ setFotoFile, setCameraView, setShowModalImage }: AccessC
             facing={facing}
             ref={cameraRef}
             onCameraReady={() => setCameraReady(true)}
-            // onMountError={hanldeErrorCamera}
-            onMountError={() => setCameraReady(true)}
+            onMountError={hanldeErrorCamera}
+            // onMountError={() => setCameraReady(true)}
             ratio={'1:1'}
+            autofocus='off'
             animateShutter={true}
          >
-         <View style={{justifyContent: 'center', alignItems: 'center' }}>
+         <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
             <Icon
-               name='close'
+               name='close-circle'
                color={theme.colors.color01}
-               size={getResponsiveSizeWidth(10)}
-               style={{ position: 'absolute', top: getResponsiveSizeHeight(2), left: getResponsiveSizeHeight(2) }}
+               size={getResponsiveSizeWidth(11)}
+               style={{alignSelf: 'flex-start', marginLeft: getResponsiveSizeWidth(5), marginTop: getResponsiveSizeWidth(5)}}
+               // style={{ position: 'absolute', top: getResponsiveSizeHeight(2), right: getResponsiveSizeHeight(2) }}
                onPress={() => setCameraView(false)}
             />
          </View>
-            {!cameraReady ?
+            {cameraReady ?
                <View style={styles.buttonActionsContainer}>
-                  <TouchableOpacity onPress={takePictureMock}>
+                  {/* <TouchableOpacity onPress={takePictureMock}> */}
+                  <TouchableOpacity onPress={takePicture}>
                      <Icon name="camera-iris" size={getResponsiveSizeWidth(13)} color={theme.colors.color01} />
                   </TouchableOpacity>
                </View>
