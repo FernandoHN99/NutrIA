@@ -25,10 +25,8 @@ export default class ChatBotService {
    private montarPromptPergunta(mensagensChat: chatMessagesObject[]): object {
       const comandosDeFuncoes = ["adicionar", "add", "adicione"];
       const lastMessage = mensagensChat[mensagensChat.length - 1].content[0].text.toLocaleLowerCase();
-      console.log(lastMessage);
       const invocarFuncao = true;
       // const invocarFuncao = comandosDeFuncoes.some(palavra => lastMessage.includes(palavra));
-      console.log(invocarFuncao);
 
 
       const nomeModelo = "ft:gpt-4o-mini-2024-07-18:personal:nutria-add-consumo-prod:AI0lLD2M";
@@ -87,7 +85,7 @@ export default class ChatBotService {
       if (tool_calls && tool_calls.length > 0) {
          return this.chamarAcaoBackend(tool_calls[0].function, fazerPerguntaJSON.id_usuario)
       }
-      return { acao: null, resposta: content, dados: {} };
+      return { acao: null, resposta: content, dados: null };
    }
 
    public async analisarFoto(analisarFotoJSON: fazerPerguntaObject): Promise<IChatBotRetorno> {
@@ -99,11 +97,12 @@ export default class ChatBotService {
       }
       const payloadPerguntaSomenteTexto = this.tratarPayloadIMG(analisarFotoJSON, content);
       const retornoResposta = await this.perguntar(payloadPerguntaSomenteTexto);
-      return {...retornoResposta, dados: `A imagem contém: ${content}`};
+      return retornoResposta;
+      // return {...retornoResposta, dados: `[IMAGEM]: ${content}`};
    }
 
    private async chamarAcaoBackend(requestFunctionCall: { name: string, arguments: any }, usuarioID: string): Promise<IChatBotRetorno> {
-      const responseAcao: IChatBotRetorno = { acao: requestFunctionCall.name, resposta: '', dados: [{}] };
+      const responseAcao: IChatBotRetorno = { acao: requestFunctionCall.name, resposta: '', dados: null };
       try {
          const requestJSON = JSON.parse(requestFunctionCall.arguments);
          // console.log(requestFunctionCall.arguments);
@@ -134,7 +133,7 @@ export default class ChatBotService {
       const mensagensChatList = requestJSON.mensagensChat;
       const indexRef = (mensagensChatList.length - 1) - 1;
       mensagensChatList.splice((indexRef), 1);
-      mensagensChatList[indexRef].content[0].text = mensagensChatList[indexRef].content[0].text + ':\n[CONTEÚDO FOTO]:' + retornoAnalisarFoto;
+      mensagensChatList[indexRef].content[0].text =  '[CONTEÚDO IMAGEM ENVIADA]: ' + retornoAnalisarFoto + '\n\n' + mensagensChatList[indexRef].content[0].text;
       // console.log({ id_usuario: requestJSON.id_usuario, mensagensChat: mensagensChatList });
       return { id_usuario: requestJSON.id_usuario, mensagensChat: mensagensChatList };
    }

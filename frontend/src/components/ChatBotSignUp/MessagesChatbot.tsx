@@ -9,7 +9,7 @@ interface message {
    _id: number;
    content: string;
    role: 'assistant' | 'user';
-   type: 'text' | 'img';
+   type: 'text' | 'img' | 'data';
 }
 
 const renderImg = (uriImg: string, widthValue: number, heightValue: number) => {
@@ -22,16 +22,26 @@ const renderImg = (uriImg: string, widthValue: number, heightValue: number) => {
    );
 };
 
-const MessagesChatbot = ({ messageObject} : { messageObject: message }) => (
-   <View style={messageObject.role === "user" ? (messageObject.type === 'text' ? styles.userMessage : styles.userImg) : styles.botMessage}>
-      {
-         messageObject.type === 'text' ?
+const MessagesChatbot = ({ messageObject }: { messageObject: message }) => (
+   messageObject.type !== 'data' ? (
+      <View
+         style={
+            messageObject.role === 'user'
+               ? messageObject.type === 'text'
+                  ? styles.userMessage
+                  : styles.userImg
+               : styles.botMessage
+         }
+      >
+         {messageObject.type === 'text' ? (
             <Text style={styles.textMessage}>{messageObject.content}</Text>
-            :
+         ) : (
             renderImg(messageObject.content, getResponsiveSizeWidth(50), getResponsiveSizeHeight(15))
-      }
-   </View>
+         )}
+      </View>
+   ) : null
 );
+
 
 const styles = StyleSheet.create({
    botMessage: {

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, ScrollView, StyleSheet, KeyboardAvoidingView, Platform, TextInput, TouchableOpacity, ActivityIndicator, Text, Modal, Image } from 'react-native';
 import theme from '../../../styles/theme';
-import { getResponsiveSizeWidth, getResponsiveSizeHeight, hexToRgba, criarStrData } from '../../../utils/utils';
+import { getResponsiveSizeWidth, getResponsiveSizeHeight, hexToRgba } from '../../../utils/utils';
 import MessagesChatbot from '../../../components/ChatBotSignUp/MessagesChatbot';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useConversarChatbot } from '../../../api/hooks/chatBot/useConversarChatbot';
@@ -42,7 +42,7 @@ interface message {
    _id: number;
    content: string;
    role: 'assistant' | 'user';
-   type: 'text' | 'img';
+   type: 'text' | 'img' | 'data';
 }
 
 const initMessages: message[] = [
@@ -60,7 +60,7 @@ const ChatbotScreen = () => {
    const scrollViewRef = useRef<ScrollView>(null);
    const [text, setText] = useState<string>('');
    const [messages, setMessages] = useState<message[]>(initMessages);
-   const { data, loading, error, conversarChatbot } = useConversarChatbot(queryClient);
+   const { data: responseChabot, loading, error, conversarChatbot } = useConversarChatbot(queryClient);
    const { data: usuarioInfo } = useUsuarioInfo({ enabled: false });
    const { data: perfisUsuario } = usePerfisUsuario({ enabled: false });
    const [permission, requestPermission] = useCameraPermissions();
@@ -74,6 +74,9 @@ const ChatbotScreen = () => {
       setShowModal(false);
       handleOpenCamera();
    }
+
+
+   // console.log('messages', messages);
 
    const handleOpenCamera = () => {
       // if (permission) {
@@ -119,8 +122,9 @@ const ChatbotScreen = () => {
       const userIntro = montarUserIntro() as chatBotMessagesSchema;
       const userLastQuestion = criarChatbotMessagesText(userLastMessage, 'user');
       const msgsCopy = messages.map(item => ({ ...item }));
-      const msgChatFormatadas = msgsCopy.slice(-8).filter(message => message.type = 'text').map(message => {
-         return criarChatbotMessagesText(message.content, message.role);
+      const msgChatFormatadas = msgsCopy.slice(-20).map((message, index) => {
+         return criarChatbotMessagesText(
+            message.type !== 'img' ? message.content : `[IMAGEM]`, message.role);
       })
       if (contemImg) {
          retorno = [userIntro, ...msgChatFormatadas, criarChatbotMessagesImg(fotoFile!.base64!), userLastQuestion];
@@ -143,19 +147,19 @@ const ChatbotScreen = () => {
    };
 
    useEffect(() => {
-      if (data) {
-         setMessages(prevMessages => [
-            ...prevMessages,
-            { _id: Math.random(), content: data.dados, role: "assistant", type: 'text' },
-            { _id: Math.random(), content: data.resposta, role: "assistant", type: 'text' }
-         ]);
+      if (responseChabot) {
+         const listResponses: message[] = [{ _id: Math.random(), content: responseChabot.resposta, role: "assistant", type: 'text' }]
+         if(responseChabot.dados != null){
+            listResponses.unshift({ _id: Math.random(), content: JSON.stringify(responseChabot.dados), role: "assistant", type: 'data' });
+         }
+         setMessages(prevMessages => [...prevMessages, ...listResponses]);
       } else if (error) {
          setMessages(prevMessages => [
             ...prevMessages,
             { _id: Math.random(), content: "Desculpe, ocorreu um erro ao processar sua solicitação.", role: "assistant", type: 'text' }
          ]);
       }
-   }, [data, error]);
+   }, [responseChabot, error]);
 
    if (cameraView) {
       return <AccessCamera setFotoFile={setFotoFile} setCameraView={setCameraView} setShowModalImage={setShowModalImage} />
@@ -175,11 +179,14 @@ const ChatbotScreen = () => {
             <TouchableOpacity style={styles.btnLimparChat} onPress={() => setMessages(initMessages)}>
                <Text style={styles.btnText}>Limpar Chat</Text>
             </TouchableOpacity>
-            {messages.map(message => (
-               <MessagesChatbot 
-                  key={message._id} 
-                  messageObject={message} />
-            ))}
+            {
+            messages
+               .map(message => (
+                  <MessagesChatbot 
+                     key={message._id} 
+                     messageObject={message} />
+                  ))
+            }
          </ScrollView>
          <CameraPermissionModal />
          {fotoFile &&

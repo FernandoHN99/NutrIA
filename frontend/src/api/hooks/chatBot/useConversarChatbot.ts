@@ -9,10 +9,10 @@ interface IChatBotRetorno {
    dados: any;
 }
 
-export const atualizarInfosCache = (queryClient: QueryClient, responseChatBot: IChatBotRetorno) => {
+export const atualizarInfosCache = async (queryClient: QueryClient, responseChatBot: IChatBotRetorno) => {
    switch (responseChatBot.acao) {
       case 'add_consumo_alimento': {
-         queryClient.setQueryData(['consumoAlimentos'], (cached: any[]) => {
+         await queryClient.setQueryData(['consumoAlimentos'], (cached: any[]) => {
             return [...cached, ...responseChatBot.dados];
          });
          break;
@@ -29,15 +29,18 @@ export const useConversarChatbot = (queryClient: QueryClient) => {
       setLoading(true);
       setError(null);
       try {
+         // console.log('request: ', JSON.stringify({ mensagensChat: mensagensInput }))
          const response: IChatBotRetorno = !contemImg 
-            ? await fazerPerguntaService({ mensagensChat: mensagensInput })
-            : await analisarFotoService({ mensagensChat: mensagensInput })
-         atualizarInfosCache(queryClient, response);
+         ? await fazerPerguntaService({ mensagensChat: mensagensInput })
+         : await analisarFotoService({ mensagensChat: mensagensInput })
+         // console.log('response: ', JSON.stringify(response))
+         await atualizarInfosCache(queryClient, response);
          setData(response);
       } catch (err) {
          setError((err as any));
       } finally {
          setLoading(false);
+         setData(null);
       }
    };
 
