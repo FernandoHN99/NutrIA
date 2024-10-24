@@ -76,17 +76,13 @@ export const addConsumoOpenAI = {
                         "enum": [
                            "GRAMA",
                            "MILILITRO",
-                           "COLHER SOPA",
-                           "COLHER CHA",
-                           "XICARA PADRAO",
-                           "XICARA CHA",
-                           "ICARA CAFE",
                            "UNIDADE"
                         ],
                         "type": "string",
                         "description": "Unidade de medida do alimento consumido"
                      },
                      "numero_refeicao": {
+                        "min": 1,
                         "type": "number",
                         "description": "Numero da refeição, deve ser obrigatoriamente ser informado pelo usuário"
                      },

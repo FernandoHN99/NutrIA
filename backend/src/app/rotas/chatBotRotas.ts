@@ -13,6 +13,7 @@ export default class UsuarioRotas implements Rota {
       this.controller = new ChatBotController();
 
       this.roteador.post('/perguntar', Util.envolveFuncTryCatch(this.controller, this.controller.perguntar));    
+      this.roteador.post('/analisar-foto', Util.envolveFuncTryCatch(this.controller, this.controller.analisarFoto));    
       
       console.log('Rotas Chatbot: Ativo');
    }

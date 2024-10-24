@@ -1,15 +1,37 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Keyboard } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import theme from '../../styles/theme';
 import { getResponsiveSizeHeight, getResponsiveSizeWidth } from '../../utils/utils';
 import { hexToRgba } from '../../utils/utils';
+import { chatBotMessagesSchema } from '../../api/schemas/chatBotSchema';
 
-const MessagesChatbot = ({ text, user }: { text: string, user: string }) => (
-   <View style={user === "Você" ? styles.userMessage : styles.botMessage}>
-      <Text style={styles.textMessage}>{text}</Text>
+interface message {
+   _id: number;
+   content: string;
+   role: 'assistant' | 'user';
+   type: 'text' | 'img';
+}
+
+const renderImg = (uriImg: string, widthValue: number, heightValue: number) => {
+   return (
+      <Image
+         source={{ uri: uriImg }}
+         style={{ width: widthValue, height: heightValue }}
+         resizeMode="contain"
+      />
+   );
+};
+
+const MessagesChatbot = ({ messageObject} : { messageObject: message }) => (
+   <View style={messageObject.role === "user" ? (messageObject.type === 'text' ? styles.userMessage : styles.userImg) : styles.botMessage}>
+      {
+         messageObject.type === 'text' ?
+            <Text style={styles.textMessage}>{messageObject.content}</Text>
+            :
+            renderImg(messageObject.content, getResponsiveSizeWidth(50), getResponsiveSizeHeight(15))
+      }
    </View>
 );
-
 
 const styles = StyleSheet.create({
    botMessage: {
@@ -33,11 +55,16 @@ const styles = StyleSheet.create({
       borderWidth: 1,
       borderColor: theme.colors.color04,
    },
+   userImg: {
+      alignSelf: 'flex-end',
+      maxWidth: '80%',
+      marginTop: getResponsiveSizeHeight(2),
+   },
    textMessage: {
       color: theme.colors.black,
       fontFamily: 'NotoSans-Regular',
       fontSize: getResponsiveSizeWidth(3.7),
-      
+
    }
 });
 

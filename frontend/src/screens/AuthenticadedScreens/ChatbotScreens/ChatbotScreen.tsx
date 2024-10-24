@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ImageBackground, Dimensions, View, ScrollView, StyleSheet, KeyboardAvoidingView, Platform, TextInput, TouchableOpacity, ActivityIndicator, Text, Modal, Image } from 'react-native';
+import { View, ScrollView, StyleSheet, KeyboardAvoidingView, Platform, TextInput, TouchableOpacity, ActivityIndicator, Text, Modal, Image } from 'react-native';
 import theme from '../../../styles/theme';
 import { getResponsiveSizeWidth, getResponsiveSizeHeight, hexToRgba, criarStrData } from '../../../utils/utils';
 import MessagesChatbot from '../../../components/ChatBotSignUp/MessagesChatbot';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useFazerPergunta } from '../../../api/hooks/chatBot/useFazerPergunta';
+import { useConversarChatbot } from '../../../api/hooks/chatBot/useConversarChatbot';
 import { usePerfisUsuario, useUsuarioInfo } from '../../../api/httpState/usuarioData';
 import { chatBotMessagesSchema } from '../../../api/schemas/chatBotSchema';
 import { useQueryClient } from '@tanstack/react-query';
@@ -13,18 +13,44 @@ import AccessCamera from '../../../components/AccessCamera';
 import { CameraCapturedPicture, useCameraPermissions } from 'expo-camera';
 import ModalWithImage from '../../../components/ModalWithImage';
 
-interface message {
-   _id: number;
-   text: string;
-   user: string;
+const criarChatbotMessagesText = (content: string, role: 'assistant' | 'user'): chatBotMessagesSchema => {
+   return {
+      role,
+      content: [
+         {
+            type: 'text',
+            text: content
+         }
+      ]
+   }
 }
 
+const criarChatbotMessagesImg = (content: string): chatBotMessagesSchema => {
+   return {
+      role: 'user',
+      content: [
+         {
+            type: 'image_url',
+            image_url: {
+               url: content
+            }
+         }
+      ]
+   }
+}
+interface message {
+   _id: number;
+   content: string;
+   role: 'assistant' | 'user';
+   type: 'text' | 'img';
+}
 
 const initMessages: message[] = [
    {
       _id: Math.random(),
-      text: 'Olá, como posso te ajudar?',
-      user: "NutrIA",
+      content: 'Olá, como posso te ajudar?',
+      role: "assistant",
+      type: 'text',
    }
 ]
 
@@ -34,7 +60,7 @@ const ChatbotScreen = () => {
    const scrollViewRef = useRef<ScrollView>(null);
    const [text, setText] = useState<string>('');
    const [messages, setMessages] = useState<message[]>(initMessages);
-   const { data, loading, error, fazerPergunta } = useFazerPergunta(queryClient);
+   const { data, loading, error, conversarChatbot } = useConversarChatbot(queryClient);
    const { data: usuarioInfo } = useUsuarioInfo({ enabled: false });
    const { data: perfisUsuario } = usePerfisUsuario({ enabled: false });
    const [permission, requestPermission] = useCameraPermissions();
@@ -85,41 +111,48 @@ const ChatbotScreen = () => {
 
    const montarUserIntro = () => {
       const textoIntroUser = gerarTextoPerfil(usuarioInfo, perfisUsuario?.[perfisUsuario.length - 1]);
-      return [{ role: 'user', content: textoIntroUser }];
+      return criarChatbotMessagesText(textoIntroUser, 'user');
    }
 
-   const montarChatMessageService = (userLastMessage: string) => {
-      const userIntro = montarUserIntro()
-      const msgChatFormatadas = messages.slice(-8).map(message => ({
-         role: message.user === 'Você' ? 'user' : 'assistant',
-         content: message.text
-      }));
-      return [...userIntro, ...msgChatFormatadas, { role: 'user', content: userLastMessage }];
+   const montarChatMessageService = (userLastMessage: string, contemImg: boolean): chatBotMessagesSchema[] => {
+      let retorno: chatBotMessagesSchema[] = [];
+      const userIntro = montarUserIntro() as chatBotMessagesSchema;
+      const userLastQuestion = criarChatbotMessagesText(userLastMessage, 'user');
+      const msgsCopy = messages.map(item => ({ ...item }));
+      const msgChatFormatadas = msgsCopy.slice(-8).filter(message => message.type = 'text').map(message => {
+         return criarChatbotMessagesText(message.content, message.role);
+      })
+      if (contemImg) {
+         retorno = [userIntro, ...msgChatFormatadas, criarChatbotMessagesImg(fotoFile!.base64!), userLastQuestion];
+      }else{
+         retorno = [userIntro, ...msgChatFormatadas, userLastQuestion];
+      }
+      return retorno;
    }
-
 
    const handleSendMessage = (userMessage: string) => {
-      if (userMessage.trim() === '') return;
-      const chatMessages: chatBotMessagesSchema[] = montarChatMessageService(userMessage)
-      fazerPergunta(chatMessages);
-      setMessages([...messages, {
-         _id: Math.random(),
-         text: userMessage.trim(),
-         user: "Você",
-      }]);
+      const contemImg = fotoFile ? true : false;
+      const chatMessages = montarChatMessageService(userMessage, contemImg);
+      conversarChatbot(chatMessages, contemImg);
+      const imgMessage: message | null = contemImg ? { _id: Math.random(), content: fotoFile!.uri, role: "user", type: 'img' } : null;
+      const textMessage: message = { _id: Math.random(), content: userMessage.trim(), role: "user", type: 'text' };
+      const newMessages = imgMessage ? [...messages, imgMessage, textMessage] : [...messages, textMessage];
+      setMessages(newMessages);
       setText('');
+      setFotoFile(null);
    };
 
    useEffect(() => {
       if (data) {
          setMessages(prevMessages => [
             ...prevMessages,
-            { _id: Math.random(), text: data.resposta, user: "NutrIA" }
+            { _id: Math.random(), content: data.dados, role: "assistant", type: 'text' },
+            { _id: Math.random(), content: data.resposta, role: "assistant", type: 'text' }
          ]);
       } else if (error) {
          setMessages(prevMessages => [
             ...prevMessages,
-            { _id: Math.random(), text: "Desculpe, ocorreu um erro ao processar sua solicitação.", user: "NutrIA" }
+            { _id: Math.random(), content: "Desculpe, ocorreu um erro ao processar sua solicitação.", role: "assistant", type: 'text' }
          ]);
       }
    }, [data, error]);
@@ -143,12 +176,14 @@ const ChatbotScreen = () => {
                <Text style={styles.btnText}>Limpar Chat</Text>
             </TouchableOpacity>
             {messages.map(message => (
-               <MessagesChatbot key={message._id} text={message.text} user={message.user} />
+               <MessagesChatbot 
+                  key={message._id} 
+                  messageObject={message} />
             ))}
          </ScrollView>
-         <CameraPermissionModal/>
-         { fotoFile &&
-         <ModalWithImage fotoFile={fotoFile} handleDeleteImage={handleDeleteImage} setShowModal={setShowModalImage} showModal={showModalImage} />
+         <CameraPermissionModal />
+         {fotoFile &&
+            <ModalWithImage fotoFile={fotoFile} handleDeleteImage={handleDeleteImage} setShowModal={setShowModalImage} showModal={showModalImage} />
          }
          <View style={styles.inputContainer}>
             {
@@ -181,7 +216,10 @@ const ChatbotScreen = () => {
                               />
                            }
                         </View>
-                        <TouchableOpacity onPress={() => handleSendMessage(text)} style={styles.sendButton}>
+                        <TouchableOpacity 
+                           onPress={() => handleSendMessage(text)} 
+                           style={styles.sendButton}
+                           disabled={text.trim() === ''}>
                            <Icon name="send-outline" size={24} color={theme.colors.color01} />
                         </TouchableOpacity>
                      </>
@@ -283,7 +321,7 @@ const styles = StyleSheet.create({
       width: '70%',
       height: '15%',
       resizeMode: 'contain',
-  },
+   },
 });
 
 

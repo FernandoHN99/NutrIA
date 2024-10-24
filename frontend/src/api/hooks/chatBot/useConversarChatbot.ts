@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { fazerPerguntaService } from '../../services/chatBotService';
+import { fazerPerguntaService, analisarFotoService } from '../../services/chatBotService';
 import { chatBotMessagesSchema } from '../../schemas/chatBotSchema';
 import { QueryClient } from '@tanstack/react-query';
 
@@ -20,16 +20,18 @@ export const atualizarInfosCache = (queryClient: QueryClient, responseChatBot: I
    }
 }
 
-export const useFazerPergunta = (queryClient: QueryClient) => {
+export const useConversarChatbot = (queryClient: QueryClient) => {
    const [data, setData] = useState<IChatBotRetorno | null>(null);
    const [loading, setLoading] = useState(false);
    const [error, setError] = useState<string | null>(null);
 
-   const fazerPergunta = async (mensagensInput: Array<chatBotMessagesSchema>) => {
+   const conversarChatbot = async (mensagensInput: Array<chatBotMessagesSchema>, contemImg: boolean) => {
       setLoading(true);
       setError(null);
       try {
-         const response: IChatBotRetorno = await fazerPerguntaService({ mensagensChat: mensagensInput });
+         const response: IChatBotRetorno = !contemImg 
+            ? await fazerPerguntaService({ mensagensChat: mensagensInput })
+            : await analisarFotoService({ mensagensChat: mensagensInput })
          atualizarInfosCache(queryClient, response);
          setData(response);
       } catch (err) {
@@ -39,6 +41,6 @@ export const useFazerPergunta = (queryClient: QueryClient) => {
       }
    };
 
-   return { data, loading, error, fazerPergunta };
+   return { data, loading, error, conversarChatbot };
 
 };

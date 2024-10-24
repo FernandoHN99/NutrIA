@@ -38,7 +38,7 @@ const AccessCamera = ({ setFotoFile, setCameraView, setShowModalImage }: AccessC
 
    const takePicture = async () => {
       if (cameraRef.current) {
-         const options: CameraPictureOptions = { quality: 0.7, base64: true, skipProcessing: true };
+         const options: CameraPictureOptions = { quality: 0.5, base64: true, skipProcessing: true };
          const photoData = await cameraRef.current.takePictureAsync(options);
          if (!photoData) {
             return;
@@ -79,7 +79,7 @@ const AccessCamera = ({ setFotoFile, setCameraView, setShowModalImage }: AccessC
             onCameraReady={() => setCameraReady(true)}
             // onMountError={hanldeErrorCamera}
             onMountError={() => setCameraReady(true)}
-            ratio={'16:9'}
+            ratio={'1:1'}
             animateShutter={true}
          >
          <View style={{justifyContent: 'center', alignItems: 'center' }}>

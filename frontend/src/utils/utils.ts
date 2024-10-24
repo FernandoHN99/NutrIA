@@ -184,9 +184,8 @@ export const calcularMacronutrientes = (
       alcool: arredondarValores(macronutrientesPadrao.alcool * fatorConversao,1),
       kcal: arredondarValores(macronutrientesPadrao.kcal * fatorConversao),
    };
-}
+};
 
 export const limitarValor = (valor: number, minimo: number, maximo: number) => {
    return Math.min(Math.max(valor, minimo), maximo);
- }
- 
+};
