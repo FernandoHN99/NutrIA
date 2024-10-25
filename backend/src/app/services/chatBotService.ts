@@ -29,7 +29,8 @@ export default class ChatBotService {
       // const invocarFuncao = comandosDeFuncoes.some(palavra => lastMessage.includes(palavra));
 
 
-      const nomeModelo = "ft:gpt-4o-mini-2024-07-18:personal:nutria-add-consumo-prod:AI0lLD2M";
+      const nomeModelo = "ft:gpt-4o-mini-2024-07-18:personal:nutria-eureka-v1:AM58hJW5";
+      // const nomeModelo = "ft:gpt-4o-mini-2024-07-18:personal:nutria-add-consumo-prod:AI0lLD2M";
       const contextoSistema = "Você é um assistente nutricional especializado e sua função é fornecer respostas claras e diretas sobre tópicos de nutrição, incluindo planejamento de refeições, controle de calorias e dicas para uma alimentação saudável baseados nos pilares de dietas flexível, contagem de macronutrientes e balanço energético. Você deve invocar as funções quando necessário.";
       const adicionarConsumoFn = addConsumoOpenAI;
 
@@ -40,8 +41,8 @@ export default class ChatBotService {
                { "role": "system", "content": contextoSistema },
                ...mensagensChat
             ],
-            temperature: 1,
-            max_tokens: 500,
+            temperature: 0.5,
+            max_tokens: 2048,
             top_p: 0.5,
             frequency_penalty: 0,
             presence_penalty: 0,
@@ -65,7 +66,7 @@ export default class ChatBotService {
                imgRequestJSON,
             ],
             temperature: 1,
-            max_tokens: 2048,
+            max_tokens: 5048,
             top_p: 1,
             frequency_penalty: 0,
             presence_penalty: 0,
@@ -78,7 +79,7 @@ export default class ChatBotService {
       // console.log(JSON.stringify(promptChat));
       const chatBotRetorno = await this.openai.chat.completions.create(promptChat);
       const { tool_calls, content } = chatBotRetorno.choices[0]?.message
-      // console.log(JSON.stringify(chatBotRetorno.choices[0]?.message));
+      console.log(JSON.stringify(chatBotRetorno.choices[0]?.message));
       if (!tool_calls && !content) {
          JsonReponseErro.lancar(400, 'Erro ao completar a conversa com o chatbot');
       }

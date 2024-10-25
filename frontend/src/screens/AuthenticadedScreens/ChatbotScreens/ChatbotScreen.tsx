@@ -5,7 +5,7 @@ import { getResponsiveSizeWidth, getResponsiveSizeHeight, hexToRgba } from '../.
 import MessagesChatbot from '../../../components/ChatBotSignUp/MessagesChatbot';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useConversarChatbot } from '../../../api/hooks/chatBot/useConversarChatbot';
-import { usePerfisUsuario, useUsuarioInfo } from '../../../api/httpState/usuarioData';
+import { usePerfisUsuario, useUsuarioInfo, useRefeicoesUsuario } from '../../../api/httpState/usuarioData';
 import { chatBotMessagesSchema } from '../../../api/schemas/chatBotSchema';
 import { useQueryClient } from '@tanstack/react-query';
 import { gerarTextoPerfil } from '../../../utils/formatters';
@@ -63,6 +63,7 @@ const ChatbotScreen = () => {
    const { data: responseChabot, loading, error, conversarChatbot } = useConversarChatbot(queryClient);
    const { data: usuarioInfo } = useUsuarioInfo({ enabled: false });
    const { data: perfisUsuario } = usePerfisUsuario({ enabled: false });
+   const { data: refeicoesUsuario } = useRefeicoesUsuario({ enabled: false });
    const [permission, requestPermission] = useCameraPermissions();
    const [fotoFile, setFotoFile] = useState<CameraCapturedPicture | null>(null);
    const [cameraView, setCameraView] = useState<boolean>(false);
@@ -79,7 +80,7 @@ const ChatbotScreen = () => {
       if (permission) {
          if (permission.granted) {
             setCameraView(true);
-      } else {
+         } else {
             setShowModal(true);
          }
       }
@@ -110,7 +111,13 @@ const ChatbotScreen = () => {
    }
 
    const montarUserIntro = () => {
-      const textoIntroUser = gerarTextoPerfil(usuarioInfo, perfisUsuario?.[perfisUsuario.length - 1]);
+      const refeicoesAtivas = refeicoesUsuario
+         .filter((refeicao: { ativa: any; }) => refeicao.ativa)
+         .map((refeicao: { nome_refeicao: string; numero_refeicao: number; }) => ({
+            nome_refeicao: refeicao.nome_refeicao,
+            numero_refeicao: refeicao.numero_refeicao
+         }));
+      const textoIntroUser = gerarTextoPerfil(usuarioInfo, perfisUsuario?.[perfisUsuario.length - 1], refeicoesAtivas);
       return criarChatbotMessagesText(textoIntroUser, 'user');
    }
 
@@ -119,13 +126,13 @@ const ChatbotScreen = () => {
       const userIntro = montarUserIntro() as chatBotMessagesSchema;
       const userLastQuestion = criarChatbotMessagesText(userLastMessage, 'user');
       const msgsCopy = messages.map(item => ({ ...item }));
-      const msgChatFormatadas = msgsCopy.slice(-20).map((message, index) => {
+      const msgChatFormatadas = msgsCopy.slice(-4).map((message, index) => {
          return criarChatbotMessagesText(
             message.type !== 'img' ? message.content : `[IMAGEM]`, message.role);
       })
       if (contemImg) {
          retorno = [userIntro, ...msgChatFormatadas, criarChatbotMessagesImg(fotoFile!.base64!), userLastQuestion];
-      }else{
+      } else {
          retorno = [userIntro, ...msgChatFormatadas, userLastQuestion];
       }
       return retorno;
@@ -146,7 +153,7 @@ const ChatbotScreen = () => {
    useEffect(() => {
       if (responseChabot) {
          const listResponses: message[] = [{ _id: Math.random(), content: responseChabot.resposta, role: "assistant", type: 'text' }]
-         if(responseChabot.dados != null){
+         if (responseChabot.dados != null) {
             listResponses.unshift({ _id: Math.random(), content: JSON.stringify(responseChabot.dados), role: "assistant", type: 'data' });
          }
          setMessages(prevMessages => [...prevMessages, ...listResponses]);
@@ -177,11 +184,11 @@ const ChatbotScreen = () => {
                <Text style={styles.btnText}>Limpar Chat</Text>
             </TouchableOpacity>
             {
-            messages
-               .map(message => (
-                  <MessagesChatbot 
-                     key={message._id} 
-                     messageObject={message} />
+               messages
+                  .map(message => (
+                     <MessagesChatbot
+                        key={message._id}
+                        messageObject={message} />
                   ))
             }
          </ScrollView>
@@ -220,8 +227,8 @@ const ChatbotScreen = () => {
                               />
                            }
                         </View>
-                        <TouchableOpacity 
-                           onPress={() => handleSendMessage(text)} 
+                        <TouchableOpacity
+                           onPress={() => handleSendMessage(text)}
                            style={styles.sendButton}
                            disabled={text.trim() === ''}>
                            <Icon name="send-outline" size={24} color={theme.colors.color01} />

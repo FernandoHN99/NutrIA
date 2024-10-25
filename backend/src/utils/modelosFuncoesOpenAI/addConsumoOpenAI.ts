@@ -92,7 +92,7 @@ export const addConsumoOpenAI = {
                      }
                   },
                   "additionalProperties": false
-               },
+               }
             }
          },
          "additionalProperties": false

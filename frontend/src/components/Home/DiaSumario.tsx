@@ -22,12 +22,12 @@ const DiaSumario = ({infosDia, perfilDia }: DiaSumarioProps) => {
          <View style={styles.headerSumarioContainer}>
             <Text style={styles.title}>Resumo</Text>
             <View style={styles.headerButtons}>
-               <TouchableOpacity onPress={() => console.log('oi')} >
+               {/* <TouchableOpacity onPress={() => console.log('oi')} >
                   <Ionicons name="chef-hat" size={ICON_SIZE} color={theme.colors.color05} />
                </TouchableOpacity>
                <TouchableOpacity onPress={() => console.log('oi')}>
                   <Ionicons02 name="sliders" size={ICON_SIZE} color={theme.colors.color05} />
-               </TouchableOpacity>
+               </TouchableOpacity> */}
             </View>
          </View>
          <View style={styles.infoSumarioContainer}>

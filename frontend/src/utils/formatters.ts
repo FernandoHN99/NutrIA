@@ -137,7 +137,7 @@ export const formatarConsumoRapido = (consumoRapido: AtualizarConsumoUsuarioSche
 }
 
 
-export const gerarTextoPerfil = (usuarioInfo:any, perfilInfo:any) => {
+export const gerarTextoPerfil = (usuarioInfo:any, perfilInfo:any, refeicoes:any[]) => {
    const { nome, dt_nascimento, email, pais, perfil_alimentar, sexo } = usuarioInfo;
    const { altura, peso_inicial, peso_final, objetivo, nivel_atividade, meta_proteina, meta_carboidrato, meta_gordura, tmb, tmf, kcal } = perfilInfo;
    
@@ -148,6 +148,6 @@ export const gerarTextoPerfil = (usuarioInfo:any, perfilInfo:any) => {
                  `Meu objetivo é de ${objetivo.toLocaleLowerCase()} de peso e meu nível de atividade física é ${nivel_atividade.toLocaleLowerCase()}. ` +
                  `Minha tmb (taxa metabólica basal) é ${tmb} kcal e minha tmf (meta de kcal diária) é ${tmf} kcal. `+
                  `Minhas metas diárias de maronutrientes são ${meta_proteina}g de proteína, ${meta_carboidrato}g de carboidrato e ${meta_gordura}g de gordura. `+
-                 `Hoje é dia ${criarStrData()}.`
+                 `Hoje é dia ${criarStrData()}.Minhas refeicoes são: ${refeicoes.map(refeicao => refeicao.nome_refeicao).join(', ')}. `
    return texto;
 }
