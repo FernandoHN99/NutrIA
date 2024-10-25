@@ -5,6 +5,10 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import theme from '../styles/theme';
 import { getResponsiveSizeHeight, getResponsiveSizeWidth } from '../utils/utils';
 import { base64Mock } from '../config/variaveis';
+import * as ImageManipulator from 'expo-image-manipulator';
+import * as FileSystem from 'expo-file-system';
+import * as Sharing from 'expo-sharing';
+
 
 const photoDataMock: CameraCapturedPicture = {
    uri: 'https://diplomatique.org.br/wp-content/uploads/2023/10/agricultura-arroz-feijao.jpg', // URL da imagem hardcoded
@@ -36,14 +40,48 @@ const AccessCamera = ({ setFotoFile, setCameraView, setShowModalImage }: AccessC
    }
 
 
+   // const takePicture = async () => {
+   //    if (cameraRef.current) {
+   //       const options: CameraPictureOptions = { quality: 0.1, base64: true, skipProcessing: true };
+   //       const photoData = await cameraRef.current.takePictureAsync(options);
+   //       if (!photoData) {
+   //          return;
+   //       }
+   //       setFotoFile(photoData);
+   //       setCameraView(false);
+   //    }
+   // }
+
    const takePicture = async () => {
       if (cameraRef.current) {
-         const options: CameraPictureOptions = { quality: 0.1, base64: true, skipProcessing: true };
+         const options: CameraPictureOptions = { quality: 1, base64: true, skipProcessing: true };
          const photoData = await cameraRef.current.takePictureAsync(options);
          if (!photoData) {
             return;
          }
-         setFotoFile(photoData);
+   
+         // Redimensionar a imagem
+         const manipulatedImage = await ImageManipulator.manipulateAsync(
+            photoData.uri,
+            [{ resize: { width: 800 } }],
+            { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG }
+         );
+   
+         // Converter a imagem manipulada para base64
+         const base64Image = await FileSystem.readAsStringAsync(manipulatedImage.uri, {
+            encoding: FileSystem.EncodingType.Base64,
+         });
+   
+         // Criar um arquivo de texto com o conteúdo base64
+         // const base64String = `data:image/jpeg;base64,${base64Image}`;
+         // const fileUri = `${FileSystem.documentDirectory}image_base64.txt`;
+         // await FileSystem.writeAsStringAsync(fileUri, base64String);
+   
+         // // Baixar o arquivo usando a biblioteca Sharing
+         // await Sharing.shareAsync(fileUri);
+   
+         // Atualiza o estado se necessário
+         setFotoFile({ ...photoData, base64: `data:image/jpeg;base64,${base64Image}` });
          setCameraView(false);
       }
    }

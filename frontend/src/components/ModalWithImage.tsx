@@ -49,8 +49,8 @@ const styles = StyleSheet.create({
       borderRadius: getResponsiveSizeWidth(5),
    },
    image: {
-      width: getResponsiveSizeWidth(70),
-      height: getResponsiveSizeWidth(50),
+      width: 180,
+      height: 240,
    },
    buttonsContainer: {
       flexDirection: 'row',
