@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Alert,TouchableWithoutFeedback, Keyboard } from 'react-native';
+
 import theme from '../../../styles/theme';
 import { getResponsiveSizeWidth, getResponsiveSizeHeight, hexToRgba, capitalize, criarStrData, calcularMacrosPorPorcao, validadeString } from '../../../utils/utils';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
@@ -155,6 +156,7 @@ const SearchFoodScreen = ({ route}: { route: any }) => {
    }
 
    return (
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.mainContainer}>
          <View style={styles.headerContainer}>
             <Text style={styles.titulo}>{macrosRefeicao.nome_refeicao}</Text>
@@ -235,6 +237,8 @@ const SearchFoodScreen = ({ route}: { route: any }) => {
       )}
 
       </View>
+</TouchableWithoutFeedback>
+
    );
 };
 

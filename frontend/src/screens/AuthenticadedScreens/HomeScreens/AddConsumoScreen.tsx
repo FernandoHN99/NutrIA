@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, ActivityIndicator, Alert, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { AlimentoSchema, TabelaNutricional } from '../../../api/schemas/alimentoSchema';
 import { AtualizarConsumoUsuarioSchema, ConsumoAlimentoSchema } from '../../../api/schemas/alimentoConsumidoSchema';
 import { arredondarValores, calcularMacronutrientes, criarStrData, getResponsiveSizeHeight, getResponsiveSizeWidth, hexToRgba, limitarValor, validadeString } from '../../../utils/utils';
@@ -68,8 +68,8 @@ const AddConsumoScreen = ({ route }: { route: any }) => {
    const { mutateAsync: addAlimentoConsumidoServiceFn } = useMutation({
       mutationFn: addAlimentoConsumidoService,
       onSuccess(retorno) {
-         queryClient.setQueryData(['consumoAlimentos'], (data: any[]) =>{
-            return [...data, ...retorno ];
+         queryClient.setQueryData(['consumoAlimentos'], (data: any[]) => {
+            return [...data, ...retorno];
          });
          navigation.goBack();
       },
@@ -167,7 +167,7 @@ const AddConsumoScreen = ({ route }: { route: any }) => {
    };
 
    const handleSalvarSolicitacao = async () => {
-      if(consumoAlimento.id_alimento_consumido){
+      if (consumoAlimento.id_alimento_consumido) {
          atualizarAlimentoConsumidoServiceFn(consumoAlimento);
          return;
       }
@@ -175,18 +175,18 @@ const AddConsumoScreen = ({ route }: { route: any }) => {
    };
 
 
-   const allowButtonSalvar = () =>{
+   const allowButtonSalvar = () => {
       let anyDifferent = true;
-      if(inicialConsumoAlimento){
+      if (inicialConsumoAlimento) {
          anyDifferent = Object.keys(consumoAlimento).some((key) => {
             const currentValue = consumoAlimento[key as keyof ConsumoAlimentoSchema];
             const originalValue = inicialConsumoAlimento[key as keyof ConsumoAlimentoSchema];
             return currentValue != originalValue;
          });
       }
-      const valideConsumoValues = 
+      const valideConsumoValues =
          (consumoAlimento.qtde_utilizada > 0 && consumoAlimento.qtde_utilizada <= MAX_VALUES.qtdeUtilizada) &&
-         (consumoAlimento.kcal >= 0 && consumoAlimento.kcal <= MAX_VALUES.kcal) && 
+         (consumoAlimento.kcal >= 0 && consumoAlimento.kcal <= MAX_VALUES.kcal) &&
          (consumoAlimento.qtde_carboidrato >= 0 && consumoAlimento.qtde_carboidrato <= MAX_VALUES.macros) &&
          (consumoAlimento.qtde_proteina >= 0 && consumoAlimento.qtde_proteina <= MAX_VALUES.macros) &&
          (consumoAlimento.qtde_gordura >= 0 && consumoAlimento.qtde_gordura <= MAX_VALUES.macros) &&
@@ -199,6 +199,7 @@ const AddConsumoScreen = ({ route }: { route: any }) => {
    if (!unidadesMedidaAlimento || !porcentagemMacros) return null;
 
    return (
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.container}>
          <View style={styles.header}>
             <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -297,6 +298,8 @@ const AddConsumoScreen = ({ route }: { route: any }) => {
                <Text style={styles.buttonText}>Salvar</Text>}
          </TouchableOpacity>
       </View>
+</TouchableWithoutFeedback>
+
    )
 
 };

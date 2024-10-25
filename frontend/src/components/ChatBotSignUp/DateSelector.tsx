@@ -52,10 +52,11 @@ const DateSelector: React.FC<DateSelectorProps> = ({ onSelect }) => {
                         <DateTimePicker
                            value={date || new Date()}
                            mode="date"
-                           display="compact"
+                           // display="default"
                            onChange={onChange}
                            style={styles.dateTimePicker}
                            maximumDate={new Date()}
+                           textColor={theme.colors.color05}
                         />
                         <TouchableOpacity onPress={() => setShow(false)} style={styles.doneButton}>
                            <Text style={styles.doneButtonText}>Concluído</Text>
@@ -103,6 +104,9 @@ const styles = StyleSheet.create({
       backgroundColor: 'rgba(0, 0, 0, 0.5)',
    },
    pickerContainer: {
+      flexDirection: 'row',
+      alignContent: 'center',
+      justifyContent: 'space-evenly',
       backgroundColor: 'white',
       borderTopLeftRadius: 20,
       borderTopRightRadius: 20,
@@ -118,7 +122,8 @@ const styles = StyleSheet.create({
       color: theme.colors.color05,
    },
    dateTimePicker: {
-      width: '100%',
+      // width: '50%',
+      alignSelf: 'center',
    },
    sendButton: {
       justifyContent: 'center',
