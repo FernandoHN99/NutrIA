@@ -52,7 +52,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({ onSelect }) => {
                         <DateTimePicker
                            value={date || new Date()}
                            mode="date"
-                           display="spinner"
+                           display="compact"
                            onChange={onChange}
                            style={styles.dateTimePicker}
                            maximumDate={new Date()}

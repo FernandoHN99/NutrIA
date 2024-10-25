@@ -149,14 +149,15 @@ const DadosPerfilScreen = () => {
 
    const calcularMetas = () => {
       const newPerfil = { ...perfil };
-
+      console.log('newPerfil', newPerfil)
+      console.log('dadosUsuario', dadosUsuario)
       const idade: number = calcularIdade(dadosUsuario.dt_nascimento);
       const ajusteCalorico: number = perfil.objetivo == 'GANHO' ? 300 : 0.8;
       newPerfil.tmb = arredondarValores(calcularTMB(idade, newPerfil.peso_inicial, newPerfil.altura, dadosUsuario.sexo));
       newPerfil.tmt = arredondarValores(calcularTMT(newPerfil.tmb, mapMultNiveisDeAtividade[newPerfil.nivel_atividade]));
       newPerfil.tmf = arredondarValores(calcularTMF(newPerfil.tmt, newPerfil.objetivo, ajusteCalorico));
       newPerfil.proteina_peso = newPerfil.objetivo == 'GANHO' ? 2.1 : 2.5;
-      newPerfil.gordura_peso = dadosUsuario.sexo == 'M' ? 0.6 : 0.9;
+      newPerfil.gordura_peso = dadosUsuario.sexo == 'H' ? 0.6 : 0.9;
       newPerfil.carboidrato_peso = arredondarValores(
          calcularPesoCarboidrato(newPerfil.tmf, newPerfil.peso_inicial, newPerfil.proteina_peso, newPerfil.gordura_peso), 1
       );

@@ -98,8 +98,13 @@ const SignUpScreen = ({ navigation }: { navigation: any}) => {
 
    const FlowSignUpInstance = FlowSignUp(nextQuestion, answers?.password)
 
-   if (loading || error) { 
+   if (loading) { 
       return <LoadingScreen loadingMessage='Criando a sua conta...'/>
+   }
+
+   if(error) {
+      Alert.alert('Erro', 'Ocorreu um erro ao criar a sua conta. Tente novamente mais tarde.');
+      navigation.replace('Boas-Vindas');
    }
 
    return (

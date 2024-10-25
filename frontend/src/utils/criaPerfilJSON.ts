@@ -33,7 +33,7 @@ const criaPerfilJSON = (input: any): any => {
    const idade: number = calcularIdade(input['dt_nascimento']);
    const ajusteCalorico: number = output['objetivo'] == 'GANHO' ? 300 : 0.8;
    output['proteina_peso'] = output['objetivo'] == 'GANHO' ? 2.1 : 2.5;
-   output['gordura_peso'] = input['sexo'] == 'M' ? 0.6 : 0.9;
+   output['gordura_peso'] = input['sexo'] == 'H' ? 0.6 : 0.9;
    output['tmb'] = arredondarValores(calcularTMB(idade, output['peso_inicial'], output['altura'], input['sexo']));
    output['tmt'] = arredondarValores(calcularTMT(output['tmb'], mapMultNiveisDeAtividade[output['nivel_atividade']]));
    output['tmf'] = arredondarValores(calcularTMF(output['tmt'], output['objetivo'], ajusteCalorico));

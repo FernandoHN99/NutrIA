@@ -144,7 +144,7 @@ export const gerarTextoPerfil = (usuarioInfo:any, perfilInfo:any) => {
    const dataNascimento = new Date(dt_nascimento);
    const idade = new Date().getFullYear() - dataNascimento.getFullYear();
 
-   const texto = `Meu nome é ${nome} tenho ${idade} anos, sou ${sexo === 'M' ? 'homem' : 'mulher'}, tenho ${altura} cm, e peso ${peso_inicial} kg, além de ser ${perfil_alimentar.toLocaleLowerCase()}. ` +
+   const texto = `Meu nome é ${nome} tenho ${idade} anos, sou ${sexo === 'H' ? 'homem' : 'mulher'}, tenho ${altura} cm, e peso ${peso_inicial} kg, além de ser ${perfil_alimentar.toLocaleLowerCase()}. ` +
                  `Meu objetivo é de ${objetivo.toLocaleLowerCase()} de peso e meu nível de atividade física é ${nivel_atividade.toLocaleLowerCase()}. ` +
                  `Minha tmb (taxa metabólica basal) é ${tmb} kcal e minha tmf (meta de kcal diária) é ${tmf} kcal. `+
                  `Minhas metas diárias de maronutrientes são ${meta_proteina}g de proteína, ${meta_carboidrato}g de carboidrato e ${meta_gordura}g de gordura. `+

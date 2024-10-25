@@ -90,7 +90,9 @@ export default class ChatBotService {
 
    public async analisarFoto(analisarFotoJSON: fazerPerguntaObject): Promise<IChatBotRetorno> {
       const promptChat = this.montarPromptAnalisarFoto(analisarFotoJSON.mensagensChat);
+      // console.log(JSON.stringify(promptChat));
       const chatBotRetorno = await this.openai.chat.completions.create(promptChat);
+      // console.log(JSON.stringify(chatBotRetorno));
       const { content } = chatBotRetorno.choices[0]?.message
       if (!content) {
          JsonReponseErro.lancar(400, 'Erro ao completar a conversa com o chatbot');

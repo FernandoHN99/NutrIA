@@ -44,9 +44,11 @@ export const criarUsuarioService = async (usuario: criarUsuarioSchema) => {
 export const fazerSignUpService = async (input: Object) => {
    try{
       const dataUsuario = criaUsuarioJSON(input);
+      console.log('dataUsuario: ', dataUsuario);
       const criarUsuarioResponse = await criarUsuarioService(dataUsuario);
-      setTokensStorage(criarUsuarioResponse?.access_token, criarUsuarioResponse?.refresh_token)
+      setTokensStorage(criarUsuarioResponse?.access_token, criarUsuarioResponse?.refresh_token);
       const dataPerfil = criaPerfilJSON({ ...input, ...dataUsuario });
+      console.log('dataPerfil: ', dataPerfil);
       const criarPerfilResponse = await criarPerfilService(dataPerfil);
       return {criarUsuarioResponse, criarPerfilResponse};
    }

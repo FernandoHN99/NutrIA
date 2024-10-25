@@ -38,7 +38,7 @@ export const capitalize = (str: string) => {
 
 // Formula Harris Benedict
 export const calcularTMB = (idade: number, peso: number, altura: number, sexo: string) => {
-   if (sexo.toLocaleUpperCase() === 'M') {
+   if (sexo.toLocaleUpperCase() === 'H') {
       return (10 * peso) + (6.25 * altura) - (5 * idade) + 5
    }
    return (10 * peso) + (6.25 * altura) - (5 * idade) - 161

@@ -24,6 +24,7 @@ export default class ChatBotController{
       if (!resultadoParse.success){
          JsonReponseErro.lancar(400, 'JSON inválido', resultadoParse.error);
       };
+      console.log(JSON.stringify(resultadoParse.data));
       const resposta = await this.chatBotService.analisarFoto(resultadoParse.data);
       return new JsonReponseSucesso(200, 'Resposta retornada com sucesso', resposta);
    }

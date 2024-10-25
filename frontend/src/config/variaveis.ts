@@ -1,6 +1,4 @@
-// export const DOMINIO_BACKEND: string = 'http://192.168.15.247';
-export const DOMINIO_BACKEND: string = 'http://10.240.0.39';
-// export const DOMINIO_BACKEND: string = 'http://127.0.0.1';
+export const DOMINIO_BACKEND: string = 'http://192.168.15.2';
 
 export const PORTA_BACKEND: number = 5001;
 export const ENDPOINT: string = '/nutria'
@@ -14,8 +12,8 @@ export const listaEstadosAlimentos: Array<string> = ['CRU', 'COZIDO', 'ASSADO', 
 export const listaUnidadesMedida: Array<string> = ['GRAMA', 'MILILITRO', 'COLHER SOPA', 'COLHER CHA', 'XICARA PADRAO', 'XICARA CHA', 'XICARA CAFE', 'UNIDADE'];
 export const listaSistemasMedidas: Array<string> = ['METRICO', 'IMPERIAL'];
 export const mapSexosBiologicos: { [key: string]: string } = {
-   'Masculino':'M', 
-   'Feminino': 'F'
+   'Masculino': 'H', 
+   'Feminino': 'M'
 };
 export const mapPerfisAlimentares:  { [key: string]: string }  = {
    'Onívora': 'ONIVORO', 

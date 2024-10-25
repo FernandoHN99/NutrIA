@@ -29,7 +29,8 @@ export default class Servidor {
    private configurarMiddlewares(): void {
       this.app.use(cookieParser());
       this.app.use(cors());
-      this.app.use(express.json());
+      this.app.use(express.json({ limit: '50mb' }));
+      this.app.use(express.urlencoded({ limit: '50mb', extended: true}));
       
       this.app.use((req: Request, res: Response, next: NextFunction) => {
          console.log(`${req.method} ${req.url}`);
