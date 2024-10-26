@@ -29,8 +29,8 @@ export default class ChatBotService {
       // const invocarFuncao = comandosDeFuncoes.some(palavra => lastMessage.includes(palavra));
 
 
-      const nomeModelo = "ft:gpt-4o-mini-2024-07-18:personal:nutria-eureka-v1:AM58hJW5";
-      // const nomeModelo = "ft:gpt-4o-mini-2024-07-18:personal:nutria-add-consumo-prod:AI0lLD2M";
+      // const nomeModelo = "ft:gpt-4o-mini-2024-07-18:personal:nutria-eureka-v1:AM58hJW5";
+      const nomeModelo = "ft:gpt-4o-mini-2024-07-18:personal:nutria-add-consumo-prod:AI0lLD2M";
       const contextoSistema = "Você é um assistente nutricional especializado e sua função é fornecer respostas claras e diretas sobre tópicos de nutrição, incluindo planejamento de refeições, controle de calorias e dicas para uma alimentação saudável baseados nos pilares de dietas flexível, contagem de macronutrientes e balanço energético. Você deve invocar as funções quando necessário.";
       const adicionarConsumoFn = addConsumoOpenAI;
 

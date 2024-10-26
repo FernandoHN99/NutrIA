@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { getResponsiveSizeHeight, getResponsiveSizeWidth } from '../../utils/utils';
 import theme from '../../styles/theme';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -41,6 +41,7 @@ const LoginScreen = () => {
 
 
    return (
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false} >
       <View style={styles.container}>
          <Text style={styles.heading}>NutrIA</Text>
          <View style={styles.form}>
@@ -77,6 +78,8 @@ const LoginScreen = () => {
          </View>
          {error && <Text style={styles.errorText}>Credenciais Inválidas</Text>}
       </View>
+      </TouchableWithoutFeedback>
+
    );
 };
 

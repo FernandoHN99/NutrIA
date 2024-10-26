@@ -1,4 +1,4 @@
-export const DOMINIO_BACKEND: string = 'http://192.168.15.2';
+export const DOMINIO_BACKEND: string = 'http://127.0.0.1';
 
 export const PORTA_BACKEND: number = 5001;
 export const ENDPOINT: string = '/nutria'

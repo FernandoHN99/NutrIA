@@ -4,7 +4,7 @@ import { setTokensStorage, getTokensStorage } from '../api/httpState/usuarioAuth
 
 const api = axios.create({
    baseURL: URL_BACKEND,
-   timeout: 10000,
+   timeout: 20000,
    headers: { 'Content-Type': 'application/json' },
 });
 
@@ -40,7 +40,6 @@ const refreshAuthTokens = async () => {
       await setTokensStorage(access_token, refresh_token);
       return { token: access_token, refreshToken: refresh_token };
    } catch (error) {
-      
       console.error('Erro ao atualizar o token:', (error as any)?.response?.data);
       throw error;
    }

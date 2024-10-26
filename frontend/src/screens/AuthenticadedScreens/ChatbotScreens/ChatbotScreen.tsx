@@ -126,7 +126,7 @@ const ChatbotScreen = () => {
       const userIntro = montarUserIntro() as chatBotMessagesSchema;
       const userLastQuestion = criarChatbotMessagesText(userLastMessage, 'user');
       const msgsCopy = messages.map(item => ({ ...item }));
-      const msgChatFormatadas = msgsCopy.slice(-4).map((message, index) => {
+      const msgChatFormatadas = msgsCopy.slice(-10).map((message, index) => {
          return criarChatbotMessagesText(
             message.type !== 'img' ? message.content : `[IMAGEM]`, message.role);
       })
