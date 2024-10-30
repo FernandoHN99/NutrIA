@@ -70,7 +70,7 @@ export const addConsumoOpenAI = {
                      },
                      "qtde_utilizada": {
                         "type": "number",
-                        "description": "Quantidade de porcoes consumidas"
+                        "description": "Quantidade informada pelo usuário do alimento consumido. Ex: 25, 50, 100"
                      },
                      "unidade_medida": {
                         "enum": [
@@ -88,7 +88,7 @@ export const addConsumoOpenAI = {
                      },
                      "qtde_carboidrato": {
                         "type": "number",
-                        "description": "Quantidade de carboidratos em gramas consumidas no total"
+                        "description": "Quantidade de carboidratos em  consumidas no total"
                      }
                   },
                   "additionalProperties": false
