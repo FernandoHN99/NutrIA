@@ -5,6 +5,7 @@ import { obterConsumoUsuarioService } from '../services/alimentoConsumoService';
 import { criarStrData } from '../../utils/utils';
 import { obterRefeicaoService } from '../services/refeicaoService';
 import { obterAlimentosFavoritosService } from '../services/alimentoFavoritoService';
+import { obterDiasService } from '../services/diaService';
 
 export function useUsuarioInfo(options = {}) {
    return useQuery({
@@ -52,6 +53,15 @@ export function useAlimentosFavoritos(options = {}) {
       {
          queryKey: ['alimentosFavoritos'],
          queryFn: () => obterAlimentosFavoritosService(),
+         ...options
+      })
+}
+
+export function useDiasUsuario(options = {}) {
+   return useQuery(
+      {
+         queryKey: ['diasUsuario'],
+         queryFn: () => obterDiasService(),
          ...options
       })
 }

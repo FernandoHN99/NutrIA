@@ -5,7 +5,7 @@ import { criarStrData, getResponsiveSizeWidth } from '../../utils/utils';
 import LoadingScreen from '../../components/LoadingScreen';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import theme from '../../styles/theme';
-import { useAlimentosFavoritos, useConsumoAlimentos, usePerfisUsuario, useRefeicoesUsuario, useUsuarioInfo } from '../../api/httpState/usuarioData';
+import { useAlimentosFavoritos, useConsumoAlimentos, useDiasUsuario, usePerfisUsuario, useRefeicoesUsuario, useUsuarioInfo } from '../../api/httpState/usuarioData';
 const Stack = createNativeStackNavigator();
 
 const AuthenticatedNavigator = () => {
@@ -16,13 +16,14 @@ const AuthenticatedNavigator = () => {
    const { data: consumoUsuario, error: errorConsumo, isLoading: isLoadingConsumo, refetch: refetchConsumo } = useConsumoAlimentos();
    const { data: refeicoesUsuario, error: errorRefeicoes, isLoading: isLoadingRefeicoes, refetch: refetchRefeicoes } = useRefeicoesUsuario();
    const { data: alimentosFavoritos, error: errorAlimentosFavoritos, isLoading: isLoadingAlimentosFavoritos, refetch: refetchAlimentosFavoritos } = useAlimentosFavoritos();
+   const { data: diasUsuario, error: errorDiasUsuario, isLoading: isLoadingDiasUsuario, refetch: refetchDiasUsuario } = useDiasUsuario();
 
 
-   if (isLoadingUsuario || isLoadingPerfis || isLoadingConsumo || isLoadingRefeicoes || isLoadingAlimentosFavoritos) {
+   if (isLoadingUsuario || isLoadingPerfis || isLoadingConsumo || isLoadingRefeicoes || isLoadingAlimentosFavoritos || isLoadingDiasUsuario) {
       return <LoadingScreen loadingMessage="Carregando..." />;
    }
 
-   if (errorUsuario || errorPerfis || errorConsumo || errorRefeicoes || errorAlimentosFavoritos) {
+   if (errorUsuario || errorPerfis || errorConsumo || errorRefeicoes || errorAlimentosFavoritos || errorDiasUsuario) {
 
       const tentarNovamente = () => {
          if (errorUsuario) refetchUsuario();
@@ -30,6 +31,7 @@ const AuthenticatedNavigator = () => {
          if (errorConsumo) refetchConsumo();
          if (errorRefeicoes) refetchRefeicoes();
          if (errorAlimentosFavoritos) refetchAlimentosFavoritos();
+         if (errorDiasUsuario) refetchDiasUsuario();
       };
 
       return (

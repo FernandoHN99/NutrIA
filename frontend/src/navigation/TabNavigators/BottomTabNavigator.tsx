@@ -5,7 +5,7 @@ import SettingsNavigator from '../BottomNavigators/SettingsNavigator';
 import theme from '../../styles/theme';
 import HomeNavigator from '../BottomNavigators/HomeNavigator';
 import Icon from '@expo/vector-icons/Ionicons';
-
+import DiaScroll from '../../components/Home/DiaScroll';
 
 const Tab = createBottomTabNavigator();
 
