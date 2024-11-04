@@ -5,3 +5,6 @@ export interface salvarDiaSchema {
    peso_dia: number | null;
 }
 
+export interface deletarDiaSchema {
+   dt_dia: string;
+}

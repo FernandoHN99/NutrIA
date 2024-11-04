@@ -16,13 +16,15 @@ interface Dia {
 interface DiaScrollProps {
    diaSelecionado: string;
    setDiaSelecionado: Function;
+   numeroDiasPassados?: number;
+   numeroDiasFuturos?: number;
 }
 
 
 const gerarDatas = (dataBase = new Date(), qtdeDiasPassados: number, qtdeDiasFuturos: number) => {
    const datasControl: Array<Dia> = [];
 
-   for (let i = -qtdeDiasPassados; i <= qtdeDiasFuturos; i++) {
+   for (let i = -qtdeDiasPassados; i < qtdeDiasFuturos; i++) {
       const data = new Date(dataBase);
       data.setDate(dataBase.getDate() + i);
 
@@ -36,9 +38,9 @@ const gerarDatas = (dataBase = new Date(), qtdeDiasPassados: number, qtdeDiasFut
    return datasControl;
 };
 
-const DiaScroll = ({ diaSelecionado, setDiaSelecionado }: DiaScrollProps) => {
+const DiaScroll = ({ diaSelecionado, setDiaSelecionado, numeroDiasPassados=INTERVALO_DIAS, numeroDiasFuturos=INTERVALO_DIAS }: DiaScrollProps) => {
    const [loadingLeft, setLoadingLeft] = useState(false);
-   const [datas, setDatas] = useState<Array<Dia>>(gerarDatas(new Date(), INTERVALO_DIAS, INTERVALO_DIAS));
+   const [datas, setDatas] = useState<Array<Dia>>(gerarDatas(new Date(), numeroDiasPassados, numeroDiasFuturos));
    const flatListRef = useRef<FlatList>(null);
 
    useEffect(() => {

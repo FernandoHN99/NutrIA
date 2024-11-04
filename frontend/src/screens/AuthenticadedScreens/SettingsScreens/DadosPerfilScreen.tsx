@@ -149,8 +149,6 @@ const DadosPerfilScreen = () => {
 
    const calcularMetas = () => {
       const newPerfil = { ...perfil };
-      // console.log('newPerfil', newPerfil)
-      // console.log('dadosUsuario', dadosUsuario)
       const idade: number = calcularIdade(dadosUsuario.dt_nascimento);
       const ajusteCalorico: number = perfil.objetivo == 'GANHO' ? 300 : 0.8;
       newPerfil.tmb = arredondarValores(calcularTMB(idade, newPerfil.peso_inicial, newPerfil.altura, dadosUsuario.sexo));

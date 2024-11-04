@@ -20,10 +20,13 @@ export default class DiaService{
       let diaNovo = new Dia(dadosSalvarDia);
       let diaAntigo = await this.diaRepo.obterDiaUsuario(dadosSalvarDia.id_usuario, dadosSalvarDia.dt_dia);
       if(!diaAntigo && !diaNovo.ehValido()){
-         JsonReponseErro.lancar(400, 'Dia não pode ser criado com todos seus valores nulos');
+         return diaNovo;
+         // JsonReponseErro.lancar(400, 'Dia não pode ser criado com todos seus valores nulos');
       }
       if(diaAntigo && !diaNovo.ehValido()){
-         JsonReponseErro.lancar(400, 'Dia não pode ser atualizado com todos seus valores nulos');
+         diaAntigo.remove();
+         return diaNovo;
+         // JsonReponseErro.lancar(400, 'Dia não pode ser atualizado com todos seus valores nulos');
       }
       return await (diaAntigo ? new Dia({...diaAntigo, ...dadosSalvarDia}) : diaNovo).save();
    }
