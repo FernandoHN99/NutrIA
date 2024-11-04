@@ -8,7 +8,10 @@ import {useMutation, useQueryClient } from '@tanstack/react-query';
 import { useDiasUsuario } from '../../../api/httpState/usuarioData';
 import { salvarDiaSchema } from '../../../api/schemas/diaSchema';
 import * as ImagePicker from 'expo-image-picker';
-import { deletarDiaService, salvarDiaService } from '../../../api/services/diaService';
+import { salvarDiaService } from '../../../api/services/diaService';
+import { CameraCapturedPicture, useCameraPermissions } from 'expo-camera';
+import AccessCamera from '../../../components/AccessCamera';
+import { Button } from 'react-native-elements';
 
 const formatarData = (dataDia: string) => {
    if (!dataDia) return '-';
@@ -23,66 +26,62 @@ const EvolucaoScreen: React.FC = () => {
    const [diaSelecionado, setDiaSelecionado] = useState<string>(criarStrData());
    const [dadosDia, setDadosDia] = useState<salvarDiaSchema | null>(null);
    const [dadosDiaEditavel, setDadosDiaEditavel] = useState<salvarDiaSchema | null>(null);
+   const [cameraView, setCameraView] = useState<boolean>(false);
+   const [fotoFile, setFotoFile] = useState<CameraCapturedPicture | null>(null);
+   const [permission, requestPermission] = useCameraPermissions();
 
    const queryClient = useQueryClient()
-
-   const pegarDadosDia = (): salvarDiaSchema => {
-      const dadosDiaContent =  (diasUsuarioCached?.find((dia: salvarDiaSchema) => dia.dt_dia === diaSelecionado));
-      return dadosDiaContent ? dadosDiaContent : {dt_dia: diaSelecionado, foto_dia: null, medida_abdomen_dia: null, peso_dia: null};
-   }
 
    const avancarDia = () => {
       const newData = new Date(diaSelecionado);
       newData.setDate(newData.getDate() + 1);
       setDiaSelecionado(transformDateIntoString(newData));
-   }
+   };
 
    const voltarDia = () => {
       const newData = new Date(diaSelecionado);
       newData.setDate(newData.getDate() - 1);
       setDiaSelecionado(transformDateIntoString(newData));
-   }
+   };
 
    const setDadosContent = (dadosDiaContent: salvarDiaSchema) => {
       setDadosDia(dadosDiaContent);
       setDadosDiaEditavel(dadosDiaContent);
-   }
+   };
 
    useEffect(() => {
-      const dadosDiaContent = pegarDadosDia();
-      setDadosContent(dadosDiaContent);
+      const dadosDiaCached = diasUsuarioCached?.find((dia) => dia.dt_dia === diaSelecionado);
+      if(dadosDiaCached){
+         setDadosContent(dadosDiaCached);
+         return;
+      }
+      const dadosDiaNulo = {dt_dia: diaSelecionado, foto_dia: null, medida_abdomen_dia: null, peso_dia: null};
+      queryClient.setQueryData(['diasUsuario'], [...diasUsuarioCached!, dadosDiaNulo]);
+      setDadosContent(dadosDiaNulo);
 
    }, [diaSelecionado]);
 
 
    const handleSelectImage = async () => {
-      // Solicitar permissão para acessar a galeria
-      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-      if (status !== 'granted') {
-         alert('Desculpe, precisamos de permissão para acessar suas fotos!');
-         return;
-      }
-
-      const result = await ImagePicker.launchImageLibraryAsync({
-         mediaTypes: ImagePicker.MediaTypeOptions.Images,
-         allowsEditing: true,
-         aspect: [3, 4],
-         quality: 0.8,
-      });
-
-      if (!result.canceled && result.assets[0]) {
-         // TODO: Implementar lógica para salvar a foto no backend
-         console.log('Foto selecionada:', result.assets[0].uri);
+      if (permission) {
+         if (permission.granted) {
+            setCameraView(true);
+         } else {
+            const { status } = await requestPermission();
+            if (status === 'granted') {
+               setCameraView(true);
+            } else {
+               alert('Desculpe, precisamos de permissão para acessar sua câmera!');
+            }
+         }
       }
    };
 
    const renderFotoContent = () => {
-
-      if (dadosDia?.foto_dia) {
+      if (dadosDiaEditavel?.foto_dia) {
          return (
             <Image
-               source={{ uri: dadosDia.foto_dia }}
+               source={{ uri: `${dadosDiaEditavel.foto_dia}` }}
                style={{ width: '100%', height: '100%' }}
                resizeMode='contain'
             />
@@ -117,13 +116,13 @@ const EvolucaoScreen: React.FC = () => {
             return diaUsuario;
          });
          queryClient.setQueryData(['diasUsuario'], updatedDiaUsuario);
-         setDadosContent(retorno);
+         setDadosDia(retorno);
       },
       onError() {
+         setDadosDiaEditavel(dadosDia);
          Alert.alert('Erro', 'Não foi possível salvar a alteração.',);
       }
    });
-
 
    const handleSubmitData = async () => {
       const anyDifferent = Object.keys(dadosDiaEditavel!).some((key) => {
@@ -147,8 +146,29 @@ const EvolucaoScreen: React.FC = () => {
       }
    }
 
-   if(!dadosDiaEditavel && !dadosDia){
+   useEffect(() => {
+      if (fotoFile) {
+         setDadosDiaEditavel({ ...dadosDiaEditavel!, foto_dia: fotoFile.base64! });
+         setFotoFile(null);
+      }
+   }, [fotoFile]);
+
+   useEffect(() => {
+      if (dadosDiaEditavel) {
+         const submitData = async () => {
+            await handleSubmitData();
+         };
+         submitData();
+      }
+   }, [dadosDiaEditavel?.foto_dia]);
+
+
+   if(!dadosDiaEditavel || !dadosDia || !diaSelecionado){
       return null;
+   }
+
+   if (cameraView) {
+      return <AccessCamera setFotoFile={setFotoFile} setCameraView={setCameraView} />;
    }
 
    return (
@@ -167,11 +187,12 @@ const EvolucaoScreen: React.FC = () => {
                   {renderFotoContent()}
                </View>
                <Icons
-                  style={{ transform: [{ rotate: '180deg' }] }}
-                  color={theme.colors.color05}
-                  name="arrow-back-ios"
-                  size={ICON_SIZE}
-                  onPress={avancarDia}
+               style={{ transform: [{ rotate: '180deg' }] }}
+               color={diaSelecionado !== criarStrData() ? theme.colors.color05 : theme.colors.backgroundColor}
+               name="arrow-back-ios"
+               size={ICON_SIZE}
+               onPress={avancarDia}
+               disabled={diaSelecionado === criarStrData()}
                />
             </View>
             <View style={styles.ctnInfoUsuario}>
@@ -188,8 +209,8 @@ const EvolucaoScreen: React.FC = () => {
                         style={styles.tableContent}
                         value={handleShowData(dadosDiaEditavel?.peso_dia)}
                         onChangeText={text => handleSetData('peso_dia', text)}
+                        onEndEditing={handleSubmitData}
                         keyboardType="numeric"
-                     onEndEditing={handleSubmitData}
                      />
                      <Text style={styles.unitText}> kg</Text>
                   </View>

@@ -15,10 +15,8 @@ export const obterDiasService = async () => {
 export const salvarDiaService = async (bodyRequest: salvarDiaSchema) => {
    try {
       const response = await api.post(`/dia/salvar`, bodyRequest);
-      console.log('responseSucesso: ', response.data.data);
       return response.data.data;
    } catch (error) {
-      console.log('responseErro: ', (error as any)?.response?.data);
       throw (error as any)?.response?.data;
    }
 };
