@@ -58,7 +58,7 @@ const EvolucaoScreen: React.FC = () => {
       const dadosDiaNulo = {dt_dia: diaSelecionado, foto_dia: null, medida_abdomen_dia: null, peso_dia: null};
       queryClient.setQueryData(['diasUsuario'], [...diasUsuarioCached!, dadosDiaNulo]);
       setDadosContent(dadosDiaNulo);
-      setFotoFile(null);``
+      setFotoFile(null);
 
    }, [diaSelecionado]);
 
@@ -153,13 +153,15 @@ const EvolucaoScreen: React.FC = () => {
 
    useEffect(() => {
       if (dadosDiaEditavel) {
-         setDadosDiaEditavel({ ...dadosDiaEditavel, foto_dia: fotoFile });
-         const submitData = async () => {
-            await handleSubmitData();
-         };
-         submitData();
+         setDadosDiaEditavel({ ...dadosDiaEditavel!, foto_dia: fotoFile });
       }
    }, [fotoFile]);
+
+   useEffect(() => {
+      if (dadosDiaEditavel) {
+         handleSubmitData();
+      }
+   }, [dadosDiaEditavel?.foto_dia]);
 
    if(!dadosDiaEditavel || !dadosDia || !diaSelecionado){
       return null;
