@@ -4,29 +4,21 @@ import { ActivityIndicator, Alert, Button, StyleSheet, Text, TouchableOpacity, V
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import theme from '../styles/theme';
 import { getResponsiveSizeHeight, getResponsiveSizeWidth } from '../utils/utils';
-import { base64Mock } from '../config/variaveis';
 import * as ImageManipulator from 'expo-image-manipulator';
 import * as FileSystem from 'expo-file-system';
 
-
-const photoDataMock: CameraCapturedPicture = {
-   uri: 'https://diplomatique.org.br/wp-content/uploads/2023/10/agricultura-arroz-feijao.jpg', // URL da imagem hardcoded
-   width: 1024,
-   height: 768,
-   base64: `${base64Mock}`
-};
-
 interface AccessCameraProps {
-   setFotoFile: React.Dispatch<React.SetStateAction<CameraCapturedPicture | null>>;
+   setFotoFile: React.Dispatch<React.SetStateAction<string | null>>;
    setCameraView: React.Dispatch<React.SetStateAction<boolean>>;
+   fotoFileView?: string | null;
 }
 
-const AccessCamera = ({ setFotoFile, setCameraView }: AccessCameraProps) => {
+const AccessCamera = ({ setFotoFile, setCameraView, fotoFileView = null }: AccessCameraProps) => {
 
    const [facing, setFacing] = useState<CameraType>('back');
    const cameraRef = useRef<CameraView | null>(null);
-   const [cameraReady, setCameraReady] = useState(true);
-   const [fotoFileTemp, setFotoFileTemp] = useState<CameraCapturedPicture | null>(photoDataMock);
+   const [cameraReady, setCameraReady] = useState(false);
+   const [fotoFileTemp, setFotoFileTemp] = useState<string | null>(fotoFileView);
 
 
    const toggleCameraFacing = () => {
@@ -46,7 +38,6 @@ const AccessCamera = ({ setFotoFile, setCameraView }: AccessCameraProps) => {
             return;
          }
 
-         // Redimensionar a imagem
          const manipulatedImage = await ImageManipulator.manipulateAsync(
             photoData.uri,
             [{ resize: { width: 800 } }],
@@ -57,7 +48,7 @@ const AccessCamera = ({ setFotoFile, setCameraView }: AccessCameraProps) => {
             encoding: FileSystem.EncodingType.Base64,
          });
 
-         setFotoFileTemp({ ...photoData, base64: `data:image/jpeg;base64,${base64Image}` });
+         setFotoFileTemp(`data:image/jpeg;base64,${base64Image}`);
       }
    }
 
@@ -76,14 +67,14 @@ const AccessCamera = ({ setFotoFile, setCameraView }: AccessCameraProps) => {
 
    const pendingPhoto = () => {
       return (
-         <View style={{ flex: 1 }}>
-            <Image source={{ uri: fotoFileTemp!.uri }} style={{ flex: 0.8 }} resizeMode="contain" />
-            <View style={{ position: 'absolute', bottom: '25%', left: 0, right: 0, flexDirection: 'row', justifyContent: 'center' }}>
-               <TouchableOpacity onPress={()=>setFotoFileTemp(null)} style={{marginRight: '15%'}}>
-                  <Icon name="trash-can" size={getResponsiveSizeWidth(13)} color={theme.colors.color01} />
+         <View style={{ flex: 1, backgroundColor: theme.colors.black }}>
+            <Image source={{ uri: fotoFileTemp! }} style={{ flex: 0.8 }} resizeMode="contain" />
+            <View style={{ position: 'absolute', bottom: '5%', left: 0, right: 0, flexDirection: 'row', justifyContent: 'center' }}>
+               <TouchableOpacity onPress={handleCancelarFoto} style={{ marginRight: '15%' }}>
+                  <Icon name="trash-can" size={getResponsiveSizeWidth(11)} color={theme.colors.color01} />
                </TouchableOpacity>
                <TouchableOpacity onPress={handleAceitarFoto}>
-                  <Icon name="check-circle" size={getResponsiveSizeWidth(13)} color={theme.colors.color01} />
+                  <Icon name="check-circle" size={getResponsiveSizeWidth(11)} color={theme.colors.color01} />
                </TouchableOpacity>
             </View>
          </View>
@@ -95,40 +86,52 @@ const AccessCamera = ({ setFotoFile, setCameraView }: AccessCameraProps) => {
       setCameraView(false);
    }
 
+   const handleCancelarFoto = () => {
+      if (cameraReady) {
+         setFotoFileTemp(null);
+      } else {
+         setFotoFile(null);
+         setCameraView(false);
+      }
+   }
+
    return (
       <View style={styles.container}>
-         <CameraView
-            style={styles.camera}
-            facing={facing}
-            ref={cameraRef}
-            onCameraReady={() => setCameraReady(true)}
-            onMountError={hanldeErrorCamera}
-            ratio={'1:1'}
-            autofocus='off'
-            animateShutter={true}
-         >
-            <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-               <Icon
-                  name='close-circle'
-                  color={theme.colors.color01}
-                  size={getResponsiveSizeWidth(11)}
-                  style={{ alignSelf: 'flex-start', marginLeft: getResponsiveSizeWidth(5), marginTop: getResponsiveSizeWidth(5) }}
-                  onPress={() => setCameraView(false)}
-               />
-            </View>
-            {cameraReady ?
-               !fotoFileTemp ?
-                  <View style={styles.buttonActionsContainer}>
-                     <TouchableOpacity onPress={takePicture}>
-                        <Icon name="camera-iris" size={getResponsiveSizeWidth(13)} color={theme.colors.color01} />
-                     </TouchableOpacity>
+         {
+            fotoFileTemp ?
+               pendingPhoto() :
+               (<CameraView
+                  style={styles.camera}
+                  facing={facing}
+                  ref={cameraRef}
+                  onCameraReady={() => setCameraReady(true)}
+                  onMountError={hanldeErrorCamera}
+                  ratio={'1:1'}
+                  autofocus='off'
+                  animateShutter={true}
+               >
+                  <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                     <Icon
+                        name='close-circle'
+                        color={theme.colors.color01}
+                        size={getResponsiveSizeWidth(11)}
+                        style={{ alignSelf: 'flex-start', marginLeft: getResponsiveSizeWidth(5), marginTop: getResponsiveSizeWidth(5) }}
+                        onPress={() => setCameraView(false)}
+                     />
                   </View>
-                  :
-                  pendingPhoto()
-               :
-               loadingCamera()
-            }
-         </CameraView>
+                  {
+                     cameraReady ?
+                        <View style={styles.buttonActionsContainer}>
+                           <TouchableOpacity onPress={takePicture}>
+                              <Icon name="camera-iris" size={getResponsiveSizeWidth(13)} color={theme.colors.color01} />
+                           </TouchableOpacity>
+                        </View>
+                        :
+                        loadingCamera()
+                  }
+               </CameraView>
+               )
+         }
       </View>
    );
 }

@@ -10,8 +10,7 @@ import { chatBotMessagesSchema } from '../../../api/schemas/chatBotSchema';
 import { useQueryClient } from '@tanstack/react-query';
 import { gerarTextoPerfil } from '../../../utils/formatters';
 import AccessCamera from '../../../components/AccessCamera';
-import { CameraCapturedPicture, useCameraPermissions } from 'expo-camera';
-import ModalWithImage from '../../../components/ModalWithImage';
+import { useCameraPermissions } from 'expo-camera';
 
 const criarChatbotMessagesText = (content: string, role: 'assistant' | 'user'): chatBotMessagesSchema => {
    return {
@@ -65,7 +64,7 @@ const ChatbotScreen = () => {
    const { data: perfisUsuario } = usePerfisUsuario({ enabled: false });
    const { data: refeicoesUsuario } = useRefeicoesUsuario({ enabled: false });
    const [permission, requestPermission] = useCameraPermissions();
-   const [fotoFile, setFotoFile] = useState<CameraCapturedPicture | null>(null);
+   const [fotoFile, setFotoFile] = useState<string | null>(null);
    const [cameraView, setCameraView] = useState<boolean>(false);
    const [showModal, setShowModal] = useState<boolean>(false);
    const [showModalImage, setShowModalImage] = useState<boolean>(false);
@@ -86,10 +85,6 @@ const ChatbotScreen = () => {
       }
    }
 
-   const handleDeleteImage = () => {
-      setShowModalImage(false);
-      setFotoFile(null);
-   };
 
    const CameraPermissionModal = () => {
       return (
@@ -131,7 +126,7 @@ const ChatbotScreen = () => {
             message.type !== 'img' ? message.content : `[IMAGEM]`, message.role);
       })
       if (contemImg) {
-         retorno = [userIntro, ...msgChatFormatadas, criarChatbotMessagesImg(fotoFile!.base64!), userLastQuestion];
+         retorno = [userIntro, ...msgChatFormatadas, criarChatbotMessagesImg(fotoFile!), userLastQuestion];
       } else {
          retorno = [userIntro, ...msgChatFormatadas, userLastQuestion];
       }
@@ -142,7 +137,7 @@ const ChatbotScreen = () => {
       const contemImg = fotoFile ? true : false;
       const chatMessages = montarChatMessageService(userMessage, contemImg);
       conversarChatbot(chatMessages, contemImg);
-      const imgMessage: message | null = contemImg ? { _id: Math.random(), content: fotoFile!.uri, role: "user", type: 'img' } : null;
+      const imgMessage: message | null = contemImg ? { _id: Math.random(), content: fotoFile!, role: "user", type: 'img' } : null;
       const textMessage: message = { _id: Math.random(), content: userMessage.trim(), role: "user", type: 'text' };
       const newMessages = imgMessage ? [...messages, imgMessage, textMessage] : [...messages, textMessage];
       setMessages(newMessages);
@@ -165,9 +160,10 @@ const ChatbotScreen = () => {
       }
    }, [responseChabot, error]);
 
-   if (cameraView) {
-      return <AccessCamera setFotoFile={setFotoFile} setCameraView={setCameraView} setShowModalImage={setShowModalImage} />
+   if (cameraView ) {
+      return <AccessCamera setFotoFile={setFotoFile} setCameraView={setCameraView} fotoFileView={fotoFile}/>
    }
+
 
    return (
       <KeyboardAvoidingView
@@ -193,9 +189,7 @@ const ChatbotScreen = () => {
             }
          </ScrollView>
          <CameraPermissionModal />
-         {fotoFile &&
-            <ModalWithImage fotoFile={fotoFile} handleDeleteImage={handleDeleteImage} setShowModal={setShowModalImage} showModal={showModalImage} />
-         }
+
          <View style={styles.inputContainer}>
             {
                loading ?
@@ -217,13 +211,13 @@ const ChatbotScreen = () => {
                                  name="camera-enhance"
                                  size={getResponsiveSizeWidth(8)}
                                  color={theme.colors.color05}
-                                 onPress={handleOpenCamera} />
+                                 onPress={()=>setCameraView(true)} />
                               :
                               <Icon
                                  name="file-image-outline"
                                  size={getResponsiveSizeWidth(9)}
                                  color={theme.colors.color05}
-                                 onPress={() => setShowModalImage(true)}
+                                 onPress={() => setCameraView(true)}
                               />
                            }
                         </View>

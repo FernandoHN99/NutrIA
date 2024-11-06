@@ -1,17 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, TextInput, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
+import React, { useEffect, useState, useCallback } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, TextInput, TouchableWithoutFeedback, Keyboard, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import theme from '../../../styles/theme';
 import DiaScroll from '../../../components/Home/DiaScroll';
-import { criarStrData, getResponsiveSizeHeight, getResponsiveSizeWidth, hexToRgba, transformDateIntoString, validarNumero, validarNumeroMaiorZero } from '../../../utils/utils';
+import { criarStrData, getResponsiveSizeHeight, getResponsiveSizeWidth, hexToRgba, transformDateIntoString, validarNumeroMaiorZero } from '../../../utils/utils';
 import Icons from 'react-native-vector-icons/MaterialIcons';
-import {useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useDiasUsuario } from '../../../api/httpState/usuarioData';
 import { salvarDiaSchema } from '../../../api/schemas/diaSchema';
 import * as ImagePicker from 'expo-image-picker';
 import { salvarDiaService } from '../../../api/services/diaService';
 import { CameraCapturedPicture, useCameraPermissions } from 'expo-camera';
 import AccessCamera from '../../../components/AccessCamera';
-import { Button } from 'react-native-elements';
+import { base64Mock } from '../../../config/variaveis';
+
+
+const photoDataMock: CameraCapturedPicture = {
+   uri: 'https://diplomatique.org.br/wp-content/uploads/2023/10/agricultura-arroz-feijao.jpg',
+   width: 1024,
+   height: 768,
+   base64: `${base64Mock}`
+};
 
 const formatarData = (dataDia: string) => {
    if (!dataDia) return '-';
@@ -27,7 +35,7 @@ const EvolucaoScreen: React.FC = () => {
    const [dadosDia, setDadosDia] = useState<salvarDiaSchema | null>(null);
    const [dadosDiaEditavel, setDadosDiaEditavel] = useState<salvarDiaSchema | null>(null);
    const [cameraView, setCameraView] = useState<boolean>(false);
-   const [fotoFile, setFotoFile] = useState<CameraCapturedPicture | null>(null);
+   const [fotoFile, setFotoFile] = useState<string | null>(null);
    const [permission, requestPermission] = useCameraPermissions();
 
    const queryClient = useQueryClient()
@@ -49,15 +57,18 @@ const EvolucaoScreen: React.FC = () => {
       setDadosDiaEditavel(dadosDiaContent);
    };
 
+
    useEffect(() => {
       const dadosDiaCached = diasUsuarioCached?.find((dia) => dia.dt_dia === diaSelecionado);
       if(dadosDiaCached){
          setDadosContent(dadosDiaCached);
+         setFotoFile(dadosDiaCached.foto_dia);
          return;
       }
       const dadosDiaNulo = {dt_dia: diaSelecionado, foto_dia: null, medida_abdomen_dia: null, peso_dia: null};
       queryClient.setQueryData(['diasUsuario'], [...diasUsuarioCached!, dadosDiaNulo]);
       setDadosContent(dadosDiaNulo);
+      setFotoFile(null);``
 
    }, [diaSelecionado]);
 
@@ -80,11 +91,15 @@ const EvolucaoScreen: React.FC = () => {
    const renderFotoContent = () => {
       if (dadosDiaEditavel?.foto_dia) {
          return (
-            <Image
-               source={{ uri: `${dadosDiaEditavel.foto_dia}` }}
-               style={{ width: '100%', height: '100%' }}
-               resizeMode='contain'
-            />
+            <TouchableOpacity
+            onPress={handleSelectImage}
+            >
+               <Image
+                  source={{ uri: `${dadosDiaEditavel.foto_dia}` }}
+                  style={{ width: '100%', height: '100%' }}
+                  resizeMode='contain'
+               />
+            </TouchableOpacity>
          );
       }
 
@@ -147,91 +162,90 @@ const EvolucaoScreen: React.FC = () => {
    }
 
    useEffect(() => {
-      if (fotoFile) {
-         setDadosDiaEditavel({ ...dadosDiaEditavel!, foto_dia: fotoFile.base64! });
-         setFotoFile(null);
-      }
-   }, [fotoFile]);
-
-   useEffect(() => {
       if (dadosDiaEditavel) {
+         setDadosDiaEditavel({ ...dadosDiaEditavel, foto_dia: fotoFile });
          const submitData = async () => {
             await handleSubmitData();
          };
          submitData();
       }
-   }, [dadosDiaEditavel?.foto_dia]);
-
+   }, [fotoFile]);
 
    if(!dadosDiaEditavel || !dadosDia || !diaSelecionado){
       return null;
    }
 
    if (cameraView) {
-      return <AccessCamera setFotoFile={setFotoFile} setCameraView={setCameraView} />;
+      return <AccessCamera setFotoFile={setFotoFile} setCameraView={setCameraView} fotoFileView={dadosDiaEditavel?.foto_dia} />;
    }
 
    return (
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <View style={styles.container}>
-         <DiaScroll diaSelecionado={diaSelecionado} setDiaSelecionado={setDiaSelecionado} numeroDiasFuturos={0} />
-         <View style={styles.containerContentMain}>
-            <View style={styles.ctnFoto}>
-               <Icons
-                  name="arrow-back-ios"
-                  color={theme.colors.color05}
-                  size={ICON_SIZE}
-                  onPress={voltarDia}
-               />
-               <View style={styles.ctnImagemContent}>
-                  {renderFotoContent()}
-               </View>
-               <Icons
-               style={{ transform: [{ rotate: '180deg' }] }}
-               color={diaSelecionado !== criarStrData() ? theme.colors.color05 : theme.colors.backgroundColor}
-               name="arrow-back-ios"
-               size={ICON_SIZE}
-               onPress={avancarDia}
-               disabled={diaSelecionado === criarStrData()}
-               />
-            </View>
-            <View style={styles.ctnInfoUsuario}>
-               <View style={styles.tableRow}>
-                  <Text style={styles.tableHeader}>Data</Text>
-                  <Text style={[styles.tableContent, {backgroundColor: 'transparent'}]}>
-                     {formatarData(diaSelecionado)}
-                  </Text>
-               </View>
-               <View style={styles.tableRow}>
-                  <Text style={styles.tableHeader}>Peso</Text>
-                  <View style={styles.inputWithUnit}>
-                     <TextInput
-                        style={styles.tableContent}
-                        value={handleShowData(dadosDiaEditavel?.peso_dia)}
-                        onChangeText={text => handleSetData('peso_dia', text)}
-                        onEndEditing={handleSubmitData}
-                        keyboardType="numeric"
+      <KeyboardAvoidingView
+         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+         style={styles.container}
+         keyboardVerticalOffset={Platform.select({ ios: getResponsiveSizeHeight(10), android: getResponsiveSizeHeight(10) })}
+      >
+         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+            <View style={styles.container}>
+               <DiaScroll diaSelecionado={diaSelecionado} setDiaSelecionado={setDiaSelecionado} numeroDiasFuturos={0} />
+               <View style={styles.containerContentMain}>
+                  <View style={styles.ctnFoto}>
+                     <Icons
+                        name="arrow-back-ios"
+                        color={theme.colors.color05}
+                        size={ICON_SIZE}
+                        onPress={voltarDia}
                      />
-                     <Text style={styles.unitText}> kg</Text>
+                     <View style={styles.ctnImagemContent}>
+                        {renderFotoContent()}
+                     </View>
+                     <Icons
+                     style={{ transform: [{ rotate: '180deg' }] }}
+                     color={diaSelecionado !== criarStrData() ? theme.colors.color05 : theme.colors.backgroundColor}
+                     name="arrow-back-ios"
+                     size={ICON_SIZE}
+                     onPress={avancarDia}
+                     disabled={diaSelecionado === criarStrData()}
+                     />
+                  </View>
+                  <View style={styles.ctnInfoUsuario}>
+                     <View style={styles.tableRow}>
+                        <Text style={styles.tableHeader}>Data</Text>
+                        <Text style={[styles.tableContent, {backgroundColor: 'transparent'}]}>
+                           {formatarData(diaSelecionado)}
+                        </Text>
+                     </View>
+                     <View style={styles.tableRow}>
+                        <Text style={styles.tableHeader}>Peso</Text>
+                        <View style={styles.inputWithUnit}>
+                           <TextInput
+                              style={styles.tableContent}
+                              value={handleShowData(dadosDiaEditavel?.peso_dia)}
+                              onChangeText={text => handleSetData('peso_dia', text)}
+                              onEndEditing={handleSubmitData}
+                              keyboardType="numeric"
+                           />
+                           <Text style={styles.unitText}> kg</Text>
+                        </View>
+                     </View>
+                     <View style={[styles.tableRow, {borderBottomWidth: 0}]}>
+                        <Text style={styles.tableHeader}>Medida Abdômen</Text>
+                        <View style={styles.inputWithUnit}>
+                           <TextInput
+                              style={styles.tableContent}
+                              value={handleShowData(dadosDiaEditavel?.medida_abdomen_dia)}
+                              onChangeText={text => handleSetData('medida_abdomen_dia', text)}
+                              onEndEditing={handleSubmitData}
+                              keyboardType="numeric"
+                           />
+                           <Text style={styles.unitText}>cm</Text>
+                        </View>
+                     </View>
                   </View>
                </View>
-               <View style={[styles.tableRow, {borderBottomWidth: 0}]}>
-                  <Text style={styles.tableHeader}>Medida Abdômen</Text>
-                  <View style={styles.inputWithUnit}>
-                     <TextInput
-                        style={styles.tableContent}
-                        value={handleShowData(dadosDiaEditavel?.medida_abdomen_dia)}
-                        onChangeText={text => handleSetData('medida_abdomen_dia', text)}
-                        onEndEditing={handleSubmitData}
-                        keyboardType="numeric"
-                     />
-                     <Text style={styles.unitText}>cm</Text>
-                  </View>
-               </View>
             </View>
-         </View>
-      </View>
-      </TouchableWithoutFeedback>
+         </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
    );
 };
 
@@ -317,4 +331,4 @@ const styles = StyleSheet.create({
    },
 });
 
-export default EvolucaoScreen; 
+export default EvolucaoScreen;

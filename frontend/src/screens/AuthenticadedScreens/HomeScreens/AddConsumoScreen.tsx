@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, ActivityIndicator, Alert, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, ActivityIndicator, Alert, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Platform } from 'react-native';
 import { AlimentoSchema, TabelaNutricional } from '../../../api/schemas/alimentoSchema';
 import { AtualizarConsumoUsuarioSchema, ConsumoAlimentoSchema } from '../../../api/schemas/alimentoConsumidoSchema';
 import { arredondarValores, calcularMacronutrientes, criarStrData, getResponsiveSizeHeight, getResponsiveSizeWidth, hexToRgba, limitarValor, validadeString } from '../../../utils/utils';
@@ -199,109 +199,115 @@ const AddConsumoScreen = ({ route }: { route: any }) => {
    if (!unidadesMedidaAlimento || !porcentagemMacros) return null;
 
    return (
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <View style={styles.container}>
-         <View style={styles.header}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-               <Icon name="arrow-back" size={30} color={theme.colors.color05} />
-            </TouchableOpacity>
-            <Text style={styles.title}>Adicionar Alimento</Text>
-         </View>
-         <View style={[styles.inputContainer, { borderWidth: 2 }]}>
-            <Text style={styles.textInfo}>Nome do Alimento</Text>
-            <Text style={[styles.textValue, { fontFamily: 'NotoSans-SemiBold' }]}>{consumoAlimento.alimento.nome_alimento}</Text>
-         </View>
-         <View style={styles.inputContainer}>
-            <Text style={styles.textInfo}>Refeição</Text>
-            <Text style={[styles.textValue, { fontFamily: 'NotoSans-SemiBold' }]}>{refeicao.nome_refeicao}</Text>
-         </View>
-         <View style={styles.inputContainer}>
-            <Text style={styles.textInfo}>Unidade de Medida</Text>
-            <PicklistSelector02
-               initialOption={Object.keys(unidadesMedidaAlimento).find(key => unidadesMedidaAlimento[key] === consumoAlimento.unidade_medida)!}
-               onSelect={(valor: string) => setConsumoAlimento(prevConsumo => ({ ...prevConsumo, unidade_medida: unidadesMedidaAlimento[valor] }))}
-               picklistOptions={Object.keys(unidadesMedidaAlimento)}
-            />
-         </View>
-         <View style={styles.inputContainer}>
-            <Text style={styles.textInfo}>Tamanho da Porção</Text>
-            <PicklistSelector02
-               initialOption={consumoAlimento.porcao_padrao.toString()}
-               onSelect={(valor: number) => setConsumoAlimento(prevConsumo => ({ ...prevConsumo, porcao_padrao: Number(valor) }))}
-               picklistOptions={(mapTamanhoDaPorcao[consumoAlimento.unidade_medida])}
-            />
-         </View>
-         <View style={styles.inputContainer}>
-            <Text style={styles.textInfo}>Quantidade de Porções</Text>
-            <TextInput
-               style={styles.textValue}
-               keyboardType="numeric"
-               value={consumoAlimento.qtde_utilizada.toString()}
-               placeholder='Quantidade'
-               maxLength={10}
-               onChangeText={(valorTexto) =>
-                  handlerSetConsumoInputNumber(
-                     handleNumberInput(valorTexto, true, MAX_VALUES.qtdeUtilizada, 0), 'qtde_utilizada')
-               }
-            />
-         </View>
-         <View style={styles.macrosMainContainer}>
-            <Text style={[styles.subtitle, { marginBottom: 10 }]}>Macronutrientes</Text>
-            <View style={styles.sumaryContainer}>
-               <PieChartOutline
-                  listColors={COLORS_CHART}
-                  listValues={[porcentagemMacros.porcentCarboidrato, porcentagemMacros.porcentProteina, porcentagemMacros.porcentGordura, porcentagemMacros.porcentAlcool]}
-                  sizeChart={SIZE_CHART}
-                  thickness={0.75}>
-                  <View>
-                     <Text style={styles.chartText}>Kcal</Text>
-                     <Text style={styles.chartText}>{arredondarValores(consumoAlimento.kcal)}</Text>
-                  </View>
-               </PieChartOutline>
-               <View>
-                  <View style={styles.macrosContainer}>
-                     <Text style={[styles.textInfoMacros, { color: COLORS_CHART[0] }]}>Carboidratos</Text>
-                     <Text style={styles.textValue}>{consumoAlimento.qtde_carboidrato}g
-                        {porcentagemMacros.porcentCarboidrato > 0 && ` -  ${porcentagemMacros.porcentCarboidrato}%`}
-                     </Text>
-                  </View>
-                  <View style={styles.macrosContainer}>
-                     <Text style={[styles.textInfoMacros, { color: COLORS_CHART[1] }]}>Proteínas</Text>
-                     <Text style={styles.textValue}>{consumoAlimento.qtde_proteina}g
-                        {porcentagemMacros.porcentProteina > 0 && ` -  ${porcentagemMacros.porcentProteina}%`}
-                     </Text>
-                  </View>
-                  <View style={styles.macrosContainer}>
-                     <Text style={[styles.textInfoMacros, { color: COLORS_CHART[2] }]}>Gorduras</Text>
-                     <Text style={styles.textValue}>{consumoAlimento.qtde_gordura}g
-                        {porcentagemMacros.porcentGordura > 0 && ` -  ${porcentagemMacros.porcentGordura}%`}
-                     </Text>
-                  </View>
-                  {consumoAlimento.qtde_alcool > 0 &&
-                     <View style={styles.macrosContainer}>
-                        <Text style={[styles.textInfoMacros, { color: COLORS_CHART[3] }]}>Alcool</Text>
-                        <Text style={styles.textValue}>{consumoAlimento.qtde_alcool}g
-                           -  {porcentagemMacros.porcentAlcool}%
-                        </Text>
-                     </View>}
+      // <KeyboardAvoidingView
+      //    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      //    style={styles.container}
+      //    keyboardVerticalOffset={Platform.select({ ios: getResponsiveSizeHeight(10), android: getResponsiveSizeHeight(10) })}
+      // >
+         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+            <View style={styles.container}>
+               <View style={styles.header}>
+                  <TouchableOpacity onPress={() => navigation.goBack()}>
+                     <Icon name="arrow-back" size={30} color={theme.colors.color05} />
+                  </TouchableOpacity>
+                  <Text style={styles.title}>Adicionar Alimento</Text>
                </View>
+               <View style={[styles.inputContainer, { borderWidth: 2 }]}>
+                  <Text style={styles.textInfo}>Nome do Alimento</Text>
+                  <Text style={[styles.textValue, { fontFamily: 'NotoSans-SemiBold' }]}>{consumoAlimento.alimento.nome_alimento}</Text>
+               </View>
+               <View style={styles.inputContainer}>
+                  <Text style={styles.textInfo}>Refeição</Text>
+                  <Text style={[styles.textValue, { fontFamily: 'NotoSans-SemiBold' }]}>{refeicao.nome_refeicao}</Text>
+               </View>
+               <View style={styles.inputContainer}>
+                  <Text style={styles.textInfo}>Unidade de Medida</Text>
+                  <PicklistSelector02
+                     initialOption={Object.keys(unidadesMedidaAlimento).find(key => unidadesMedidaAlimento[key] === consumoAlimento.unidade_medida)!}
+                     onSelect={(valor: string) => setConsumoAlimento(prevConsumo => ({ ...prevConsumo, unidade_medida: unidadesMedidaAlimento[valor] }))}
+                     picklistOptions={Object.keys(unidadesMedidaAlimento)}
+                  />
+               </View>
+               <View style={[styles.inputContainer]}>
+                  <Text style={styles.textInfo}>Tamanho da Porção</Text>
+                  <View style={{minWidth: getResponsiveSizeWidth(10)}}>
+                     <PicklistSelector02
+                        initialOption={consumoAlimento.porcao_padrao.toString()}
+                        onSelect={(valor: number) => setConsumoAlimento(prevConsumo => ({ ...prevConsumo, porcao_padrao: Number(valor) }))}
+                        picklistOptions={(mapTamanhoDaPorcao[consumoAlimento.unidade_medida])}
+                     />
+                  </View>
+               </View>
+               <View style={styles.inputContainer}>
+                  <Text style={styles.textInfo}>Quantidade de Porções</Text>
+                  <TextInput
+                     style={[styles.textValue, { minWidth: getResponsiveSizeWidth(10), textAlign: 'center',  fontFamily: 'NotoSans-SemiBold' }]}
+                     keyboardType="numeric"
+                     value={consumoAlimento.qtde_utilizada.toString()}
+                     placeholder='Quantidade'
+                     maxLength={10}
+                     onChangeText={(valorTexto) =>
+                        handlerSetConsumoInputNumber(
+                           handleNumberInput(valorTexto, true, MAX_VALUES.qtdeUtilizada, 0), 'qtde_utilizada')
+                     }
+                  />
+               </View>
+               <View style={styles.macrosMainContainer}>
+                  <Text style={[styles.subtitle, { marginBottom: 10 }]}>Macronutrientes</Text>
+                  <View style={styles.sumaryContainer}>
+                     <PieChartOutline
+                        listColors={COLORS_CHART}
+                        listValues={[porcentagemMacros.porcentCarboidrato, porcentagemMacros.porcentProteina, porcentagemMacros.porcentGordura, porcentagemMacros.porcentAlcool]}
+                        sizeChart={SIZE_CHART}
+                        thickness={0.75}>
+                        <View>
+                           <Text style={styles.chartText}>Kcal</Text>
+                           <Text style={styles.chartText}>{arredondarValores(consumoAlimento.kcal)}</Text>
+                        </View>
+                     </PieChartOutline>
+                     <View>
+                        <View style={styles.macrosContainer}>
+                           <Text style={[styles.textInfoMacros, { color: COLORS_CHART[0] }]}>Carboidratos</Text>
+                           <Text style={styles.textValue}>{consumoAlimento.qtde_carboidrato}g
+                              {porcentagemMacros.porcentCarboidrato > 0 && ` -  ${porcentagemMacros.porcentCarboidrato}%`}
+                           </Text>
+                        </View>
+                        <View style={styles.macrosContainer}>
+                           <Text style={[styles.textInfoMacros, { color: COLORS_CHART[1] }]}>Proteínas</Text>
+                           <Text style={styles.textValue}>{consumoAlimento.qtde_proteina}g
+                              {porcentagemMacros.porcentProteina > 0 && ` -  ${porcentagemMacros.porcentProteina}%`}
+                           </Text>
+                        </View>
+                        <View style={styles.macrosContainer}>
+                           <Text style={[styles.textInfoMacros, { color: COLORS_CHART[2] }]}>Gorduras</Text>
+                           <Text style={styles.textValue}>{consumoAlimento.qtde_gordura}g
+                              {porcentagemMacros.porcentGordura > 0 && ` -  ${porcentagemMacros.porcentGordura}%`}
+                           </Text>
+                        </View>
+                        {consumoAlimento.qtde_alcool > 0 &&
+                           <View style={styles.macrosContainer}>
+                              <Text style={[styles.textInfoMacros, { color: COLORS_CHART[3] }]}>Alcool</Text>
+                              <Text style={styles.textValue}>{consumoAlimento.qtde_alcool}g
+                                 -  {porcentagemMacros.porcentAlcool}%
+                              </Text>
+                           </View>}
+                     </View>
+                  </View>
+               </View>
+               <TouchableOpacity
+                  style={[styles.buttonNotAllowed, allowSalvar && styles.button]}
+                  onPress={() => handleSalvarSolicitacao()}
+                  disabled={!allowSalvar || isLoading}
+               >
+                  {isLoading ?
+                     <ActivityIndicator size="small" color={theme.colors.color01} />
+                     :
+                     <Text style={styles.buttonText}>Salvar</Text>}
+               </TouchableOpacity>
             </View>
-         </View>
-         <TouchableOpacity
-            style={[styles.buttonNotAllowed, allowSalvar && styles.button]}
-            onPress={() => handleSalvarSolicitacao()}
-            disabled={!allowSalvar || isLoading}
-         >
-            {isLoading ?
-               <ActivityIndicator size="small" color={theme.colors.color01} />
-               :
-               <Text style={styles.buttonText}>Salvar</Text>}
-         </TouchableOpacity>
-      </View>
-</TouchableWithoutFeedback>
-
+         </TouchableWithoutFeedback>
+      // </KeyboardAvoidingView>
    )
-
 };
 
 const styles = StyleSheet.create({
