@@ -62,28 +62,11 @@ const EvolucaoScreen: React.FC = () => {
 
    }, [diaSelecionado]);
 
-
-   const handleSelectImage = async () => {
-      if (permission) {
-         if (permission.granted) {
-            setCameraView(true);
-         } else {
-            const { status } = await requestPermission();
-            if (status === 'granted') {
-               setCameraView(true);
-            } else {
-               alert('Desculpe, precisamos de permissão para acessar sua câmera!');
-            }
-         }
-      }
-   };
-
    const renderFotoContent = () => {
       if (dadosDiaEditavel?.foto_dia) {
          return (
             <TouchableOpacity
-            onPress={handleSelectImage}
-            >
+            onPress={()=>setCameraView(true)}>
                <Image
                   source={{ uri: `${dadosDiaEditavel.foto_dia}` }}
                   style={{ width: '100%', height: '100%' }}
@@ -99,7 +82,7 @@ const EvolucaoScreen: React.FC = () => {
          >
             <TouchableOpacity
                style={styles.addPhotoContent}
-               onPress={handleSelectImage}>
+               onPress={()=>setCameraView(true)}>
                <Icons
                   name="add-a-photo"
                   size={ICON_SIZE * 1.2}

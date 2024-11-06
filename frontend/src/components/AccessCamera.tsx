@@ -19,7 +19,23 @@ const AccessCamera = ({ setFotoFile, setCameraView, fotoFileView = null }: Acces
    const cameraRef = useRef<CameraView | null>(null);
    const [cameraReady, setCameraReady] = useState(false);
    const [fotoFileTemp, setFotoFileTemp] = useState<string | null>(fotoFileView);
+   const [permission, requestPermission] = useCameraPermissions();
+   const hasShownAlertRef = useRef(false);
 
+   useEffect(() => {
+      const handleRequestPermission = async () => {
+         if (permission?.granted === false && !hasShownAlertRef.current) {
+            const { status } = await requestPermission();
+            if (status !== 'granted') {
+               hasShownAlertRef.current = true;
+               Alert.alert('Permissão de Acesso', 'Desculpe, precisamos de permissão para acessar sua câmera!');
+               setCameraView(false);
+            }
+         }
+      }
+
+      handleRequestPermission();
+   }, [permission?.granted]);
 
    const toggleCameraFacing = () => {
       setFacing(current => (current === 'back' ? 'front' : 'back'));
@@ -94,6 +110,8 @@ const AccessCamera = ({ setFotoFile, setCameraView, fotoFileView = null }: Acces
          setCameraView(false);
       }
    }
+
+   if (!permission) return null;
 
    return (
       <View style={styles.container}>

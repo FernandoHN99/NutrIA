@@ -86,24 +86,24 @@ const ChatbotScreen = () => {
    }
 
 
-   const CameraPermissionModal = () => {
-      return (
-         <Modal
-            transparent={true}
-            animationType="fade"
-            visible={showModal}
-         >
-            <View style={styles.modalContainer}>
-               <TouchableOpacity
-                  style={styles.buttonAcess}
-                  onPress={handleRequestPermission}>
-                  <Icon name="camera" size={getResponsiveSizeWidth(10)} color={theme.colors.color01} style={{ marginBottom: 5 }} />
-                  <Text style={styles.buttonAcessText}>Conceder Permissão de Acesso a Câmera</Text>
-               </TouchableOpacity>
-            </View>
-         </Modal>
-      );
-   }
+   // const CameraPermissionModal = () => {
+   //    return (
+   //       <Modal
+   //          transparent={true}
+   //          animationType="fade"
+   //          visible={showModal}
+   //       >
+   //          <View style={styles.modalContainer}>
+   //             <TouchableOpacity
+   //                style={styles.buttonAcess}
+   //                onPress={handleRequestPermission}>
+   //                <Icon name="camera" size={getResponsiveSizeWidth(10)} color={theme.colors.color01} style={{ marginBottom: 5 }} />
+   //                <Text style={styles.buttonAcessText}>Conceder Permissão de Acesso a Câmera</Text>
+   //             </TouchableOpacity>
+   //          </View>
+   //       </Modal>
+   //    );
+   // }
 
    const montarUserIntro = () => {
       const refeicoesAtivas = refeicoesUsuario
@@ -188,7 +188,7 @@ const ChatbotScreen = () => {
                   ))
             }
          </ScrollView>
-         <CameraPermissionModal />
+         {/* <CameraPermissionModal /> */}
 
          <View style={styles.inputContainer}>
             {
