@@ -223,7 +223,7 @@ const ChatbotScreen = () => {
                         </View>
                         <TouchableOpacity
                            onPress={() => handleSendMessage(text)}
-                           style={styles.sendButton}
+                           style={[styles.sendButton, text.trim() === '' && styles.unSendButton]}
                            disabled={text.trim() === ''}>
                            <Icon name="send-outline" size={24} color={theme.colors.color01} />
                         </TouchableOpacity>
@@ -256,9 +256,12 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
       marginLeft: getResponsiveSizeWidth(3),
-      backgroundColor: theme.colors.color05,
+      backgroundColor: theme.colors.color03,
       borderRadius: getResponsiveSizeWidth(10),
       padding: getResponsiveSizeWidth(3.5),
+   },
+   unSendButton: {
+      backgroundColor: hexToRgba(theme.colors.color05, '0.5'),
    },
    ctnInputUser: {
       flexDirection: 'row',
@@ -277,7 +280,6 @@ const styles = StyleSheet.create({
       flex: 0.9,
       fontFamily: 'NotoSans-Regular',
       fontSize: getResponsiveSizeWidth(3.5),
-      // minHeight: getResponsiveSizeHeight(5),
       color: theme.colors.black,
       paddingVertical: getResponsiveSizeHeight(1.5),
    },

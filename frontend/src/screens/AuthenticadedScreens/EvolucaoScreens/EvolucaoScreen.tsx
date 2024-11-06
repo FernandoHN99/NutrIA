@@ -7,19 +7,9 @@ import Icons from 'react-native-vector-icons/MaterialIcons';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useDiasUsuario } from '../../../api/httpState/usuarioData';
 import { salvarDiaSchema } from '../../../api/schemas/diaSchema';
-import * as ImagePicker from 'expo-image-picker';
 import { salvarDiaService } from '../../../api/services/diaService';
 import { CameraCapturedPicture, useCameraPermissions } from 'expo-camera';
 import AccessCamera from '../../../components/AccessCamera';
-import { base64Mock } from '../../../config/variaveis';
-
-
-const photoDataMock: CameraCapturedPicture = {
-   uri: 'https://diplomatique.org.br/wp-content/uploads/2023/10/agricultura-arroz-feijao.jpg',
-   width: 1024,
-   height: 768,
-   base64: `${base64Mock}`
-};
 
 const formatarData = (dataDia: string) => {
    if (!dataDia) return '-';
