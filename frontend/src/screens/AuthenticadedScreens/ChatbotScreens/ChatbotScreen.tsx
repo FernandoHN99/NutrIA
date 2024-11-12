@@ -1,14 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, ScrollView, StyleSheet, KeyboardAvoidingView, Platform, TextInput, TouchableOpacity, ActivityIndicator, Text, Modal, Image } from 'react-native';
 import theme from '../../../styles/theme';
-import { getResponsiveSizeWidth, getResponsiveSizeHeight, hexToRgba } from '../../../utils/utils';
+import { getResponsiveSizeWidth, getResponsiveSizeHeight, hexToRgba, criarStrData } from '../../../utils/utils';
 import MessagesChatbot from '../../../components/ChatBotSignUp/MessagesChatbot';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useConversarChatbot } from '../../../api/hooks/chatBot/useConversarChatbot';
-import { usePerfisUsuario, useUsuarioInfo, useRefeicoesUsuario } from '../../../api/httpState/usuarioData';
+import { usePerfisUsuario, useUsuarioInfo, useRefeicoesUsuario, useConsumoAlimentos } from '../../../api/httpState/usuarioData';
 import { chatBotMessagesSchema } from '../../../api/schemas/chatBotSchema';
 import { useQueryClient } from '@tanstack/react-query';
-import { gerarTextoPerfil } from '../../../utils/formatters';
+import { encontrarPerfilPorData, filtrarConsumoDia, filtrarConsumoRefeicao, filtrarRefeicoesAtivas, gerarTextoPerfil, somarMacrosDiaPorRefeicao } from '../../../utils/formatters';
 import AccessCamera from '../../../components/AccessCamera';
 import { useCameraPermissions } from 'expo-camera';
 
@@ -60,9 +60,13 @@ const ChatbotScreen = () => {
    const [text, setText] = useState<string>('');
    const [messages, setMessages] = useState<message[]>(initMessages);
    const { data: responseChabot, loading, error, conversarChatbot } = useConversarChatbot(queryClient);
-   const { data: usuarioInfo } = useUsuarioInfo({ enabled: false });
-   const { data: perfisUsuario } = usePerfisUsuario({ enabled: false });
-   const { data: refeicoesUsuario } = useRefeicoesUsuario({ enabled: false });
+
+   const { data: usuarioCached } = useUsuarioInfo({ enabled: false });
+   const { data: perfisCached } = usePerfisUsuario({enabled: false});
+   const { data: consumoAlimentosCached } = useConsumoAlimentos({ enabled: false });
+   const { data: refeicoesCached } = useRefeicoesUsuario({enabled: false});
+
+   // const { data: refeicoesUsuario } = useRefeicoesUsuario({ enabled: false });
    const [permission, requestPermission] = useCameraPermissions();
    const [fotoFile, setFotoFile] = useState<string | null>(null);
    const [cameraView, setCameraView] = useState<boolean>(false);
@@ -85,34 +89,13 @@ const ChatbotScreen = () => {
       }
    }
 
-
-   // const CameraPermissionModal = () => {
-   //    return (
-   //       <Modal
-   //          transparent={true}
-   //          animationType="fade"
-   //          visible={showModal}
-   //       >
-   //          <View style={styles.modalContainer}>
-   //             <TouchableOpacity
-   //                style={styles.buttonAcess}
-   //                onPress={handleRequestPermission}>
-   //                <Icon name="camera" size={getResponsiveSizeWidth(10)} color={theme.colors.color01} style={{ marginBottom: 5 }} />
-   //                <Text style={styles.buttonAcessText}>Conceder Permissão de Acesso a Câmera</Text>
-   //             </TouchableOpacity>
-   //          </View>
-   //       </Modal>
-   //    );
-   // }
-
    const montarUserIntro = () => {
-      const refeicoesAtivas = refeicoesUsuario
-         .filter((refeicao: { ativa: any; }) => refeicao.ativa)
-         .map((refeicao: { nome_refeicao: string; numero_refeicao: number; }) => ({
-            nome_refeicao: refeicao.nome_refeicao,
-            numero_refeicao: refeicao.numero_refeicao
-         }));
-      const textoIntroUser = gerarTextoPerfil(usuarioInfo, perfisUsuario?.[perfisUsuario.length - 1], refeicoesAtivas);
+      const perfilDia = encontrarPerfilPorData(perfisCached, criarStrData());
+      const refeicoesAtivas = filtrarRefeicoesAtivas(refeicoesCached);
+      const infosDia = filtrarConsumoDia(consumoAlimentosCached, criarStrData());
+
+      const textoIntroUser = gerarTextoPerfil(usuarioCached, perfilDia, infosDia, refeicoesAtivas);
+      console.log('textoIntroUser', textoIntroUser);
       return criarChatbotMessagesText(textoIntroUser, 'user');
    }
 

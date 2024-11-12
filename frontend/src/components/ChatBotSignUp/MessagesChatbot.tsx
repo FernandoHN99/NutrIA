@@ -2,8 +2,7 @@ import React, { useState, useRef } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import theme from '../../styles/theme';
 import { getResponsiveSizeHeight, getResponsiveSizeWidth } from '../../utils/utils';
-import { hexToRgba } from '../../utils/utils';
-import { chatBotMessagesSchema } from '../../api/schemas/chatBotSchema';
+import MarkdownDisplay from 'react-native-markdown-display';
 
 interface message {
    _id: number;
@@ -34,7 +33,17 @@ const MessagesChatbot = ({ messageObject }: { messageObject: message }) => (
          }
       >
          {messageObject.type === 'text' ? (
-            <Text style={styles.textMessage}>{messageObject.content}</Text>
+            <MarkdownDisplay
+               style={{
+                  body: { ...styles.textMessage, padding: 0, margin: 0 },
+                  p: { margin: 0, padding: 0 }, // Remova margens dos parágrafos
+                  strong: { fontFamily: 'NotoSans-Bold' },
+                  em: { fontStyle: 'italic' },
+               }}
+            >
+               {messageObject.content}
+            </MarkdownDisplay>
+
          ) : (
             renderImg(messageObject.content, getResponsiveSizeWidth(50), getResponsiveSizeHeight(15))
          )}
@@ -47,7 +56,8 @@ const styles = StyleSheet.create({
    botMessage: {
       // backgroundColor: hexToRgba(theme.colors.color04, '0.5'),
       backgroundColor: '#8FB29D',
-      padding: getResponsiveSizeWidth(4),
+      paddingHorizontal: getResponsiveSizeWidth(4),
+      paddingVertical: getResponsiveSizeHeight(1),
       borderRadius: getResponsiveSizeWidth(10),
       marginVertical: getResponsiveSizeHeight(1),
       alignSelf: 'flex-start',
@@ -57,7 +67,8 @@ const styles = StyleSheet.create({
    },
    userMessage: {
       backgroundColor: theme.colors.color02,
-      padding: getResponsiveSizeWidth(4),
+      paddingHorizontal: getResponsiveSizeWidth(4),
+      paddingVertical: getResponsiveSizeHeight(1),
       borderRadius: getResponsiveSizeWidth(10),
       marginVertical: getResponsiveSizeHeight(1),
       alignSelf: 'flex-end',
@@ -74,6 +85,7 @@ const styles = StyleSheet.create({
       color: theme.colors.black,
       fontFamily: 'NotoSans-Regular',
       fontSize: getResponsiveSizeWidth(3.7),
+      maxWidth: '90%',
 
    }
 });

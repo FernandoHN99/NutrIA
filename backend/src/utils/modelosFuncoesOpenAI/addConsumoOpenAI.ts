@@ -2,7 +2,7 @@ export const addConsumoOpenAI = {
    "type": "function",
    "function": {
       "name": "add_consumo_alimento",
-      "description": "Adiciona individualmente os alimentos consumidos por um usuário SOMENTE quando solicitado.",
+      "description": `Acionar uma ÚNICA VEZ em UMA ÚNICA lista TODOS os alimentos que o usuário solicitou, se atente em diferenciar alimentos ja consumidos e aqueles q precisam ser adicionados! Conforme o schema - Ex: {"role":"assistant","content":null,"tool_calls":[{"id":"call_jHXkxBk1KGl1exSG3g5zwdv9","type":"function","function":{"name":"add_consumo_alimento","arguments":"{\"alimentos\":[{\"nome_consumo\":\"arroz\",\"id_alimento\":null,\"kcal\":130,\"dt_dia\":\"2024-11-08\",\"id_prato\":null,\"qtde_alcool\":0,\"qtde_gordura\":0.3,\"porcao_padrao\":1,\"qtde_proteina\":2.7,\"qtde_utilizada\":100,\"unidade_medida\":\"GRAMA\",\"numero_refeicao\":1,\"qtde_carboidrato\":28},{\"nome_consumo\":\"feijao\",\"id_alimento\":null,\"kcal\":95,\"dt_dia\":\"2024-11-08\",\"id_prato\":null,\"qtde_alcool\":0,\"qtde_gordura\":0.5,\"porcao_padrao\":1,\"qtde_proteina\":6.6,\"qtde_utilizada\":100,\"unidade_medida\":\"GRAMA\",\"numero_refeicao\":1,\"qtde_carboidrato\":17}]}\n"}}],"refusal":null}`,
       "strict": true,
       "parameters": {
          "type": "object",
@@ -13,7 +13,7 @@ export const addConsumoOpenAI = {
          "properties": {
             "alimentos": {
                "type": "array",
-               "description": "Lista de alimentos consumidos na refeição",
+               "description": "TODOS os alimentos consumidos DEVEM estar ÚNICA e EXCLUSIVAMENTE contidos NESTA lista de alimentos consumidos.",
                "items": {
                   "type": "object",
                   "required": [
@@ -34,7 +34,7 @@ export const addConsumoOpenAI = {
                   "properties": {
                      "nome_consumo": {
                         "type": "string",
-                        "description": "Nome do alimento q caracteriza o consumo em questão"
+                        "description": "Nome do alimento que caracteriza o consumo em questão"
                      },
                      "id_alimento": {
                         "type": "null",
@@ -61,8 +61,9 @@ export const addConsumoOpenAI = {
                         "description": "Quantidade de gorduras em gramas consumidas no total"
                      },
                      "porcao_padrao": {
+                        "max": 1,
                         "type": "number",
-                        "description": "Porcao padrao do alimento consumido de acordo com a unidade de medida"
+                        "description": "Porcao padrao do alimento consumido sempre será 1."
                      },
                      "qtde_proteina": {
                         "type": "number",

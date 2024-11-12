@@ -17,69 +17,21 @@ interface IChatBotRetorno {
 
 export default class ChatBotService {
    private openai: any;
+   private contextoSistemaBase = "Você é um assistente nutricional especializado em tópicos de nutrição, você NÃO DEVE responder perguntas sobre outros tópicos! Você deve ser curto e grosso, se existir cálculos NÃO exiba ao usuário somente os resultados, portante seja EXTREMAMEENTE direto e NÃO SEJA redundante nas respostas! Você sempre terá as informações básicas do usuário, portanto SEMPRE se baseia nas caracteristicas dele e PRINCIPALMENTE no pilares de dietas flexível, contagem de macronutrientes e balanço energético. Ex: Ofereça alternativas para opções alimentares, tire dúvidas e etc.";
+   private contextoSistemaFuncoes = "Você é um assistente nutricional especializado em invocar funções para ajudar o usuário a preencher o seu registro de alimentos. Se atente a função solicitada e seu respectivo schema!";
+   private contextoSistemaImagens = `Você é um assistente nutricional especializado em analisar fotos de pratos de comida e retorne com precisão os nomes dos alimentos, a quantidade total, o conteúdo de macronutrientes (carboidratos, proteínas, gorduras e álcool, se aplicável), bem como o total de calorias. Se não houver alimentos para ser analisado, retorne: "A imagem não possui alimentos.\n\nExemplo de Saida:\nAlimento:  Nome Alimento 01,\nQuantidade: Qtde Alimento 01,\nMacronutrientes:  Carboidratos 01, Proteínas 01,  Gorduras 01, Alcool 01\nCalorias: kcal 01\n\nAlimento:  Nome Alimento 02,\nQuantidade: Qtde Alimento 02,\nMacronutrientes:  Carboidratos 02, Proteínas 02,  Gorduras 02, Alcool 02\nCalorias: kcal 02`;
+   private comandosDeFuncoes = ["adicionar", "add", "adicione", "coloque" , "colocar", "inserir", "insira", "registre", "registrar"];
+   private paramsIABase = { temp: 0.3, maxTokens: 2048, topP: 0.5, freqP: 0.5, presP: 0.5, response_format: { "type": "text" } };
 
    constructor() {
       this.openai = new OpenAI({ apiKey: OPEN_AI_API_KEY });
    }
 
-   private montarPromptPergunta(mensagensChat: chatMessagesObject[]): object {
-      const comandosDeFuncoes = ["adicionar", "add", "adicione", "coloque" , "inserir", "insira"];
-      const lastMessage = mensagensChat[mensagensChat.length - 1].content[0].text.toLocaleLowerCase();
-      // const invocarFuncao = true;
-      const invocarFuncao = comandosDeFuncoes.some(palavra => lastMessage.includes(palavra));
-
-
-      const nomeModelo = "ft:gpt-4o-mini-2024-07-18:personal:eureka-v2:AMdf022C";
-      // const nomeModelo = "ft:gpt-4o-mini-2024-07-18:personal:nutria-add-consumo-prod:AI0lLD2M";
-      const contextoSistema = "Você é um assistente nutricional especializado e sua função é fornecer respostas claras e diretas sobre tópicos de nutrição. Monte opcoes alimentares quando solicitado, incluindo planejamento de refeições, controle de calorias e dicas para uma alimentação saudável baseados nos pilares de dietas flexível, contagem de macronutrientes e balanço energético. Você deve invocar as funções quando necessário.";
-      const adicionarConsumoFn = addConsumoOpenAI;
-
-      return (
-         {
-            model: nomeModelo,
-            messages: [
-               { "role": "system", "content": contextoSistema },
-               ...mensagensChat
-            ],
-            temperature: 0.5,
-            max_tokens: 2048,
-            top_p: 0.5,
-            frequency_penalty: 0,
-            presence_penalty: 0,
-            tools: invocarFuncao ? [ adicionarConsumoFn ] : null,
-            response_format: {
-               "type": "text"
-            },
-         }
-      );
-   }
-
-   private montarPromptAnalisarFoto(mensagensChat: chatMessagesObject[]): object {
-      const nomeModelo = "gpt-4o-mini";
-      const contextoSistema = `Interprete SOMENTE fotos de pratos de comida e retorne com precisão os nomes dos alimentos, a quantidade total, o conteúdo de macronutrientes (carboidratos, proteínas, gorduras e álcool, se aplicável), bem como o total de calorias. Se não houver alimentos para ser analisado, retorne: "A imagem não possui alimentos.\n\nExemplo de Saida:\nAlimento:  Nome Alimento 01,\nQuantidade: Qtde Alimento 01,\nMacronutrientes:  Carboidratos 01, Proteínas 01,  Gorduras 01, Alcool 01\nCalorias: kcal 01\n\nAlimento:  Nome Alimento 02,\nQuantidade: Qtde Alimento 02,\nMacronutrientes:  Carboidratos 02, Proteínas 02,  Gorduras 02, Alcool 02\nCalorias: kcal 02`;
-      const imgRequestJSON = mensagensChat[mensagensChat.length - 2];
-      return (
-         {
-            model: nomeModelo,
-            messages: [
-               { "role": "system", "content": contextoSistema },
-               imgRequestJSON,
-            ],
-            temperature: 1,
-            max_tokens: 5048,
-            top_p: 1,
-            frequency_penalty: 0,
-            presence_penalty: 0,
-         }
-      );
-   }
-
    public async perguntar(fazerPerguntaJSON: fazerPerguntaObject): Promise<IChatBotRetorno> {
       const promptChat = this.montarPromptPergunta(fazerPerguntaJSON.mensagensChat);
-      // console.log(JSON.stringify(promptChat));
       const chatBotRetorno = await this.openai.chat.completions.create(promptChat);
       const { tool_calls, content } = chatBotRetorno.choices[0]?.message
-      console.log(JSON.stringify(chatBotRetorno.choices[0]?.message));
+      console.log(JSON.stringify(chatBotRetorno.choices));
       if (!tool_calls && !content) {
          JsonReponseErro.lancar(400, 'Erro ao completar a conversa com o chatbot');
       }
@@ -93,16 +45,69 @@ export default class ChatBotService {
       const promptChat = this.montarPromptAnalisarFoto(analisarFotoJSON.mensagensChat);
       // console.log(JSON.stringify(promptChat));
       const chatBotRetorno = await this.openai.chat.completions.create(promptChat);
-      console.log(JSON.stringify(chatBotRetorno));
+      // console.log(JSON.stringify(chatBotRetorno));
       const { content } = chatBotRetorno.choices[0]?.message
       if (!content) {
-         JsonReponseErro.lancar(400, 'Erro ao completar a conversa com o chatbot');
+         JsonReponseErro.lancar(400, 'Erro ao analisar foto.');
       }
       const payloadPerguntaSomenteTexto = this.tratarPayloadIMG(analisarFotoJSON, content);
       const retornoResposta = await this.perguntar(payloadPerguntaSomenteTexto);
       return retornoResposta;
       // return {...retornoResposta, dados: `[IMAGEM]: ${content}`};
    }
+
+   private montarPromptPergunta(mensagensChat: chatMessagesObject[]): object {
+      const { nomeModelo, contextoSistema, funcoes } = this.montarParamsIA(mensagensChat);
+
+      return (
+         {
+            model: nomeModelo,
+            messages: [
+               { "role": "system", "content": this.contextoSistemaImagens },
+               ...mensagensChat
+            ],
+            temperature: this.paramsIABase.temp,
+            max_tokens: this.paramsIABase.maxTokens,
+            top_p: this.paramsIABase.topP,
+            frequency_penalty: this.paramsIABase.freqP,
+            presence_penalty: this.paramsIABase.presP,
+            tools: funcoes,
+            response_format: this.paramsIABase.response_format
+         }
+      );
+   }
+
+   private montarPromptAnalisarFoto(mensagensChat: chatMessagesObject[]): object {
+      const imgRequestJSON = mensagensChat[mensagensChat.length - 2];
+      return (
+         {
+            model: 'gpt-4o-mini',
+            messages: [
+               { "role": "system", "content": this.contextoSistemaImagens },
+               imgRequestJSON,
+            ],
+            temperature: this.paramsIABase.temp,
+            max_tokens: this.paramsIABase.maxTokens,
+            top_p: this.paramsIABase.topP,
+            frequency_penalty: this.paramsIABase.freqP,
+            presence_penalty: this.paramsIABase.presP,
+         }
+      );
+   }
+
+   private montarParamsIA(mensagensChat: chatMessagesObject[]): any {
+      // const objectParams: any = { nomeModelo: 'ft:gpt-4o-mini-2024-07-18:personal:eureka-v2:AMdf022C', contextSistema: this.contextoSistemaBase, funcoes: null};
+      const objectParams: any = { nomeModelo: 'gpt-4o-mini', contextSistema: this.contextoSistemaBase, funcoes: null};
+      const lastMessage = mensagensChat[mensagensChat.length - 1].content[0].text.toLocaleLowerCase();
+      const invocarFuncao = this.comandosDeFuncoes.some(palavra => lastMessage.includes(palavra));
+      if (invocarFuncao) {
+         objectParams.nomeModelo = 'gpt-4o';
+         objectParams.funcoes = [addConsumoOpenAI];
+         objectParams.contextSistema = this.contextoSistemaFuncoes;
+      }
+      return objectParams;
+   }
+
 
    private async chamarAcaoBackend(requestFunctionCall: { name: string, arguments: any }, usuarioID: string): Promise<IChatBotRetorno> {
       const responseAcao: IChatBotRetorno = { acao: requestFunctionCall.name, resposta: '', dados: null };
@@ -137,7 +142,6 @@ export default class ChatBotService {
       const indexRef = (mensagensChatList.length - 1) - 1;
       mensagensChatList.splice((indexRef), 1);
       mensagensChatList[indexRef].content[0].text =  '[CONTEÚDO IMAGEM ENVIADA]: ' + retornoAnalisarFoto + '\n\n' + mensagensChatList[indexRef].content[0].text;
-      // console.log({ id_usuario: requestJSON.id_usuario, mensagensChat: mensagensChatList });
       return { id_usuario: requestJSON.id_usuario, mensagensChat: mensagensChatList };
    }
 

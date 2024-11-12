@@ -24,13 +24,11 @@ const RefeicaoScreen = ({ route, navigation }: { route: any, navigation: any }) 
    const navigator = useNavigation();
    const queryClient = useQueryClient()
    const { data: consumoAlimentosCached } = useConsumoAlimentos({ enabled: false });
-
    const [loadingItemId, setLoadingItemId] = useState<number | null>(null);
-
    const infosDia = filtrarConsumoDia(consumoAlimentosCached, diaSelecionado);
    const consumoRefeicao = filtrarConsumoRefeicao(infosDia, numeroRefeicao);
    const macrosRefeicoes = somarMacrosDiaPorRefeicao(infosDia, refeicoesDiaAtivas);
-   const macrosRefeicao = macrosRefeicoes[numeroRefeicao]
+   const macrosRefeicao = macrosRefeicoes[numeroRefeicao];
 
    const { mutateAsync: deletarAlimentoConsumidoServiceFn } = useMutation({
       mutationFn: deletarAlimentoConsumidoService,

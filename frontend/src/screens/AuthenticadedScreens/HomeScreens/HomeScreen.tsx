@@ -64,6 +64,9 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
       );
    }
 
+   // console.log('perfilDia', perfilDia);
+   // console.log('consumoUsuarioDia', consumoUsuarioDia);
+
    return (
       <View style={styles.container}>
          <DiaScroll diaSelecionado={diaSelecionado} setDiaSelecionado={setDiaSelecionado} />

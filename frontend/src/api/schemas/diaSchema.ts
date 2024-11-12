@@ -1,3 +1,4 @@
+
 export interface salvarDiaSchema {
    dt_dia: string;
    foto_dia: string | null;
