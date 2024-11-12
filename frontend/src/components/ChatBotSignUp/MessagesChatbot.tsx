@@ -32,11 +32,12 @@ const MessagesChatbot = ({ messageObject }: { messageObject: message }) => (
                : styles.botMessage
          }
       >
+         {/* const markdownText = apiResponse; */}
          {messageObject.type === 'text' ? (
             <MarkdownDisplay
                style={{
                   body: { ...styles.textMessage, padding: 0, margin: 0 },
-                  p: { margin: 0, padding: 0 }, // Remova margens dos parágrafos
+                  p: { margin: 0, padding: 0 },
                   strong: { fontFamily: 'NotoSans-Bold' },
                   em: { fontStyle: 'italic' },
                }}
@@ -86,7 +87,6 @@ const styles = StyleSheet.create({
       fontFamily: 'NotoSans-Regular',
       fontSize: getResponsiveSizeWidth(3.7),
       maxWidth: '90%',
-
    }
 });
 

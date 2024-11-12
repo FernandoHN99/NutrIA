@@ -17,7 +17,7 @@ interface IChatBotRetorno {
 
 export default class ChatBotService {
    private openai: any;
-   private contextoSistemaBase = "Você é um assistente nutricional especializado em tópicos de nutrição, você NÃO DEVE responder perguntas sobre outros tópicos! Você deve ser curto e grosso, se existir cálculos NÃO exiba ao usuário somente os resultados, portante seja EXTREMAMEENTE direto e NÃO SEJA redundante nas respostas! Você sempre terá as informações básicas do usuário, portanto SEMPRE se baseia nas caracteristicas dele e PRINCIPALMENTE no pilares de dietas flexível, contagem de macronutrientes e balanço energético. Ex: Ofereça alternativas para opções alimentares, tire dúvidas e etc.";
+   private contextoSistemaBase = "Você é um assistente nutricional especializado em tópicos de nutrição, você NÃO DEVE responder perguntas sobre outros tópicos! Você deve responder com o mínimo de palavras possívceis! Seja curto e grosso, se existir cálculos NÃO exiba ao usuário somente os resultados NÃO SEJA redundante nas respostas! Você sempre terá as informações básicas do usuário, portanto SEMPRE se baseia nas caracteristicas dele e PRINCIPALMENTE no pilares de dietas flexível, contagem de macronutrientes e balanço energético. Ex: Ofereça alternativas para opções alimentares, tire dúvidas e etc.";
    private contextoSistemaFuncoes = "Você é um assistente nutricional especializado em invocar funções para ajudar o usuário a preencher o seu registro de alimentos. Se atente a função solicitada e seu respectivo schema!";
    private contextoSistemaImagens = `Você é um assistente nutricional especializado em analisar fotos de pratos de comida e retorne com precisão os nomes dos alimentos, a quantidade total, o conteúdo de macronutrientes (carboidratos, proteínas, gorduras e álcool, se aplicável), bem como o total de calorias. Se não houver alimentos para ser analisado, retorne: "A imagem não possui alimentos.\n\nExemplo de Saida:\nAlimento:  Nome Alimento 01,\nQuantidade: Qtde Alimento 01,\nMacronutrientes:  Carboidratos 01, Proteínas 01,  Gorduras 01, Alcool 01\nCalorias: kcal 01\n\nAlimento:  Nome Alimento 02,\nQuantidade: Qtde Alimento 02,\nMacronutrientes:  Carboidratos 02, Proteínas 02,  Gorduras 02, Alcool 02\nCalorias: kcal 02`;
    private comandosDeFuncoes = ["adicionar", "add", "adicione", "coloque" , "colocar", "inserir", "insira", "registre", "registrar"];
@@ -29,6 +29,7 @@ export default class ChatBotService {
 
    public async perguntar(fazerPerguntaJSON: fazerPerguntaObject): Promise<IChatBotRetorno> {
       const promptChat = this.montarPromptPergunta(fazerPerguntaJSON.mensagensChat);
+      console.log(JSON.stringify(promptChat));
       const chatBotRetorno = await this.openai.chat.completions.create(promptChat);
       const { tool_calls, content } = chatBotRetorno.choices[0]?.message
       console.log(JSON.stringify(chatBotRetorno.choices));
@@ -63,7 +64,7 @@ export default class ChatBotService {
          {
             model: nomeModelo,
             messages: [
-               { "role": "system", "content": this.contextoSistemaImagens },
+               { "role": "system", "content": contextoSistema },
                ...mensagensChat
             ],
             temperature: this.paramsIABase.temp,
@@ -97,9 +98,10 @@ export default class ChatBotService {
 
    private montarParamsIA(mensagensChat: chatMessagesObject[]): any {
       // const objectParams: any = { nomeModelo: 'ft:gpt-4o-mini-2024-07-18:personal:eureka-v2:AMdf022C', contextSistema: this.contextoSistemaBase, funcoes: null};
-      const objectParams: any = { nomeModelo: 'gpt-4o-mini', contextSistema: this.contextoSistemaBase, funcoes: null};
+      const objectParams: any = { nomeModelo: 'gpt-4o-mini', contextoSistema: this.contextoSistemaBase, funcoes: null};
       const lastMessage = mensagensChat[mensagensChat.length - 1].content[0].text.toLocaleLowerCase();
       const invocarFuncao = this.comandosDeFuncoes.some(palavra => lastMessage.includes(palavra));
+      console.log('invocarFuncao ', invocarFuncao);
       if (invocarFuncao) {
          objectParams.nomeModelo = 'gpt-4o';
          objectParams.funcoes = [addConsumoOpenAI];

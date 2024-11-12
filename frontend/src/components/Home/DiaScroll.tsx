@@ -24,7 +24,7 @@ interface DiaScrollProps {
 const gerarDatas = (dataBase = new Date(), qtdeDiasPassados: number, qtdeDiasFuturos: number) => {
    const datasControl: Array<Dia> = [];
 
-   for (let i = -qtdeDiasPassados; i < qtdeDiasFuturos; i++) {
+   for (let i = -qtdeDiasPassados; i <= qtdeDiasFuturos; i++) {
       const data = new Date(dataBase);
       data.setDate(dataBase.getDate() + i);
 
