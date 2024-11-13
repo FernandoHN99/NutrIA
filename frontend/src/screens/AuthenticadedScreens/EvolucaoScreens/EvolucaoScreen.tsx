@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, TextInput, TouchableWithoutFeedback, Keyboard, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import theme from '../../../styles/theme';
 import DiaScroll from '../../../components/Home/DiaScroll';
-import { criarStrData, getResponsiveSizeHeight, getResponsiveSizeWidth, hexToRgba, transformDateIntoString, validarNumeroMaiorZero } from '../../../utils/utils';
+import { criarData, criarStrData, getResponsiveSizeHeight, getResponsiveSizeWidth, hexToRgba, transformDateIntoString, validarNumeroMaiorZero } from '../../../utils/utils';
 import Icons from 'react-native-vector-icons/MaterialIcons';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useDiasUsuario } from '../../../api/httpState/usuarioData';
@@ -154,6 +154,7 @@ const EvolucaoScreen: React.FC = () => {
       return <AccessCamera setFotoFile={setFotoFile} setCameraView={setCameraView} fotoFileView={dadosDiaEditavel?.foto_dia} />;
    }
 
+
    return (
       <KeyboardAvoidingView
          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -176,11 +177,11 @@ const EvolucaoScreen: React.FC = () => {
                      </View>
                      <Icons
                      style={{ transform: [{ rotate: '180deg' }] }}
-                     color={diaSelecionado !== criarStrData() ? theme.colors.color05 : theme.colors.backgroundColor}
+                     color={ new Date(`${diaSelecionado}T00:00:00`) < criarData() ? theme.colors.color05 : theme.colors.backgroundColor}
                      name="arrow-back-ios"
                      size={ICON_SIZE}
                      onPress={avancarDia}
-                     disabled={diaSelecionado === criarStrData()}
+                     disabled={ new Date(`${diaSelecionado}T00:00:00`) >= criarData()}
                      />
                   </View>
                   <View style={styles.ctnInfoUsuario}>
