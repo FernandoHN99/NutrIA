@@ -156,11 +156,11 @@ const EvolucaoScreen: React.FC = () => {
 
 
    return (
-      // <KeyboardAvoidingView
-      //    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      //    style={styles.container}
-      //    keyboardVerticalOffset={Platform.select({ ios: getResponsiveSizeHeight(10), android: getResponsiveSizeHeight(10) })}
-      // >
+      <KeyboardAvoidingView
+         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+         style={styles.container}
+         keyboardVerticalOffset={Platform.select({ ios: getResponsiveSizeHeight(10), android: getResponsiveSizeHeight(10) })}
+      >
          <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <View style={styles.container}>
                <DiaScroll diaSelecionado={diaSelecionado} setDiaSelecionado={setDiaSelecionado} numeroDiasFuturos={0} />
@@ -221,7 +221,7 @@ const EvolucaoScreen: React.FC = () => {
                </View>
             </View>
          </TouchableWithoutFeedback>
-      // </KeyboardAvoidingView>
+       </KeyboardAvoidingView>
    );
 };
 

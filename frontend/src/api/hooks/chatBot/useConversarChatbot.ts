@@ -29,18 +29,17 @@ export const useConversarChatbot = (queryClient: QueryClient) => {
       setLoading(true);
       setError(null);
       try {
-         // console.log('request: ', JSON.stringify({ mensagensChat: mensagensInput }))
          const response: IChatBotRetorno = !contemImg 
          ? await fazerPerguntaService({ mensagensChat: mensagensInput })
          : await analisarFotoService({ mensagensChat: mensagensInput })
-         // console.log('response: ', JSON.stringify(response))
          await atualizarInfosCache(queryClient, response);
+         console.log(response);
          setData(response);
       } catch (err) {
          setError((err as any));
       } finally {
          setLoading(false);
-         setData(null);
+         // setData(null);
       }
    };
 

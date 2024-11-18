@@ -17,11 +17,12 @@ interface IChatBotRetorno {
 
 export default class ChatBotService {
    private openai: any;
+   // private contextoSistemaBase = "Você é um assistente nutricional especializado em tópicos de nutrição! Você deve responder com o mínimo de palavras possíveis! Seja curto e grosso, se existir cálculos NÃO os exiba ao usuário somente os resultados NÃO SEJA redundante nas respostas! Você sempre terá as informações básicas do usuário, portanto SEMPRE se baseia nas caracteristicas dele e PRINCIPALMENTE no pilares de dietas flexível, contagem de macronutrientes e balanço energético";
    private contextoSistemaBase = "Você é um assistente nutricional especializado em tópicos de nutrição, você NÃO DEVE responder perguntas sobre outros tópicos! Você deve responder com o mínimo de palavras possívceis! Seja curto e grosso, se existir cálculos NÃO exiba ao usuário somente os resultados NÃO SEJA redundante nas respostas! Você sempre terá as informações básicas do usuário, portanto SEMPRE se baseia nas caracteristicas dele e PRINCIPALMENTE no pilares de dietas flexível, contagem de macronutrientes e balanço energético. Ex: Ofereça alternativas para opções alimentares, tire dúvidas e etc.";
    private contextoSistemaFuncoes = "Você é um assistente nutricional especializado em invocar funções para ajudar o usuário a preencher o seu registro de alimentos. Se atente a função solicitada e seu respectivo schema!";
    private contextoSistemaImagens = `Você é um assistente nutricional especializado em analisar fotos de pratos de comida e retorne com precisão os nomes dos alimentos, a quantidade total, o conteúdo de macronutrientes (carboidratos, proteínas, gorduras e álcool, se aplicável), bem como o total de calorias. Se não houver alimentos para ser analisado, retorne: "A imagem não possui alimentos.\n\nExemplo de Saida:\nAlimento:  Nome Alimento 01,\nQuantidade: Qtde Alimento 01,\nMacronutrientes:  Carboidratos 01, Proteínas 01,  Gorduras 01, Alcool 01\nCalorias: kcal 01\n\nAlimento:  Nome Alimento 02,\nQuantidade: Qtde Alimento 02,\nMacronutrientes:  Carboidratos 02, Proteínas 02,  Gorduras 02, Alcool 02\nCalorias: kcal 02`;
    private comandosDeFuncoes = ["adicionar", "add", "adicione", "coloque" , "colocar", "inserir", "insira", "registre", "registrar"];
-   private paramsIABase = { temp: 0.3, maxTokens: 2048, topP: 0.5, freqP: 0.5, presP: 0.5, response_format: { "type": "text" } };
+   private paramsIABase = { temp: 0.2, maxTokens: 2048, topP: 0.5, freqP: 0.5, presP: 0.5, response_format: { "type": "text" } };
 
    constructor() {
       this.openai = new OpenAI({ apiKey: OPEN_AI_API_KEY });
