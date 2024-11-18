@@ -8,7 +8,6 @@ import { JsonReponseErro } from "../../utils/jsonReponses";
 import { criarAlimentoConsumidoCompletoObject } from "../schemas/alimentoConsumido/criarAlimentoConsumidoCompletoSchema";
 
 export default class AlimentoConsumidoService{
-   
    private controleCaloriasRepo: ControleCaloriasRepositorio;
 
    constructor(){

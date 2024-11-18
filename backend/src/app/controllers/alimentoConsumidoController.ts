@@ -20,7 +20,7 @@ export default class AlimentoConsumidoController {
       if (!resultadoParse.success) {
          JsonReponseErro.lancar(400, 'JSON inválido', resultadoParse.error);
       }
-   const retornoConsumoUsuario = await this.alimentoConsumidoService.obterConsumoUsuario(req.body.id_usuario, resultadoParse.data);
+      const retornoConsumoUsuario = await this.alimentoConsumidoService.obterConsumoUsuario(req.body.id_usuario, resultadoParse.data);
       return new JsonReponseSucesso(200, 'Consumo do usuário retornado com sucesso', retornoConsumoUsuario);
    }
 

@@ -10,7 +10,6 @@ const Stack = createNativeStackNavigator();
 
 const AuthenticatedNavigator = () => {
 
-
    const { data: usuarioInfo, error: errorUsuario, isLoading: isLoadingUsuario, refetch: refetchUsuario } = useUsuarioInfo();
    const { data: perfisUsuario, error: errorPerfis, isLoading: isLoadingPerfis, refetch: refetchPerfis } = usePerfisUsuario();
    const { data: consumoUsuario, error: errorConsumo, isLoading: isLoadingConsumo, refetch: refetchConsumo } = useConsumoAlimentos();
