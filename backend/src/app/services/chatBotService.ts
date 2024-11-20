@@ -30,10 +30,10 @@ export default class ChatBotService {
 
    public async perguntar(fazerPerguntaJSON: fazerPerguntaObject): Promise<IChatBotRetorno> {
       const promptChat = this.montarPromptPergunta(fazerPerguntaJSON.mensagensChat);
-      console.log(JSON.stringify(promptChat));
+      // console.log(JSON.stringify(promptChat));
       const chatBotRetorno = await this.openai.chat.completions.create(promptChat);
       const { tool_calls, content } = chatBotRetorno.choices[0]?.message
-      console.log(JSON.stringify(chatBotRetorno.choices));
+      // console.log(JSON.stringify(chatBotRetorno.choices));
       if (!tool_calls && !content) {
          JsonReponseErro.lancar(400, 'Erro ao completar a conversa com o chatbot');
       }
@@ -106,7 +106,7 @@ export default class ChatBotService {
       if (invocarFuncao) {
          objectParams.nomeModelo = 'gpt-4o';
          objectParams.funcoes = [addConsumoOpenAI];
-         objectParams.contextSistema = this.contextoSistemaFuncoes;
+         objectParams.contextoSistema = this.contextoSistemaFuncoes;
       }
       return objectParams;
    }
