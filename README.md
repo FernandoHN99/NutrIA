@@ -59,7 +59,7 @@ NutrIA é um aplicativo inteligente para contabilização de calorias e acompanh
    ```
 
 #### 3. Frontend
-1. Acesse o diretório do frontend:
+1. Em outro terminal acesse o diretório do frontend:
    ```bash
    cd frontend
    ```
