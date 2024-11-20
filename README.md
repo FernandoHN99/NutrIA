@@ -36,7 +36,7 @@ NutrIA é um aplicativo inteligente para contabilização de calorias e acompanh
 
 #### 1. Clone o repositório:
    ```bash
-   git clone https://github.com/seu-usuario/nutria.git
+   git clone https://github.com/FernandoHN99/NutrIA.git
    ```
    ```bash
    cd nutria
