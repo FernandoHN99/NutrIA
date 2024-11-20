@@ -42,24 +42,23 @@ NutrIA é um aplicativo inteligente para contabilização de calorias e acompanh
    cd nutria
    ```
 
-#### 2. Arquivo .env
-1. Preencha o arquivo .env com as credenciais necessárias. Um arquivo de exemplo (.env.example) está disponível no projeto para referência. Atualize as informações de acordo com suas credenciais do Supabase e da OpenAI.
-
-#### 3. Backend
+#### 2. Backend
 1. Acesse o diretório do backend:
    ```bash
    cd backend
    ```
-2. Instale as dependências:
+2. Preencha o arquivo .env com as credenciais necessárias. Um arquivo de exemplo (.env.example) está disponível no projeto para referência. Atualize as informações de acordo com suas credenciais do Supabase e da OpenAI.
+
+3. Instale as dependências:
    ```bash
    npm install
    ```
-3. Inicie o servidor:
+4. Inicie o servidor:
    ```bash
    npm start
    ```
 
-#### 4. Frontend
+#### 3. Frontend
 1. Acesse o diretório do frontend:
    ```bash
    cd frontend
