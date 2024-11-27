@@ -128,7 +128,6 @@ const ChatbotScreen = () => {
    };
 
    useEffect(() => {
-      // console.log(responseChabot);
       if (responseChabot) {
          const listResponses: message[] = [{ _id: Math.random(), content: responseChabot.resposta, role: "assistant", type: 'text' }]
          if (responseChabot.dados != null) {

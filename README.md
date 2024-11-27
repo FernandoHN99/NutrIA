@@ -47,7 +47,7 @@ NutrIA é um aplicativo inteligente para contabilização de calorias e acompanh
    ```bash
    cd backend
    ```
-2. Preencha o arquivo .env com as credenciais necessárias. Um arquivo de exemplo (.env.example) está disponível no projeto para referência. Atualize as informações de acordo com suas credenciais do Supabase e da OpenAI.
+2. Preencha o arquivo .env com as credenciais necessárias. Um arquivo de exemplo (.env) está disponível no projeto para referência. Atualize as informações de acordo com suas credenciais do Supabase e da OpenAI.
 
 3. Instale as dependências:
    ```bash
@@ -63,11 +63,14 @@ NutrIA é um aplicativo inteligente para contabilização de calorias e acompanh
    ```bash
    cd frontend
    ```
-2. Instale as dependências:
+2. Atualize o arquivo .env com as informações apontadas ao Backend. Um arquivo de exemplo (.env) está disponível no projeto para referência.
+   > **Observação:** Para utilizar o Expo em múltiplos dispositivos de forma simultânea subistituir o localhost pelo IP da máquina que hospeda o servidor backend.
+
+3. Instale as dependências:
    ```bash
    npm install
    ```
-3. Inicie o aplicativo com o Expo:
+4. Inicie o aplicativo com o Expo:
    ```bash
    npx expo start
    ```

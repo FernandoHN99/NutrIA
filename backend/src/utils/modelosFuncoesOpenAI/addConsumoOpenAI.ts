@@ -34,7 +34,7 @@ export const addConsumoOpenAI = {
                   "properties": {
                      "nome_consumo": {
                         "type": "string",
-                        "description": "Nome do alimento que caracteriza o consumo em questão"
+                        "description": "Nome do alimento que caracteriza o consumo em questão com a primeira letra em maiúscula"
                      },
                      "id_alimento": {
                         "type": "null",

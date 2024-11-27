@@ -1,9 +1,7 @@
-// export const DOMINIO_BACKEND: string = 'http://192.168.15.3';
-// export const DOMINIO_BACKEND: string = 'http://192.168.15.2';
-// export const DOMINIO_BACKEND: string = 'http://10.2.2.103';
-export const DOMINIO_BACKEND: string = 'http://127.0.0.1';
+import { BACKEND_URL, BACKEND_PORTA } from '@env';
 
-export const PORTA_BACKEND: number = 5001;
+export const DOMINIO_BACKEND: string = BACKEND_URL ?? '';
+export const PORTA_BACKEND: number = BACKEND_PORTA ?? '';
 export const ENDPOINT: string = '/nutria'
 export const URL_BACKEND: string = `${DOMINIO_BACKEND}:${PORTA_BACKEND}${ENDPOINT}`
 export const TOKEN_KEY = 'authToken';

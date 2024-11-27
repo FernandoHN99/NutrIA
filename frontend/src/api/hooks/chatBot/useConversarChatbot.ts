@@ -33,7 +33,6 @@ export const useConversarChatbot = (queryClient: QueryClient) => {
          ? await fazerPerguntaService({ mensagensChat: mensagensInput })
          : await analisarFotoService({ mensagensChat: mensagensInput })
          await atualizarInfosCache(queryClient, response);
-         console.log(response);
          setData(response);
       } catch (err) {
          setError((err as any));
