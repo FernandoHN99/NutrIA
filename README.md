@@ -27,8 +27,9 @@ NutrIA é um aplicativo inteligente para contabilização de calorias e acompanh
 ## 🚀 Instalação e Configuração
 
 ### Pré-requisitos
-- Node.js (>=16.x)
+- Node.js
 - NPM
+- Expo (não é necessário instalar globalmente, o projeto usa npx expo)
 - Conta no Supabase
 - Conta na OpenAI
 
