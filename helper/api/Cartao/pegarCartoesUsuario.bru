@@ -1,0 +1,19 @@
+meta {
+  name: pegarCartoesUsuario
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{backend_url}}:{{backend_port}}/nutria/cartao/usuario
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{tokenBearer}}
+}
+
+body:json {
+  {}
+}
