@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import jwt, { TokenExpiredError } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import express, { Request, Response, NextFunction } from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
@@ -63,7 +63,7 @@ export default class Servidor {
          req.body.id_usuario = decoded.sub;
          next();
       } catch (error) {
-         if (error instanceof TokenExpiredError) {
+         if (error instanceof jwt.TokenExpiredError) {
             return res.status(401).json({ sucesso: false, codigo: 401, mensagem: 'Token expirado', erro: error });
          }
          return res.status(401).json({ sucesso: false, codigo: 401, mensagem: 'Token inválido', erro: error });

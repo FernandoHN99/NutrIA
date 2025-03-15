@@ -3,7 +3,7 @@ import Rota from '../../utils/rota';
 import RefeicaoController from '../controllers/refeicaoController';
 import Util from '../../utils/util';
 
-export default class DiaRotas implements Rota {
+export default class RefeicaoRotas implements Rota {
    public caminho: string = '/refeicao';
    public roteador: Router;
    public controller: RefeicaoController;

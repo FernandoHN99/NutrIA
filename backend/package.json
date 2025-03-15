@@ -3,6 +3,9 @@
    "version": "0.0.1",
    "description": "Awesome project developed with TypeORM.",
    "type": "commonjs",
+   "engines": {
+      "node": "23.7.0"
+   },
    "devDependencies": {
       "@types/axios": "^0.14.0",
       "@types/cookie-parser": "^1.4.7",
@@ -12,7 +15,7 @@
       "@types/jsonwebtoken": "^9.0.6",
       "@types/node": "^16.11.10",
       "@types/uuid-validate": "^0.0.3",
-      "tsup": "^8.0.2",
+      "tsup": "8.4.0",
       "tsx": "^4.7.2",
       "typescript": "4.5.2"
    },
@@ -32,9 +35,9 @@
       "zod": "^3.22.5"
    },
    "scripts": {
-      "build": "tsup src",
       "start": "tsx src/app.ts",
       "dev": "NODE_NO_WARNINGS=1 tsx watch src/app.ts",
-      "typeorm": "tsx ./node_modules/typeorm/cli.js"
+      "typeorm": "tsx ./node_modules/typeorm/cli.js",
+      "build": "tsup src --out-dir build"
    }
 }

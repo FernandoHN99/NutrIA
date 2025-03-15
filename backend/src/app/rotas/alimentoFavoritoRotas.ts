@@ -3,7 +3,7 @@ import Rota from '../../utils/rota';
 import Util from '../../utils/util';
 import AlimentoFavoritoController from '../controllers/alimentoFavoritoController';
 
-export default class DiaRotas implements Rota {
+export default class AlimentoFavoritoRotas implements Rota {
    public caminho: string = '/alimento-favorito';
    public roteador: Router;
    public controller: AlimentoFavoritoController;

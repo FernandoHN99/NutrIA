@@ -3,7 +3,7 @@ import Rota from '../../utils/rota';
 import ChatBotController from '../controllers/chatBotController';
 import Util from '../../utils/util';
 
-export default class UsuarioRotas implements Rota {
+export default class ChatBotRotas implements Rota {
    public caminho: string = '/chatbot';
    public roteador: Router;
    public controller: ChatBotController;
